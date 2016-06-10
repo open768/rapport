@@ -51,7 +51,7 @@ tr
 	background-image: url("link.png");
     background-repeat: no-repeat;
     background-position: right;
-	background-color:#LemonChiffon;
+	background-color:gold;
 	
 	border-radius: 5px;
 	border:1px solid LightSlateGray;
@@ -130,7 +130,7 @@ tr
 .timebox
 {
 	border: 8px solid gold;
-	background:#B3F8F4;
+	background:lightyellow;
 	border-radius: 30px;
 	
 	padding: 10px;
