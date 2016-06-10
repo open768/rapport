@@ -9,6 +9,7 @@ Desktop.ini
 \[sessions\]/
 css/jquery-ui
 css/app.cs
-inc/inc-secret.php
 static/
 images/src
+inc/inc-secret AP.php
+css/app-ap.css

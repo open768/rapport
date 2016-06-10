@@ -1,20 +1,19 @@
 body
 {
-	background-color:#eeeeee;
-	font-family:ubuntu,arial,sans-serif;
-	font-style:normal;
+	background-color:LemonChiffon;
+	font:15px arial,sans-serif;
 }
 
-h2
+canvas
 {
-	color:#2D95BF;
+	background-color:white;
+	border-radius: 10px;
+	outline: 0px;
 }
 
-.charttooltip
+tr
 {
-	border:2px solid darkcyan;
-	border-radius: 5px;
-	padding: 5px;
+	padding:10px;
 }
 
 .blue_button
@@ -24,33 +23,22 @@ h2
 	-webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
 	box-shadow:inset 0px 1px 0px 0px #97c4fe;
 	
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #2D95BF), color-stop(1, #2D95BF) );
-	background:-moz-linear-gradient( center top, #2D95BF 5%, #2D95BF 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2D95BF', endColorstr='#2D95BF');
-	background-color:#2D95BF;
-	border-radius: 5px;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #B3F8F4), color-stop(1, #8FE3E0) );
+	background:-moz-linear-gradient( center top, #B3F8F4 5%, #8FE3E0 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#B3F8F4', endColorstr='#8FE3E0');
+	background-color:#LemonChiffon;
+	border-radius: 10px;
 	border:1px solid LightSlateGray;
-	padding:8px;
+	padding:4px;
 	padding-left:8px;
 	padding-right:8px;
 	
 	/* font*/
-	color:white;
+	color:LightSlateGray;
+	font-family:Arial;
 	font-size:15px;
 	font-weight:bold;
-}
-.fake_blue_button
-{
-	background-color:#2D95BF;
-	border-radius: 5px;
-	border:1px solid LightSlateGray;
-	padding:8px;
-	line-height:34px;
-	white-space:nowrap;	
-	/* font*/
-	color:white;
-	font-size:15px;
-	font-weight:bold;
+	font-style:normal;
 }
 
 .appd_button
@@ -63,7 +51,7 @@ h2
 	background-image: url("link.png");
     background-repeat: no-repeat;
     background-position: right;
-	background-color:#2D95BF;
+	background-color:#LemonChiffon;
 	
 	border-radius: 5px;
 	border:1px solid LightSlateGray;
@@ -79,15 +67,6 @@ h2
 	text-decoration: none;
 }
 
-.maintable
-{
-	width: 1060px;
-	border-radius: 3px;
-	padding: 10px;
-	/* box-shadow: 10px 10px 5px #888888; */
-	border: 3px solid #2D95BF;
-}
-
 .chartdiv
 {
 	border:1px solid #000000;
@@ -96,10 +75,11 @@ h2
 .chartnodatadiv
 {
 	border:1px solid #000000;
-	background-color:AliceBlue;
+	background-color:lightyellow;
 	font-family: Courier;
 	font-size:12px;
 }
+
 
 .errorbox
 {
@@ -117,21 +97,30 @@ h2
 	font-weight:bold;
 }
 
+.maintable
+{
+	width: 1060px;
+	border-radius: 10px;
+	padding: 10px;
+	/* box-shadow: 10px 10px 5px #888888; */
+	border: 3px solid gold;
+}
+
 .footer
 {
 	width: 100%;
+	font-family: Arial;
 	font-size: 10px;
-	font-family:arial,sans-serif;
 }
 
 .loginbox{
-	border: 10px solid #2D95BF;
-   	background-color:#ffffff;
+	border: 10px solid gold;
+   	background-color:lightyellow;
 	
 	padding: 10px;
 	padding-right:25px;
 	
-	border-radius: 5px;
+	border-radius: 30px;
 	
    -moz-box-shadow:    inset 0 0 10px #000000;
    -webkit-box-shadow: inset 0 0 10px #000000;
@@ -140,9 +129,9 @@ h2
 
 .timebox
 {
-	border: 8px solid #2D95BF;
-	background:#ffffff;
-	border-radius: 3px;
+	border: 8px solid gold;
+	background:#B3F8F4;
+	border-radius: 30px;
 	
 	padding: 10px;
 	width: 1060px;
@@ -169,20 +158,21 @@ h2
 
 .row2
 {
-	background:#CAEBF8;
+	background:LemonChiffon;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
 .logotable
 {
-	background:#ffffff;
-	border-radius: 3px;
+	background:#B3F8F4;
+	border-radius: 15px;
 	padding:5px;
 	padding-right:10px;
 	width:100%;
 }
 
+/*
 .logoimage
 {
 	content: url("http://www.applicationperformance.com/wp-content/uploads/2013-2016/04/AP-logo-340x156.png");
@@ -194,9 +184,15 @@ h2
 	height:80;
 }
 
+
 .licenseBox{
 	display:none
 }
+
+*/
+
+
+
 
 
 
