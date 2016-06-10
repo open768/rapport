@@ -1,0 +1,883 @@
+<?php
+
+/**************************************************************************
+Copyright (C) Chicken Katsu 2013-2016 
+
+This code is protected by copyright under the terms of the 
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
+http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+For licenses that allow for commercial use please contact cluck@chickenkatsu.co.uk
+
+// USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
+**************************************************************************/
+require_once("$phpinc/ckinc/colour.php");
+require_once("$phpinc/ckinc/header.php");
+require_once("$phpinc/ckinc/http.php");
+require_once("$phpinc/appdynamics/core.php");
+require_once("$root/inc/inc-filter.php");
+
+
+//#######################################################################
+//#######################################################################
+class cRender{
+	//************************************************************
+	const APP_QS = "app";
+	
+	const DB_QS = "db";
+	const APP_ID_QS = "aid";
+	const IGNORE_REF_QS = "igr";
+	
+	const TIER_QS = "tier";
+	const FROM_TIER_QS = "from";
+	const TO_TIER_QS = "to";
+	const TIER_ID_QS = "tid";
+	
+	const TRANS_QS = "trans";
+	const TRANS_ID_QS = "trid";
+	
+	const NODE_QS = "nd";
+	const FILTER_NODE_QS = "fnqs";
+	const NODE_ID_QS = "ndid";
+	
+	const TITLE_QS = "tit";
+	const METRIC_QS = "met";
+	const BACKEND_QS = "back";
+	const LICENSE_QS = "lc";
+	
+	const USAGE_QS = "us";
+	const CSV_QS = "csv";
+	const DIV_QS = "div";
+	
+	const PREVIOUS_QS="prv";
+
+	//************************************************************
+	const GROUP_TYPE_QS ="gtq";
+	const GROUP_TYPE_NODE ="n";
+	const GROUP_TYPE_TIER ="t";
+	const GROUP_TYPE_IP ="i";
+	
+	//************************************************************
+	const METRIC_TYPE_QS ="mt";
+	
+	const METRIC_TYPE_RUMCALLS = "mrc";
+	const METRIC_TYPE_RUMRESPONSE = "mrr";
+	const METRIC_TYPE_TRANSRESPONSE = "mtr";
+	const METRIC_TYPE_DATABASE_TIME = "mdt";
+	const METRIC_TYPE_ACTIVITY = "mac";
+	const METRIC_TYPE_RESPONSE_TIMES = "mrt";
+	const METRIC_TYPE_BACKEND_RESPONSE = "mbr";
+	const METRIC_TYPE_BACKEND_ACTIVITY = "mba";
+	
+	const METRIC_TYPE_INFR_AVAIL = "mtia";
+	const METRIC_TYPE_INFR_AGENT_METRICS = "mtiam";
+	const METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS = "mtiale";
+	const METRIC_TYPE_INFR_CPU_BUSY = "mticb";
+	const METRIC_TYPE_INFR_MEM_FREE = "mtimf";
+	const METRIC_TYPE_INFR_DISK_FREE = "mtidf";
+	const METRIC_TYPE_INFR_NETWORK_IN = "mtini";
+	const METRIC_TYPE_INFR_NETWORK_OUT = "mtino";
+	const METRIC_TYPE_INFR_JAVA_HEAP_FREE = "mtijhf";
+	const METRIC_TYPE_INFR_JAVA_GC_TIME = "mtijgt";
+	const METRIC_TYPE_INFR_DOTNET_HEAP_USED = "mtidhu";
+	const METRIC_TYPE_INFR_DOTNET_GC_PCT = "mtidgp";
+	const METRIC_TYPE_INFR_DOTNET_ANON_REQ = "mtidar";
+	
+	const METRIC_TYPE_JMX_DBPOOLS = "mtjdbp";
+	
+	//************************************************************
+	const CHART_WIDTH_LARGE = 940;
+	const CHART_HEIGHT_LARGE = 700;
+	const CHART_HEIGHT_SMALL = 125;
+
+	const CHART_WIDTH_LETTERBOX = 940;
+	const CHART_HEIGHT_LETTERBOX = 250;
+	
+	const CHART_WIDTH_LETTERBOX2 = 940;
+	const CHART_HEIGHT_LETTERBOX2 = 200;
+	
+	//**************************************************************************
+	const RUM_DETAILS_QS ="rmd";
+	const RUM_PAGE_QS = "rpg";
+	const RUM_DETAILS_ACTIVITY ="rmda";
+	const RUM_DETAILS_RESPONSE ="rmdr";
+	
+	//**************************************************************************
+	const BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS, cFilter::FILTER_APP_QS , cFilter::FILTER_TIER_QS , cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS];
+	const BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS,  cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS , cFilter::FILTER_NODE_QS];
+	const BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS , cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS ];
+	
+	//**************************************************************************
+	const CHART_METRIC_FIELD = "cmf";
+	const CHART_TITLE_FIELD = "ctf";
+	const CHART_COUNT_FIELD = "ccf";
+	const CHART_APP_FIELD = "caf";
+	
+	//**************************************************************************
+	private static $AppdCredentials = null;
+
+
+	//**************************************************************************
+	public static function get_appd_credentials(){
+		$oCred = self::$AppdCredentials;
+		if (!$oCred){
+			$oCred = new cAppDynCredentials;
+			$oCred->load();
+			self::$AppdCredentials = $oCred;
+		}
+		return $oCred;
+	}
+	
+	//**************************************************************************
+	public static function get_times(){
+		$sTime = cCommon::get_session(cAppDynCommon::TIME_SESS_KEY);
+		if ($sTime == cAppDynCommon::TIME_CUSTOM){
+			$epochFrom = cCommon::get_session(cAppDynCommon::TIME_CUSTOM_FROM_KEY);
+			$epochTo = cCommon::get_session(cAppDynCommon::TIME_CUSTOM_TO_KEY);
+		}else{
+			if ($sTime == "") $sTime=60;
+			
+			$epochTo = time() *1000;
+			$epochFrom = $epochTo - ((60 * $sTime)*1000);
+		}
+		
+		$oTimes = new cAppDynTimes();
+		$oTimes->start = $epochFrom;
+		$oTimes->end = $epochTo;
+		
+		return $oTimes;
+	}
+	
+	//**************************************************************************
+	public static function get_trans_speed_colour($piValue){
+
+		$sImg = "green.png";
+		if ($piValue > 5000) $sImg="red.png";
+		elseif ($piValue > 1000) $sImg="nearlyred.png";
+		elseif ($piValue > 200) $sImg="amber.png";
+		
+		return "images/$sImg";
+	}
+
+	//**************************************************************************
+	public static function force_login(){
+		try{
+			$oCred = self::get_appd_credentials();
+			return $oCred->logged_in();
+		}
+		catch (Exception $e)
+		{
+			$sMsg = $e->getMessage();
+			self::show_top_banner("not logged in "); 
+			?>
+				<p>
+				<div class='errorbox'>
+					<b>Oops there was a problem logging in.</b> "<?=$sMsg?>"
+					<?=self::button("Back to login", "index.php", false);?>
+				</div>
+			<?php
+			die;
+		}
+	}
+	
+	//**************************************************************************
+	public static function errorbox($psMessage){
+		?>
+			<div class='errorbox'>
+				<h2>Oops there was a an error</h2>
+				<p>
+				<?=$psMessage?>
+			</div>
+		<?php
+	}
+	
+	//**************************************************************************
+	public static function render_tier_ext($psApp, $psAppID, $psTier,  $psTid, $poData){
+		global $LINK_SESS_KEY;
+		
+		$showlink = cCommon::get_session($LINK_SESS_KEY);
+		if (sizeof($poData) > 0){
+		
+			$tierlink=self::getTierLink($psApp, $psAppID, $psTier,  $psTid);
+			
+			echo "<table border=1 cellspacing=0>";
+			echo "<tr><th width=700>$tierlink</th><th colspan=4>Calls per min</th><th rowspan=2 width=80>max response Times (ms)</th></tr>";
+			echo "<tr><th width=700>other tier</th><th width=80>max</th><th width=80>min</th><th width=80>avg</th><th width=80>total</th></tr>";
+
+			foreach ( $poData as $detail){
+				$other_tier = $detail->name;
+				$oCalls = $detail->calls;
+				$oTimes = $detail->times;
+				
+				if ($oCalls){
+						
+					if ($oCalls->sum > 0){	
+						echo "<tr>";
+							if ($showlink==1)
+								echo "<td><a href='tiertotier.php?app=$psApp&from=$psTier&to=$other_tier'>$other_tier</a></td>";
+							else
+								echo "<td>$other_tier</td>";
+							echo "<td align=middle>$oCalls->max</td>";
+							echo "<td align=middle>$oCalls->min</td>";
+							echo "<td align=middle>$oCalls->avg</td>";
+							echo "<td align=middle>$oCalls->sum</td>";
+							if ($oTimes)
+								echo "<td align=middle bgcolor=lightgrey>$oTimes->max</td>";
+						echo "</tr>";
+					}
+				}
+			}
+			echo "</table>";
+		}
+	}
+
+
+	//*************************************************************
+	public static function render_heatmap($paData, $psCaption, $psColCaption, $psRowCaption){
+		$aColours = cColour::multigradient([ [0,255,0,7],[255,0,0,5],[255,255,0,7],[255,255,255,0]]);
+		$iColours = count($aColours);
+		
+		$aCols = self::pr__get_cols($paData);
+		$aRows = self::pr__get_rows($paData);
+		echo "<h2>$psCaption</h2>";
+		cColour::showGradient($aColours, "&nbsp;&nbsp;&nbsp;", 40);
+		echo "<table border=0 cellspacing=0 class='maintable'><tr><td><table>";
+			echo "<tr>";
+				echo "<th>$psRowCaption \ $psColCaption</th>";
+				foreach ($aCols as $sCol) echo "<th>$sCol</th>";
+			echo "</tr>";
+			foreach ($aRows as $sRow){
+				echo "<tr>";
+					echo "<th>$sRow</th>";
+					foreach ($aCols as $sCol){
+						if (array_key_exists($sRow, $paData[$sCol])){
+							$iValue = $paData[$sCol][$sRow];
+							$iColourValue = round($iValue*($iColours-1));
+							$sColour = $aColours[$iColourValue];
+							echo "<td bgcolor='$sColour' width=30 height=30 align='middle'>&nbsp;</td>  ";
+						} else
+							echo "<td>&nbsp;</td>";
+					} 
+				echo "</tr>";
+			}
+			
+
+		echo "</table></td></tr></table>";
+	}
+	
+	//*************************************************************
+	public static function getTopLink($psApp,$psAid)
+	{
+		$appenc=urlencode($psApp);
+		return "<a href=\"tiers.php?app=$appenc&aid=$psAid\">$psApp</a>";
+	}
+	
+	//**************************************************************************
+	public static function getApplicationsLink()
+	{
+		return "<a href='apps.php'>Apps</a>";
+	}
+	
+	//**************************************************************************
+	public static function getTierLinkUrl($psApp,$psAid, $psTier, $psTid)
+	{
+		return "tier.php?app=$psApp&aid=$psAid&tier=$psTier&tid=$psTid";
+	}
+	//**************************************************************************
+	public static function getTierLink($psApp,$psAid, $psTier, $psTid)
+	{
+		return "<a href='".self::getTierLinkUrl($psApp,$psAid, $psTier, $psTid)."'>$psTier</a>";
+	}
+	
+	//**************************************************************************
+	public static function plain_button ($psCaption, $psUrl){
+		
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login) return;
+
+		echo  "<button onclick=\"document.location.href='$psUrl';return false;\">$psCaption</button>";
+	}
+
+	//**************************************************************************
+	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login && ($psUrl !=="index.php")){
+			echo "<a class='fake_blue_button'>$psCaption</a>&nbsp;";
+			return;
+		}
+		
+		echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams);
+	}
+	
+	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
+		$sTarget = "";
+		$sID = "";
+		$sClass = "blue_button";
+		
+		if ($pbNewWindow) $sTarget = " target='new'";
+		
+		if ($paParams !== null){
+			if (gettype($paParams) !== "array") cDebug::error("expecting an array as the 4th parameter");
+			if (array_key_exists("id", $paParams )) $sID=" id='".$paParams["id"]."'";
+			if (array_key_exists("class", $paParams )) $sClass.=" ".$paParams["class"];
+		}
+		
+		return "<button  $sTarget $sID class='$sClass' onclick='document.location.href=\"$psUrl\";return false;'>$psCaption</button>";
+	}
+	
+	//**************************************************************************
+	public static function appdButton ($psUrl, $psCaption = "Launch in AppDynamics"){
+		if ($psCaption !== "") $psCaption = "$psCaption ";
+		?>
+			<a class="appd_button" title='Launch in AppDynamics' target='appd' href="<?=$psUrl?>"><?=$psCaption?></a>
+		<?php
+	}
+
+	//**************************************************************************
+	public static function html_header ($psTitle){
+		global $jsinc;
+		?>
+		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+		<html>
+		<head>
+			<title><?=$psTitle?></title>
+			<LINK rel="stylesheet" type="text/css" href="css/app.css" >
+			<link rel="stylesheet" type="text/css" href="css/jquery-ui/jquery-ui.min.css">
+			
+			<script src="<?=$jsinc?>/jquery/jquery-min.js"></script>
+			<script src="<?=$jsinc?>/jquery-ui/jquery-ui.min.js"></script>
+			<script src="js/common.js"></script>
+		</head>
+		<BODY>
+		<!-- Google Tag Manager -->
+		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=<?=cSecret::GOOGLE_TAG_ID?>"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-PFLM8J');</script>
+		<!-- End Google Tag Manager -->
+		<?php
+	}
+	
+	//**************************************************************************
+	public static function html_footer (){
+		?>
+		<script language="javascript">
+			$(
+				function(){
+				$("button.blue_button").removeAttr("class").button();
+				}
+			);
+		</script>
+		<table border=0 width="100%" class="footer"><tr><td>
+				<div class="licenseBox"><pre>
+				Copyright (c) 2013-2016 ChickenKatsu Ltd.
+				
+				This code is protected by copyright under the terms of the 
+				Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
+				http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+				USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
+				
+				For licenses that allow for commercial use please contact cluck@chickenkatsu.co.uk
+				
+				</pre></div>
+				<div class="paidLicenseBox">
+				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>--><br>
+				Copyright (c) 2013-2016
+				<p>
+				<small>
+				Charts built using <a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
+				uses phplib and jsinc from <a target="new" href="https://github.com/open768">Github</a> licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+				</small>
+		</td></tr></table>
+		
+		</BODY></HTML>
+		<?php
+	}	
+	
+		//**************************************************************************
+	public static function show_html_time_options(){
+		global $_SERVER;
+		
+		$sUrl = urlencode($_SERVER['REQUEST_URI']);
+		echo get_time_label();
+		
+		$duration = get_duration();
+		?>
+		<table border=1 cellpadding=0 cellspacing=0><tr><td>
+			Time Shown:<br>
+			<?php
+			foreach ( cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue)
+				if ($iValue== $duration){
+					?><button disabled="disabled"><?=$sCaption?></button><?php
+				}else
+					self::button($sCaption, "settime.php?duration=$iValue&url=$sUrl");
+			?>
+			<br><a href="togglelnk.php?url=<?=$sUrl?>">toggle links</a><p>
+		</td></tr></table><p>
+		<?php
+	}
+	
+	//**************************************************************************
+	private static function pr__logout_menu(){
+		
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login){
+			self::button("<nobr>Back to Login</nobr>", "index.php");
+			return;
+		}
+		
+		$aApps = cAppDyn::GET_Applications();
+		$sCurrentApp = cHeader::get(self::APP_QS);
+
+		?><script language="JavaScript">
+			$(onLoadStyleLogoutList);
+			function  onLoadStyleLogoutList(){
+				$("#logoutmenu").selectmenu({change:common_onListChange,width:100});
+			}
+		</script>
+	
+		<select id="logoutmenu">
+			<option selected disabled>Go...</option>
+			<option value="index.php?,<?=self::IGNORE_REF_QS?>=1">Logout</option>
+			<option value="link.php">Link to this page</option>
+			<optgroup label="All">
+				<option value="allagents.php">Agents</option>
+				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_ACTIVITY)?>">Application Activity</option>
+				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RESPONSE_TIMES)?>">Application Response Times</option>
+				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RUMCALLS)?>">Browser RUM Activity</option>
+				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RUMRESPONSE)?>">Browser RUM Response Times</option>
+				<option value="config.php">Configuration</option>
+				<option value="alldb.php">Databases</option>
+			<option value="usage.php">License Usage</option>
+				<option value="allbackends.php">Remote Services</option>
+			</optgroup>
+			<optgroup label="Application Overview for ..."><?php
+				foreach ($aApps as $oApp){
+					$sLink = cHttp::build_url("tiers.php",self::APP_QS, $oApp->name);
+					$sLink = cHttp::build_url($sLink,self::APP_ID_QS, $oApp->id);
+					
+					?><option value="<?=$sLink?>" ><?=$oApp->name?></option><?php
+				}
+			?><optgroup>
+		</select><?php
+	}
+
+	//**************************************************************************
+	public static function show_time_options( $psTitle){
+		global $_SERVER;
+		
+		$sUrl = $_SERVER['REQUEST_URI'];
+		if (strpos($sUrl,"%")) $sUrl = urldecode($sUrl);
+		cDebug::write("return URL is $sUrl");
+		
+		$oCred = self::get_appd_credentials();
+		$sAccount = $oCred->account;
+		$sHost = $oCred->host;
+		
+		$duration = get_duration();
+		?>
+			<form name="frmTime" id="frmTime" action="settime.php" method="get">
+				<input type="hidden" name="url" value="<?=$sUrl?>">
+				<table class="timebox"><tr>
+					<td>
+						<?=self::pr__logout_menu()?>
+					</td>
+					<td >
+						<?=$sAccount?><br>
+						<?=$sHost?><p>
+						<b><?=$psTitle?></b>
+					</td>
+					<td ><?=get_time_label()?></td>
+					<td width=90 ><select name="duration" onchange="document.getElementById('frmTime').submit();"><?php
+						foreach (cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue){
+							$sSelected = "";
+							if ($iValue== $duration)$sSelected =" selected";
+							echo "<option value='$iValue' $sSelected>$sCaption</option>";
+						}
+					?></select></td>
+					<td width=80 align="middle"><?php
+						$sUrl = urlencode($sUrl);
+						self::button("<i>Custom</i>", "customtime.php?url=$sUrl", false);
+					?></td>
+					<td align="right" class="logoimage"></td>
+				</tr></table>
+			</form>
+		<?php
+	}
+	//**************************************************************************
+	public static function show_top_banner( $psTitle){
+		$bLoggedin = true;
+		try{
+			$oCred = self::get_appd_credentials();
+			$sAccount = $oCred->account;
+			$sHost = $oCred->host;
+		}catch (Exception $e){
+			$sAccount = "unknown";
+			$sHost = "unknown";
+			$bLoggedin = false;
+		}
+
+		?>
+			<div class="timebox"><table width="100%"><tr>
+				<td width="150">
+					<?=($bLoggedin?self::pr__logout_menu():"")?>
+				</td>
+				<td  width="75%">
+					<?=$sAccount?><br>
+					<?=$sHost?><p>
+					<b><?=$psTitle?></b>
+				</td>
+				<td class="logoimage"></td>
+			</tr></table></div>
+		<?php
+	}
+		
+	//**************************************************************************
+	public static function getRowClass()
+	{
+		cAppDynCommon::$ROW_TOGGLE = !cAppDynCommon::$ROW_TOGGLE;
+		if (cAppDynCommon::$ROW_TOGGLE)
+			return "row1";
+		else
+			return "row2";
+
+	}
+	
+	//**************************************************************************
+	public static function getInfrastructureMetricTypes(){
+		$aData = 
+		 [
+			self::METRIC_TYPE_ACTIVITY,
+			self::METRIC_TYPE_RESPONSE_TIMES,
+			self::METRIC_TYPE_INFR_AVAIL,
+			self::METRIC_TYPE_INFR_AGENT_METRICS,
+			self::METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS,
+			self::METRIC_TYPE_INFR_CPU_BUSY,
+			self::METRIC_TYPE_INFR_DISK_FREE,
+			self::METRIC_TYPE_INFR_MEM_FREE,
+			self::METRIC_TYPE_INFR_JAVA_HEAP_FREE,
+			self::METRIC_TYPE_INFR_JAVA_GC_TIME,
+			self::METRIC_TYPE_INFR_DOTNET_ANON_REQ,
+			self::METRIC_TYPE_INFR_DOTNET_HEAP_USED,
+			self::METRIC_TYPE_INFR_DOTNET_GC_PCT,
+			self::METRIC_TYPE_INFR_NETWORK_IN,
+			self::METRIC_TYPE_INFR_NETWORK_OUT
+		];
+		
+		return $aData;
+	}
+	
+	//**************************************************************************
+	public static function getInfrastructureMetric($psTier, $psNode=null, $psMetricType){
+			$sNodeCaption = ($psNode?$psNode:$psTier);
+			
+			switch($psMetricType){
+				case self::METRIC_TYPE_ACTIVITY:
+					$sMetricUrl = cAppDynMetric::tierNodeCallsPerMin($psTier,$psNode);
+					$sCaption = "Calls per min ($sNodeCaption)";
+					$sShortCaption = "Activity";
+					break;
+				case self::METRIC_TYPE_RESPONSE_TIMES:
+					$sMetricUrl = cAppDynMetric::tierNodeResponseTimes($psTier,$psNode);
+					$sCaption = "response times in ms ($sNodeCaption)";
+					$sShortCaption = "Response";
+					break;
+				case self::METRIC_TYPE_INFR_AVAIL:
+					$sMetricUrl = cAppDynMetric::InfrastructureAgentAvailability($psTier,$psNode);
+					$sCaption = "Agent Availailability ($sNodeCaption)";
+					$sShortCaption = "Availability";
+					break;
+				case self::METRIC_TYPE_INFR_CPU_BUSY:
+					$sMetricUrl = cAppDynMetric::InfrastructureCpuBusy($psTier,$psNode);
+					$sCaption = "CPU Busy ($sNodeCaption)";
+					$sShortCaption = "CPU Busy";
+					break;
+				case self::METRIC_TYPE_INFR_MEM_FREE:
+					$sMetricUrl = cAppDynMetric::InfrastructureMemoryFree($psTier,$psNode);
+					$sCaption = "memory free in MB ($sNodeCaption)";
+					$sShortCaption = "Memory free (MB)";
+					break;
+				case self::METRIC_TYPE_INFR_DISK_FREE:
+					$sMetricUrl = cAppDynMetric::InfrastructureDiskFree($psTier,$psNode);
+					$sCaption = "Disk Space free in MB ($sNodeCaption)";
+					$sShortCaption = "Disk space free";
+					break;
+				case self::METRIC_TYPE_INFR_NETWORK_IN:
+					$sMetricUrl = cAppDynMetric::InfrastructureNetworkIncoming($psTier,$psNode);
+					$sCaption = "incoming network traffic in KB/sec ($sNodeCaption)";
+					$sShortCaption = "Network-in";
+					break;
+				case self::METRIC_TYPE_INFR_NETWORK_OUT:
+					$sMetricUrl = cAppDynMetric::InfrastructureNetworkOutgoing($psTier,$psNode);
+					$sCaption = "outgoing network traffic in KB/sec ($sNodeCaption)";
+					$sShortCaption = "Network-out";
+					break;
+				case self::METRIC_TYPE_INFR_JAVA_HEAP_FREE:
+					$sMetricUrl = cAppDynMetric::InfrastructureJavaHeapFree($psTier,$psNode);
+					$sCaption = "Java Heap free ($sNodeCaption)";
+					$sShortCaption = "Java Heap free";
+					break;
+				case self::METRIC_TYPE_INFR_JAVA_GC_TIME:
+					$sMetricUrl = cAppDynMetric::InfrastructureJavaGCTime($psTier,$psNode);
+					$sCaption = "Java GC Time ($sNodeCaption)";
+					$sShortCaption = "Java GC Time";
+					break;
+				case self::METRIC_TYPE_INFR_DOTNET_HEAP_USED:
+					$sMetricUrl = cAppDynMetric::InfrastructureDotnetHeapUsed($psTier,$psNode);
+					$sCaption = "DotNet heap used ($sNodeCaption)";
+					$sShortCaption = ".Net heap used";
+					break;
+				case self::METRIC_TYPE_INFR_DOTNET_GC_PCT:
+					$sMetricUrl = cAppDynMetric::InfrastructureDotnetGCTime($psTier,$psNode);
+					$sCaption = "percent DotNet GC time  ($sNodeCaption)";
+					$sShortCaption = ".Net-GC";
+					break;
+				case self::METRIC_TYPE_INFR_DOTNET_ANON_REQ:
+					$sMetricUrl = cAppDynMetric::InfrastructureDotnetAnonRequests($psTier,$psNode);
+					$sCaption = "DotNet Anonymous Requests  ($sNodeCaption)";
+					$sShortCaption = ".Net-Anonymous";
+					break;
+				case self::METRIC_TYPE_INFR_AGENT_METRICS:
+					$sMetricUrl = cAppDynMetric::InfrastructureAgentMetricsUploaded($psTier,$psNode);
+					$sCaption = "Agent Metrics uploaded  ($sNodeCaption)";
+					$sShortCaption = "Agent-metrics";
+					break;
+				case self::METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS:
+					$sMetricUrl = cAppDynMetric::InfrastructureAgentMetricsLicenseErrors($psTier,$psNode);
+					$sCaption = "License Errors ($sNodeCaption)";
+					$sShortCaption = "License errors";
+					break;
+				default:
+					cDebug::error("unknown Metric type");
+			}	
+
+			return (object)["metric"=>$sMetricUrl, "caption"=>$sCaption, "short"=>$sShortCaption ];
+	}
+
+	//******************************************************************************************
+	public static function show_infra_menu($psTierQS)
+	{
+		
+	}
+	
+	//******************************************************************************************
+	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	
+		$sCurrentApp = cHeader::get(self::APP_QS);
+		$sCurrentAID = cHeader::get(self::APP_ID_QS);
+		
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			self::button($psCaption,null);
+			return;
+		}
+
+		
+		$oApps = cAppDyn::GET_Applications();
+		?>
+			<script language="JavaScript">
+				$(onLoadStyleApplist);
+				function  onLoadStyleApplist(){
+					$("#applist").selectmenu({change:common_onListChange});
+				}
+			</script>
+		
+			<select id="applist">
+				<option selected disabled>Show <?=$psCaption?> for</option>
+				<?php
+					foreach ($oApps as $oApp){
+						$sDisabled = ($oApp->name == $sCurrentApp?"disabled":"");
+						
+						$sLink = cHttp::build_url($psURLFragment, self::APP_QS, $oApp->name) ;
+						$sLink = cHttp::build_url($sLink, self::APP_ID_QS, $oApp->id) ;
+						$sLink = cHttp::build_url($sLink, $psExtraQS) ;
+						
+						?>
+						<option value="<?=$sLink?>" <?=$sDisabled?>><?=$oApp->name?></option>
+						<?php
+					}
+				?>
+			</select>		
+		<?php
+		self::show_app_functions($sCurrentApp, $sCurrentAID);
+	}
+	
+	//******************************************************************************************
+	public static function show_app_functions($psApp=null, $psAppID=null){
+
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			self::button($psApp,null);
+			return;
+		}
+		
+		$sApp = $psApp;
+		$sAid = $psAppID;
+		if (($sApp == null) || ($psAppID == null)) {
+			$sApp = cHeader::get(self::APP_QS);
+			$sAid = cHeader::get(self::APP_ID_QS);
+		}
+		
+		$AppQS = cHttp::build_qs(null, self::APP_QS,$sApp);
+		$AppQS = cHttp::build_qs($AppQS, self::APP_ID_QS,$sAid);
+		?>
+			<script language="JavaScript">
+				$(onLoadStyleAppActions);
+				function  onLoadStyleAppActions(){
+					$("#appActions_<?=$sAid?>").selectmenu({change:common_onListChange});
+				}
+			</script>
+			<select id="appActions_<?=$sAid?>">
+				<optgroup label="Application">
+					<option selected disabled><?=$sApp?></option>
+					<option value="appoverview.php?<?=$AppQS?>">One Pager</option>
+				</optgroup>
+				<optgroup label="Application Functions">
+					<option value="appnodes.php?<?=$AppQS?>">Agents</option>
+					<option value="appavail.php?<?=$AppQS?>">Availability</option>
+					<option value="tiers.php?<?=$AppQS?>">Activity</option>
+					<option value="appheatmap.php?<?=$AppQS?>">Activity Heatmap</option>
+					<option value="events.php?<?=$AppQS?>">Events</option>
+					<option value="appext.php?<?=$AppQS?>">External Calls</option>
+					<option value="appinfra.php?<?=$AppQS?>">Infrastructure Overview</option>
+					<option value="allnodedetail.php?<?=cHttp::build_qs($AppQS,self::METRIC_TYPE_QS,self::METRIC_TYPE_INFR_CPU_BUSY)?>">Infrastructure (cpu)</option>
+					<option value="backends.php?<?=$AppQS?>">Remote Services</option>
+					<option value="apptrans.php?<?=$AppQS?>">Transactions</option>
+					<option value="apprum.php?<?=$AppQS?>">Web Real User Monitoring</option>
+				</optgroup>
+			</select>
+		<?php
+	}
+	
+	//******************************************************************************************
+	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			self::button($psTier,null);
+			return;
+		}
+		
+		//-------------------------------------------------------------------------------------
+		$sTier = $psTier;
+		$sTierID = $psTierID;
+		$sNode = $psNode;
+		
+		if (($sTier == null) || ($sTierID == null)) {
+			$sTier = cHeader::get(self::TIER_QS);
+			$sTierID = cHeader::get(self::TIER_ID_QS);
+		}
+		
+		//-------------------------------------------------------------------------------------
+		if ($sNode == null)
+			$sNode = cHeader::get(self::NODE_QS);
+
+		//-------------------------------------------------------------------------------------
+		$sMenuID = "menuShowTier$sTierID";
+		$sApp = cHeader::get(self::APP_QS);
+		
+		$sAppQs = self::get_base_app_qs();
+		$sTierQs = cHttp::build_qs($sAppQs, self::TIER_QS, $sTier);
+		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $sTierID);
+		if ($sNode) $sTierQs = cHttp::build_qs($sTierQs, self::NODE_QS, $sNode);
+
+
+		?>
+		<select id="<?=$sMenuID?>">
+			<optgroup label="Tier">
+				<option selected disabled><?=$sTier?></option>
+				<option disabled><?=$sApp?> (Application)</option>
+			</optgroup>
+			<option value="<?=cHttp::build_url("tierextgraph.php",$sTierQs)?>">External Calls</option>
+			<option value="<?=cHttp::build_url("tierinfrstats.php",$sTierQs)?>">Infrastructure Statistics</option>
+			<option value="<?=cHttp::build_url("tierjmx.php?$sTierQs", self::METRIC_TYPE_QS, self::METRIC_TYPE_JMX_DBPOOLS)?>">Java Connection Pools</option>
+			<option value="<?=cHttp::build_url("tier.php",$sTierQs)?>">Overview</option>
+			<option value="<?=cHttp::build_url("tiertransgraph.php", $sTierQs)?>">Transactions Statistics</option>
+			<option value="<?=cHttp::build_url("tiertrans.php",$sTierQs)?>">Transactions in tabular form</option>
+		</select>
+		<script language="JavaScript">
+			$(onLoadStyleTierActions);
+			function  onLoadStyleTierActions(){
+				$("#<?=$sMenuID?>").selectmenu({change:common_onListChange});
+			}
+		</script>
+		<?php
+		
+	}
+	
+	//#####################################################################################
+	//#####################################################################################
+	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null){ 
+		$iCol = 0;
+		$iOldWidth = cChart::$width;
+		cChart::$width = self::CHART_WIDTH_LETTERBOX / $piMaxCols;
+		if ($piHeight==null) $piHeight = self::CHART_HEIGHT_SMALL;
+		
+		?><table class="maintable"><?php
+			foreach ($paTable as $aItem){
+				if ($iCol == 0) echo "<tr class=\"$psRowClass\">";
+				$iCol++;
+				if (count($aItem) ==1)
+					echo "<th>".$aItem[0]."</th>";
+				else{
+					echo "<td>";
+							cChart::add($aItem[0], $aItem[1], $psApp, $piHeight);
+					echo "</td>";
+				}
+				if ($iCol==$piMaxCols){
+					echo "</tr>";
+					$iCol = 0;
+				}
+			}
+			if ($iCol !== 0) echo "</tr>";
+		?></table><?php 
+		
+		cChart::$width = $iOldWidth;
+	}
+
+
+	//#####################################################################################
+	//#####################################################################################
+	public static function get_base_app_QS(){ return self::pr_get_base_QS(self::BASE_APP_PARAMS);}
+	public static function get_base_tier_QS(){return self::pr_get_base_QS(self::BASE_TIER_PARAMS);}
+	public static function get_base_node_QS(){return self::pr_get_base_QS(self::BASE_NODE_PARAMS);}
+	
+	private static function pr_get_base_QS($paParams){
+		$sBaseUrl = "";
+		
+		foreach ($paParams as $sParam){
+			$sValue = cHeader::get($sParam);
+			if ($sValue) $sBaseUrl = cHttp::build_qs($sBaseUrl, $sParam, $sValue );
+		}
+		return $sBaseUrl;
+	}
+	
+	//#####################################################################################
+	//#####################################################################################
+	private static function pr__get_rows($paArray){
+		$aRows = [];
+		
+		foreach ($paArray as $sCol=>$aRows)
+			foreach ($aRows as $sRow =>$iValue)
+				$aRows[$sRow] = 0;
+		
+		ksort($aRows, SORT_NUMERIC);
+		return (array_keys($aRows));
+	}
+	
+	private static function pr__get_cols($paArray){
+		$aCols = [];
+		
+		foreach ($paArray as $sCol=>$aRows)
+			$aCols[$sCol] = 0;
+		ksort($aCols, SORT_NUMERIC);
+		return (array_keys($aCols));
+	}
+	
+	
+
+}
+?>
