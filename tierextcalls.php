@@ -42,7 +42,6 @@ $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $aid=cHeader::get(cRender::APP_ID_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
-$toplink=cRender::getTopLink($app,$aid);
 $gsAppQs=cRender::get_base_app_QS();
 $gsTierQs=cRender::get_base_tier_QS();
 
@@ -53,14 +52,27 @@ $duration = get_duration();
 cRender::html_header("External tier calls");
 cRender::force_login();
 
-cRender::show_time_options("External calls from $tier in $toplink"); 
-cRender::button("Stats", cHttp::build_url("tierstats.php?",$gsTierQs));
-cRender::button("Transactions", cHttp::build_url("tiertrans.php?",$gsTierQs));
-echo "&nbsp;";
-cRender::button("<i>Graph</i>", cHttp::build_url("tierextgraph.php?",$gsTierQs));
+cRender::show_time_options("External calls from $tier in $app"); 
+cRender::show_tier_functions();
+cRender::show_tier_menu("Change Tier to", "tierextcalls.php");
+cRender::button("Graph it", cHttp::build_url("tierextgraph.php?",$gsTierQs));
+cRender::button("ext calls for ($app) app", cHttp::build_url("appext.php?",$gsAppQs));
+
+//####################################################################
 cCommon::flushprint ("<br>");
 
-$oResponse =cAppdyn::GET_Tier_ext_details($app, $tier);
+$oTimes = cRender::get_times();
+?>
+	<span id="progress"><?php
+		$oResponse =cAppdyn::GET_Tier_ext_details($app, $tier, $oTimes);
+	?></span>
+	<script language="javascript">
+		function clearProgresStatus(){
+			$("#progress").hide();
+		}
+		$(clearProgresStatus);
+	</script>
+<?php
 cRender::render_tier_ext($app, $aid, $tier, $tid, $oResponse);
 
 cRender::html_footer();

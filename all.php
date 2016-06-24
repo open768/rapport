@@ -39,27 +39,25 @@ require_once("inc/inc-render.php");
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
 	case cRender::METRIC_TYPE_RUMCALLS:
-		$sTitle = "Web Browser Page Requests";
-		$sMetric = cAppDynMetric::webrumCallsPerMin();
-		break;
 	case cRender::METRIC_TYPE_RUMRESPONSE:
-		$sTitle = "Web Browser Page Response";
-		$sMetric = cAppDynMetric::webrumResponseTimes();
+		$sTitle1 = "Web Browser Page Requests";
+		$sMetric1 = cAppDynMetric::webrumCallsPerMin();
+		$sTitle2 = "Web Browser Page Response";
+		$sMetric2 = cAppDynMetric::webrumResponseTimes();
 		break;
 	case cRender::METRIC_TYPE_RESPONSE_TIMES:
-		$sTitle = "Application Response Times";
-		$sMetric = cAppDynMetric::appResponseTimes();
-		break;
 	case cRender::METRIC_TYPE_ACTIVITY:
-		$sTitle = "Application Activity";
-		$sMetric = cAppDynMetric::appCallsPerMin();
+		$sTitle1 = "Application Activity";
+		$sMetric1 = cAppDynMetric::appCallsPerMin();
+		$sTitle2 = "Application Response Times";
+		$sMetric2 = cAppDynMetric::appResponseTimes();
 		break;
 	default:
 		cDebug::error("unknown  metric type $sMetricType");
 }
 
 //####################################################################
-cRender::html_header("All Applications - $sTitle");
+cRender::html_header("All Applications - $sTitle1");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
@@ -79,11 +77,11 @@ cChart::$title_qs = cRender::TITLE_QS;
 cChart::$app_qs = cRender::APP_QS;
 
 //####################################################################
-cRender::show_time_options( "All Applications - $sTitle"); 
+cRender::show_time_options( "All Applications - $sTitle1"); 
 		
 
 //####################################################################
-cChart::$width=940;
+cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 $oResponse = cAppDyn::GET_Applications();
 ?>
 	<table class="maintable">
@@ -94,14 +92,19 @@ $oResponse = cAppDyn::GET_Applications();
 			//display the results
 			foreach ( $oResponse as $oApp){
 				if (cFilter::isAppFilteredOut($oApp->name)) continue;
+				$sClass = cRender::getRowClass();
 				?>
-					<tr><td class="<?=cRender::getRowClass()?>">
+					<tr class="<?=$sClass?>"><td colspan=2>
 						<?=cRender::show_app_functions($oApp->name, $oApp->id)?>
-						<br>
-						<?php
-							cChart::add($sTitle, $sMetric, $oApp->name, 200);
-						?>
 					</td></tr>
+					<tr class="<?=$sClass?>">
+						<td><?php
+							cChart::add($sTitle1, $sMetric1, $oApp->name, 200);
+						?></td>
+						<td><?php
+							cChart::add($sTitle2, $sMetric2, $oApp->name, 200);
+						?></td>
+					</tr>
 				<?php
 			}
 	?>

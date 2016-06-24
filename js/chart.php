@@ -67,6 +67,7 @@ function onChartJson( poData){
 		oData.addColumn('number', 'Value');		
 		oData.addColumn('number', 'Max');		
 		oData.addColumn({type: 'string', role: 'tooltip', p: {html: true}});		
+		
 
 		for (i=0; i<oJson.data.length; i++ ){
 			var oItem = oJson.data[i];
@@ -84,7 +85,9 @@ function onChartJson( poData){
 			
 		}
 		
-		// update the maximum
+		// set the display range of the chart to match the requested timerange
+		
+		// display maximumes and observed values
 		iMax = Math.max(iMax, iMaxObserved);
 		$("#"+sDivID+"max").html(iMax);
 		$("#"+sDivID+"maxo").html(iMaxObserved);
@@ -94,6 +97,9 @@ function onChartJson( poData){
 		
 		// draw the chart
 		var oDiv = document.getElementById(sDivID);
+		var dStart = new Date(oJson.epoch_start);
+		var dEnd = new Date(oJson.epoch_end);
+		
 		oChart = new google.visualization.LineChart( oDiv );
 		var oOptions = {
 			title: oRemoteItem.caption,
@@ -103,10 +109,15 @@ function onChartJson( poData){
 			dataOpacity: 0.8,
 			theme: 'maximized' ,
 			hAxis: {
-				textStyle:{color: 'DarkCyan'}
+				textStyle:{color: 'DarkCyan'},
+				viewWindow:{
+					min:dStart,
+					max:dEnd,
+				}			
 			},
 			vAxis: {
-				textStyle:{color: 'DarkCyan'}
+				textStyle:{color: 'DarkCyan'},
+				viewWindow:{min:0}			
 			}
 		};
 		oChart.draw(oData, oOptions);
@@ -127,6 +138,8 @@ function chart_nodata(poData){
 	oDiv.html("Nothing found: "<?=(cChart::$showShortNoData?"":"+sCaption")?>);
 	oDiv.height(<?=(cChart::$showShortNoData?40:90)?>);
 	oDiv.attr('class', 'chartnodatadiv');
+	
+	//publish event
 	bean.fire(cChartBean,CHART__NODATA_EVENT,poData)
 }
 

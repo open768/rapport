@@ -34,6 +34,8 @@ class cMetricOutput{
 	public $metric;
 	public $app;
 	public $data = [];
+	public $epoch_start;
+	public $epoch_end;
 	
 	public function add($psDate, $piValue, $piMax = null){
 		$oItem = new cMetricItem;
@@ -124,12 +126,19 @@ class cMetric{
 		$oOutput = new cMetricOutput;
 		$oOutput->metric = $psMetric;
 		$oOutput->app = $psApp;
+		$aData = null;
 		
 		if (strstr($psMetric, cAppDynMetric::USAGE_METRIC)){
 			//license usage metrics are special
 			$aParams = explode("/",$psMetric);
+			$sModule = $aParams[1];
+			$iDuration = $aParams[2];
+			
+			$oOutput->epoch_start = (time() - ($iDuration*cCommon::SECONDS_IN_MONTH))*1000;
+			$oOutput->epoch_end = time()*1000;
+
 			try{
-				$aData = cAppDynAccount::GET_license_usage($aParams[1], $aParams[2]);
+				$aData = cAppDynAccount::GET_license_usage($sModule, $iDuration);
 			}
 			catch (Exception $e){}
 			
@@ -144,7 +153,8 @@ class cMetric{
 			$oTime= cRender::get_times();
 			$epochTo = $oTime->end;
 			$epochFrom = $oTime->start;
-			
+			$oOutput->epoch_start = $epochFrom;
+			$oOutput->epoch_end = $epochTo;
 			
 			if ($pbPreviousPeriod){
 				$iDiff = $epochTo - $epochFrom;
@@ -157,36 +167,12 @@ class cMetric{
 			}
 			catch (Exception $e){}
 			if ($aData){
-				//add a null if the first  item didnt have the expected timstamp
-				if (count($aData) > 0){
-					$oFirst = $aData[0];
-					if ($oFirst->startTimeInMillis > $epochFrom){
-						cDebug::write("first item didnt start on $epochFrom");
-						$sDate = date(DateTime::W3C, $epochFrom/1000); 
-						$oOutput->add($sDate,null,0 );
-						
-						$sDate = date(DateTime::W3C, ($oFirst->startTimeInMillis-1)/1000 ); 
-						$oOutput->add($sDate,null,0 );
-					}
-				}
-				
 				//add the other data
 				foreach ($aData as $oRow){
 					$sDate = date(DateTime::W3C, $oRow->startTimeInMillis/1000); 
 					$iMaxval = max($oRow->max, $oRow->value);
 					
 					$oOutput->add($sDate,$oRow->value,$iMaxval );
-				}
-				
-				//add a null if the last item didnt have the expected timstamp
-				if ($oRow->startTimeInMillis < $epochTo){
-					cDebug::write("last item didnt end on $epochTo");
-					$sDate = date(DateTime::W3C, ($oRow->startTimeInMillis+1)/1000); 
-					$oOutput->add($sDate,null,0 );
-					
-					$sDate = date(DateTime::W3C, $epochTo/1000); 
-					$oOutput->add($sDate,null,0 );
-					
 				}
 			}
 		}

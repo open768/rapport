@@ -36,50 +36,29 @@ require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
 //####################################################################
-cRender::html_header("Transactions");
-cRender::force_login();
+// common functions
+function render_tier_transactions($psApp, $psTier, $psTierID, $paTrans, $poTimes){	
 
-// huge time limit as this takes a long time//display the results
-set_time_limit(200); 
-
-//get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
-$oTime= cRender::get_times();
-
-// show time options
-$gsAppQS = cRender::get_base_app_qs();
-cRender::show_time_options("Business Transactions - $app"); 
-
-?><h2>transaction counts and avg response times </h2><?php
-cRender::show_apps_menu("Transactions", "apptrans.php");
-
-// common function
-function render_tier_transactions($psTier, $psTierID, $paTrans){	
-	global $app, $oTime;
-
-	?><table border=1 cellspacing=0>
-		<tr>
+	?><table border=1 cellspacing=0 id="<?=$psTierID?>">
+		<thead><tr>
 			<th width=700>transaction</th>
 			<th width=50>&nbsp;</th>
-			<th width=90>max</th>
-			<th width=90>avg</th>
+			<th width=90>max (ms)</th>
+			<th width=90>avg (ms)</th>
 			<th width=90>calls</th>
-		</tr><?php
+		</tr></thead>
+		<tbody><?php
 		$sBaseUrl = cHttp::build_url("transdetails.php", cRender::get_base_app_qs());
 		$sBaseUrl = cHttp::build_url($sBaseUrl, cRender::TIER_QS, $psTier );
 		$sBaseUrl = cHttp::build_url($sBaseUrl, cRender::TIER_ID_QS, $psTierID );
 		$iCount = 0;
-		
-		foreach ($paTrans as $oTrans){
-			$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS,$oTrans->name);
-			$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$oTrans->id);
+
+		$aStats = cAppdyn::GET_TransResponse($psApp, $psTier, "*", $poTimes, "true");
+		foreach ($aStats as $oTrans){
+			$oStats =  cAppdynUtil::Analyse_Metrics($oTrans->metricValues);
+			$sName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $psTier);
 			
-			cCommon::flushprint("<!-- $oTrans->name -->");
-			
-			$oStats = cAppdyn::GET_TransResponse($app, $psTier, $oTrans->name, $oTime, "true");
-			if (!$oStats )	continue;
-			$oStats = cAppdynUtil::Analyse_Metrics($oStats);
+			$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS,$sName);
 			
 			if ($oStats->count == 0)	continue;
 			$iCount ++;
@@ -87,10 +66,10 @@ function render_tier_transactions($psTier, $psTierID, $paTrans){
 			$img = cRender::get_trans_speed_colour($oStats->max);
 			
 			?><tr>
-				<td><a href="<?=$sLink?>"><?=$oTrans->name?></a></td>
+				<td><a href="<?=$sLink?>"><?=$sName?></a></td>
 				<td><img src="<?=$img?>" align=middle></td>
-				<td align="right"><?=$oStats->max?> ms</td>
-				<td align="right"><?=$oStats->avg?> ms</td>
+				<td align="right"><?=$oStats->max?></td>
+				<td align="right"><?=$oStats->avg?></td>
 				<td align=middle><?=$oStats->count?></td>
 			</tr><?php
 			
@@ -101,13 +80,39 @@ function render_tier_transactions($psTier, $psTierID, $paTrans){
 			?><tr><td colspan="5" align="left">No Transactions with Data found</td></tr><?php
 			cCommon::flushprint("");
 		}
-	?></table>
+		?></tbody>
+	</table>
+	<script language="javascript">
+		$( function(){ $("#<?=$psTierID?>").tablesorter();} );
+	</script>
 	<?php
 }
+//####################################################################
+cRender::html_header("Transactions");
+cRender::force_login();
+
+//get passed in values
+$app = cHeader::get(cRender::APP_QS);
+$gsAppQS = cRender::get_base_app_qs();
+
+//header
+cRender::show_time_options("Business Transactions - $app"); 
+
+?><h2>Transaction statistics (<?=$app?>)</h2><?php
+
+//header
+cRender::show_apps_menu("Change Application", "apptrans.php");
+if (cFilter::isFiltered()){
+	$sCleanAppQS = cRender::get_clean_base_app_QS();
+	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
+}
+
+$aTiers =cAppdyn::GET_Tiers($app);
 
 // work through each tier
 $aTierIDsWithData = [];
 $aTiers =cAppdyn::GET_Tiers($app);
+$oTimes = cRender::get_times();
 ?>
 <div class="maintable"><?php
 	foreach ( $aTiers as $oTier){
@@ -128,7 +133,7 @@ $aTiers =cAppdyn::GET_Tiers($app);
 		//display the transaction data
 		?><div class="<?=cRender::getRowClass()?>"><?php
 			cRender::button($oTier->name, $sUrl);
-			render_tier_transactions($oTier->name, $oTier->id, $aTrans);
+			render_tier_transactions($app, $oTier->name, $oTier->id, $aTrans, $oTimes);
 		?></div><?php
 	}
 ?></div>

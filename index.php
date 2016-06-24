@@ -63,10 +63,10 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	$oCred->use_https = ($sUse_https=="yes");
 	try{
 		$oCred->save();
-	}
-	
+	}	
 	catch (Exception $e)
 	{
+		cRender::html_header("unable to login");
 		$sError = $e->getMessage();
 		cRender::show_top_banner("Unable to Login !"); 
 		?>
@@ -146,6 +146,15 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 			</table>
 			<input type="hidden" name="<?=cLogin::KEY_REFERRER?>" value="<?=$_SERVER['HTTP_REFERER']?>">
 			<input type="hidden" name="<?=cRender::IGNORE_REF_QS?>" value="<?=cHeader::get(cRender::IGNORE_REF_QS)?>">
+			<?php
+				if (cDebug::is_debugging()){
+					?><input type="hidden" name="<?=cDebug::DEBUG_STR?>" value="1"><?php
+				}
+				if (cDebug::is_extra_debugging()){
+					?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
+				}
+			?>
+			
 		</td></tr></table>
 		</form>
 	<?php

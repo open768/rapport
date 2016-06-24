@@ -89,6 +89,7 @@ class cRender{
 	const CHART_WIDTH_LARGE = 940;
 	const CHART_HEIGHT_LARGE = 700;
 	const CHART_HEIGHT_SMALL = 125;
+	const CHART_HEIGHT_TINY = 75;
 
 	const CHART_WIDTH_LETTERBOX = 940;
 	const CHART_HEIGHT_LETTERBOX = 250;
@@ -103,6 +104,10 @@ class cRender{
 	const RUM_DETAILS_RESPONSE ="rmdr";
 	
 	//**************************************************************************
+	const CLEAN_BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS];
+	const CLEAN_BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS];
+	const CLEAN_BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS];
+	
 	const BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS, cFilter::FILTER_APP_QS , cFilter::FILTER_TIER_QS , cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS];
 	const BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS,  cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS , cFilter::FILTER_NODE_QS];
 	const BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS , cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS ];
@@ -344,8 +349,10 @@ class cRender{
 			<LINK rel="stylesheet" type="text/css" href="css/app.css" >
 			<link rel="stylesheet" type="text/css" href="css/jquery-ui/jquery-ui.min.css">
 			
-			<script src="<?=$jsinc?>/jquery/jquery-min.js"></script>
+			<script src="<?=$jsinc?>/jquery/jquery-3.0.0.min.js"></script>
+			<script src="<?=$jsinc?>/jquery/jquery-migrate-3.0.0.min.js"></script>
 			<script src="<?=$jsinc?>/jquery-ui/jquery-ui.min.js"></script>
+			<script src="<?=$jsinc?>/tablesorter/jquery.tablesorter.min.js"></script>
 			<script src="js/common.js"></script>
 		</head>
 		<BODY>
@@ -391,6 +398,7 @@ class cRender{
 				<small>
 				Charts built using <a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
 				uses phplib and jsinc from <a target="new" href="https://github.com/open768">Github</a> licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+				uses <a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license
 				</small>
 		</td></tr></table>
 		
@@ -430,7 +438,12 @@ class cRender{
 			return;
 		}
 		
-		$aApps = cAppDyn::GET_Applications();
+		try{
+			$aApps = cAppDyn::GET_Applications();
+		} catch (Exception $e){
+			return;
+		}
+		
 		$sCurrentApp = cHeader::get(self::APP_QS);
 
 		?><script language="JavaScript">
@@ -447,9 +460,7 @@ class cRender{
 			<optgroup label="All">
 				<option value="allagents.php">Agents</option>
 				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_ACTIVITY)?>">Application Activity</option>
-				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RESPONSE_TIMES)?>">Application Response Times</option>
 				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RUMCALLS)?>">Browser RUM Activity</option>
-				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RUMRESPONSE)?>">Browser RUM Response Times</option>
 				<option value="config.php">Configuration</option>
 				<option value="alldb.php">Databases</option>
 			<option value="usage.php">License Usage</option>
@@ -687,7 +698,7 @@ class cRender{
 			</script>
 		
 			<select id="applist">
-				<option selected disabled>Show <?=$psCaption?> for</option>
+				<option selected disabled><?=$psCaption?></option>
 				<?php
 					foreach ($oApps as $oApp){
 						$sDisabled = ($oApp->name == $sCurrentApp?"disabled":"");
@@ -754,6 +765,45 @@ class cRender{
 	}
 	
 	//******************************************************************************************
+	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login)	return;
+
+		$sCurrentTier = cHeader::get(self::TIER_QS);
+		$sCurrentTID = cHeader::get(self::TIER_ID_QS);
+		$sApp = cHeader::get(self::APP_QS);
+		
+		$oTiers = cAppDyn::GET_Tiers($sApp);
+		?>
+			<script language="JavaScript">
+				$(onLoadStyleApplist);
+				function  onLoadStyleApplist(){
+					$("#tierlist").selectmenu({change:common_onListChange});
+				}
+			</script>
+		
+			<select id="tierlist">
+				<option selected disabled><?=$psCaption?></option>
+				<?php
+					foreach ($oTiers as $oTier){
+						$sDisabled = ($oTier->name == $sCurrentTier?"disabled":"");
+						
+						$sLink = cHttp::build_url($psURLFragment, self::get_base_app_QS()) ;
+						$sLink = cHttp::build_url($sLink, self::TIER_QS, $oTier->name);
+						$sLink = cHttp::build_url($sLink, self::TIER_ID_QS, $oTier->id);
+						$sLink = cHttp::build_url($sLink, $psExtraQS) ;
+						
+						?>
+						<option value="<?=$sLink?>" <?=$sDisabled?>><?=$oTier->name?></option>
+						<?php
+					}
+				?>
+			</select>		
+		<?php
+	}
+	
+	//******************************************************************************************
 	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
 		$oCred = self::get_appd_credentials();
 		if ($oCred->restricted_login) {
@@ -765,6 +815,7 @@ class cRender{
 		$sTier = $psTier;
 		$sTierID = $psTierID;
 		$sNode = $psNode;
+		$sCurrentTier = cHeader::get(self::TIER_QS);
 		
 		if (($sTier == null) || ($sTierID == null)) {
 			$sTier = cHeader::get(self::TIER_QS);
@@ -789,14 +840,17 @@ class cRender{
 		<select id="<?=$sMenuID?>">
 			<optgroup label="Tier">
 				<option selected disabled><?=$sTier?></option>
-				<option disabled><?=$sApp?> (Application)</option>
+				<?php
+				if ($sCurrentTier !== null){?>
+					<option value="<?=cHttp::build_url("tiers.php",$sAppQs)?>">Back to (<?=$sApp?>) Application</option>
+				<?php }
+				?>
 			</optgroup>
 			<option value="<?=cHttp::build_url("tierextgraph.php",$sTierQs)?>">External Calls</option>
-			<option value="<?=cHttp::build_url("tierinfrstats.php",$sTierQs)?>">Infrastructure Statistics</option>
+			<option value="<?=cHttp::build_url("tierinfrstats.php",$sTierQs)?>">Infrastructure</option>
 			<option value="<?=cHttp::build_url("tierjmx.php?$sTierQs", self::METRIC_TYPE_QS, self::METRIC_TYPE_JMX_DBPOOLS)?>">Java Connection Pools</option>
 			<option value="<?=cHttp::build_url("tier.php",$sTierQs)?>">Overview</option>
-			<option value="<?=cHttp::build_url("tiertransgraph.php", $sTierQs)?>">Transactions Statistics</option>
-			<option value="<?=cHttp::build_url("tiertrans.php",$sTierQs)?>">Transactions in tabular form</option>
+			<option value="<?=cHttp::build_url("tiertransgraph.php", $sTierQs)?>">Transactions</option>
 		</select>
 		<script language="JavaScript">
 			$(onLoadStyleTierActions);
@@ -841,11 +895,12 @@ class cRender{
 
 	//#####################################################################################
 	//#####################################################################################
-	public static function get_base_app_QS(){ return self::pr_get_base_QS(self::BASE_APP_PARAMS);}
-	public static function get_base_tier_QS(){return self::pr_get_base_QS(self::BASE_TIER_PARAMS);}
-	public static function get_base_node_QS(){return self::pr_get_base_QS(self::BASE_NODE_PARAMS);}
+	public static function get_clean_base_app_QS(){ return self::get_base_QS(self::CLEAN_BASE_APP_PARAMS);}
+	public static function get_base_app_QS(){ return self::get_base_QS(self::BASE_APP_PARAMS);}
+	public static function get_base_tier_QS(){return self::get_base_QS(self::BASE_TIER_PARAMS);}
+	public static function get_base_node_QS(){return self::get_base_QS(self::BASE_NODE_PARAMS);}
 	
-	private static function pr_get_base_QS($paParams){
+	public static function get_base_QS($paParams){
 		$sBaseUrl = "";
 		
 		foreach ($paParams as $sParam){

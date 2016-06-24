@@ -13,8 +13,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 class cSecret{
-	const GOOGLE_TAG_ID = "not set";
-	const LICENSED_TO = "Not Licensed";
-	const LICENSE_COMMENT = "** This is a Freemium product **";
+	const GOOGLE_TAG_ID = "GTM-PFLM8J";
+	const LICENSED_TO = "Application Performance Ltd";
+	const LICENSE_COMMENT = "** For Demonstration Purposes only **";
 }
 ?>

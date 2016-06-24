@@ -33,6 +33,7 @@ require_once("$phpinc/appdynamics/common.php");
 require_once("inc/inc-charts.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
+require_once("inc/inc-filter.php");
 
 //####################################################################
 cRender::html_header("Tier Transactions");
@@ -86,13 +87,15 @@ cRender::show_time_options( $title);
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRender::show_tier_functions();
+	cRender::show_tier_menu("change tier", "tiertransgraph.php");
+	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($tier));
 	?>
 	<select id="nodesMenu">
-		<optgroup label="Show">
-			<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for (<?=$app?>) application</option>
-		</optgroup>
+		<option selected disabled>Show...</option>
+		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for (<?=$app?>) application</option>
+		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$tier?></option>
+		
 		<optgroup label="Servers">
-			<option selected disabled>Servers...</option>
 		<?php
 			if ($node){
 				?><option value="tiertrans.php?<?=$gsTierQs?>">All servers in tier</option><?php
@@ -113,7 +116,6 @@ if ($oCred->restricted_login == null){
 	<script language="javascript">
 	$(  
 		function(){
-			$("#backMenu").selectmenu({change:common_onListChange});
 			$("#nodesMenu").selectmenu({change:common_onListChange});
 		}  
 	);
@@ -130,11 +132,11 @@ cRender::appdButton(cAppDynControllerUI::tier($aid,$tid));
 	<tr class="<?=cRender::getRowClass()?>">
 		<td ><?php
 			$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-			cChart::add("Overall Calls per min ($tier) tier", $sMetricUrl, $app);
+			cChart::add("Overall Calls per min ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
 		?></td>
 		<td ><?php
 			$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-			cChart::add("Overall  response times (ms) ($tier) tier", $sMetricUrl, $app);
+			cChart::add("Overall  response times (ms) ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
 		?></td>
 	</tr>
 </table>
@@ -163,6 +165,10 @@ $aResponse =cAppdyn::GET_tier_transaction_names($app, $tier);
 	<h3>Transaction Details</h3>
 	
 	<table class="maintable">
+		<tr>
+			<th>Calls Per minute</th>
+			<th>Response Times in ms</th>
+		</tr>
 	<?php
 		if ($aResponse){
 			foreach ($aResponse as $oTrans){
@@ -176,11 +182,11 @@ $aResponse =cAppdyn::GET_tier_transaction_names($app, $tier);
 				?><tr class="<?=cRender::getRowClass()?>">
 					<td><?php
 						$sMetricUrl=cAppdynMetric::transCallsPerMin($tier, $sTrans, $node);
-						cChart::add("Calls per min for ($sTrans)", $sMetricUrl, $app);
+						cChart::add("Calls ($sTrans)", $sMetricUrl, $app, cRender::CHART_HEIGHT_TINY);
 					?></td>
 					<td><?php
 						$sMetricUrl=cAppdynMetric::transResponseTimes($tier, $sTrans, $node);
-						$sDivID = cChart::add("Response times for ($sTrans)", $sMetricUrl, $app);
+						$sDivID = cChart::add("Response ($sTrans)", $sMetricUrl, $app, cRender::CHART_HEIGHT_TINY);
 					?></td>
 					<td id="<?=$sDivID?>Go"><?php
 						cRender::button("Go",$sLink);

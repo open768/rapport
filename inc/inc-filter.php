@@ -22,6 +22,8 @@ final class cFilterRule{
 }
 
 //#######################################################################
+// rules are of the form "i,thing|o,thing"
+
 //#######################################################################
 class cFilterRules{
 	const RULE_DELIM_CHAR = "|";
@@ -83,10 +85,24 @@ class cFilter{
 	private static $praFilters = [];
 	
 	//************************************************************
+	public static function isFiltered(){
+		if (cHeader::get(self::FILTER_APP_QS)) return true;
+		if (cHeader::get(self::FILTER_TIER_QS)) return true;
+		if (cHeader::get(self::FILTER_NODE_QS)) return true;
+		return false;
+	}
+	
 	public static function isAppFilteredOut($psThing){ return self::pr__isFilteredOut(self::FILTER_APP_QS, $psThing);	}
 	public static function isTierFilteredOut($psThing){ return self::pr__isFilteredOut(self::FILTER_TIER_QS, $psThing);	}
 	public static function isNodeFilteredOut($psThing){ return self::pr__isFilteredOut(self::FILTER_NODE_QS, $psThing);	}
 	
+	//************************************************************
+	public static function makeTierFilter($psTier, $pbFilterIn = true){
+		$sFilterChar = ($pbFilterIn? cFilterRules::RULE_TYPE_IN: cFilterRules::RULE_TYPE_OUT);
+		return cHttp::build_qs(null,self::FILTER_TIER_QS , $sFilterChar.cFilterRules::RULE_SPLIT_CHAR.$psTier);
+	}
+	
+	//************************************************************
 	//************************************************************
 	private static function pr__isFilteredOut( $psWhat, $psThing ){
 		$oRules = self::pr__read_filter($psWhat);

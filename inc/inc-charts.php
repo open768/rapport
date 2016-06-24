@@ -129,7 +129,7 @@ class cChart{
 						oChartData.chart="<?=$aRow[self::KEY__CHART]?>";
 						oChartData.metric="<?=urlencode($aRow[self::KEY__METRIC])?>";
 						oChartData.previous=<?=($aRow[self::KEY__PREVIOUS]?"true":"false")?>;
-						oChartData.caption="<?=$aRow[self::KEY__CAPTION]?>";
+						oChartData.caption="<?=cCommon::strip_non_printing($aRow[self::KEY__CAPTION])?>";
 						oRemote.aItems.push( oChartData);
 						<?php
 					}
