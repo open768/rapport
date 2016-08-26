@@ -16,6 +16,7 @@ require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/appdynamics/core.php");
+require_once("inc/inc-secret.php");
 
 class cLinkPageData{
 	public $page = null;
@@ -31,9 +32,7 @@ class cLinkPage{
 		global $_SERVER;
 		
 		//-- check referrer
-		if (!array_key_exists("HTTP_REFERER", $_SERVER))
-			cDebug::error("no referrer");
-		$sReferrer = $_SERVER["HTTP_REFERER"];
+		$sReferrer = cHeader::get_referer();
 	
 		//-- get the unique key for the hash
 		$oCred = new cAppDynCredentials();
@@ -74,7 +73,7 @@ class cLinkPage{
 		if ($oData == null){
 			cDebug::write("creating hash object");
 
-			$sReferrer = $_SERVER["HTTP_REFERER"];
+			$sReferrer = cHeader::get_referer();
 			$oAppdynCredentials = new cAppDynCredentials();
 			$oAppdynCredentials->load();
 

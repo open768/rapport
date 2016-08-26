@@ -58,7 +58,7 @@ cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 <script language="javascript">
 	function hide_chart(poData){
 		var sDivID = poData.oItem.chart;
-		$("#"+sDivID).closest("tr").hide();
+		$("#"+sDivID).closest("table").closest("tr").hide();
 	}
 	bean.on(cChartBean,CHART__NODATA_EVENT,hide_chart);
 </script>

@@ -37,7 +37,7 @@ require_once("inc/inc-render.php");
 
 //choose a default duration
 
-$duration = get_duration();
+
 $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
@@ -49,7 +49,7 @@ cRender::html_header("tier infrastructure");
 cRender::force_login();
 cChart::do_header();
 
-cChart::$width=700;
+cChart::$width=cRender::CHART_WIDTH_LARGE;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -69,9 +69,9 @@ set_time_limit(200);
 $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-$oPageMetric = cRender::getInfrastructureMetric($app,null,$sMetricType);
+$oMetricDetails = cRender::getInfrastructureMetric($app,null,$sMetricType);
 
-$title = "$app&gt;$tier&gt;Tier Infrastructure&gt;$oPageMetric->caption";
+$title = "$app&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 
 //stuff for later
 $sAppQS = cRender::get_base_app_QS();
@@ -95,7 +95,7 @@ $sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricT
 		$sDisabled = ($oCred->restricted_login? "disabled": "");
 	?>
 	<option <?=$sDisabled?> value="<?=$sAllNodeUrl?>">
-		All <?=$oPageMetric->short?> data for (<?=$app?>) Application</option>
+		All <?=$oMetricDetails->short?> data for (<?=$app?>) Application</option>
 	<optgroup label="Show details of ..">
 	<?php
 		$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQS);
@@ -129,7 +129,7 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 	
 //####################################################################
 ?>
-<h2><?=$oPageMetric->caption?> for Servers in (<?=$tier?>) Tier</h2>
+<h2><?=$oMetricDetails->caption?> for Servers in (<?=$tier?>) Tier</h2>
 <p>
 <table class="maintable">
 <?php
@@ -145,7 +145,7 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 				cChart::add($oMetric->caption, $oMetric->metric, $app, 200);
 			?></td>
 			<td><?php
-				cRender::button("Statistics", cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode));
+				cRender::button("Node<br>Infrastructure", cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode));
 				if ($sMetricType==cRender::METRIC_TYPE_INFR_DISK_FREE)
 						cRender::button("Disks",cHttp::build_url($sDiskUrl, cRender::NODE_QS, $sNode));
 			?></td>

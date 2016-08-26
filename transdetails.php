@@ -34,8 +34,10 @@ require_once("$phpinc/appdynamics/common.php");
 require_once("inc/inc-charts.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
+require_once("inc/inc-filter.php");
 
 const COLUMNS=6;
+const FLOW_ID = "trflw";
 
 //####################################################################
 cRender::html_header("Transactions");
@@ -43,6 +45,7 @@ cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
 	<script type="text/javascript" src="js/chart.php"></script>
+	<script type="text/javascript" src="js/transflow.php"></script>
 <?php
 cChart::do_header();
 cChart::$json_data_fn = "chart_getUrl";
@@ -59,7 +62,9 @@ cChart::$app_qs = cRender::APP_QS;
 //####################################################
 //display the results
 $app = cHeader::get(cRender::APP_QS);
+$aid = cHeader::get(cRender::APP_ID_QS);
 $tier = cHeader::get(cRender::TIER_QS);
+$tid = cHeader::get(cRender::TIER_ID_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $node= cHeader::get(cRender::NODE_QS);
@@ -70,34 +75,41 @@ $sTierQS = cRender::get_base_tier_QS();
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 
+$sFilterTierQS = cFilter::makeTierFilter($tier);
+$sFilterTierQS = cHttp::build_QS($sAppQS, $sFilterTierQS);
+
 //**************************************************
 $aNodes = cAppdyn::GET_TierAppNodes($app,$tier);
 cRender::show_time_options("$app&gt;$app&gt;$tier&gt;$trans"); 
 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){?>
-	<select id="showMenu">
+	<select id="backMenu">
 		<option selected disabled>Back to...</option>
-		<optgroup label="All Transactions">
-			<option value="apptrans.php?<?=$sAppQS?>">for <?=($app)?> Application</option>
-			<option value="tiertransgraph.php?<?=$sTransQS?>">for <?=($tier)?> tier</option>
-			<?php
-				if ($node){ 
-					$sNodeQs = cHttp::build_url($sTransQS, cRender::NODE_QS, $node);
-					?><option value="tiertransgraph.php?<?=$sNodeQs?>">
-						for (<?=($node)?>) server
-					</option><?php 
-				}
-			?>
-		</optgroup>
-		<optgroup label="Servers for (<?=$trans?>) transaction">
+		<option value="apptrans.php?<?=$sAppQS?>"><?=($app)?> <i>app</i></option>
+		<option value="apptrans.php?<?=$sFilterTierQS?>"><?=($tier)?> <i>tier</i></option>
+		<?php
+			if ($node){ 
+				$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $node);
+				?><option value="tiertransgraph.php?<?=$sNodeQs?>">
+					(<?=($node)?>) server
+				</option><?php 
+			}
+		?>
+	</select>
+	<select id="showMenu">
+		<option selected disabled>Show...</option>
 		<?php
 			if ($node){
-				?><option value="transdetails.php?<?=$sTransQS?>">All servers</option><?php
+				?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
 			}
+		?>
+		<optgroup label="Servers for this transaction">
+		<?php
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
-				$sUrl = "transdetails.php?$sNodeQs=$oNode->name";
+				$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
+				$sUrl = "transdetails.php?$sNodeQs";
 				?>
 					<option <?=$sDisabled?> value="<?=$sUrl?>"><?=$oNode->name?></option>
 				<?php
@@ -108,6 +120,7 @@ if ($oCred->restricted_login == null){?>
 	<script language="javascript">
 	$(  
 		function(){
+			$("#backMenu").selectmenu({change:common_onListChange});
 			$("#showMenu").selectmenu({change:common_onListChange});
 		}  
 	);
@@ -116,105 +129,113 @@ if ($oCred->restricted_login == null){?>
 $aid = cHeader::get(cRender::APP_ID_QS);
 cRender::appdButton(cAppDynControllerUI::transaction($aid,$trid));
 
-
-//####################################################
+?>
+<!-- #############################################################################-->
+<!-- #############################################################################-->
+<h2>Data for (<?=$trans?>) in (<?=$tier?>) tier </h2>
+<?php
+	$aMetrics = [];
+	$aMetrics[] = ["trans Calls:", cAppDynMetric::transCallsPerMin($tier, $trans)];
+	$aMetrics[] = ["trans Response:", cAppDynMetric::transResponseTimes($tier, $trans)];
+	$aMetrics[] = ["trans errors:", cAppDynMetric::transErrors($tier, $trans)];
+	$aMetrics[] = ["trans cpu used:", cAppDynMetric::transCpuUsed($tier, $trans)];
+	cRender::render_metrics_table($app, $aMetrics, 3, cRender::getRowClass(), cRender::CHART_HEIGHT_SMALL);
 ?>
 
-<!-- ************************************************** -->
-<h2>Overall data for <?=$trans?> in (<?=$tier?>) tier </h2>
-<table class='maintable'>
-	<tr><td class="<?=cRender::getRowClass()?>">
-	<?php
-		$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $trans);
-		cChart::add("Overall Response Times:  ($trans) Transaction, ($tier) Tier", $sMetricUrl, $app);
-	?>
-	</td></tr>
-	<tr><td class="<?=cRender::getRowClass()?>">
-	<?php
-		$sMetricUrl=cAppDynMetric::transCallsPerMin($tier, $trans);
-		cChart::add("Overall Calls per min: ($trans) Transaction, ($tier) Tier", $sMetricUrl, $app);
-	?>
-	</td></tr>
-	<tr><td class="<?=cRender::getRowClass()?>">
-	<?php
-		$sMetricUrl=cAppDynMetric::transErrors($tier, $trans);
-		cChart::add("Overall Errors per min: ($trans) Transaction, ($tier) Tier", $sMetricUrl, $app);
-	?>
-	</td></tr>
-</table>
 <p>
+<!-- #############################################################################-->
+<!-- #############################################################################-->
+<h2>Transaction map</h2>
+<div class="transactionflow" id="<?=FLOW_ID?>">
+	Please wait...
+</div>
+<script>
+	function load_trans_flow(){
+		var oLoader = new cTransFlow("<?=FLOW_ID?>");
+		oLoader.load("<?=$app?>", "<?=$tier?>", "<?=$trans?>");
+	}
+	$(load_trans_flow);	
+</script>
 
 <?php
-if ($node){ ?>
-	<h2>Data for (<?=$node?>) node</h2>
-	<table class='maintable'>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $trans, $node);
-			cChart::add("Response Times:  ($trans) Transaction, ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::transCallsPerMin($tier, $trans, $node);
-			cChart::add("Overall Calls per min: ($trans) Transaction, ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::transErrors($tier, $trans, $node);
-			cChart::add("Errors: ($trans) Transaction, ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::transCpuUsed($tier, $trans, $node);
-			cChart::add("CPU Used: ($trans) Transaction, ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::InfrastructureCpuBusy($tier, $node);
-			cChart::add("Overall CPU Busy: ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::InfrastructureJavaHeapFree($tier, $node);
-			cChart::add("Java Heap free: ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::InfrastructureJavaGCTime($tier, $node);
-			cChart::add("Java GC time: ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::InfrastructureDotnetHeapUsed($tier, $node);
-			cChart::add("dotnet  Heap used: ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-		<tr><td class="<?=cRender::getRowClass()?>">
-		<?php
-			$sMetricUrl=cAppDynMetric::InfrastructureDotnetGCTime($tier, $node);
-			cChart::add("dotnet  GC time : ($tier) Tier, ($node) Server", $sMetricUrl, $app);
-		?>
-		</td></tr>
-	</table>
-<p>
-<?php } ?>
 
-<!-- ************************************************** -->
-<h2>External tiers for - <?=$tier?> - <?=$trans?></h2>
+// ################################################################################
+// ################################################################################
+if ($node){ ?>
+	<h2>Transaction Data for (<?=$node?>) server</h2>
+	<?php
+		$aMetrics = [];
+		$aMetrics[] = ["server trans Calls:", cAppDynMetric::transCallsPerMin($tier, $trans, $node)];
+		$aMetrics[] = ["server trans Response:", cAppDynMetric::transResponseTimes($tier, $trans, $node)];
+		$aMetrics[] = ["server trans Errors:", cAppDynMetric::transErrors($tier, $trans, $node)];
+		$aMetrics[] = ["server trans cpu used:", cAppDynMetric::transCpuUsed($tier, $trans, $node)];
+		cRender::render_metrics_table($app, $aMetrics, 3, cRender::getRowClass(), cRender::CHART_HEIGHT_SMALL);
+	?>
+	<h2>Server Data</h2>
+	<?php
+		$aMetrics = [];
+		$aMetrics[] = ["Overall CPU Busy:", cAppDynMetric::InfrastructureCpuBusy($tier, $node)];
+		$aMetrics[] = ["Overall Java Heap Used:", cAppDynMetric::InfrastructureJavaHeapUsed($tier, $node)];
+		$aMetrics[] = ["Overall Java GC Time:", cAppDynMetric::InfrastructureJavaGCTime($tier, $node)];
+		$aMetrics[] = ["Overall .Net Heap Used:", cAppDynMetric::InfrastructureDotnetHeapUsed($tier, $node)];
+		$aMetrics[] = ["Overall .Net GC Time:", cAppDynMetric::InfrastructureDotnetGCTime($tier, $node)];
+		cRender::render_metrics_table($app, $aMetrics, 3, cRender::getRowClass(), cRender::CHART_HEIGHT_SMALL);
+} else{
+	?><h2>Transaction information for individual Servers</?>
+	<table class='maintable'>
+		<tr class="tableheader">
+			<th>Calls</th>
+			<th>Response times</th>
+			<th>Errors</th>
+		</tr>
+		<?php
+			function sort_nodes($a, $b){
+				return strcmp($a->name, $b->name);
+			}
+			uasort($aNodes , "sort_nodes");
+			
+			cChart::$width = cRender::CHART_WIDTH_LETTERBOX / 3;
+			foreach ($aNodes as $oNode){ 
+				$sNodeName = $oNode->name;
+				$sClass = cRender::getRowClass();
+				?>
+				<tr class="<?=$sClass?>">
+					<td colspan="4">&nbsp;<br><span class="tableheader">Server:</span> <?=$sNodeName?></td>
+				</tr><tr class="<?=$sClass?>">
+					<td><?php
+						$sMetricUrl=cAppDynMetric::transCallsPerMin($tier, $trans, $sNodeName);
+						cChart::add("Calls  ($sNodeName)", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+					<td><?php
+						$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $trans, $sNodeName);
+						cChart::add("response ($sNodeName)", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+					<td><?php
+						$sMetricUrl=cAppDynMetric::transErrors($tier, $trans, $sNodeName);
+						cChart::add("Errors ($sNodeName)", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+					<td width="30"><?php
+						$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
+						$sUrl = "transdetails.php?$sNodeQs";
+						cRender::button("Go", $sUrl);
+					?></td>
+				</tr>
+			<?php }
+	?></table><?php
+}
+?>
+
+<p>
+<!-- #############################################################################-->
+<!-- #############################################################################-->
+<h2>Remote Services for - <?=$tier?> - <?=$trans?></h2>
 	<?php
 		//******get the external tiers used by this transaction
 		$oData = cAppdyn::GET_TransExtTiers($app, $tier, $trans);
 		cChart::$width = cRender::CHART_WIDTH_LETTERBOX / 3;
 		if ($oData){
 			?><table class='maintable'>
-			<tr>
+			<tr class="tableheader">
 				<th>Name</th>
 				<th>Activity</th>
 				<th>Response Times (ms)</th>
@@ -240,13 +261,57 @@ if ($node){ ?>
 			?></table><?php
 		}else
 			echo "<h3>This transaction has no external calls</h3>";
-
-		//******** investigate the snapshots not avail in 3.3.3
-		//$oSnapshots = cAppdyn::GET_Snapshots($app, $tid, $trid);
 	?>
 </table>
-
+<p>
+<!-- #############################################################################-->
+<!-- #############################################################################-->
 <?php
+$oTimes = cRender::get_times();
+$sAppdUrl = cAppDynControllerUI::transaction_snapshots($aid,$trid, $oTimes);
+cRender::appdButton($sAppdUrl, "Transaction Snapshots");
+$aSnapshots = cAppdyn::GET_snaphot_info($app, $trid, $oTimes);
+if (count($aSnapshots) == 0){
+	?><div class="maintable">No Snapshots found</div><?php
+}else{
+	cDebug::vardump($aSnapshots[0],true);
+	?>
+	<table class="maintable" id="trans">
+		<thead><tr class="tableheader">
+			<th width="150">start time</th>
+			<th width="10"></th>
+			<th width="80">Duration</th>
+			<th>Server</th>
+			<th>Summary</th>
+			<th width="100"></th>
+		</tr></thead>
+		<tbody><?php
+			foreach ($aSnapshots as $oSnapshot){
+				$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
+				$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
+				$sAppdUrl = cAppDynControllerUI::snapshot($aid, $trid, $oSnapshot->requestGUID, $oTimes);
+				$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
+				?>
+				<tr class="<?=cRender::getRowClass()?>">
+					<td><?=$sDate?></td>
+					<td><img src="<?=$sImgUrl?>"></td>
+					<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
+					<td><?=cAppdynUtil::get_node_name($aid,$oSnapshot->applicationComponentNodeId)?></td>
+					<td><?=$oSnapshot->summary?></td>
+					<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
+				</tr>
+			<?php }
+		?></tbody>
+	</table>
+	<script language="javascript">
+		$( function(){ $("#trans").tablesorter();} );
+	</script>
+<?php
+}
+
+
+// ################################################################################
+// ################################################################################
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
 cRender::html_footer();

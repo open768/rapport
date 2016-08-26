@@ -24,6 +24,7 @@ require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
+require_once("$phpinc/pubsub/pub-sub.php");
 	
 cSession::set_folder();
 session_start();
@@ -61,25 +62,22 @@ cChart::$app_qs = cRender::APP_QS;
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $backend = cHeader::get(cRender::BACKEND_QS);
-$duration = get_duration();
+$sAppQS = cRender::get_base_app_QS();
+$sBackendQS = cHttp::build_QS($sAppQS, cRender::BACKEND_QS, $backend);
 
-$applink=cRender::getApplicationsLink();
-$topurl = cRender::getTopLink($app,$aid);
 
-$title= "$applink&gt;$topurl&gt;Backend Transactions&gt;$backend";
+$title= "$app&gt;Backend Transactions&gt;$backend";
 cRender::show_time_options($title); 
-cRender::button("Back to Backends", "backends.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid");
-cRender::button("Backend Tier Calls", "backcalls.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid&".cRender::BACKEND_QS."=$backend");
-cRender::button("Backend Transaction Timings", "backtransresponse.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid&".cRender::BACKEND_QS."=$backend");
+cRender::button("Back to Backends", "backends.php?$sAppQS");
+cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
+cRender::button("Backend Transaction Timings", "backtransresponse.php?$sBackendQS");
 echo "<br>";
 
 cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 ?>
-<span id="progress">
-<?php
-$aTransactions = cAppdyn::GET_BackendCallerTransactions($app, $backend);
-?>
-</span>
+<span id="progress"><?php
+	$aTransactions = cAppdyn::GET_BackendCallerTransactions($app, $backend);
+?></span>
 <script language="javascript">
 	$("#progress").hide();
 </script>

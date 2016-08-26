@@ -39,10 +39,11 @@ require_once("inc/inc-render.php");
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $rum_page = cHeader::get(cRender::RUM_PAGE_QS);
-$applink=cRender::getApplicationsLink();
+$rum_type = cHeader::get(cRender::RUM_TYPE_QS);
+$gsAppQS = cRender::get_base_app_QS();
 
 //####################################################################
-$title ="$applink&gt;$app&gtWeb Real User Monitoring Details&gt;$rum_page";
+$title ="$app&gtWeb Real User Monitoring Details&gt;$rum_page";
 cRender::html_header("Web browser - Real user monitoring - $rum_page");
 cRender::show_time_options( $title); 
 cRender::force_login();
@@ -63,50 +64,40 @@ cChart::$metric_qs = cRender::METRIC_QS;
 cChart::$title_qs = cRender::TITLE_QS;
 cChart::$app_qs = cRender::APP_QS;
 
-cRender::button("back to $app RUM details", "rumdetails.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid&".cRender::RUM_DETAILS_QS."=".cRender::RUM_DETAILS_RESPONSE);
+cRender::button("back to $app RUM details", "rumstats.php?$gsAppQS");
 //cRender::appdButton(cAppDynControllerUI::webrum($aid));
 
 //####################################################################
-$class=cRender::getRowClass();
+
 ?>
 	<table class="maintable">
-		<tr><td class="<?=$class?>">
+		<tr><td class="<?=cRender::getRowClass()?>">
 			<?php
-				$sMetricUrl=cAppDynMetric::webrumPageCallsPerMin($rum_page);
+				$sMetricUrl=cAppDynMetric::webrumPageCallsPerMin($rum_type, $rum_page);
 				cChart::add("Page requests: $rum_page", $sMetricUrl, $app);
-				$class=cRender::getRowClass();
 			?>
 		</td></tr>
-		<tr><td class="<?=$class?>">
+		<tr><td class="<?=cRender::getRowClass()?>">
 			<?php
-				$sMetricUrl=cAppDynMetric::webrumPageResponseTimes($rum_page);
+				$sMetricUrl=cAppDynMetric::webrumPageResponseTimes($rum_type, $rum_page);
 				cChart::add("Page Response times: $rum_page", $sMetricUrl, $app);
 			?>
 		</td></tr>
-	</table>
-	<p>
-<?php
-$class=cRender::getRowClass();
-?>
-	<table class="maintable">
-		<tr><td class="<?=$class?>">
+		<tr><td class="<?=cRender::getRowClass()?>">
 			<?php
-				$class=cRender::getRowClass();
-				$sMetricUrl=cAppDynMetric::webrumPageTCPTime($rum_page);
+				$sMetricUrl=cAppDynMetric::webrumPageTCPTime($rum_type, $rum_page);
 				cChart::add("Page connection time", $sMetricUrl, $app);
 			?>
 		</td></tr>
-		<tr><td class="<?=$class?>">
+		<tr><td class="<?=cRender::getRowClass()?>">
 			<?php
-				$class=cRender::getRowClass();
-				$sMetricUrl=cAppDynMetric::webrumPageServerTime($rum_page);
+				$sMetricUrl=cAppDynMetric::webrumPageServerTime($rum_type, $rum_page);
 				cChart::add("Page Server time", $sMetricUrl, $app);
 			?>
 		</td></tr>
-		<tr><td class="<?=$class?>">
+		<tr><td class="<?=cRender::getRowClass()?>">
 			<?php
-				$class=cRender::getRowClass();
-				$sMetricUrl=cAppDynMetric::webrumPageFirstByte($rum_page);
+				$sMetricUrl=cAppDynMetric::webrumPageFirstByte($rum_type, $rum_page);
 				cChart::add("Page first byte time", $sMetricUrl, $app);
 			?>
 		</td></tr>

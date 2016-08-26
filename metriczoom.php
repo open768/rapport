@@ -53,7 +53,7 @@ cRender::show_time_options("App: $sApp&gt; $sTitle");
 
 //####################################################################
 cChart::do_header();
-cChart::$width=940;
+cChart::$width=cRender::CHART_WIDTH_LARGE;
 cChart::$showZoom = false;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";

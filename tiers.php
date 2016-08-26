@@ -62,7 +62,7 @@ cRender::show_time_options( $app);
 
 
 //####################################################################
-cRender::show_apps_menu("Tier Activity","tiers.php");
+cRender::show_apps_menu("Show Tier Activity for:","tiers.php");
 $sAppQS = cRender::get_base_app_QS();
 
 cRender::appdButton(cAppDynControllerUI::application($aid));
@@ -88,7 +88,7 @@ cChart::$width=cRender::CHART_WIDTH_LETTERBOX/2;
 
 	//-----------------------------------------------
 	$oResponse =cAppdyn::GET_Tiers($app);
-	cChart::$width=940;
+	cChart::$width = cRender::CHART_WIDTH_LARGE;
 ?>
 
 <p>

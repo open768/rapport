@@ -52,6 +52,7 @@ class cLogin{
 
 if (cHeader::get(cLogin::KEY_SUBMIT))
 {
+	cDebug::write("submit seen");
 	$oCred = new cAppDynCredentials();
 	$oCred->host = cHeader::get(cLogin::KEY_HOST);
 	$oCred->account  = cHeader::get(cLogin::KEY_ACCOUNT);
@@ -69,20 +70,15 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		cRender::html_header("unable to login");
 		$sError = $e->getMessage();
 		cRender::show_top_banner("Unable to Login !"); 
-		?>
-			<p><!-- error was '<?=$sError?>' -->
-			<div class='errorbox'>
-				Oops there was a problem logging in
-				<?=cRender::button("Back to login", "index.php", false);?>
-			</div>
-		<?php
+		cRender::errorbox($sError);
+		cRender::button("Back to login", "index.php", false);
 		exit;
 	}
 	
 	//---------- where are we going
 	$sReferrer = cHeader::get(cLogin::KEY_REFERRER);
 	$sIgnoreReferrer = cHeader::get(cRender::IGNORE_REF_QS);
-	$sLocation = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_RESPONSE_TIMES);
+	$sLocation = "all.php";
 
 	if ($sReferrer && !$sIgnoreReferrer){
 		$aUrl = parse_url($sReferrer);
@@ -94,17 +90,26 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		$sLocation = cHttp::build_url($sLocation, "debug");
 	
 	//----------- redirect
-	if (! headers_sent ())
-		header("Location:  $sLocation");
-	else{
-		?>
-			<script src="<?=$jsinc?>/ck-inc/common.js"></script>
-			<script>
-				cBrowser.openWindow("<?=$sLocation?>", "apps");
-			</script>
-		<?php
-	}
+	cHeader::redirect($sLocation);
 	exit();
+}else if (cHeader::get(cRender::LOGIN_TOKEN_QS)){
+	cDebug::write("token seen");
+	try{
+		$sToken = cHeader::get(cRender::LOGIN_TOKEN_QS);
+		cAppDynCredentials::login_with_token($sToken);
+	}	
+	catch (Exception $e)
+	{
+		cRender::html_header("unable to login");
+		$sError = $e->getMessage();
+		cRender::show_top_banner("Unable to Login !"); 
+		cRender::errorbox($sError);
+		cRender::button("Back to login", "index.php", false);
+		exit;
+	}
+	cHeader::redirect("all.php");
+	exit();
+	
 }else{
 	cRender::html_header("login");
 	?>

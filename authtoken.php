@@ -33,48 +33,24 @@ require_once("inc/inc-render.php");
 require_once("inc/inc-link.php");
 
 
-
 //####################################################################
-$sGoKey = cHeader::get(cLinkPage::GO_QS);
-if ($sGoKey){
-	$oLinkData = cLinkPage::get_obj($sGoKey);
-	
-	//perform the login
-	$oLinkData->credentials->save();
-	cDebug::vardump($oLinkData);
-	//Set the time window
-	if (property_exists($oLinkData,"time_window")){
-		cDebug::write("setting time window");
-		$_SESSION[cAppDynCommon::TIME_SESS_KEY] = cAppDynCommon::TIME_CUSTOM ;
-		$_SESSION[cAppDynCommon::TIME_CUSTOM_FROM_KEY] = $oLinkData->time_window->start ;
-		$_SESSION[cAppDynCommon::TIME_CUSTOM_TO_KEY] = $oLinkData->time_window->end;
-	}
-	
-	//then redirect
-	$sPage = $oLinkData->page;
-	cHeader::redirect($sPage);
-	exit;
-}
-
-//####################################################################
-cRender::html_header("link");
+cRender::html_header("AuthToken");
 cRender::force_login();
 
-cRender::show_top_banner("link"); 
-$sUrl = cLinkPage::get_referrer_link();
-$sLinkID = cLinkPage::get_link_id();
-$oLinkData = cLinkPage::get_obj($sLinkID);
-$sPage = $oLinkData->page;
+cRender::show_top_banner("AuthToken"); 
+$sToken = cAppDynCredentials::get_login_token();
+$sURL = cHeader::get_server().dirname($_SERVER["SCRIPT_NAME"])."/index.php";
+$sURL = cHttp::build_URL($sURL,cRender::LOGIN_TOKEN_QS, $sToken);
 ?>
 
 <p>
-<h2>Link to page</h2>
+<h2>Auth Token</h2>
 <table class="maintable"><TR><TD>
 	Copy the following link:
 	<p>
-	<input type="text" value="<?=$sUrl?>" class="clipbox">
+	<input type="text" value="<?=$sURL?>" class="clipbox">
 	<p>
-	<?=cRender::button("Go back to page", $sPage)?>
+	<?=cRender::button("Go back to page", cHeader::get_referer())?>
 </TD></TR></TABLE>
 <?php
 cRender::html_footer();

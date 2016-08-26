@@ -72,113 +72,90 @@ function get_app_node_data($psAid){
 	return $aTierData;
 }
 
-function get_all_app_node_data(){
-	global $moApps;
-	
-	$aData = [];
-	
-	foreach ($moApps as $oApp){
-		$sApp=$oApp->name;
-		$sAid=$oApp->id;
-		
-		cCommon::flushprint();
-		$aAppData = get_app_node_data($sAid);
-		$aData [$sApp] = $aAppData;
-	}
-	
-	return $aData;
-}
-
-
 ?>
 <h2>All Agents</h2>
-<div id="progress"><?php	
-	$aAllData = get_all_app_node_data();
-?></div>
 <?php
-if (!cDebug::is_debugging()){ 
-	?><script language="javascript">
-		function clearProgresStatus(){
-			$("#progress").empty();
-		}
-		$(clearProgresStatus);
-	</script><?php 
-}
-const APPCOL_WIDTH=200;
+const BLANK_WIDTH=200;
 const TIERCOL_WIDTH=300;
 const TOTALCOL_WIDTH=150;
 
 //####################################################################
 ?>
 <table class="maintable">
-	<tr>
-		<th width="<?=APPCOL_WIDTH?>">Application</th>
-		<th>Agents</th>
-	</tr>
 	<?php
 	$oGrandTotal = new cAgentTotals();
 	
 	foreach ($moApps as $oApp){
-		$sApp=$oApp->name;
-		$sAid=$oApp->id;
-		$sAppUrl = "appnodes.php?".cRender::APP_QS."=$sApp&".cRender::APP_ID_QS."=$sAid";
-		$aAppData = $aAllData[$sApp];
+		$sAppQs = cRender::build_app_qs($oApp->name, $oApp->id);
+		$sAgentNamesUrl = "appnodes.php?$sAppQs";
+		$sAgentStatsUrl = "allnodedetail.php?".cHttp::build_qs($sAppQs, cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_INFR_AVAIL);
+
+		$aAppData = get_app_node_data($oApp->id);
 		$oAppTotals = new cAgentTotals();
 		
 		
 		if (count($aAppData) == 0) continue;
 		
-		
-		?><tr class="<?=cRender::getRowClass()?>">
-			<td width="<?=APPCOL_WIDTH?>">
-				<?=cRender::Button($sApp, $sAppUrl)?>
-			</td>
-			<td><table width="100%">
-				<tr>
-					<th width="<?=TIERCOL_WIDTH?>">Tier</th>
-					<th width="<?=TOTALCOL_WIDTH?>">total</th>
-					<th width="<?=TOTALCOL_WIDTH?>">Machine agents</th>
-					<th width="<?=TOTALCOL_WIDTH?>">App server agents</th>
-				</tr>
+		$sClass = cRender::getRowClass();
+		?><tr class="<?=$sClass?>"><td colspan="5" align="left">
 			<?php
-				foreach ($aAppData as $sTier=>$oTierCounts){
-					$oAppTotals->add($oTierCounts);
-					$oGrandTotal->add($oTierCounts);
-					?><tr>
-						<td width="<?=TIERCOL_WIDTH?>"><?=$sTier?></td>
-						<td width="<?=TOTALCOL_WIDTH?>" align="middle"><?=$oTierCounts->total?></td>
-						<td width="<?=TOTALCOL_WIDTH?>" align="middle"><?=$oTierCounts->machine?></td>
-						<?php
-							if ($oTierCounts->machine != $oTierCounts->appserver){
-								?><td width="<?=TOTALCOL_WIDTH?>"align="middle"><font color="red"><b><?=$oTierCounts->appserver?></b></font></td><?php
-							}else{
-								?><td width="<?=TOTALCOL_WIDTH?>"align="middle"><?=$oTierCounts->appserver?></td><?php
-							}
-						?>
-					</tr><?php
-				}
-				?><tr>
-					<td width="<?=TIERCOL_WIDTH?>" align="right">Total for <?=$sApp?> &gt; </td>
-					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->total?></font></b></td>
-					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->machine?></font></b></td>
-					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->appserver?></font></b></td>
+				cRender::show_app_functions($oApp->name, $oApp->id);
+			?>
+			<select id="Agent<?=$oApp->id?>">
+				<option disabled selected>Show Agent...</option>
+				<option value="<?=$sAgentNamesUrl?>">Details</option>
+				<option value="<?=$sAgentStatsUrl?>">Activity</option>
+			</select>
+			<script language="JavaScript">
+				$(	function(){
+					$("#Agent<?=$oApp->id?>").selectmenu({change:common_onListChange, width:200});
+				});
+			</script>
+		</tr>
+		<tr class="tableheader">
+			<th width="<?=BLANK_WIDTH?>"></th>
+			<th width="<?=TIERCOL_WIDTH?>">Tier</th>
+			<th width="<?=TOTALCOL_WIDTH?>">total</th>
+			<th width="<?=TOTALCOL_WIDTH?>">Machine agents</th>
+			<th width="<?=TOTALCOL_WIDTH?>">App server agents</th>
+		</tr>
+		<?php
+			foreach ($aAppData as $sTier=>$oTierCounts){
+				$oAppTotals->add($oTierCounts);
+				$oGrandTotal->add($oTierCounts);
+				?><tr class="<?=$sClass?>">
+					<th width="<?=BLANK_WIDTH?>"></th>
+					<td width="<?=TIERCOL_WIDTH?>"><?=$sTier?></td>
+					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><?=$oTierCounts->total?></td>
+					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><?=$oTierCounts->machine?></td>
+					<?php
+						if ($oTierCounts->machine != $oTierCounts->appserver){
+							?><td width="<?=TOTALCOL_WIDTH?>"align="middle"><font color="red"><b><?=$oTierCounts->appserver?></b></font></td><?php
+						}else{
+							?><td width="<?=TOTALCOL_WIDTH?>"align="middle"><?=$oTierCounts->appserver?></td><?php
+						}
+					?>
 				</tr><?php
-			?></table></td>
-		</tr><?php
+			}
+			?><tr class="<?=$sClass?>">
+				<td width="<?=BLANK_WIDTH?>"></td>
+				<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Total for <?=$oApp->name?></b></td>
+				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->total?></font></b></td>
+				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->machine?></font></b></td>
+				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->appserver?></font></b></td>
+			</tr>
+			<tr class="<?=$sClass?>" align="left"><td colspan="5">&nbsp;</td></tr>
+		<?php
 	}
 	?><tr>
-		<td width="<?=APPCOL_WIDTH?>" align="right">&nbsp;</td>
-		<td>
-			<table width="100%"><tr>
-				<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Grand Totals</b></td>
-				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->total?></font></b></td>
-				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->machine?></font></b></td>
-				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->appserver?></font></b></td>
-			</tr></table>
-		</td>
+		<td></td>
+		<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Grand Totals</b></td>
+		<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->total?></font></b></td>
+		<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->machine?></font></b></td>
+		<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->appserver?></font></b></td>
 	</tr>
 </table><?php
 
-	
+cRender::button("Show All Agent Versions", "allnodes.php");	
 cRender::html_footer();
 ?>

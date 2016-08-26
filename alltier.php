@@ -20,8 +20,8 @@ $jsinc = "../jsinc";
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
+require_once("$phpinc/ckinc/header.php");
 	
 cSession::set_folder();
 session_start();
@@ -31,19 +31,19 @@ cDebug::check_GET_or_POST();
 require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/common.php");
 require_once("inc/inc-charts.php");
+require_once("inc/inc-charts.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
 
 //####################################################################
-cRender::html_header("All Applications - Databases");
+cRender::html_header("All Tiers");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
 	<script type="text/javascript" src="js/chart.php"></script>
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -55,49 +55,57 @@ cChart::$metric_qs = cRender::METRIC_QS;
 cChart::$title_qs = cRender::TITLE_QS;
 cChart::$app_qs = cRender::APP_QS;
 
+//####################################################################
+cRender::show_time_options( "All Tiers"); 
+		
 
+cChart::$width=cRender::CHART_WIDTH_LARGE/3;
+$aApps = cAppDyn::GET_Applications();
+if (count($aApps) == 0) cRender::errorbox("No Applications found");
 
 //####################################################################
-cRender::show_time_options( "All Applications - Time in Databases"); 
-cRender::button("back to apps", "apps.php",false);
-cRender::button("Events", "events.php?".cRender::APP_QS."=".cAppDynCore::DATABASE_APPLICATION."&".cRender::APP_ID_QS."=null");
-cRender::button("All RUM Page Requests", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_RUMCALLS,false);
-cRender::button("All RUM Response times", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_RUMRESPONSE,false);
-cRender::button("All Application Response times", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_TRANSRESPONSE,false);
-echo "All Time in Databases";
-cRender::appdButton(cAppDynControllerUI::databases());
-
-
-//####################################################################
-cChart::$width=cRender::CHART_WIDTH_LARGE;
-$oResponse = cAppDyn::GET_Databases();
-if (count($oResponse) == 0){
+foreach ( $aApps as $oApp){
+	if (cFilter::isAppFilteredOut($oApp->name)) continue;
+	$sAppQS = cRender::build_app_qs($oApp->name, $oApp->id);
+	$sClass = cRender::getRowClass();
 	?>
-		<div class='maintable'>No Monitored Databases found</div>
-	<?php
-}
-else{
+	<table class="maintable">
+		<tr class="<?=$sClass?>"><td colspan=4>
+			<?=cRender::show_app_functions($oApp->name, $oApp->id)?>
+		</td></tr>
+		<?php
+			$aTiers =cAppdyn::GET_Tiers($oApp->name);
+			foreach ($aTiers as $oTier){ 
+				if (cFilter::isTierFilteredOut($oTier->name)) continue;
+				?>	
+				<tr class="<?=$sClass?>">
+					<td width="50"><?=$oTier->name?></td>
+					<td><?php
+						$sMetric=cAppDynMetric::tierCallsPerMin($oTier->name);
+						cChart::add("calls: $oTier->name", $sMetric, $oApp->name, cRender::CHART_HEIGHT_SMALL);	
+					?></td>
+					<td><?php
+						$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
+						cChart::add("Response: $oTier->name", $sMetric, $oApp->name, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+					<td width="30"><?php
+						$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
+						cRender::button("Go", "tier.php?$sTierQs")
+					?></td>
+				</tr>
+			<?php }
+		}
 	?>
-		<table class="maintable">
-		<?php	
-			//display the results
-			foreach ( $oResponse as $oDB){
-				$class=cRender::getRowClass();
-				$sDB=$oDB->name;
-				$sMetric = cAppDynMetric::databaseTimeSpent($sDB);
-
-				echo "<tr>";
-					echo "<td class='$class'>";
-						cRender::button($sDB, "db.php?".cRender::DB_QS."=$sDB", false);
-						echo "<br>";
-						cChart::add($sDB, $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
-					echo "</td>";
-				echo "</tr>";
-			}
-		?>
-		</table>
-	<?php
-	}
+	</table>
+	
+	<script language="javascript">
+		function hide_row(poData){ //override
+			var sDivID = poData.oItem.chart;
+			$("#"+sDivID).closest("TABLE").closest("TR").hide(); //the whole row
+		}
+		bean.on(cChartBean,CHART__NODATA_EVENT,hide_row);
+	</script>
+<?php
 	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
 	cRender::html_footer();

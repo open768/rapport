@@ -61,12 +61,9 @@ cChart::$app_qs = cRender::APP_QS;
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
-$duration = get_duration();
 
-$applink=cRender::getApplicationsLink();
-$topurl = cRender::getTopLink($app,$aid);
 
-$title= "$applink&gt;$app&gt;Availability";
+$title= "$app&gt;Availability";
 cRender::show_time_options($title); 
 cRender::show_apps_menu("Availability", "appavail.php");
 

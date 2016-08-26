@@ -37,7 +37,7 @@ require_once("inc/inc-render.php");
 
 //choose a default duration
 
-$duration = get_duration();
+
 $CHART_IGNORE_ZEROS = false;
 
 //####################################################################

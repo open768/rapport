@@ -37,7 +37,7 @@ require_once("inc/inc-render.php");
 
 //choose a default duration
 
-$duration = get_duration();
+
 $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
@@ -49,7 +49,7 @@ cRender::html_header("tier infrastructure");
 cRender::force_login();
 cChart::do_header();
 
-cChart::$width=940;
+cChart::$width=cRender::CHART_WIDTH_LARGE;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -67,17 +67,19 @@ set_time_limit(200);
 
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
+$aid = cHeader::get(cRender::APP_ID_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
+	
 
 $title = "$app&gt;$tier&gt;Infrastructure";
 
 //stuff for later
 
-$aMetricTypes = cRender::getInfrastructureMetricTypes();
 $sAppQs = cRender::get_base_app_QS();
 $sTierQs = cRender::get_base_tier_QS();
-$sInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
+$sTierInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
+$sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
 
 // show time options
 cRender::show_time_options($title); 
@@ -96,11 +98,12 @@ if ($oCred->restricted_login == null)	cRender::show_tier_functions();
 
 ?><select id="menuNodes">
 	<option selected disabled>Show Infrastructure Details for</option>
-	<option <?=($node?"":"disabled")?> value="<?=$sInfraUrl?>">(<?=$tier?>) tier</option>
+	<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=$tier?>) tier</option>
+	<option value="<?=$sAppInfraUrl?>">(<?=$app?>) Application</option>
 	<optgroup label="Individual Servers"><?php
 		foreach ($aNodes as $oNode){
 			$sNode = $oNode->name;
-			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sInfraUrl, cRender::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
+			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sTierInfraUrl, cRender::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
 		}
 	?></optgroup>
 </select>
@@ -112,39 +115,44 @@ $(
 	}  
 );
 </script><?php
+if ($node) {
+	$sNodeID = cAppdynUtil::get_node_id($aid, $node);
+	if ($sNodeID){
+		$sUrl = cAppDynControllerUI::nodeDashboard($aid, $sNodeID);
+		cRender::appdButton($sUrl);
+	}
+}
 
 
 //####################################################################
 ?>
 <p>
-<table class="maintable">
-	<tr><td>
-		<h2>Infrastructure Statistics for</h2>
-		<h3>(<?=$tier?>) Tier, <?=($node?$node:"all Servers")?></h3>
-	</td></tr>
-	<?php
-		$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
-		
-		foreach ($aMetricTypes as $sMetricType){
-			$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
-			?><tr class="<?=cRender::getRowClass()?>">
-				<td>
-					<?php cChart::add($oMetric->caption, $oMetric->metric, $app, 200); ?>
-				</td>
-				<td>
-					<?php
-						cRender::button("All Tier",cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType));
-						if ($node && ($sMetricType==cRender::METRIC_TYPE_INFR_DISK_FREE)){
-							$sDiskUrl = cHttp::build_url("nodedisks.php",$sTierQs);
-							$sDiskUrl = cHttp::build_url($sDiskUrl,cRender::NODE_QS,$node);
-							cRender::button("Disks",$sDiskUrl);
-						}
-					?>
-				</td>
-			</tr><?php
-		}
-	?>
-</table>
+<h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
+
+<table class="maintable"><?php
+	$aMetricTypes = cRender::getInfrastructureMetricTypes();
+	
+	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
+	
+	foreach ($aMetricTypes as $sMetricType){
+		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
+		?><tr class="<?=cRender::getRowClass()?>">
+			<td>
+				<?php cChart::add($oMetric->caption, $oMetric->metric, $app, 200); ?>
+			</td>
+			<td>
+				<?php
+					cRender::button("All Tier",cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType));
+					if ($node && ($sMetricType==cRender::METRIC_TYPE_INFR_DISK_FREE)){
+						$sDiskUrl = cHttp::build_url("nodedisks.php",$sTierQs);
+						$sDiskUrl = cHttp::build_url($sDiskUrl,cRender::NODE_QS,$node);
+						cRender::button("Disks",$sDiskUrl);
+					}
+				?>
+			</td>
+		</tr><?php
+	}
+?></table>
 
 <?php
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");

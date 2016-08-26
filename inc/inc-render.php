@@ -50,6 +50,7 @@ class cRender{
 	const DIV_QS = "div";
 	
 	const PREVIOUS_QS="prv";
+	const LOGIN_TOKEN_QS="lt";
 
 	//************************************************************
 	const GROUP_TYPE_QS ="gtq";
@@ -71,14 +72,16 @@ class cRender{
 	
 	const METRIC_TYPE_INFR_AVAIL = "mtia";
 	const METRIC_TYPE_INFR_AGENT_METRICS = "mtiam";
+	const METRIC_TYPE_INFR_AGENT_INVALID_METRICS = "mtiaim";
 	const METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS = "mtiale";
 	const METRIC_TYPE_INFR_CPU_BUSY = "mticb";
 	const METRIC_TYPE_INFR_MEM_FREE = "mtimf";
 	const METRIC_TYPE_INFR_DISK_FREE = "mtidf";
 	const METRIC_TYPE_INFR_NETWORK_IN = "mtini";
 	const METRIC_TYPE_INFR_NETWORK_OUT = "mtino";
-	const METRIC_TYPE_INFR_JAVA_HEAP_FREE = "mtijhf";
+	const METRIC_TYPE_INFR_JAVA_HEAP_USED = "mtijhu";
 	const METRIC_TYPE_INFR_JAVA_GC_TIME = "mtijgt";
+	const METRIC_TYPE_INFR_JAVA_CPU_USAGE = "mtijcpu";
 	const METRIC_TYPE_INFR_DOTNET_HEAP_USED = "mtidhu";
 	const METRIC_TYPE_INFR_DOTNET_GC_PCT = "mtidgp";
 	const METRIC_TYPE_INFR_DOTNET_ANON_REQ = "mtidar";
@@ -100,6 +103,7 @@ class cRender{
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";
 	const RUM_PAGE_QS = "rpg";
+	const RUM_TYPE_QS = "rty";
 	const RUM_DETAILS_ACTIVITY ="rmda";
 	const RUM_DETAILS_RESPONSE ="rmdr";
 	
@@ -108,7 +112,7 @@ class cRender{
 	const CLEAN_BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS];
 	const CLEAN_BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS];
 	
-	const BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS, cFilter::FILTER_APP_QS , cFilter::FILTER_TIER_QS , cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS];
+	const BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS, cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS];
 	const BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS,  cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS , cFilter::FILTER_NODE_QS];
 	const BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS , cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS ];
 	
@@ -174,13 +178,8 @@ class cRender{
 		{
 			$sMsg = $e->getMessage();
 			self::show_top_banner("not logged in "); 
-			?>
-				<p>
-				<div class='errorbox'>
-					<b>Oops there was a problem logging in.</b> "<?=$sMsg?>"
-					<?=self::button("Back to login", "index.php", false);?>
-				</div>
-			<?php
+			self::errorbox("there was a problem logging in - $sMsg");
+			self::button("Back to login", "index.php", false);
 			die;
 		}
 	}
@@ -188,9 +187,19 @@ class cRender{
 	//**************************************************************************
 	public static function errorbox($psMessage){
 		?>
+			<p>
 			<div class='errorbox'>
-				<h2>Oops there was a an error</h2>
+				<h2>Oops there was an error</h2>
 				<p>
+				<?=$psMessage?>
+			</div>
+		<?php
+	}
+	//**************************************************************************
+	public static function messagebox($psMessage){
+		?>
+			<p>
+			<div class='errorbox'>
 				<?=$psMessage?>
 			</div>
 		<?php
@@ -270,18 +279,6 @@ class cRender{
 		echo "</table></td></tr></table>";
 	}
 	
-	//*************************************************************
-	public static function getTopLink($psApp,$psAid)
-	{
-		$appenc=urlencode($psApp);
-		return "<a href=\"tiers.php?app=$appenc&aid=$psAid\">$psApp</a>";
-	}
-	
-	//**************************************************************************
-	public static function getApplicationsLink()
-	{
-		return "<a href='apps.php'>Apps</a>";
-	}
 	
 	//**************************************************************************
 	public static function getTierLinkUrl($psApp,$psAid, $psTier, $psTid)
@@ -332,9 +329,8 @@ class cRender{
 	
 	//**************************************************************************
 	public static function appdButton ($psUrl, $psCaption = "Launch in AppDynamics"){
-		if ($psCaption !== "") $psCaption = "$psCaption ";
 		?>
-			<a class="appd_button" title='Launch in AppDynamics' target='appd' href="<?=$psUrl?>"><?=$psCaption?></a>
+			<a class="appd_button" title="<?=$psCaption?>" target='appd' href="<?=$psUrl?>"><?=$psCaption?></a>
 		<?php
 	}
 
@@ -349,6 +345,7 @@ class cRender{
 			<LINK rel="stylesheet" type="text/css" href="css/app.css" >
 			<link rel="stylesheet" type="text/css" href="css/jquery-ui/jquery-ui.min.css">
 			
+			<script src="<?=$jsinc?>/ck-ink/debug.js"></script>
 			<script src="<?=$jsinc?>/jquery/jquery-3.0.0.min.js"></script>
 			<script src="<?=$jsinc?>/jquery/jquery-migrate-3.0.0.min.js"></script>
 			<script src="<?=$jsinc?>/jquery-ui/jquery-ui.min.js"></script>
@@ -379,10 +376,10 @@ class cRender{
 			);
 		</script>
 		<table border=0 width="100%" class="footer"><tr><td>
-				<div class="licenseBox"><pre>
-				Copyright (c) 2013-2016 ChickenKatsu Ltd.
-				
-				This code is protected by copyright under the terms of the 
+				<div class="licenseBox">
+				Copyright (c) 2013-2016 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu Ltd</a><br>
+
+				This software is protected by copyright under the terms of the 
 				Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
 				http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
@@ -393,12 +390,11 @@ class cRender{
 				</pre></div>
 				<div class="paidLicenseBox">
 				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>--><br>
-				Copyright (c) 2013-2016
 				<p>
 				<small>
 				Charts built using <a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
-				uses phplib and jsinc from <a target="new" href="https://github.com/open768">Github</a> licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
-				uses <a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license
+				uses <a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license<br>
+				uses <a href="https://gist.github.com/umidjons/8396981">pub sub pattern</a> by Baylor Rae licensed under the GNU General Public license<br>
 				</small>
 		</td></tr></table>
 		
@@ -411,15 +407,15 @@ class cRender{
 		global $_SERVER;
 		
 		$sUrl = urlencode($_SERVER['REQUEST_URI']);
-		echo get_time_label();
+		echo cAppDynCommon::get_time_label();
 		
-		$duration = get_duration();
+		$iDuration = cAppDynCommon::get_duration();
 		?>
 		<table border=1 cellpadding=0 cellspacing=0><tr><td>
 			Time Shown:<br>
 			<?php
 			foreach ( cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue)
-				if ($iValue== $duration){
+				if ($iValue== $iDuration){
 					?><button disabled="disabled"><?=$sCaption?></button><?php
 				}else
 					self::button($sCaption, "settime.php?duration=$iValue&url=$sUrl");
@@ -455,7 +451,8 @@ class cRender{
 	
 		<select id="logoutmenu">
 			<option selected disabled>Go...</option>
-			<option value="index.php?,<?=self::IGNORE_REF_QS?>=1">Logout</option>
+			<option value="index.php?<?=self::IGNORE_REF_QS?>=1">Logout</option>
+			<option value="authtoken.php">Login Token</option>
 			<option value="link.php">Link to this page</option>
 			<optgroup label="All">
 				<option value="allagents.php">Agents</option>
@@ -463,15 +460,14 @@ class cRender{
 				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RUMCALLS)?>">Browser RUM Activity</option>
 				<option value="config.php">Configuration</option>
 				<option value="alldb.php">Databases</option>
+				<option value="alltier.php">Tiers</option>
 			<option value="usage.php">License Usage</option>
 				<option value="allbackends.php">Remote Services</option>
 			</optgroup>
 			<optgroup label="Application Overview for ..."><?php
 				foreach ($aApps as $oApp){
-					$sLink = cHttp::build_url("tiers.php",self::APP_QS, $oApp->name);
-					$sLink = cHttp::build_url($sLink,self::APP_ID_QS, $oApp->id);
-					
-					?><option value="<?=$sLink?>" ><?=$oApp->name?></option><?php
+					$sAppQs = self::build_app_qs( $oApp->name, $oApp->id);
+					?><option value="tiers.php?<?=$sAppQs?>" ><?=$oApp->name?></option><?php
 				}
 			?><optgroup>
 		</select><?php
@@ -488,8 +484,8 @@ class cRender{
 		$oCred = self::get_appd_credentials();
 		$sAccount = $oCred->account;
 		$sHost = $oCred->host;
+		$iDuration = cAppDynCommon::get_duration();
 		
-		$duration = get_duration();
 		?>
 			<form name="frmTime" id="frmTime" action="settime.php" method="get">
 				<input type="hidden" name="url" value="<?=$sUrl?>">
@@ -502,11 +498,11 @@ class cRender{
 						<?=$sHost?><p>
 						<b><?=$psTitle?></b>
 					</td>
-					<td ><?=get_time_label()?></td>
+					<td ><?=cAppDynCommon::get_time_label()?></td>
 					<td width=90 ><select name="duration" onchange="document.getElementById('frmTime').submit();"><?php
 						foreach (cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue){
 							$sSelected = "";
-							if ($iValue== $duration)$sSelected =" selected";
+							if ($iValue== $iDuration)$sSelected =" selected";
 							echo "<option value='$iValue' $sSelected>$sCaption</option>";
 						}
 					?></select></td>
@@ -560,18 +556,20 @@ class cRender{
 	
 	//**************************************************************************
 	public static function getInfrastructureMetricTypes(){
-		$aData = 
+		$aTypes = 
 		 [
 			self::METRIC_TYPE_ACTIVITY,
 			self::METRIC_TYPE_RESPONSE_TIMES,
 			self::METRIC_TYPE_INFR_AVAIL,
 			self::METRIC_TYPE_INFR_AGENT_METRICS,
+			self::METRIC_TYPE_INFR_AGENT_INVALID_METRICS,
 			self::METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS,
 			self::METRIC_TYPE_INFR_CPU_BUSY,
 			self::METRIC_TYPE_INFR_DISK_FREE,
 			self::METRIC_TYPE_INFR_MEM_FREE,
-			self::METRIC_TYPE_INFR_JAVA_HEAP_FREE,
+			self::METRIC_TYPE_INFR_JAVA_HEAP_USED,
 			self::METRIC_TYPE_INFR_JAVA_GC_TIME,
+			self::METRIC_TYPE_INFR_JAVA_CPU_USAGE,
 			self::METRIC_TYPE_INFR_DOTNET_ANON_REQ,
 			self::METRIC_TYPE_INFR_DOTNET_HEAP_USED,
 			self::METRIC_TYPE_INFR_DOTNET_GC_PCT,
@@ -579,7 +577,18 @@ class cRender{
 			self::METRIC_TYPE_INFR_NETWORK_OUT
 		];
 		
-		return $aData;
+		//sort the list
+		$aSortedList = [];
+		foreach ($aTypes as $sMetricType){
+			$oDetails = self::getInfrastructureMetric(null,null,$sMetricType);
+			$aSortedList[$oDetails->caption] = $oDetails;
+		}
+		uksort($aSortedList, "strnatcasecmp");
+		$aTypes = [];
+		foreach ($aSortedList as $oDetails)
+			$aTypes[] = $oDetails->type;
+		
+		return $aTypes;
 	}
 	
 	//**************************************************************************
@@ -627,19 +636,24 @@ class cRender{
 					$sCaption = "outgoing network traffic in KB/sec ($sNodeCaption)";
 					$sShortCaption = "Network-out";
 					break;
-				case self::METRIC_TYPE_INFR_JAVA_HEAP_FREE:
-					$sMetricUrl = cAppDynMetric::InfrastructureJavaHeapFree($psTier,$psNode);
-					$sCaption = "Java Heap free ($sNodeCaption)";
-					$sShortCaption = "Java Heap free";
+				case self::METRIC_TYPE_INFR_JAVA_HEAP_USED:
+					$sMetricUrl = cAppDynMetric::InfrastructureJavaHeapUsed($psTier,$psNode);
+					$sCaption = "memory - Java Heap used ($sNodeCaption)";
+					$sShortCaption = "Java Heap used";
 					break;
 				case self::METRIC_TYPE_INFR_JAVA_GC_TIME:
 					$sMetricUrl = cAppDynMetric::InfrastructureJavaGCTime($psTier,$psNode);
 					$sCaption = "Java GC Time ($sNodeCaption)";
 					$sShortCaption = "Java GC Time";
 					break;
+				case self::METRIC_TYPE_INFR_JAVA_CPU_USAGE:
+					$sMetricUrl = cAppDynMetric::InfrastructureJavaCPUUsage($psTier,$psNode);
+					$sCaption = "CPU - Java Usage ($sNodeCaption)";
+					$sShortCaption = "Java CPU";
+					break;
 				case self::METRIC_TYPE_INFR_DOTNET_HEAP_USED:
 					$sMetricUrl = cAppDynMetric::InfrastructureDotnetHeapUsed($psTier,$psNode);
-					$sCaption = "DotNet heap used ($sNodeCaption)";
+					$sCaption = "memory - dotNet heap used ($sNodeCaption)";
 					$sShortCaption = ".Net heap used";
 					break;
 				case self::METRIC_TYPE_INFR_DOTNET_GC_PCT:
@@ -654,26 +668,26 @@ class cRender{
 					break;
 				case self::METRIC_TYPE_INFR_AGENT_METRICS:
 					$sMetricUrl = cAppDynMetric::InfrastructureAgentMetricsUploaded($psTier,$psNode);
-					$sCaption = "Agent Metrics uploaded  ($sNodeCaption)";
-					$sShortCaption = "Agent-metrics";
+					$sCaption = "Agent - Metrics uploaded  ($sNodeCaption)";
+					$sShortCaption = "Agent-Metrics";
+					break;
+				case self::METRIC_TYPE_INFR_AGENT_INVALID_METRICS:
+					$sMetricUrl = cAppDynMetric::InfrastructureAgentInvalidMetrics($psTier,$psNode);
+					$sCaption = "Agent - Invalid Metrics  ($sNodeCaption)";
+					$sShortCaption = "Agent-Invalid Metrics";
 					break;
 				case self::METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS:
 					$sMetricUrl = cAppDynMetric::InfrastructureAgentMetricsLicenseErrors($psTier,$psNode);
-					$sCaption = "License Errors ($sNodeCaption)";
-					$sShortCaption = "License errors";
+					$sCaption = "Agent - License Errors ($sNodeCaption)";
+					$sShortCaption = "Agent-License errors";
 					break;
 				default:
 					cDebug::error("unknown Metric type");
 			}	
 
-			return (object)["metric"=>$sMetricUrl, "caption"=>$sCaption, "short"=>$sShortCaption ];
+			return (object)["metric"=>$sMetricUrl, "caption"=>$sCaption, "short"=>$sShortCaption , "type"=>$psMetricType];
 	}
 
-	//******************************************************************************************
-	public static function show_infra_menu($psTierQS)
-	{
-		
-	}
 	
 	//******************************************************************************************
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
@@ -687,13 +701,19 @@ class cRender{
 			return;
 		}
 
-		
-		$oApps = cAppDyn::GET_Applications();
+		try{
+			$oApps = cAppDyn::GET_Applications();
+		}
+		catch (Exception $e)
+		{
+			self::errorbox("Oops unable to get application data from controller");
+			exit;
+		}
 		?>
 			<script language="JavaScript">
 				$(onLoadStyleApplist);
 				function  onLoadStyleApplist(){
-					$("#applist").selectmenu({change:common_onListChange});
+					$("#applist").selectmenu({change:common_onListChange,width:280});
 				}
 			</script>
 		
@@ -703,8 +723,8 @@ class cRender{
 					foreach ($oApps as $oApp){
 						$sDisabled = ($oApp->name == $sCurrentApp?"disabled":"");
 						
-						$sLink = cHttp::build_url($psURLFragment, self::APP_QS, $oApp->name) ;
-						$sLink = cHttp::build_url($sLink, self::APP_ID_QS, $oApp->id) ;
+						$sAppQs = self::build_app_qs($oApp->name, $oApp->id);
+						$sLink = cHttp::build_url($psURLFragment, $sAppQs);
 						$sLink = cHttp::build_url($sLink, $psExtraQS) ;
 						
 						?>
@@ -733,13 +753,12 @@ class cRender{
 			$sAid = cHeader::get(self::APP_ID_QS);
 		}
 		
-		$AppQS = cHttp::build_qs(null, self::APP_QS,$sApp);
-		$AppQS = cHttp::build_qs($AppQS, self::APP_ID_QS,$sAid);
+		$AppQS = self::build_app_qs($sApp,$sAid);
 		?>
 			<script language="JavaScript">
 				$(onLoadStyleAppActions);
 				function  onLoadStyleAppActions(){
-					$("#appActions_<?=$sAid?>").selectmenu({change:common_onListChange});
+					$("#appActions_<?=$sAid?>").selectmenu({change:common_onListChange,width:300});
 				}
 			</script>
 			<select id="appActions_<?=$sAid?>">
@@ -751,12 +770,13 @@ class cRender{
 					<option value="appnodes.php?<?=$AppQS?>">Agents</option>
 					<option value="appavail.php?<?=$AppQS?>">Availability</option>
 					<option value="tiers.php?<?=$AppQS?>">Activity</option>
-					<option value="appheatmap.php?<?=$AppQS?>">Activity Heatmap</option>
 					<option value="events.php?<?=$AppQS?>">Events</option>
 					<option value="appext.php?<?=$AppQS?>">External Calls</option>
+					<option value="appinfo.php?<?=$AppQS?>">Information Points</option>
 					<option value="appinfra.php?<?=$AppQS?>">Infrastructure Overview</option>
 					<option value="allnodedetail.php?<?=cHttp::build_qs($AppQS,self::METRIC_TYPE_QS,self::METRIC_TYPE_INFR_CPU_BUSY)?>">Infrastructure (cpu)</option>
 					<option value="backends.php?<?=$AppQS?>">Remote Services</option>
+					<option value="appservice.php?<?=$AppQS?>">Service End Points</option>
 					<option value="apptrans.php?<?=$AppQS?>">Transactions</option>
 					<option value="apprum.php?<?=$AppQS?>">Web Real User Monitoring</option>
 				</optgroup>
@@ -774,7 +794,15 @@ class cRender{
 		$sCurrentTID = cHeader::get(self::TIER_ID_QS);
 		$sApp = cHeader::get(self::APP_QS);
 		
-		$oTiers = cAppDyn::GET_Tiers($sApp);
+		try{
+			$oTiers = cAppDyn::GET_Tiers($sApp);
+		}
+		catch (Exception $e)
+		{
+			self::errorbox("Oops unable to get tier data from controller");
+			exit;
+		}
+
 		?>
 			<script language="JavaScript">
 				$(onLoadStyleApplist);
@@ -790,8 +818,7 @@ class cRender{
 						$sDisabled = ($oTier->name == $sCurrentTier?"disabled":"");
 						
 						$sLink = cHttp::build_url($psURLFragment, self::get_base_app_QS()) ;
-						$sLink = cHttp::build_url($sLink, self::TIER_QS, $oTier->name);
-						$sLink = cHttp::build_url($sLink, self::TIER_ID_QS, $oTier->id);
+						$sLink = self::build_tier_qs($sLink, $oTier->name, $oTier->id);
 						$sLink = cHttp::build_url($sLink, $psExtraQS) ;
 						
 						?>
@@ -831,15 +858,21 @@ class cRender{
 		$sApp = cHeader::get(self::APP_QS);
 		
 		$sAppQs = self::get_base_app_qs();
-		$sTierQs = cHttp::build_qs($sAppQs, self::TIER_QS, $sTier);
-		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $sTierID);
+		$sTierQs = self::build_tier_qs($sAppQs, $sTier, $sTierID);
 		if ($sNode) $sTierQs = cHttp::build_qs($sTierQs, self::NODE_QS, $sNode);
+		
+		$sTransUrl = cHttp::build_url("apptrans.php", $sAppQs);
+		$sTransUrl = cHttp::build_url($sTransUrl, cFilter::makeTierFilter($sTier));
+		
+		$sServicePtUrl = cHttp::build_url("appservice.php", $sAppQs);
+		$sServicePtUrl = cHttp::build_url($sServicePtUrl, cFilter::makeTierFilter($sTier));
 
 
 		?>
 		<select id="<?=$sMenuID?>">
 			<optgroup label="Tier">
 				<option selected disabled><?=$sTier?></option>
+				<option value="<?=cHttp::build_url("tier.php",$sTierQs)?>">Tier Overview</option>
 				<?php
 				if ($sCurrentTier !== null){?>
 					<option value="<?=cHttp::build_url("tiers.php",$sAppQs)?>">Back to (<?=$sApp?>) Application</option>
@@ -847,15 +880,15 @@ class cRender{
 				?>
 			</optgroup>
 			<option value="<?=cHttp::build_url("tierextgraph.php",$sTierQs)?>">External Calls</option>
-			<option value="<?=cHttp::build_url("tierinfrstats.php",$sTierQs)?>">Infrastructure</option>
+			<option value="<?=cHttp::build_url("tierinfrstats.php",$sTierQs)?>">Infrastructure Overview</option>
 			<option value="<?=cHttp::build_url("tierjmx.php?$sTierQs", self::METRIC_TYPE_QS, self::METRIC_TYPE_JMX_DBPOOLS)?>">Java Connection Pools</option>
-			<option value="<?=cHttp::build_url("tier.php",$sTierQs)?>">Overview</option>
-			<option value="<?=cHttp::build_url("tiertransgraph.php", $sTierQs)?>">Transactions</option>
+			<option value="<?=$sServicePtUrl?>">Service End Points</option>
+			<option value="<?=$sTransUrl?>">Transactions</option>
 		</select>
 		<script language="JavaScript">
 			$(onLoadStyleTierActions);
 			function  onLoadStyleTierActions(){
-				$("#<?=$sMenuID?>").selectmenu({change:common_onListChange});
+				$("#<?=$sMenuID?>").selectmenu({change:common_onListChange,width:250});
 			}
 		</script>
 		<?php
@@ -864,6 +897,7 @@ class cRender{
 	
 	//#####################################################################################
 	//#####################################################################################
+	//* 2 column table with captions and metrics
 	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null){ 
 		$iCol = 0;
 		$iOldWidth = cChart::$width;
@@ -893,6 +927,20 @@ class cRender{
 	}
 
 
+	//#####################################################################################
+	//#####################################################################################
+	public static function build_app_qs( $psApp, $psAppID){
+		$AppQs = cHttp::build_qs(null, self::APP_QS, $psApp);
+		$AppQs = cHttp::build_qs($AppQs, self::APP_ID_QS, $psAppID);
+		return $AppQs;
+	}
+
+	//******************************************************************************************
+	public static function build_tier_qs( $psAppQs, $psTier, $psTierID){
+		$sTierQs = cHttp::build_qs($psAppQs, self::TIER_QS, $psTier);
+		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $psTierID);
+		return $sTierQs;
+	}
 	//#####################################################################################
 	//#####################################################################################
 	public static function get_clean_base_app_QS(){ return self::get_base_QS(self::CLEAN_BASE_APP_PARAMS);}

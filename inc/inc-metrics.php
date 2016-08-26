@@ -160,10 +160,13 @@ class cMetric{
 				$iDiff = $epochTo - $epochFrom;
 				$epochTo = $epochFrom;
 				$epochFrom = $epochTo - $iDiff;
+				
+				$oTime->end = $epochTo;
+				$oTime->start = $epochFrom;
 			}
 			
 			try{
-				$aData = cAppDynCore::GET_MetricData_between($psApp, $psMetric, $epochFrom, $epochTo);
+				$aData = cAppDynCore::GET_MetricData($psApp, $psMetric, $oTime, false);
 			}
 			catch (Exception $e){}
 			if ($aData){

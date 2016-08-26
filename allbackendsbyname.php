@@ -55,7 +55,7 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=400;
+cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";

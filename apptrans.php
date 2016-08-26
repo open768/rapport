@@ -37,7 +37,10 @@ require_once("inc/inc-render.php");
 
 //####################################################################
 // common functions
-function render_tier_transactions($psApp, $psTier, $psTierID, $paTrans, $poTimes){	
+$giTotalTrans = 0;
+function render_tier_transactions($psApp, $psTier, $psTierID){	
+	global $giTotalTrans;
+	$oTimes = cRender::get_times();
 
 	?><table border=1 cellspacing=0 id="<?=$psTierID?>">
 		<thead><tr>
@@ -48,17 +51,28 @@ function render_tier_transactions($psApp, $psTier, $psTierID, $paTrans, $poTimes
 			<th width=90>calls</th>
 		</tr></thead>
 		<tbody><?php
-		$sBaseUrl = cHttp::build_url("transdetails.php", cRender::get_base_app_qs());
-		$sBaseUrl = cHttp::build_url($sBaseUrl, cRender::TIER_QS, $psTier );
-		$sBaseUrl = cHttp::build_url($sBaseUrl, cRender::TIER_ID_QS, $psTierID );
+		$sTierQS = cRender::build_tier_qs(cRender::get_base_app_qs(), $psTier, $psTierID);
+		$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 		$iCount = 0;
 
-		$aStats = cAppdyn::GET_TransResponse($psApp, $psTier, "*", $poTimes, "true");
+		$sMetricpath = cAppdynMetric::transResponseTimes($psTier, "*");
+		$aStats = cAppdynCore::GET_MetricData($psApp, $sMetricpath, $oTimes,"true",false,true);
+		$giTotalTrans += count($aStats);
+		cDebug::vardump($aStats, true);
 		foreach ($aStats as $oTrans){
 			$oStats =  cAppdynUtil::Analyse_Metrics($oTrans->metricValues);
 			$sName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $psTier);
-			
-			$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS,$sName);
+			try{
+				$sTrID = cAppdynUtil::extract_bt_id($oTrans->metricName);
+			}
+			catch (Exception $e){
+				$sTrID = null;
+			}
+			$sLink = null;
+			if ($sTrID){
+				$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS,$sName);
+				$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
+			}
 			
 			if ($oStats->count == 0)	continue;
 			$iCount ++;
@@ -66,7 +80,12 @@ function render_tier_transactions($psApp, $psTier, $psTierID, $paTrans, $poTimes
 			$img = cRender::get_trans_speed_colour($oStats->max);
 			
 			?><tr>
-				<td><a href="<?=$sLink?>"><?=$sName?></a></td>
+				<td><?php
+					if ($sLink){
+						?><a href="<?=$sLink?>"><?=$sName?></a><?php
+					}else
+						echo $sName;
+				?></td>
 				<td><img src="<?=$img?>" align=middle></td>
 				<td align="right"><?=$oStats->max?></td>
 				<td align="right"><?=$oStats->avg?></td>
@@ -80,7 +99,13 @@ function render_tier_transactions($psApp, $psTier, $psTierID, $paTrans, $poTimes
 			?><tr><td colspan="5" align="left">No Transactions with Data found</td></tr><?php
 			cCommon::flushprint("");
 		}
-		?></tbody>
+		?>
+		</tbody>
+		<tfoot>
+			<tr><td colspan="5" align="right">
+				showing <?=$iCount?> of <?=count($aStats)?> transactions
+			</td></tr>
+		</tfoot>
 	</table>
 	<script language="javascript">
 		$( function(){ $("#<?=$psTierID?>").tablesorter();} );
@@ -93,6 +118,7 @@ cRender::force_login();
 
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
+$aid = cHeader::get(cRender::APP_ID_QS);
 $gsAppQS = cRender::get_base_app_qs();
 
 //header
@@ -106,22 +132,20 @@ if (cFilter::isFiltered()){
 	$sCleanAppQS = cRender::get_clean_base_app_QS();
 	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
 }
+cRender::appdButton(cAppDynControllerUI::businessTransactions($aid));
 
-$aTiers =cAppdyn::GET_Tiers($app);
-
+//####################################################################
 // work through each tier
 $aTierIDsWithData = [];
 $aTiers =cAppdyn::GET_Tiers($app);
-$oTimes = cRender::get_times();
 ?>
 <div class="maintable"><?php
+	$giTotalTrans = 0;
 	foreach ( $aTiers as $oTier){
 		//get the transaction names for the Tier
 		if (cFilter::isTierFilteredOut($oTier->name)) continue;
 		
 		$aTrans = cAppdyn::GET_tier_transaction_names($app, $oTier->name);	
-		cCommon::flushprint("<!-- $oTier->name -->");
-		
 		if (!$aTrans) continue;
 		if (count($aTrans) == 0) continue;
 
@@ -133,10 +157,13 @@ $oTimes = cRender::get_times();
 		//display the transaction data
 		?><div class="<?=cRender::getRowClass()?>"><?php
 			cRender::button($oTier->name, $sUrl);
-			render_tier_transactions($app, $oTier->name, $oTier->id, $aTrans, $oTimes);
+			render_tier_transactions($app, $oTier->name, $oTier->id);
 		?></div><?php
 	}
-?></div>
+	?><div class="<?=cRender::getRowClass()?>">
+			Total Transactions = <?=$giTotalTrans?>
+	</div>
+</div>
 
 <?php
 cRender::html_footer();

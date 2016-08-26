@@ -37,7 +37,7 @@ require_once("inc/inc-render.php");
 
 //choose a default duration
 //
-$duration = get_duration();
+
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 
 
@@ -47,8 +47,6 @@ set_time_limit(200);
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
-$applink=cRender::getApplicationsLink();
-$toplink=cRender::getTopLink($app,$aid);
 
 //####################################################################
 cRender::html_header("External tier calls");
@@ -56,7 +54,7 @@ cRender::force_login();
 
 // show time options
 $baseQuery ="?".cRender::APP_QS."=$app&".cRender::APP_QS."=$aid";
-cRender::show_time_options("$applink&gt;$toplink&gt;External Calls"); 
+cRender::show_time_options("$app&gt;External Calls"); 
 
 cRender::button("Response time", "transreport.php?$baseQuery");
 cRender::button("Server stats", "csv/serverstats.php?$baseQuery");

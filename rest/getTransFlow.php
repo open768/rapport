@@ -16,6 +16,8 @@ $root=realpath("..");
 $phpinc = realpath("$root/../phpinc");
 require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/common.php");
+require_once("$phpinc/appdynamics/metrics.php");
+require_once("$phpinc/appdynamics/account.php");
 
 
 set_time_limit(200); // huge time limit as this could takes a long time
@@ -25,34 +27,25 @@ require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("../inc/inc-render.php");
-
+require_once("../inc/inc-metrics.php");
+	
+//###################### DATA #############################################
 cSession::set_folder();
 session_start();
 cDebug::check_GET_or_POST();
 
 
-//###################### DATA #############################################################
-$app = cHeader::get(cRender::APP_QS);
-$tier = cHeader::get(cRender::TIER_QS);
-$trans = cHeader::get(cRender::TRANS_QS);
-$index = cHeader::get("id"); //id of HTML div
+//###################### DATA #############################################
+$app = cHeader::get(cRender::APP_QS) ;
+$tier = cHeader::get(cRender::TIER_QS) ;
+$trans = cHeader::get(cRender::TRANS_QS) ;
+if ($app == null)	cDebug::error("App not set");
+if ($tier == null)	cDebug::error("Tier not set");
+if ($trans == null)	cDebug::error("Trans not set");
 
-$aResult = array( "id"=>$index);
-
-$oTimes = cRender::get_times();
-$sMetricpath = cAppdynMetric::transResponseTimes($tier, $trans);
-$aStats = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes,"true",false,true);
-
-
-if ($aStats){
-	$aResult["max"] = $aStats[0];
-	$sMetricpath = cAppdynMetric::transErrors($tier, $trans);
-	$aErrors = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes,"true",false,true);
-	
-	if ($aErrors)		$aResult["transErrors"] = $aErrors[0];
-}else{
-	$aResult["error"] = "no data";
-}
-
-echo json_encode($aResult);	
+//*************************************************************************
+$sMetricPath = cAppDynMetric::transExtNames($tier, $trans);
+$oWalker = new cAppDynTransFlow();
+$oWalker->walk($app, $tier, $trans);
+cCommon::write_json($oWalker);	
 ?>

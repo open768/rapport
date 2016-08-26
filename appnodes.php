@@ -46,7 +46,7 @@ $aMetrics = cRender::getInfrastructureMetricTypes();
 
 //####################################################################
 cRender::show_top_banner("Agents for $app"); 
-cRender::show_apps_menu("Agents", "appnodes.php");
+cRender::show_apps_menu("Show Agents for...", "appnodes.php");
 ?>
 <select id="showMenu">
 	<option selected disabled>Show...</option>
@@ -142,8 +142,8 @@ if ($iNodes==0){
 	<p>
 	<h2>There are <?=$iNodes;?> agents in total in (<?=$app?>)</h2>
 	<p>
-	<table class="maintable" border="1" cellspacing="0" cellpadding="2">
-		<tr>
+	<table class="maintable">
+		<tr class="tableheader">
 			<th>Machine</th>
 			<th>Tier</th>
 			<th>Agent Type</th>
@@ -155,8 +155,8 @@ if ($iNodes==0){
 		<?php
 			foreach ($aResponse as $aNodes){
 				$iRowSpan = count($aNodes) +1;
-				$class=cRender::getRowClass();
-				?><tr class='$class'><?php
+				$sClass=cRender::getRowClass();
+				?><tr class='$sClass'><?php
 					if ($psAggType== cRender::GROUP_TYPE_NODE){
 						$sMachine = $aNodes[0]->machineName;
 						$iMachineID = $aNodes[0]->machineId;
@@ -164,7 +164,7 @@ if ($iNodes==0){
 							<?=cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine)?> (<?=$iMachineID?>)
 						</nobr></td><?php
 					}else{
-						?><td></td><?php
+						?><td>&nbsp;</td><?php
 					}
 					
 					if ($psAggType== cRender::GROUP_TYPE_TIER){
@@ -186,26 +186,24 @@ if ($iNodes==0){
 					$sTierQS = cHttp::build_qs($sAppQS, cRender::TIER_QS,$sTier);
 					$sTierQS = cHttp::build_qs($sTierQS, cRender::TIER_ID_QS,$oNode->tierId);
 					
-					?>
-						<tr class="<?=$class?>">
-							<td><nobr><?php
-								if ($psAggType !== cRender::GROUP_TYPE_NODE){
-									cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine);
-									echo " ($iMachineID)";
-								}
-								if ($psAggType !== cRender::GROUP_TYPE_TIER) cRender::button($sTier, cHttp::build_url("tierinfrstats.php",$sTierQS));
-							?></nobr></td>
-							<td><?=$oNode->agentType?></td>
-							<td><?php
-								$sNodeUrl = cHttp::build_url("tierinfrstats.php", $sTierQS);
-								cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-								cRender::appdButton(cAppDynControllerUI::nodeAgent($aid, $oNode->id), $oNode->id);
-							?></td>
-							<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
-							<td><?=($oNode->machineAgentPresent?$oNode->machineAgentVersion:"none")?></td>
-							<td><?=($oNode->appAgentPresent?$oNode->appAgentVersion:"none")?></td>
-						</tr>
-						<?php
+					?><tr class="<?=$sClass?>">
+						<td><nobr><?php
+							if ($psAggType !== cRender::GROUP_TYPE_NODE){
+								cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine);
+								echo " ($iMachineID)";
+							}
+							if ($psAggType !== cRender::GROUP_TYPE_TIER) cRender::button($sTier, cHttp::build_url("tierinfrstats.php",$sTierQS));
+						?></nobr></td>
+						<td><?=$oNode->agentType?></td>
+						<td><?php
+							$sNodeUrl = cHttp::build_url("tierinfrstats.php", $sTierQS);
+							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
+							cRender::appdButton(cAppDynControllerUI::nodeAgent($aid, $oNode->id), $oNode->id);
+						?></td>
+						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
+						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
+						<td><?=($oNode->appAgentPresent?cAppdynUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
+					</tr><?php
 				}
 			}
 		?>

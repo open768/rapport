@@ -45,7 +45,7 @@ cRender::force_login();
 	<script type="text/javascript" src="js/chart.php"></script>
 <?php
 cChart::do_header();
-cChart::$width=500;
+cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -63,7 +63,7 @@ cRender::button("back to all databases", "alldb.php",false);
 cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false);
 
 //####################################################################
-cChart::$width=940;
+cChart::$width=cRender::CHART_WIDTH_LARGE;
 ?>
 	<table class="maintable"><tr><td>
 	<?php	

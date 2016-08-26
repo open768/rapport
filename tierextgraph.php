@@ -76,7 +76,6 @@ if ($oCred->restricted_login == null){
 	cRender::show_tier_functions();
 	cRender::show_tier_menu("Change Tier to", "tierextgraph.php");
 	cRender::button("summary", cHttp::build_url("tierextcalls.php", $tierQS));
-	cRender::button("Ext calls: ($app) app", cHttp::build_url("appext.php", $gsAppQs));
 }
 
 //************* basic information about the tier *********************

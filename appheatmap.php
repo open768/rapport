@@ -53,12 +53,9 @@ $aid = cHeader::get(cRender::APP_ID_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 
 
-$duration = get_duration();
 
-$applink=cRender::getApplicationsLink();
-$topurl = cRender::getTopLink($app,$aid);
 
-$title= "$applink&gt;$topurl&gt;Activity&gt;heatmap";
+$title= "$app&gt;Activity&gt;heatmap";
 cRender::show_time_options($title); 
 cRender::show_apps_menu("heatmap", "appheatmap.php");
 

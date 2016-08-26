@@ -19,7 +19,7 @@ require_once("$phpinc/appdynamics/common.php");
 require_once("$phpinc/appdynamics/metrics.php");
 require_once("$phpinc/appdynamics/account.php");
 
-$duration = get_duration();
+
 set_time_limit(200); // huge time limit as this could takes a long time
 
 require_once("$phpinc/ckinc/debug.php");

@@ -60,20 +60,14 @@ cChart::$app_qs = cRender::APP_QS;
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $backend = cHeader::get(cRender::BACKEND_QS);
-$duration = get_duration();
+$sAppQS = cRender::get_base_app_QS();
+$sBackendQS = cHttp::build_QS($sAppQS, cRender::BACKEND_QS, $backend);
 
-$applink=cRender::getApplicationsLink();
-$topurl = cRender::getTopLink($app,$aid);
-
-$title= "$applink&gt;$topurl&gt;Backend Transaction response times&gt;$backend";
+$title= "$app&gt;Backend Transaction response times&gt;$backend";
 cRender::show_time_options($title); 
-cRender::button("Backends", "backends.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid");
-cRender::button("Backend Tier Calls", "backcalls.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid&".cRender::BACKEND_QS."=$backend");
-cRender::button("Backend Transaction Calls", "backtrans.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid&".cRender::BACKEND_QS."=$backend");
-cRender::button("Activity", "appactivity.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid");
-cRender::button("Response times", "appresponse.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid");
-cRender::button("Heatmap", "heatmap.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid");
-cRender::button("export", "csv/activitycsv.php?".cRender::APP_QS."=$app&".cRender::APP_ID_QS."=$aid");
+cRender::button("Back to Backends", "backends.php?$sAppQS");
+cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
+cRender::button("Backend Transaction Calls", "backtrans.php?$sBackendQS");
 cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
 ?>
 <br>

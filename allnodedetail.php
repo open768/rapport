@@ -46,7 +46,7 @@ $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 	<script type="text/javascript" src="js/chart.php"></script>
 <?php
 cChart::do_header();
-cChart::$width=940;
+cChart::$width = cRender::CHART_WIDTH_LARGE;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -103,7 +103,7 @@ $sDetailRootQS = cHttp::build_url("allnodedetail.php", $sAppQS);
 
 //####################################################################
 cRender::show_time_options($sTitle); 
-cRender::show_apps_menu("Detail", "allnodedetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
+cRender::show_apps_menu("Show detail for", "allnodedetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
 
 $aMetrics = cRender::getInfrastructureMetricTypes();
 ?>

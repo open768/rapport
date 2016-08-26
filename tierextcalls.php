@@ -46,7 +46,7 @@ $gsAppQs=cRender::get_base_app_QS();
 $gsTierQs=cRender::get_base_tier_QS();
 
 $SHOW_PROGRESS=true;
-$duration = get_duration();
+
 
 //####################################################################
 cRender::html_header("External tier calls");

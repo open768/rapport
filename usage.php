@@ -44,7 +44,7 @@ cRender::force_login();
 	<script type="text/javascript" src="js/chart.php"></script>
 <?php
 cChart::do_header();
-cChart::$width=940;
+cChart::$width= cRender::CHART_WIDTH_LARGE;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -61,12 +61,14 @@ cChart::$showCompare = false;
 $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 cRender::show_top_banner("License Usage for $sUsage month(s)"); 
-
-
-?><select id="menuTime">
+?>
+<h2>License Usage</h2>
+login account needs administrator role for this to work
+<p>
+<select id="menuTime">
 	<option selected disabled>Show Licenses for</option>
 	<?php
-		foreach ([1,2,3,6,12] as $iOption ){
+		foreach ([1,2,3,4,5,6,12] as $iOption ){
 			$sDisabled = ($sUsage == $iOption?"disabled":"");
 			?>
 				<option <?=$sDisabled?> value="<?=cHttp::build_url("usage.php",cRender::USAGE_QS,$iOption)?>"><?=$iOption?> Months</option>
@@ -76,33 +78,23 @@ cRender::show_top_banner("License Usage for $sUsage month(s)");
 </select>
 
 <script language="javascript">
-$(  
-	function(){
-		$("#menuTime").selectmenu({change:common_onListChange});
-	}  
-);
+$(  function(){
+		$("#menuTime").selectmenu({change:common_onListChange,width:300});
+} );
 </script><?php
 
-
 //####################################################################
+?>
+<?php
 $oMods=cAppDynAccount::GET_license_modules();
 $aMods = $oMods->modules;
-//cDebug::vardump($aMods,true);
-?>
-	<h2>License Usage</h2>
-	<h3>login account needs administrator role for this to work</h3>
-	<table class="maintable"><tr><td>
-	<?php
-		foreach ($oMods->modules as $oModule){
-			$sModule = $oModule->name;
-			$class=cRender::getRowClass();
+sort ($aMods);
+$aMetrics = [];
+foreach ($aMods as $oModule)
+	$aMetrics[] = [$oModule->name, cAppdynMetric::moduleUsage($oModule->name, $sUsage)];
 
-			echo "<tr class='$class'><td>";
-				cChart::add("Usage for $sModule", cAppDynMetric::USAGE_METRIC."/$sModule/$sUsage", null, 200);
-			echo "</td></tr>";
-		}
-	?>
-	</td></tr></table><?php
+$sClass=cRender::getRowClass();
+cRender::render_metrics_table(null, $aMetrics,3, $sClass, null);
 
 cChart::do_footer();
 cRender::html_footer();

@@ -39,7 +39,7 @@ $SHOW_PROGRESS=false;
 set_time_limit(200); 
 
 //####################################################################
-cRender::html_header("Backends");
+cRender::html_header("Service End Points");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
@@ -52,70 +52,74 @@ cChart::$csv_url = "rest/getMetric.php";
 cChart::$zoom_url = "metriczoom.php";
 cChart::$save_fn = "save_fave_chart";
 cChart::$compare_url = "compare.php";
+
 cChart::$metric_qs = cRender::METRIC_QS;
 cChart::$title_qs = cRender::TITLE_QS;
 cChart::$app_qs = cRender::APP_QS;
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
+cChart::$width = cRender::CHART_WIDTH_LETTERBOX/4;
 
-
+//####################################################################
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 
-$sAppQs = cRender::get_base_app_QS();
 
-
-$title= "$app;Backends";
-
+$title= "$app&gt;Service EndPoints";
 cRender::show_time_options($title); 
-cRender::show_apps_menu("Remote Services", "backends.php");
-cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
-
+cRender::show_apps_menu("Show Service EndPoints for", "appservice.php");
+if (cFilter::isFiltered()){
+	$sCleanAppQS = cRender::get_clean_base_app_QS();
+	cRender::button("Clear Filter", "appservice.php?$sCleanAppQS");
+}
+//####################################################################
 //retrieve tiers
-$oBackends =cAppdyn::GET_Backends($app);
+$oTimes = cRender::get_times();
+$aTiers = cAppdyn::GET_Tiers($app, $oTimes);
 
 
-// work through each tier
-?>
-<h2>Overall Statistics for <?=$app?>
-<table class="maintable">
-	<tr class="<?=cRender::getRowClass()?>">
-		<td><?php
-			$sMetric=cAppDynMetric::appCallsPerMin();
-			cChart::add("Overall Calls per min", $sMetric, $app);	
-		?></td>
-		<td><?php
-			$sMetric=cAppDynMetric::appResponseTimes();
-			cChart::add("Overall Response Times", $sMetric, $app);	
-		?></td>
-	</tr>
-</table>
-<p>
+foreach ($aTiers as $oTier){
+	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 
-<h2>Remote Services for <?=$app?></h2>
-<table class='maintable'>
-	<?php
-	$sBackendURL = cHttp::build_url("backcalls.php",$sAppQs );
-	foreach ( $oBackends as $oBackend){
-		$sBackend = $oBackend->name;
-		$sClass = cRender::getRowClass();
-		?><tr class="<?=$sClass?>" ><td colspan="2"><?php
-			cRender::button($sBackend, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $sBackend));
-		?></td></tr>
-		<tr class="<?=$sClass?>">
-			<td><?php
-				$sMetric=cAppDynMetric::backendCallsPerMin($sBackend);
-				cChart::add("Calls per min ($sBackend)", $sMetric, $app);	
-			?></td>
-			<td><?php
-				$sMetric=cAppDynMetric::backendResponseTimes($sBackend);
-				cChart::add("Response Times ($sBackend)", $sMetric, $app);	
-			?></td>
-		</tr><?php
+	//****************************************************************************************
+	$aEndPoints = cAppdyn::GET_TierServiceEndPoints($app, $oTier->name);
+	if (count($aEndPoints) == 0){
+		cRender::messagebox("no Service endpoints found for $oTier->name");
+		continue;
 	}
-	?>
-</table>
-<?php
+	
+	//****************************************************************************************
+	?><p><?php
+	cRender::show_tier_functions($oTier->name, $oTier->id);
+	?><table class="maintable">
+		<tr>
+			<th>End Point</th>
+			<th>Activity</th>
+			<th>Response Times in ms</th>
+			<th>Errors per minute</th>
+		</tr>
+		<?php
+			foreach ($aEndPoints as $oEndPoint){
+				?><tr class="<?=cRender::getRowClass()?>">
+					<td><?=$oEndPoint->name?></td>
+					<td><?php	
+						$sMetricUrl = cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name);
+						cChart::add("Calls", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+					<td><?php	
+						$sMetricUrl = cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name);
+						cChart::add("Response", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+					<td><?php	
+						$sMetricUrl = cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name);
+						cChart::add("Errors", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+					?></td>
+				</tr><?php
+			}
+		?>
+	</table><?php 
+}
+
+//####################################################################
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
 cRender::html_footer();

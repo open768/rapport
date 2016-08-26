@@ -35,7 +35,7 @@ require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
 
-$duration = get_duration();
+
 
 set_time_limit(200); // huge time limit as this takes a long time
 //####################################################################
@@ -55,6 +55,7 @@ cRender::show_time_options($title);
 $oResponse =cAppdyn::GET_Tier_transactions($app, $tier);
 
 $sBaseUrl = cHttp::build_url("transdetails.php", $gsTierQS;) 
+$oTimes = cRender::get_times();
 foreach ($oResponse as $oDetail){
     $trans = $oDetail->name;
 	$trid = $oDetail->id;
@@ -62,9 +63,12 @@ foreach ($oResponse as $oDetail){
 	$sLink = cHttp::build_url($sLink, cRender::TRANS_ID_QS, $trid);
 	
 	cCommon::flushprint ("<h2><a href='$link'>$trans</a></h2>");   
-	$oDetResponse = cAppdyn::GET_TransCalls($app, $tier, $trans, false);
-	$iTotalRows = count($oDetResponse);
-    $charturl = generate_chart("ttc", "call per min $trans",  $oDetResponse);
+	
+	$sMetricpath = cAppdynMetric::transCallsPerMin($tier, $trans);
+	$oResponse = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes, "false");
+	
+	$iTotalRows = count($oResponse);
+    $charturl = generate_chart("ttc", "call per min $trans",  $oResponse);
 	echo "<img src='$charturl'>";
 }
 

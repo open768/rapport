@@ -42,7 +42,7 @@ $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 
 $SHOW_PROGRESS=true;
-$duration = get_duration();
+
 $sAppQs = cRender::get_base_app_QS();
 $sTierQs = cRender::get_base_tier_QS();
 
@@ -56,7 +56,6 @@ cRender::force_login();
 cRender::show_time_options("$app&gt;$tier"); 
 
 cChart::do_header();
-cChart::$width=940;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -75,6 +74,7 @@ if ($oCred->restricted_login == null){
 	$sInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
 
 	cRender::show_tier_functions();
+	cRender::show_tier_menu("Change Tier", "tier.php");
 	?>
 		<select id="menuNodes">
 			<option selected disabled>Individual Servers</option>
@@ -95,40 +95,52 @@ if ($oCred->restricted_login == null){
 }
 
 //####################################################################
+cChart::$width = cRender::CHART_WIDTH_LARGE/2;
 ?>
-
-<h2>Overall Stats for (<?=$app?>) Application</h2>
+<h2>Activity</h2>
 <table class="maintable">
-	<tr><td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::appResponseTimes();
-		cChart::add("Overall response time in ms ($app) application", $sMetricUrl, $app);
-	?></td></tr>
-	<tr><td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::appCallsPerMin();
-		cChart::add("Overall Calls per min ($app) application", $sMetricUrl, $app);
-	?></td></tr>
-</table>
-
-<h2>(<?=$tier?>) Tier</h2>
-<table class="maintable">
-	<tr><td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-		cChart::add("Calls per min for ($tier) tier", $sMetricUrl, $app);
-	?></td></tr>
-	<tr><td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-		cChart::add("Response times in ms for ($tier) tier", $sMetricUrl, $app);
-	?></td></tr>
-	<tr><td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::InfrastructureMachineAvailability($tier);
-		cChart::add("Server Availability", $sMetricUrl, $app);
-	?></td></tr>
-	<tr><td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::InfrastructureAgentAvailability($tier);
-		cChart::add("Agent Availability", $sMetricUrl, $app);
-	?></td></tr>
+	<tr class="<?=cRender::getRowClass()?>">
+		<td><?php
+			$sMetricUrl=cAppDynMetric::appCallsPerMin();
+			cChart::add("Overall Calls per min ($app) application", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+		?></td>
+		<td><?php
+			$sMetricUrl=cAppDynMetric::appResponseTimes();
+			cChart::add("Overall response time in ms ($app) application", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+		?></td>
+	</tr>
+	<tr class="<?=cRender::getRowClass()?>">
+		<td><?php
+			$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
+			cChart::add("Calls per min for ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+		?></td>
+		<td><?php
+			$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
+			cChart::add("Response times in ms for ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
+		?></td>
+	</tr>
 </table>
 <?php
+	cChart::$width = cRender::CHART_WIDTH_LARGE;
+	$aMetrics = [];
+	$aMetrics[] = ["Slow Calls", cAppDynMetric::tierSlowCalls($tier)];
+	$aMetrics[] = ["Very Slow Calls", cAppDynMetric::tierVerySlowCalls($tier)];
+	$aMetrics[] = ["CPU Busy", cAppDynMetric::InfrastructureCpuBusy($tier)];
+	$aMetrics[] = ["Disk Free", cAppDynMetric::InfrastructureDiskFree($tier)];
+	$aMetrics[] = ["Errors Per Min", cAppDynMetric::tierErrorsPerMin($tier)];
+	$aMetrics[] = ["Exceptions Per Min", cAppDynMetric::tierExceptionsPerMin($tier)];
+	$aMetrics[] = ["Java Heap Used", cAppDynMetric::InfrastructureJavaHeapUsed($tier)];
+	$aMetrics[] = [".Net Heap used", cAppDynMetric::InfrastructureDotnetHeapUsed($tier)];
+	$aMetrics[] = ["Network In", cAppDynMetric::InfrastructureNetworkIncoming($tier)];
+	$aMetrics[] = ["Network Out", cAppDynMetric::InfrastructureNetworkOutgoing($tier)];
+	$aMetrics[] = ["Machine Availability", cAppDynMetric::InfrastructureMachineAvailability($tier)];
+	$aMetrics[] = ["Agent Availability", cAppDynMetric::InfrastructureAgentAvailability($tier)];
+	$sClass=cRender::getRowClass();
+?>
+<h2>(<?=$tier?>) Dashboard</h2>
+<?php
+cRender::render_metrics_table($app, $aMetrics, 3, $sClass);
+
 //####################################################################
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 cRender::html_footer();

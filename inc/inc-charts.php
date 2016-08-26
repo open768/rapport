@@ -39,14 +39,13 @@ class cChart{
 	const KEY__CHART = "c";
 	const KEY__PREVIOUS = "p";
 	const KEY__CAPTION = "n`";
+	const ID_DIV_SAVE= "chrtsv";
 	
 	private static $chart_items = array();
 	
 	//****************************************************************************
-	//move this into inc-render
+	//TODO move this into a jquery Widget
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ 
-
-
 		if (!self::$metric_qs) cDebug::error("metric_qs class property not set");
 		if (!self::$title_qs) cDebug::error("title_qs  class property not set");
 		if (!self::$app_qs) cDebug::error("app_qs class property not set");
@@ -56,6 +55,8 @@ class cChart{
 		if (self::$showCompare && !self::$compare_url) cDebug::error("compare url not set");
 		
 		cDebug::write("adding chart $psMetric");
+		
+		//check type of $psMetric, do something different if array
 		
 		$iCount = count( self::$chart_items);
 		$sDivID = "chart".$iCount;
@@ -75,9 +76,10 @@ class cChart{
 					<p>
 					<b>Observed</b><br>
 					<nobr>Max: <span id="<?=$sDivID?>maxo">?</nobr><br>
-					<nobr>Avg: <span id="<?=$sDivID?>avgo">?</nobr>
+					<nobr>Avg: <span id="<?=$sDivID?>avgo">?</nobr><br>
+					<nobr>Min: <span id="<?=$sDivID?>mino">?</nobr>
 				</td>
-			</table>
+			</tr></table>
 			
 			<div id="<?=$sDivID?>buttons" style="display: none;">
 			<?php
@@ -112,6 +114,8 @@ class cChart{
 	public static function do_footer(){
 		if (!self::$json_data_fn) cDebug::error("data function not set");
 		if (!self::$json_callback_fn) cDebug::error("JSON callback not set");
+		if (count(self::$chart_items) == 0) return;
+		
 		cDebug::enter();
 		?>
 		<script type="text/javascript">
@@ -140,6 +144,10 @@ class cChart{
 				oRemote.go();
 			}		
 		</script>
+		<!-- the form to save the Chart -->
+		<div id="<?=self::ID_DIV_SAVE?>" style="display:none">
+			Saving not supported
+		</div
 		
 		<!-- THE FORM TO EXTRACT ALL THE CHART DATA INTO A CORRELATED csv FILE -->
 		<form method="POST" action="all_csv.php" target="_blank">

@@ -48,7 +48,7 @@ cRender::force_login();
 	<script type="text/javascript" src="js/chart.php"></script>
 <?php
 cChart::do_header();
-cChart::$width=500;
+cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";
@@ -69,7 +69,7 @@ cRender::show_time_options( $title);
 
 
 //####################################################################
-cRender::show_apps_menu("Overview for $gsApp","appoverview.php");
+cRender::show_apps_menu("Show Overview for:","appoverview.php");
 $gsAppQs = cRender::get_base_app_QS();
 cRender::appdButton(cAppDynControllerUI::application($aid));
 
@@ -100,7 +100,7 @@ $aMetrics  = [
 <h2><a name="app">Application Overview</a></h2>
 <?php 
 $class=cRender::getRowClass();
-cChart::$width=400;
+cChart::$width=cRender::CHART_WIDTH_LARGE/3;
 cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 
 //####################################################################
@@ -110,7 +110,7 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 	//-----------------------------------------------
 	$oResponse =cAppdyn::GET_Tiers($gsApp);
 	$sClass=cRender::getRowClass();
-	cChart::$width=200;
+	cChart::$width=cRender::CHART_WIDTH_LARGE/5;
 	$iHeight=100;
 ?>
 <table class="maintable">
@@ -155,7 +155,7 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 
 <?php
 //####################################################################
-	cChart::$width=400;
+	cChart::$width=cRender::CHART_WIDTH_LARGE/3;
 	$oBackends =cAppdyn::GET_Backends($gsApp);
 	$sBackendURL = cHttp::build_url("backcalls.php",$gsAppQs );
 	$iHeight=150;
@@ -198,7 +198,7 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 <h2><a name="trans">Transactions</a></h2>
 <?php
 $aTiers =cAppdyn::GET_Tiers($gsApp);
-cChart::$width=200;
+cChart::$width=cRender::CHART_WIDTH_LARGE/4;
 $iHeight=100;
 
 foreach ($aTiers as $oTier){

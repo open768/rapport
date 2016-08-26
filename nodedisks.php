@@ -42,7 +42,7 @@ cChart::do_header();
 	<script type="text/javascript" src="js/chart.php"></script>
 <?php
 
-cChart::$width=940;
+cChart::$width=cRender::CHART_WIDTH_LARGE;
 cChart::$json_data_fn = "chart_getUrl";
 cChart::$json_callback_fn = "chart_jsonCallBack";
 cChart::$csv_url = "rest/getMetric.php";

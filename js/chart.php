@@ -44,7 +44,7 @@ function onChartError( poData){
 
 //the callback - this draws the graph
 function onChartJson( poData){
-	var oChart, aValues, dDate, iValue, iItemMax, iMax, iMaxObserved, iAvgObs, iSum, sMax;
+	var oChart, aValues, dDate, iValue, iItemMax, iMax, iMaxObserved, iAvgObs, iSum, sMax, iMin;
 	
 	var oRemoteItem = poData.oItem;
 	var oJson = poData.oJson;
@@ -74,10 +74,17 @@ function onChartJson( poData){
 			dDate = new Date(oItem.date);
 			iValue = oItem.value;
 			iItemMax = oItem.max;
+			
 			sMax= (iMax?"<br>Max: "+iItemMax:"");
 			iMax = Math.max(iMax,iItemMax);
 			iMaxObserved = Math.max(iMaxObserved,iValue);
 			iSum += iValue;
+			
+			if (i==0)
+				iMin = iValue;
+			else
+				iMin = Math.min(iMin, iValue);
+			
 			
 			sTooltip = "<div class='charttooltip'>value:" + iValue + sMax + "<br>" + dDate.toString() + "</i></div>";
 			
@@ -90,6 +97,7 @@ function onChartJson( poData){
 		// display maximumes and observed values
 		iMax = Math.max(iMax, iMaxObserved);
 		$("#"+sDivID+"max").html(iMax);
+		$("#"+sDivID+"mino").html(iMin);
 		$("#"+sDivID+"maxo").html(iMaxObserved);
 		iAvgObs = Math.round(iSum/oJson.data.length);
 		$("#"+sDivID+"avgo").html(iAvgObs);
@@ -118,7 +126,8 @@ function onChartJson( poData){
 			vAxis: {
 				textStyle:{color: 'DarkCyan'},
 				viewWindow:{min:0}			
-			}
+			},
+			interpolateNulls: false
 		};
 		oChart.draw(oData, oOptions);
 		
@@ -158,6 +167,7 @@ function chart_getUrl(poItem){
 //*******************************************************************
 function save_fave_chart(psApp, psMetric){
 	window.alert("chart saving is not implemented");
+	//$('#<?=cChart::ID_DIV_SAVE?>').dialog({ modal: true });
 }
 
 
