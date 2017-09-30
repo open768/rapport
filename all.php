@@ -31,7 +31,6 @@ cDebug::check_GET_or_POST();
 require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/common.php");
 require_once("inc/inc-charts.php");
-require_once("inc/inc-charts.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
@@ -61,6 +60,7 @@ cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
 	<script type="text/javascript" src="js/chart.php"></script>
+	<script type="text/javascript" src="js/widgets/chart.js"></script>
 <?php
 cChart::do_header();
 cChart::$json_data_fn = "chart_getUrl";
@@ -94,19 +94,27 @@ else{
 					<?=cRender::show_app_functions($oApp->name, $oApp->id)?>
 				</td></tr>
 				<tr class="<?=$sClass?>">
-					<td><?php
-						cChart::add($sTitle1, $sMetric1, $oApp->name, 200);
+					<td>
+					<DIV type="appdchart" appName="<?=$oApp->name?>" metric="<?=$sMetric1?>" title="<?=$sTitle1?>">Loading...</DIV>
+					<?php
+						//cChart::add($sTitle1, $sMetric1, $oApp->name, 200);
 					?></td>
-					<td><?php
-						cChart::add($sTitle2, $sMetric2, $oApp->name, 200);
+					<td>
+					<div type="appdchart" appName="<?=$oApp->name?>" metric="<?=$sMetric2?>" title="<?=$sTitle2?>">Loading...</div>
+					<?php
+						//cChart::add($sTitle2, $sMetric2, $oApp->name, 200);
 					?></td>
 				</tr>
 			<?php
 		}
 	?></table><?php
 }
+?>
+<script language="javascript">
+$(ck_appd_chart_loadCharts);
+</script>
 
+<?php
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 cRender::html_footer();
-
 ?>
