@@ -58,21 +58,9 @@ switch($sMetricType){
 cRender::html_header("All Applications - $sTitle1");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
 	<script type="text/javascript" src="js/widgets/chart.js"></script>
 <?php
 cChart::do_header();
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$save_fn = "save_fave_chart";
-
-cChart::$compare_url = "compare.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
 
 //####################################################################
 cRender::show_time_options( "All Applications - $sTitle1"); 
@@ -95,14 +83,12 @@ else{
 				</td></tr>
 				<tr class="<?=$sClass?>">
 					<td>
-					<DIV type="appdchart" appName="<?=$oApp->name?>" metric="<?=$sMetric1?>" title="<?=$sTitle1?>">Loading...</DIV>
 					<?php
-						//cChart::add($sTitle1, $sMetric1, $oApp->name, 200);
+						cChart::add($sTitle1, $sMetric1, $oApp->name, 200);
 					?></td>
 					<td>
-					<div type="appdchart" appName="<?=$oApp->name?>" metric="<?=$sMetric2?>" title="<?=$sTitle2?>">Loading...</div>
 					<?php
-						//cChart::add($sTitle2, $sMetric2, $oApp->name, 200);
+						cChart::add($sTitle2, $sMetric2, $oApp->name, 200);
 					?></td>
 				</tr>
 			<?php
@@ -110,9 +96,6 @@ else{
 	?></table><?php
 }
 ?>
-<script language="javascript">
-$(ck_appd_chart_loadCharts);
-</script>
 
 <?php
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");

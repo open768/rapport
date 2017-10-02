@@ -1,18 +1,47 @@
-function ck_appd_chart_loadCharts(){
-	$("DIV[type='appdchart']").each( 
-		function(pIndex, pElement){
-			var oElement = $(pElement);
-			oElement.appdchart({
-				appName:oElement.attr("appName"),
-				title:oElement.attr("title"),
-				metric:oElement.attr("metric")
-			});
-		}
-	);
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+var cChartItem = function(psApp, psMetric, psTitle){
+	this.app = psApp;
+	this.title = psMetric;
+	this.metric = psTitle;
 }
 
-goAppdChartQueue = new cHttpQueue;
+//###############################################################################
+var cCharts={
+	queue: new cHttpQueue,
+	allCharts: [],
+	
+	//*********************************************************
+	addChart: function(psApp, psMetric, psTitle){
+		var oItem = new cChartItem(psApp, psMetric, psTitle);
+		cCharts.allCharts.push(oItem);
+	},
+	
+	//*********************************************************
+	loadCharts: function(){
+		$("DIV[type='appdchart']").each( 
+			function(pIndex, pElement){
+				var oElement = $(pElement);
+				oElement.appdchart({
+					appName:oElement.attr("appName"),
+					title:oElement.attr("title"),
+					metric:oElement.attr("metric"),
+					width:oElement.attr("width"),
+					height:oElement.attr("height")
+				});
+				
+				cCharts.addChart(
+					oElement.attr("appName"),
+					oElement.attr("metric"),
+					oElement.attr("title")
+				);
+			}
+		);
+	}
+}
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //load google charts
 try{
 	google.charts.load('current', {'packages':['corechart']});
@@ -29,7 +58,8 @@ $.widget( "ck.appdchart",{
 		title:null,
 		appName:null,
 		metric: null,
-		width:400,
+		width:null,
+		height:null,
 		onClick:null,
 		shortNoData:false
 	},
@@ -44,7 +74,8 @@ $.widget( "ck.appdchart",{
 		SHORT_NO_DATA_HEIGHT: 40,
 		csv_url:"rest/getMetric.php",
 		zoom_url:"metriczoom.php",
-		compare_url:"compare.php"
+		compare_url:"compare.php",
+		WAIT_VISIBLE:1200
 	},
 
 	//#################################################################
@@ -57,7 +88,6 @@ $.widget( "ck.appdchart",{
 		oThis = this;
 		oElement = oThis.element;
 		oElement.uniqueId();
-		oElement.empty();
 		
 		//check for necessary classes
 		if (!bean){						$.error("bean class is missing! check includes");	}
@@ -71,13 +101,20 @@ $.widget( "ck.appdchart",{
 		if (!oOptions.title)	{		$.error("title  missing!");			}
 		if (!oOptions.appName)	{		$.error("application  missing!");	}
 		if (!oOptions.metric)	{		$.error("metric  missing!");		}
+		if (!oOptions.width)	{		$.error("width missing!");		}
+		if (!oOptions.height)	{		$.error("height missing!");		}
 		
 		//load content
-		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);
-
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("please wait...");
+		this.pr__setInView();
+	},
+	
+	pr__setInView: function(){
+		var oThis = this;
+		var oElement = oThis.element;
+		
+		oElement.empty();
+		oElement.append("meet the invisible man.");
+		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
 	},
 
 	//#################################################################
@@ -89,17 +126,39 @@ $.widget( "ck.appdchart",{
 
 		//check if element is visible
 		if (!pbIsInView) return;		
-		this.element.off('inview');	//turn off the inview listener
-		oElement.append (" Loading...");		
+		oElement.off('inview');	//turn off the inview listener
+		oElement.empty();
+		oElement.append("give me a sec.");
 
+		setTimeout(	function(){	oThis.onTimer()}, this.consts.WAIT_VISIBLE);
+	},
+	
+	//*******************************************************************
+	onTimer: function(){
+		var oThis = this;
+		var oElement = oThis.element;
+		if (cCharts.queue.stopping) return;
+		
+		if (!oElement.visible()){
+			this.pr__setInView();
+			return;
+		}
+
+		if (cCharts.queue.stopping) return;
+		
+		//loading message
+		oElement.empty();
+		var oLoader = $("<DIV>");
+		oLoader.gSpinner({scale: .25});
+		oElement.append(oLoader).append("Loading...");
+		
 		//add the data request to the http queue
-		if (goAppdChartQueue.stopping) return;
 		var oItem = new cHttpQueueItem();
 		oItem.url = this.pr__get_chart_url();
 
 		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		goAppdChartQueue.add(oItem);
+		cCharts.queue.add(oItem);
 	},
 	
 	//*******************************************************************
@@ -120,6 +179,8 @@ $.widget( "ck.appdchart",{
 		var oOptions = this.options;
 		var oElement = oThis.element;
 
+		if (cCharts.queue.stopping) return;
+		
 		var oResponse = poHttp.response;
 		if (oResponse.data.length == 0){
 			this.pr__no_data_found();
@@ -262,7 +323,7 @@ $.widget( "ck.appdchart",{
 		
 		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width});
+		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width, height:oOptions.height});
 		var oCell = $("<TD>");
 		oCell.append(oChartDiv);
 		oRow.append(oCell);
