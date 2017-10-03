@@ -1,44 +1,66 @@
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-var cChartItem = function(psApp, psMetric, psTitle){
-	this.app = psApp;
-	this.title = psMetric;
-	this.metric = psTitle;
-}
 
 //###############################################################################
 var cCharts={
 	queue: new cHttpQueue,
-	allCharts: [],
+	METRIC_FIELD: "cmf.",
+	COUNT_FIELD: "ccf",
+	TITLE_FIELD: "ctf.",
+	APP_FIELD: "caf.",
 	
 	//*********************************************************
-	addChart: function(psApp, psMetric, psTitle){
+	rememberChart: function(psApp, psMetric, psTitle){
 		var oItem = new cChartItem(psApp, psMetric, psTitle);
 		cCharts.allCharts.push(oItem);
 	},
 	
 	//*********************************************************
-	loadCharts: function(){
+	loadCharts: function(pbShowExportAll){	
+		var iCount ,oInput;
+		
+		iCount = 0;
+		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:"all_csv.php",target:"_blank"});
+		
 		$("DIV[type='appdchart']").each( 
 			function(pIndex, pElement){
 				var oElement = $(pElement);
+				
+				var sAppName = oElement.attr("appName");
+				var sMetric = oElement.attr("metric");
+				var sTitle = oElement.attr("title");
+				
 				oElement.appdchart({
-					appName:oElement.attr("appName"),
-					title:oElement.attr("title"),
-					metric:oElement.attr("metric"),
+					appName:sAppName,
+					title:sTitle,
+					metric:sMetric,
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
 					showZoom:oElement.attr("showZoom"),
 					showCompare:oElement.attr("showCompare")
 				});
-				
-				cCharts.addChart(
-					oElement.attr("appName"),
-					oElement.attr("metric"),
-					oElement.attr("title")
-				);
+					
+				//-------------build the form
+				if(pbShowExportAll){
+					iCount++;
+					oInput = $("<input>",{type:"hidden",name:cCharts.METRIC_FIELD+iCount,value:sMetric}	);
+					oForm.append(oInput);
+					oInput = $("<input>",{type:"hidden",name:cCharts.TITLE_FIELD+iCount,value:sTitle}	);
+					oForm.append(oInput);
+					oInput = $("<input>",{type:"hidden",name:cCharts.APP_FIELD+iCount,value:sAppName}	);
+					oForm.append(oInput);
+				}
 			}
 		);
+		
+		//complete the form
+		if (iCount >0){
+			oInput = $("<input>",{type:"hidden",name:cCharts.COUNT_FIELD,value:iCount}	);
+			oForm.append(oInput);
+			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV"}	);
+			oForm.append(oInput);
+			$("#AllMetrics").empty().append(oForm);
+		}
 	}
 }
 

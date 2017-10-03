@@ -47,6 +47,7 @@ cRender::force_login();
 	<script type="text/javascript" src="js/remote.js"></script>
 	
 <?php
+cChart::$show_export_all = false;
 cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 

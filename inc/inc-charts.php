@@ -18,6 +18,7 @@ class cChart{
 	public static $width=1000;
 	public static $show_zoom = true;
 	public static $show_compare = true;
+	public static $show_export_all = true;
 
 	//****************************************************************************
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
@@ -40,34 +41,11 @@ class cChart{
 	//****************************************************************************
 	public static function do_footer(){		
 		?>
+		<div id="AllMetrics">...</div>
 		<script language="javascript">
-			$(cCharts.loadCharts());
+			$(cCharts.loadCharts(<?=self::$show_export_all?>));
 		</script>
 		<?php
-		/*
-		<!-- THE FORM TO EXTRACT ALL THE CHART DATA INTO A CORRELATED csv FILE -->
-		<form method="POST" action="all_csv.php" target="_blank">
-		<?php
-		$i=0;
-		foreach (self::$chart_items as $aRow){
-			$sMetric = $aRow[self::KEY__METRIC];
-			$sApp = $aRow[self::KEY__APP];
-			$sCaption = $aRow[self::KEY__CAPTION];
-			$i++;
-			?>
-			<input type="hidden" name="<?=cRender::CHART_APP_FIELD?>.<?=$i?>" value="<?=$sApp?>">
-			<input type="hidden" name="<?=cRender::CHART_METRIC_FIELD?>.<?=$i?>" value="<?=$sMetric?>">
-			<input type="hidden" name="<?=cRender::CHART_TITLE_FIELD?>.<?=$i?>" value="<?=$sCaption?>">
-			<?php
-		}
-		?>
-		<input type="hidden" name="<?=cRender::CHART_COUNT_FIELD?>" value="<?=$i?>">
-		<input type="submit" name="submit" value="Export All chart data on this screen">
-			
-		</form>
-		<?php
-		cDebug::leave();
-		*/
 	}
 }
 ?>
