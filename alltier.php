@@ -41,25 +41,15 @@ cRender::html_header("All Tiers");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cChart::do_header();
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$save_fn = "save_fave_chart";
-
-cChart::$compare_url = "compare.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
+cChart::$width=cRender::CHART_WIDTH_LARGE/3;
 
 //####################################################################
 cRender::show_time_options( "All Tiers"); 
 		
 
-cChart::$width=cRender::CHART_WIDTH_LARGE/3;
 $aApps = cAppDyn::GET_Applications();
 if (count($aApps) == 0) cRender::errorbox("No Applications found");
 

@@ -27,7 +27,9 @@ var cCharts={
 					title:oElement.attr("title"),
 					metric:oElement.attr("metric"),
 					width:oElement.attr("width"),
-					height:oElement.attr("height")
+					height:oElement.attr("height"),
+					showZoom:oElement.attr("showZoom"),
+					showCompare:oElement.attr("showCompare")
 				});
 				
 				cCharts.addChart(
@@ -61,7 +63,8 @@ $.widget( "ck.appdchart",{
 		width:null,
 		height:null,
 		onClick:null,
-		shortNoData:false
+		shortNoData:false,
+		showZoom:true
 	},
 	
 	consts:{
@@ -374,21 +377,19 @@ $.widget( "ck.appdchart",{
 			oButton.click(		function(){ oThis.onClickCSV()}		);
 			oCell.append(oButton);
 		
-		var oButton = $("<button>",{class:"csv_button"});
+		if (oOptions.showZoom){
+			var oButton = $("<button>",{class:"csv_button"});
 			oButton.append("Zoom");
 			oButton.click(		function(){ oThis.onClickZoom()}		);
 			oCell.append(oButton);
+		}
 
-		/*var oButton = $("<button>",{class:"csv_button"});
-			oButton.append("Save");
-			oCell.append(oButton);
-		*/
-
-		var oButton = $("<button>",{class:"csv_button"});
+		if (oOptions.showCompare){
+			var oButton = $("<button>",{class:"csv_button"});
 			oButton.append("Compare");
 			oButton.click(		function(){ oThis.onClickCompare()}		);
 			oCell.append(oButton);
-			
+		}
 		oRow.append(oCell);
 		oTable.append(oRow);
 	}

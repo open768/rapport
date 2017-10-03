@@ -45,26 +45,12 @@ $sTitle = cHeader::get(cRender::TITLE_QS);
 //####################################################################
 cRender::html_header($sTitle);
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
-<?php
 cRender::show_time_options("App: $sApp&gt; $sTitle"); 
 
 //####################################################################
 cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE;
-cChart::$showZoom = false;
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$csv_url = "rest/getMetric.php";
-
-cChart::$save_fn = "save_fave_chart";
-cChart::$compare_url = "compare.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
+cChart::$show_zoom = false;
 
 //####################################################################
 
@@ -75,6 +61,6 @@ cChart::$app_qs = cRender::APP_QS;
 	?>
 	</td></tr></table><?php
 
-cChart::do_footer();
+cChart::do_footer(false);
 cRender::html_footer();
 ?>

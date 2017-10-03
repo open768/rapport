@@ -44,22 +44,11 @@ $CHART_IGNORE_ZEROS = false;
 cRender::html_header("tier infrastructure");
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cRender::force_login();
 cChart::do_header();
-
 cChart::$width=cRender::CHART_WIDTH_LARGE;
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$save_fn = "save_fave_chart";
-cChart::$compare_url = "compare.php";
-
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
 
 //####################################################################
 // huge time limit as this takes a long time//display the results

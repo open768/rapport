@@ -45,24 +45,10 @@ cRender::html_header("$gsApp Overview");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE/2;
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$save_fn = "save_fave_chart";
-
-cChart::$compare_url = "compare.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
-cChart::$showZoom = false;
-cChart::$showCSV = false;
-cChart::$showSave = false;
-cChart::$showCompare = false;
 
 $title ="$gsApp&gt;Overview";
 cRender::show_time_options( $title); 
@@ -143,7 +129,7 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 				cChart::add("CPU Busy", cAppDynMetric::InfrastructureCpuBusy($sTier), $gsApp, $iHeight);
 			echo "</td>";
 			echo "<td>";
-				cChart::add("Java Heap Free", cAppDynMetric::InfrastructureJavaHeapFree($sTier), $gsApp, $iHeight);
+				cChart::add("Java Heap Used", cAppDynMetric::InfrastructureJavaHeapUsed($sTier), $gsApp, $iHeight);
 			echo "</td>";
 			echo "<td>";
 				cChart::add(".Net Heap Used", cAppDynMetric::InfrastructureDotnetHeapUsed($sTier), $gsApp, $iHeight);

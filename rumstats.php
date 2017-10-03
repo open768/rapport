@@ -44,7 +44,7 @@ cRender::html_header("Web browser - Real user monitoring - Stats");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 $title ="$app&gtWeb Real User Monitoring Stats";
 cRender::show_time_options( $title); 

@@ -42,20 +42,10 @@ cRender::html_header("Database - $sDB");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE/2;
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$save_fn = "save_fave_chart";
-
-cChart::$compare_url = "compare.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
 
 //####################################################################
 cRender::show_time_options( "Summary Database information  - $sDB"); 

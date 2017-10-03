@@ -49,22 +49,14 @@ if (!$sMetric ) cDebug::error("Metric missing");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cRender::show_time_options("<b>comparing</b>: ($sApp): $sChartTitle"); 
 
 //####################################################################
 cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LETTERBOX;
-cChart::$showCompare = false;
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$save_fn = "save_fave_chart";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
+cChart::$show_compare = false;
 
 //####################################################################
 

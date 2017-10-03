@@ -16,10 +16,20 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 class cChart{
 	public static $width=1000;
+	public static $show_zoom = true;
+	public static $show_compare = true;
 
 	//****************************************************************************
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
-		<DIV type="appdchart" appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" width="<?=self::$width?>" height="<?=$piHeight?>" >Loading...</DIV>
+		<DIV 
+			type="appdchart" 
+			appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" 
+			width="<?=self::$width?>" height="<?=$piHeight?>" 
+			showZoom="<?=self::$show_zoom?>"
+			showCompare="<?=self::$show_compare?>"
+		>
+			Initialising...
+		</DIV>
 	<?php }
 	
 	

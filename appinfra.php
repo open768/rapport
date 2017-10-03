@@ -39,23 +39,9 @@ cRender::html_header("Infrastructure");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cChart::do_header();
-cChart::$json_data_fn = "chart_getUrl";
-cChart::$json_callback_fn = "chart_jsonCallBack";
-cChart::$csv_url = "rest/getMetric.php";
-cChart::$zoom_url = "metriczoom.php";
-cChart::$save_fn = "save_fave_chart";
-
-cChart::$compare_url = "compare.php";
-cChart::$metric_qs = cRender::METRIC_QS;
-cChart::$title_qs = cRender::TITLE_QS;
-cChart::$app_qs = cRender::APP_QS;
-cChart::$showZoom = false;
-cChart::$showCSV = false;
-cChart::$showSave = false;
-cChart::$showCompare = false;
 
 //####################################################################
 //####################################################################
@@ -70,19 +56,6 @@ cRender::show_time_options( $sTitle);
 
 ?>
 <h2><?=$sTitle?></h2>
-<script language="javascript">
-	bean.on(cChartBean, CHART__NODATA_EVENT, onChartNoData);
-	
-	function onChartNoData(poData){
-		var sCaption, iPos;
-		
-		sCaption = poData.oItem.caption;
-		iPos = sCaption.indexOf("(");
-		if (iPos !== -1) sCaption = sCaption.substr(0,iPos);
-		
-		$("#"+poData.oItem.chart).html("no data: " + sCaption );
-	}
-</script>
 <?php
 //####################################################################
 cRender::show_apps_menu("Infrastructure Overview for $gsApp","appinfra.php");

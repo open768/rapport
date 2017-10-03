@@ -43,7 +43,7 @@ cRender::html_header("Information Points");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
-	<script type="text/javascript" src="js/chart.php"></script>
+	
 <?php
 cChart::do_header();
 cChart::$json_data_fn = "chart_getUrl";
