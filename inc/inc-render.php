@@ -673,7 +673,7 @@ class cRender{
 		$sApps_fragment = self::pr__get_apps_fragment();
 
 		?>
-			<div type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></div>
+			<span type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></span>
 		<?php
 	}
 	
@@ -709,7 +709,7 @@ class cRender{
 		$sApps_fragment = self::pr__get_apps_fragment();
 
 		?>
-			<div type="appdmenus" menu="applist" url="<?=$psURLFragment?>" <?=$sApps_fragment?>></div>
+			<span type="appdmenus" menu="appsmenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sApps_fragment?>></span>
 		<?php
 		self::show_app_functions();
 	}
@@ -728,7 +728,7 @@ class cRender{
 			$psAppID = cHeader::get(self::APP_ID_QS);
 		}
 		?>
-			<div type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></div>
+			<span type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
 		<?php
 	}
 	

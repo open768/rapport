@@ -19,9 +19,13 @@ var cMenus={
 		$("DIV[type='appdmenus']").each( 
 			function(pIndex, pElement){
 				var oElement = $(pElement);
-								
 				oElement.appdmenu({	MenuType: oElement.attr("menu")	});
-					
+			}
+		);
+		$("SPAN[type='appdmenus']").each( 
+			function(pIndex, pElement){
+				var oElement = $(pElement);
+				oElement.appdmenu({	MenuType: oElement.attr("menu")	});
 			}
 		);
 		
@@ -67,8 +71,8 @@ $.widget( "ck.appdmenu",{
 			case "appfunctions": 
 				this.pr__showAppFunctions();
 				break;
-			case "applist": 
-				this.pr__showAppList();
+			case "appsmenu": 
+				this.pr__showAppsMenu();
 				break;
 			case "logoutmenu":
 				this.pr__showLogoutMenu();
@@ -192,24 +196,52 @@ $.widget( "ck.appdmenu",{
 	},
 	
 	//****************************************************************
-	pr__showAppList: function(){
+	pr__showAppsMenu: function(){
 		var oOptions, oElement;
 		oOptions = this.options;
 		oElement = this.element;
 		
-		oElement.append(oOptions.MenuType);				
+		var sThisID = cBrowser.data[cMenus.APPID_QS];
+		var sUrl = oElement.attr("url") + oElement.attr("extra");
+		
+		var oSelect = $("<select>");
+			var oOption = $("<option>",{selected:1,disabled:1}).append(oElement.attr("caption"));
+			oSelect.append(oOption);
+
+			var sApp, sAppid, oParams, oOption;
+			var iCount = 1;
+			
+			while (true){
+				sApp = oElement.attr("appname."+iCount);
+				if (!sApp) break;
+				sAppid = oElement.attr("appid."+iCount);
+				
+				oParams = {};
+				oParams[cMenus.APP_QS] = sApp;
+				oParams[cMenus.APPID_QS] = sAppid;
+					
+				oOption = this.pr__addToGroup(oSelect, sApp, cBrowser.buildUrl(sUrl, oParams));
+				if (sAppid == sThisID)	oOption.attr("disabled",1);
+				iCount++;
+			}
+		//add and make the menu a selectmenu
+		var oThis = this;		
+		oElement.append(oSelect);
+		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
 	//****************************************************************
 	pr__addToGroup: function(poGroup, psLabel, psUrl){
 		var oOption = $("<option>",{value:psUrl}).append(psLabel);			
-		poGroup.append(oOption);			
+		poGroup.append(oOption);
+		return oOption;
 	},
 	
 	//#################################################################
 	//# events
 	//#################################################################`
 	onSelectItem: function(poTarget){
-		document.location.href = poTarget.attr("value");
+		var sUrl = poTarget.attr("value");
+		if (sUrl)	document.location.href = sUrl;
 	}
 });
