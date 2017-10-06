@@ -86,7 +86,8 @@ $.widget( "ck.appdchart",{
 		height:null,
 		onClick:null,
 		shortNoData:false,
-		showZoom:true
+		showZoom:true,
+		onSelect: null
 	},
 	
 	consts:{
@@ -138,7 +139,7 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 		
 		oElement.empty();
-		oElement.append("meet the invisible man.");
+		oElement.append("I'm invisible apparently");
 		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
 	},
 

@@ -363,6 +363,7 @@ class cRender{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
 			
 			<script src="js/widgets/chart.js"></script>
+			<script src="js/widgets/menus.js"></script>
 			<script src="js/common.js"></script>
 		</head>
 		<BODY>
@@ -385,6 +386,7 @@ class cRender{
 			$(
 				function(){
 				$("button.blue_button").removeAttr("class").button();
+				cMenus.renderMenus();
 				}
 			);
 		</script>
@@ -707,9 +709,6 @@ class cRender{
 	//******************************************************************************************
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
 	
-		$sCurrentApp = cHeader::get(self::APP_QS);
-		$sCurrentAID = cHeader::get(self::APP_ID_QS);
-		
 		$oCred = self::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			self::button($psCaption,null);
@@ -724,32 +723,16 @@ class cRender{
 			self::errorbox("Oops unable to get application data from controller");
 			exit;
 		}
+		$iCount=0;
+		$sApps_fragment = "";
+		foreach ($oApps as $oApp){
+			$count++;
+			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
+		}
 		?>
-			<script language="JavaScript">
-				$(onLoadStyleApplist);
-				function  onLoadStyleApplist(){
-					$("#applist").selectmenu({change:common_onListChange,width:280});
-				}
-			</script>
-		
-			<select id="applist">
-				<option selected disabled><?=$psCaption?></option>
-				<?php
-					foreach ($oApps as $oApp){
-						$sDisabled = ($oApp->name == $sCurrentApp?"disabled":"");
-						
-						$sAppQs = self::build_app_qs($oApp->name, $oApp->id);
-						$sLink = cHttp::build_url($psURLFragment, $sAppQs);
-						$sLink = cHttp::build_url($sLink, $psExtraQS) ;
-						
-						?>
-						<option value="<?=$sLink?>" <?=$sDisabled?>><?=$oApp->name?></option>
-						<?php
-					}
-				?>
-			</select>		
+			<div type="appdmenus" menu="applist" url="<?=$psURLFragment?>" <?=$sApps_fragment?>></div>
 		<?php
-		self::show_app_functions($sCurrentApp, $sCurrentAID);
+		self::show_app_functions();
 	}
 	
 	//******************************************************************************************
@@ -761,41 +744,12 @@ class cRender{
 			return;
 		}
 		
-		$sApp = $psApp;
-		$sAid = $psAppID;
-		if (($sApp == null) || ($psAppID == null)) {
-			$sApp = cHeader::get(self::APP_QS);
-			$sAid = cHeader::get(self::APP_ID_QS);
+		if (($psApp == null) || ($psAppID == null)) {
+			$psApp = cHeader::get(self::APP_QS);
+			$psAppID = cHeader::get(self::APP_ID_QS);
 		}
-		
-		$AppQS = self::build_app_qs($sApp,$sAid);
 		?>
-			<script language="JavaScript">
-				$(onLoadStyleAppActions);
-				function  onLoadStyleAppActions(){
-					$("#appActions_<?=$sAid?>").selectmenu({change:common_onListChange,width:300});
-				}
-			</script>
-			<select id="appActions_<?=$sAid?>">
-				<optgroup label="Application">
-					<option selected disabled><?=$sApp?></option>
-					<option value="appoverview.php?<?=$AppQS?>">One Pager</option>
-				</optgroup>
-				<optgroup label="Application Functions">
-					<option value="appnodes.php?<?=$AppQS?>">Agents</option>
-					<option value="appavail.php?<?=$AppQS?>">Availability</option>
-					<option value="tiers.php?<?=$AppQS?>">Activity</option>
-					<option value="events.php?<?=$AppQS?>">Events</option>
-					<option value="appext.php?<?=$AppQS?>">External Calls</option>
-					<option value="appinfo.php?<?=$AppQS?>">Information Points</option>
-					<option value="appinfra.php?<?=$AppQS?>">Infrastructure Overview</option>
-					<option value="allnodedetail.php?<?=cHttp::build_qs($AppQS,self::METRIC_TYPE_QS,self::METRIC_TYPE_INFR_CPU_BUSY)?>">Infrastructure (cpu)</option>
-					<option value="backends.php?<?=$AppQS?>">Remote Services</option>
-					<option value="appservice.php?<?=$AppQS?>">Service End Points</option>
-					<option value="apptrans.php?<?=$AppQS?>">Transactions</option>
-					<option value="apprum.php?<?=$AppQS?>">Web Real User Monitoring</option>
-				</optgroup>
-			</select>
+			<div type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></div>
 		<?php
 	}
 	
