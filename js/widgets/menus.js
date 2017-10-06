@@ -6,6 +6,12 @@ var cMenus={
 	METRIC_FIELD: "cmf.",
 	TITLE_FIELD: "ctf.",
 	APP_FIELD: "caf.",
+	APP_QS:"app",
+	APPID_QS:"aid",
+	IGNORE_REF_QS: "igr",
+	METRIC_TYPE_QS:"mt",
+	METRIC_TYPE_ACTIVITY: "mac",
+	METRIC_TYPE_RUMCALLS:"mrc",
 		
 	//*********************************************************
 	renderMenus: function(){	
@@ -37,10 +43,6 @@ $.widget( "ck.appdmenu",{
 		TierID: null
 	},
 	
-	consts:{
-		APP_QS:"app",
-		APPID_QS:"aid"
-	},
 
 	//#################################################################
 	//# Constructor
@@ -68,6 +70,9 @@ $.widget( "ck.appdmenu",{
 			case "applist": 
 				this.pr__showAppList();
 				break;
+			case "logoutmenu":
+				this.pr__showLogoutMenu();
+				break;
 			default:
 				$.error("unknown menu type!");
 		}
@@ -90,8 +95,8 @@ $.widget( "ck.appdmenu",{
 		
 		//build the params
 		var oParams = {};
-		oParams[this.consts.APP_QS] = sAppname;
-		oParams[this.consts.APPID_QS] = sAppid;
+		oParams[cMenus.APP_QS] = sAppname;
+		oParams[cMenus.APPID_QS] = sAppid;
 		
 		//build the menu
 		var oSelect = $("<select>");
@@ -124,10 +129,66 @@ $.widget( "ck.appdmenu",{
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 
+	
 	//****************************************************************
-	pr__addToGroup: function(poGroup, psLabel, psUrl){
-		var oOption = $("<option>",{value:psUrl}).append(psLabel);			
-		poGroup.append(oOption);			
+	pr__showLogoutMenu: function(){
+		var oOptions, oElement, oParams, oGroup;
+		oOptions = this.options;
+		oElement = this.element;
+		
+		var oSelect = $("<select>");
+			var oOption = $("<option>",{selected:1,disabled:1}).append("Go...");
+			oSelect.append(oOption);
+			
+			oParams = {};
+			oParams[cMenus.IGNORE_REF_QS] = 1;
+			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl("index.php", oParams));
+			this.pr__addToGroup( oSelect, "Login Token", "authtoken.php");
+			this.pr__addToGroup( oSelect, "Link to this page", "link.php");
+			
+			//- - - - -All group
+			oGroup = $("<optgroup>",{label:"All"});
+				this.pr__addToGroup( oGroup, "Agents", "allagents.php");
+				
+				oParams = {};
+				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
+				this.pr__addToGroup(oGroup, "Application Activity", cBrowser.buildUrl("all.php", oParams));
+				
+				oParams = {};
+				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
+				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl("all.php", oParams));
+				
+				this.pr__addToGroup( oGroup, "Configuration", "config.php");
+				this.pr__addToGroup( oGroup, "Databases", "alldb.php");
+				this.pr__addToGroup( oGroup, "License Usage", "usage.php");
+				this.pr__addToGroup( oGroup, "Remote Services", "allbackends.php");
+				this.pr__addToGroup( oGroup, "Tiers", "alltier.php");
+				
+			oSelect.append(oGroup);
+			
+			//- - - - -App Overview group
+			oGroup = $("<optgroup>",{label:"Application Overview for ..."});
+			
+			var sApp, sAppid;
+			var iCount = 1;
+			
+			while (true){
+				sApp = oElement.attr("appname."+iCount);
+				if (!sApp) break;
+				sAppid = oElement.attr("appid."+iCount);
+				
+				oParams = {};
+				oParams[cMenus.APP_QS] = sApp;
+				oParams[cMenus.APPID_QS] = sAppid;
+				this.pr__addToGroup(oGroup, sApp, cBrowser.buildUrl("tiers.php", oParams));
+				iCount++;
+			}
+			oSelect.append(oGroup);
+			
+		//add and make the menu a selectmenu
+		var oThis = this;		
+		oElement.append(oSelect);
+		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
 	//****************************************************************
@@ -137,6 +198,12 @@ $.widget( "ck.appdmenu",{
 		oElement = this.element;
 		
 		oElement.append(oOptions.MenuType);				
+	},
+	
+	//****************************************************************
+	pr__addToGroup: function(poGroup, psLabel, psUrl){
+		var oOption = $("<option>",{value:psUrl}).append(psLabel);			
+		poGroup.append(oOption);			
 	},
 	
 	//#################################################################

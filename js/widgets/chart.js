@@ -395,20 +395,20 @@ $.widget( "ck.appdchart",{
 		var oRow = $("<TR>");
 		var oCell = $("<TD>",{colspan:2});
 		
-		var oButton = $("<button>",{class:"csv_button"});
+		var oButton = $("<button>",{class:"csv_button"}).button();
 			oButton.append("CSV");
 			oButton.click(		function(){ oThis.onClickCSV()}		);
 			oCell.append(oButton);
 		
 		if (oOptions.showZoom){
-			var oButton = $("<button>",{class:"csv_button"});
+			var oButton = $("<button>",{class:"csv_button"}).button();
 			oButton.append("Zoom");
 			oButton.click(		function(){ oThis.onClickZoom()}		);
 			oCell.append(oButton);
 		}
 
 		if (oOptions.showCompare){
-			var oButton = $("<button>",{class:"csv_button"});
+			var oButton = $("<button>",{class:"csv_button"}).button();
 			oButton.append("Compare");
 			oButton.click(		function(){ oThis.onClickCompare()}		);
 			oCell.append(oButton);

@@ -442,53 +442,6 @@ class cRender{
 		<?php
 	}
 	
-	//**************************************************************************
-	private static function pr__logout_menu(){
-		
-		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login){
-			self::button("<nobr>Back to Login</nobr>", "index.php");
-			return;
-		}
-		
-		try{
-			$aApps = cAppDyn::GET_Applications();
-		} catch (Exception $e){
-			return;
-		}
-		
-		$sCurrentApp = cHeader::get(self::APP_QS);
-
-		?><script language="JavaScript">
-			$(onLoadStyleLogoutList);
-			function  onLoadStyleLogoutList(){
-				$("#logoutmenu").selectmenu({change:common_onListChange,width:100});
-			}
-		</script>
-	
-		<select id="logoutmenu">
-			<option selected disabled>Go...</option>
-			<option value="index.php?<?=self::IGNORE_REF_QS?>=1">Logout</option>
-			<option value="authtoken.php">Login Token</option>
-			<option value="link.php">Link to this page</option>
-			<optgroup label="All">
-				<option value="allagents.php">Agents</option>
-				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_ACTIVITY)?>">Application Activity</option>
-				<option value="<?=cHttp::build_url("all.php",self::METRIC_TYPE_QS,self::METRIC_TYPE_RUMCALLS)?>">Browser RUM Activity</option>
-				<option value="config.php">Configuration</option>
-				<option value="alldb.php">Databases</option>
-				<option value="alltier.php">Tiers</option>
-			<option value="usage.php">License Usage</option>
-				<option value="allbackends.php">Remote Services</option>
-			</optgroup>
-			<optgroup label="Application Overview for ..."><?php
-				foreach ($aApps as $oApp){
-					$sAppQs = self::build_app_qs( $oApp->name, $oApp->id);
-					?><option value="tiers.php?<?=$sAppQs?>" ><?=$oApp->name?></option><?php
-				}
-			?><optgroup>
-		</select><?php
-	}
 
 	//**************************************************************************
 	public static function show_time_options( $psTitle){
@@ -706,15 +659,26 @@ class cRender{
 	}
 
 	
-	//******************************************************************************************
-	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
-	
+	//############################################################################
+	//# Menus
+	//############################################################################
+	private static function pr__logout_menu(){
+		
 		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			self::button($psCaption,null);
+		if ($oCred->restricted_login){
+			self::button("<nobr>Back to Login</nobr>", "index.php");
 			return;
 		}
+		
+		$sApps_fragment = self::pr__get_apps_fragment();
 
+		?>
+			<div type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></div>
+		<?php
+	}
+	
+	//******************************************************************************************
+	private static function pr__get_apps_fragment(){
 		try{
 			$oApps = cAppDyn::GET_Applications();
 		}
@@ -726,9 +690,24 @@ class cRender{
 		$iCount=0;
 		$sApps_fragment = "";
 		foreach ($oApps as $oApp){
-			$count++;
+			$iCount++;
 			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
 		}
+		
+		return $sApps_fragment;
+	}
+	
+	//******************************************************************************************
+	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	
+		$oCred = self::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			self::button($psCaption,null);
+			return;
+		}
+		
+		$sApps_fragment = self::pr__get_apps_fragment();
+
 		?>
 			<div type="appdmenus" menu="applist" url="<?=$psURLFragment?>" <?=$sApps_fragment?>></div>
 		<?php
