@@ -72,28 +72,16 @@ $oResponse = cAppDyn::GET_Applications();
 if ( count($oResponse) == 0)
 	cRender::messagebox("Nothing found");
 else{
-	?><table class="maintable"><?php	
+	?><div ><?php	
 		//display the results
 		foreach ( $oResponse as $oApp){
 			if (cFilter::isAppFilteredOut($oApp->name)) continue;
-			$sClass = cRender::getRowClass();
-			?>
-				<tr class="<?=$sClass?>"><td colspan=2>
-					<?=cRender::show_app_functions($oApp->name, $oApp->id)?>
-				</td></tr>
-				<tr class="<?=$sClass?>">
-					<td>
-					<?php
-						cChart::add($sTitle1, $sMetric1, $oApp->name, 200);
-					?></td>
-					<td>
-					<?php
-						cChart::add($sTitle2, $sMetric2, $oApp->name, 200);
-					?></td>
-				</tr>
-			<?php
+			$sClass = cRender::getRowClass();			
+			$aMetrics = [[$sTitle1, $sMetric1],[$sTitle2, $sMetric2]];
+			cRender::show_app_functions($oApp->name, $oApp->id);
+			cRender::render_metrics_table($oApp->id, $aMetrics,2,$sClass);
 		}
-	?></table><?php
+	?></div><?php
 }
 ?>
 

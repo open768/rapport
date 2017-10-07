@@ -12,6 +12,9 @@ var cMenus={
 	METRIC_TYPE_QS:"mt",
 	METRIC_TYPE_ACTIVITY: "mac",
 	METRIC_TYPE_RUMCALLS:"mrc",
+	NODE_QS:"nd",
+	TIER_QS:"tier",
+	TIER_ID_QS: "tid",
 		
 	//*********************************************************
 	renderMenus: function(){	
@@ -77,13 +80,19 @@ $.widget( "ck.appdmenu",{
 			case "logoutmenu":
 				this.pr__showLogoutMenu();
 				break;
+			case "tiermenu":
+				this.pr__showTierMenu();
+				break;
+			case "tiernodesmenu":
+				this.pr__showTierNodesMenu();
+				break;
 			default:
-				$.error("unknown menu type!");
+				$.error("unknown menu type: " + oOptions.MenuType);
 		}
 	},	
 	
 	//#################################################################
-	//# Privates
+	//# show menus
 	//#################################################################`
 	pr__showAppFunctions: function(){
 		var oOptions, oElement;
@@ -196,6 +205,74 @@ $.widget( "ck.appdmenu",{
 	},
 	
 	//****************************************************************
+	pr__showTierNodesMenu: function(){
+		var oOptions, oElement;
+		oOptions = this.options;
+		oElement = this.element;
+		var sThisBaseUrl = this.pr__get_base_tier_QS(oElement.attr("url"));
+
+		//
+		var oSelect = $("<select>");
+			var oOption = $("<option>",{selected:1,disabled:1}).append(oElement.attr("caption"));
+			oSelect.append(oOption);
+			
+			var iCount = 1;
+			while(true){
+				var sNode = oElement.attr("node."+iCount);
+				if (!sNode) break;
+				
+				var oParams = {};
+				oParams[cMenus.NODE_QS] = sNode;
+				this.pr__addToGroup(oSelect, sNode, cBrowser.buildUrl(sThisBaseUrl, oParams));
+				iCount++;
+			}
+
+		//add and make the menu a selectmenu
+		var oThis = this;		
+		oElement.append(oSelect);
+		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
+		
+	},
+	
+	//****************************************************************
+	pr__showTierMenu: function(){
+		var oOptions, oElement;
+		oOptions = this.options;
+		oElement = this.element;
+		
+		var sThisTierID = cBrowser.data[cMenus.TIER_ID_QS];
+		var sUrl = oElement.attr("url")+ oElement.attr("extra");
+		var sBaseUrl = this.pr__get_base_app_QS(sUrl);
+		var sCaption = oElement.attr("caption");
+		
+		//build the select
+		var oSelect = $("<select>");
+			var oOption = $("<option>",{selected:1,disabled:1}).append(sCaption);
+			oSelect.append(oOption);
+			var iCount = 1;
+			while (true){
+				sTier = oElement.attr("tname."+iCount);
+				if (!sTier) break;
+				sTid = oElement.attr("tid."+iCount);
+
+				var oParams = {};
+				oParams[cMenus.TIER_QS] = sTier;
+				oParams[cMenus.TIER_ID_QS] = sTid;
+				var sOptUrl = cBrowser.buildUrl(sBaseUrl,oParams);
+				
+				var oOption = this.pr__addToGroup(oSelect, sTier, sOptUrl);
+				if (sTid == sThisTierID) oOption.disabled = true;
+				
+				iCount++;
+			}
+
+		//add and make the menu a selectmenu
+		var oThis = this;		
+		oElement.append(oSelect);
+		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
+	},
+	
+	//****************************************************************
 	pr__showAppsMenu: function(){
 		var oOptions, oElement;
 		oOptions = this.options;
@@ -230,11 +307,33 @@ $.widget( "ck.appdmenu",{
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
-	//****************************************************************
+	//#################################################################
+	//# privates 
+	//#################################################################`
 	pr__addToGroup: function(poGroup, psLabel, psUrl){
 		var oOption = $("<option>",{value:psUrl}).append(psLabel);			
 		poGroup.append(oOption);
 		return oOption;
+	},
+	
+	//****************************************************************
+	pr__get_base_tier_QS: function(psBaseUrl){
+		var oParams = {};
+		oParams[cMenus.APP_QS]= cBrowser.data[cMenus.APP_QS];
+		oParams[cMenus.APPID_QS]= cBrowser.data[cMenus.APPID_QS];
+		oParams[cMenus.TIER_ID_QS]= cBrowser.data[cMenus.TIER_ID_QS];
+		oParams[cMenus.TIER_QS]= cBrowser.data[cMenus.TIER_QS];
+		
+		return cBrowser.buildUrl(psBaseUrl,oParams);
+	},
+	
+	//****************************************************************
+	pr__get_base_app_QS: function(psBaseUrl){
+		var oParams = {};
+		oParams[cMenus.APP_QS]= cBrowser.data[cMenus.APP_QS];
+		oParams[cMenus.APPID_QS]= cBrowser.data[cMenus.APPID_QS];
+		
+		return cBrowser.buildUrl(psBaseUrl,oParams);
 	},
 	
 	//#################################################################

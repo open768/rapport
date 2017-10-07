@@ -750,34 +750,37 @@ class cRender{
 			self::errorbox("Oops unable to get tier data from controller");
 			exit;
 		}
-
-		?>
-			<script language="JavaScript">
-				$(onLoadStyleApplist);
-				function  onLoadStyleApplist(){
-					$("#tierlist").selectmenu({change:common_onListChange});
-				}
-			</script>
 		
-			<select id="tierlist">
-				<option selected disabled><?=$psCaption?></option>
-				<?php
-					foreach ($oTiers as $oTier){
-						$sDisabled = ($oTier->name == $sCurrentTier?"disabled":"");
-						
-						$sLink = cHttp::build_url($psURLFragment, self::get_base_app_QS()) ;
-						$sLink = self::build_tier_qs($sLink, $oTier->name, $oTier->id);
-						$sLink = cHttp::build_url($sLink, $psExtraQS) ;
-						
-						?>
-						<option value="<?=$sLink?>" <?=$sDisabled?>><?=$oTier->name?></option>
-						<?php
-					}
-				?>
-			</select>		
+		$sFragment = "";
+		$iCount = 1;
+		foreach ($oTiers as $oTier){
+			$sFragment .= " tname.$iCount=\"$oTier->name\" tid.$iCount=\"$oTier->id\" ";
+			$iCount++;
+		}
+		
+		?>
+			<span type="appdmenus" menu="tiermenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sFragment?>></span>
 		<?php
 	}
 	
+	//******************************************************************************************
+	public static function show_tiernodes_menu($psCaption, $psUrl){
+		$app = cHeader::get(cRender::APP_QS);
+		$tier = cHeader::get(cRender::TIER_QS);
+		$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
+		$sFragment = "";
+		
+		$iCount = 1;
+		foreach ($aNodes as $oNode){
+			$sFragment .= " node.$iCount=\"$oNode->name\"";
+			$iCount++;
+		}
+		
+		?>
+			<span type="appdmenus" menu="tiernodesmenu"  caption="<?=$psCaption?>" url="<?=$psUrl?>" <?=$sFragment?>></span>
+		<?php
+	}
+
 	//******************************************************************************************
 	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
 		$oCred = self::get_appd_credentials();
