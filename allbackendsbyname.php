@@ -69,40 +69,31 @@ $oApps = cAppDyn::GET_Applications();
 	}
 ?></ul></div>
 
-<table class="maintable"><?php
+<!-- ############################################################## -->
+<h2>Backend  Details</h2>
+<?php
 	$iBackID = 0;
 	foreach ($aBackends as $sBackend=>$aApps){
 		$iBackID++;
 		$sClass=cRender::getRowClass();
-		$sResponseMetric = cAppDynMetric::backendResponseTimes($sBackend);
-		$sCallsMetric = cAppDynMetric::backendCallsPerMin($sBackend);
 		
-		?><tr class="<?=$sClass?>"><td><dl>
-			<dt><h3><a name="<?=$iBackID?>"><?=$sBackend?></a></h3>
-			<dd><table border="0" width="100%">
-			<?php
-				foreach ($aApps as $oApp){
-					$sGoUrl = cHttp::build_url("backcalls.php", cRender::APP_QS, $oApp->name);
-					$sGoUrl = cHttp::build_url($sGoUrl, cRender::APP_ID_QS, $oApp->id);
-					$sGoUrl = cHttp::build_url($sGoUrl, cRender::BACKEND_QS, $sBackend);
+		?><h3><a name="<?=$iBackID?>"><?=$sBackend?></a></h3><?php
+			foreach ($aApps as $oApp){
+				?><h4><?=$oApp->name?></h4><?php
+				
+				$aMetrics = [];
+				$sMetricUrl = cAppDynMetric::backendCallsPerMin($sBackend);
+				$aMetrics[] = ["Calls Per minute: ($sBackend) in ($oApp->name) App", $sMetricUrl];
+				$sMetricUrl = cAppDynMetric::backendResponseTimes($sBackend);
+				$aMetrics[] = ["Response Times: ($sBackend) in ($oApp->name) App", $sMetricUrl];
+				cRender::render_metrics_table($oApp->name, $aMetrics, 2, cRender::getRowClass());
 
-					?><tr>
-						<td colspan="2" align="left"><?=$oApp->name?></td>
-					</tr><tr>
-						<td><?php
-							cChart::add("Calls Per minute: ($sBackend) in ($oApp->name) App", $sCallsMetric, $oApp->name, 100);
-						?></td>
-						<td><?php
-							cChart::add("Response Times: ($sBackend) in ($oApp->name) App", $sResponseMetric, $oApp->name, 100);
-						?></td>
-						<td align="right"><?=cRender::button("Go", $sGoUrl)?></td>
-					</tr><?php
-				}
-			?>
-			</table>
-		</dl></td></tr><?php
+				$sGoUrl = cHttp::build_url("backcalls.php", cRender::APP_QS, $oApp->name);
+				$sGoUrl = cHttp::build_url($sGoUrl, cRender::APP_ID_QS, $oApp->id);
+				$sGoUrl = cHttp::build_url($sGoUrl, cRender::BACKEND_QS, $sBackend);
+				cRender::button("Go", $sGoUrl);
+			}
 	}
-?></table><?php
 
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 cRender::html_footer();

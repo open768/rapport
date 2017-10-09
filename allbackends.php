@@ -47,8 +47,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE;
-
 $title ="All Remote Services";
 cRender::show_time_options( $title); 
 
@@ -58,40 +56,32 @@ cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 ?>
 
 <h2><?=$title?></h2>
-<ul>
-<?php
+<ul><?php
 	foreach ($oApps as $oApp){
-		$sApp = $oApp->name;
-		$sID = $oApp->id;
-		?>
-		<li><a href="#<?=$sID?>"><?=$sApp?></a>
-		<?php
-	}?>
-</ul>
-<?php
+		?><li><a href="#<?=$oApp->id?>"><?=$oApp->name?></a><?php
+	}
+?></ul><?php
+
 //####################################################################
 foreach ($oApps as $oApp){
 	$sApp = $oApp->name;
 	$sID = $oApp->id;
 	$sUrl = cHttp::build_url("backends.php", cRender::APP_QS, $sApp);
 	$sUrl = cHttp::build_url($sUrl, cRender::APP_ID_QS, $sID);
-	?>
-		<div class="<?=cRender::getRowClass();?>">
+	
+	?><div class="<?=cRender::getRowClass();?>">
 		<a name="<?=$sID?>"><?=cRender::button("$oApp->name", $sUrl);?></a>
-		<table class="maintable"><?php
+		<?php
 			$aBackends = cAppdyn::GET_Backends($sApp);
+			$aMetrics = [];
 			foreach ($aBackends as $oItem){
 				$sMetric = cAppDynMetric::backendResponseTimes($oItem->name);
-				?>
-					<tr class="<?=cRender::getRowClass()?>"><td><?php 
-						cChart::add("Backend Response Times: $oItem->name", $sMetric, $sApp, 100);
-					?></td></tr>
-				<?php
+				$aMetrics[] = ["Backend Response Times: $oItem->name", $sMetric];
 			}
-		?></table>
-	<?php
+			cRender::render_metrics_table($sApp, $aMetrics, 3, cRender::getRowClass());
+		?>
+	</div><?php
 }
-
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
-	cRender::html_footer();
+cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cRender::html_footer();
 ?>

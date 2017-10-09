@@ -48,7 +48,7 @@ class cRenderMenus{
 			return;
 		}
 		
-		$sApps_fragment = cRender::get_apps_fragment();
+		$sApps_fragment = self::get_apps_fragment();
 
 		?>
 			<span type="appdmenus" menu="appsmenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sApps_fragment?>></span>
@@ -112,7 +112,7 @@ class cRenderMenus{
 			return;
 		}
 		
-		$sApps_fragment = cRender::get_apps_fragment();
+		$sApps_fragment = self::get_apps_fragment();
 
 		?>
 			<span type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></span>
@@ -130,6 +130,27 @@ class cRenderMenus{
 			<span type="appdmenus" menu="tierfunctions"  tier="<?=$psTier?>" tid="<?=$psTierID?>" node="<?=$psNode?>"></span>
 		<?php
 	}
+	
+	//******************************************************************************************
+	public static function get_apps_fragment(){
+		try{
+			$oApps = cAppDyn::GET_Applications();
+		}
+		catch (Exception $e)
+		{
+			cRender::errorbox("Oops unable to get application data from controller");
+			exit;
+		}
+		$iCount=0;
+		$sApps_fragment = "";
+		foreach ($oApps as $oApp){
+			$iCount++;
+			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
+		}
+		
+		return $sApps_fragment;
+	}
+
 }
 
 //#######################################################################
@@ -772,31 +793,6 @@ class cRender{
 			return (object)["metric"=>$sMetricUrl, "caption"=>$sCaption, "short"=>$sShortCaption , "type"=>$psMetricType];
 	}
 
-	
-	//############################################################################
-	//# Menus
-	//############################################################################
-	
-	//******************************************************************************************
-	public static function get_apps_fragment(){
-		try{
-			$oApps = cAppDyn::GET_Applications();
-		}
-		catch (Exception $e)
-		{
-			self::errorbox("Oops unable to get application data from controller");
-			exit;
-		}
-		$iCount=0;
-		$sApps_fragment = "";
-		foreach ($oApps as $oApp){
-			$iCount++;
-			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
-		}
-		
-		return $sApps_fragment;
-	}
-	
 
 	//#####################################################################################
 	//#####################################################################################
