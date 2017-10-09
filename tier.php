@@ -62,9 +62,9 @@ $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	$sInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
 
-	cRender::show_tier_functions();
-	cRender::show_tier_menu("Change Tier", "tier.php");
-	cRender::show_tiernodes_menu("Tier infrastructure for..", "tierinfrstats.php");	
+	cRenderMenus::show_tier_functions();
+	cRenderMenus::show_tier_menu("Change Tier", "tier.php");
+	cRenderMenus::show_tiernodes_menu("Tier infrastructure for..", "tierinfrstats.php");	
 }
 
 //####################################################################

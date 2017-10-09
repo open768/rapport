@@ -78,7 +78,7 @@ else{
 			if (cFilter::isAppFilteredOut($oApp->name)) continue;
 			$sClass = cRender::getRowClass();			
 			$aMetrics = [[$sTitle1, $sMetric1],[$sTitle2, $sMetric2]];
-			cRender::show_app_functions($oApp->name, $oApp->id);
+			cRenderMenus::show_app_functions($oApp->name, $oApp->id);
 			cRender::render_metrics_table($oApp->id, $aMetrics,2,$sClass);
 		}
 	?></div><?php

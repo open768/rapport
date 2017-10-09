@@ -63,8 +63,8 @@ $tierQS = cRender::get_base_tier_QS();
 cRender::show_time_options($title); 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
-	cRender::show_tier_functions();
-	cRender::show_tier_menu("Change Tier to", "tierextgraph.php");
+	cRenderMenus::show_tier_functions();
+	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
 	cRender::button("summary", cHttp::build_url("tierextcalls.php", $tierQS));
 }
 

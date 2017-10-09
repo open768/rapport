@@ -59,7 +59,7 @@ $sAppQs = cRender::get_base_app_QS();
 $title= "$app;Backends";
 
 cRender::show_time_options($title); 
-cRender::show_apps_menu("Remote Services", "backends.php");
+cRenderMenus::show_apps_menu("Remote Services", "backends.php");
 cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
 
 //retrieve tiers

@@ -56,7 +56,7 @@ $aid = cHeader::get(cRender::APP_ID_QS);
 
 $title= "$app&gt;Service EndPoints";
 cRender::show_time_options($title); 
-cRender::show_apps_menu("Show Service EndPoints for", "appservice.php");
+cRenderMenus::show_apps_menu("Show Service EndPoints for", "appservice.php");
 if (cFilter::isFiltered()){
 	$sCleanAppQS = cRender::get_clean_base_app_QS();
 	cRender::button("Clear Filter", "appservice.php?$sCleanAppQS");
@@ -79,7 +79,7 @@ foreach ($aTiers as $oTier){
 	
 	//****************************************************************************************
 	?><p><?php
-	cRender::show_tier_functions($oTier->name, $oTier->id);
+	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
 	?><table class="maintable">
 		<tr>
 			<th>End Point</th>

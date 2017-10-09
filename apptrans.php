@@ -127,7 +127,7 @@ cRender::show_time_options("Business Transactions - $app");
 ?><h2>Transaction statistics (<?=$app?>)</h2><?php
 
 //header
-cRender::show_apps_menu("Change Application", "apptrans.php");
+cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
 if (cFilter::isFiltered()){
 	$sCleanAppQS = cRender::get_clean_base_app_QS();
 	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");

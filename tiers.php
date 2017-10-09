@@ -53,68 +53,39 @@ cRender::show_time_options( $app);
 
 
 //####################################################################
-cRender::show_apps_menu("Show Tier Activity for:","tiers.php");
+cRenderMenus::show_apps_menu("Show Tier Activity for:","tiers.php");
 $sAppQS = cRender::get_base_app_QS();
 
 cRender::appdButton(cAppDynControllerUI::application($aid));
 
 //####################################################################
 ?>
-	<table class="maintable"><tr>
-		<td>
-		<?php
-			$sMetricUrl=cAppDynMetric::appCallsPerMin();
-			cChart::add("Overall Calls per min", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX);
-		?>
-		</td>
-		<td>
-		<?php
-			$sMetricUrl=cAppDynMetric::appResponseTimes();
-			cChart::add("Overall response time in ms", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX );
-		?>
-		</td>
-	</tr></table>
+<h2>Overall Activity in <?=$app?></h2>
 <?php
-
-	//-----------------------------------------------
-	$oResponse =cAppdyn::GET_Tiers($app);
-	cChart::$width = cRender::CHART_WIDTH_LARGE;
+$aMetrics = [];
+$aMetrics[] = ["Overall Calls per min",cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = ["Overall response time in ms", cAppDynMetric::appResponseTimes()];
+cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
 ?>
-
 <p>
-<h2>Tiers Activity in application (<?=$app?>)</h2>
-<table class="maintable">
-	<?php
-		cChart::$width=cRender::CHART_WIDTH_LETTERBOX/2;
-		foreach ( $oResponse as $oTier){
-			$sTier=$oTier->name;
-			if (cFilter::isTierFilteredOut($sTier)) continue;
-			
-			$class=cRender::getRowClass();
-			?>
-				<tr class="<?=$class?>" align="left">
-					<td colspan=2><?php
-						cRender::show_tier_functions($sTier, $oTier->id)
-						?> 
-						<i><small><?=$oTier->type?></i></small><br>
-					</td>
-				</tr>
-				<tr class="<?=$class?>">
-					<td><?php
-						$sMetricUrl=cAppDynMetric::tierCallsPerMin($sTier);
-						cChart::add("Calls Per minute", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX);						
-					?></td>
-					<td><?php
-						$sMetricUrl=cAppDynMetric::tierResponseTimes($sTier);
-						cChart::add("Response Times in ms", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX);						
-					?></td>
-				</tr>
-			<?php
-		}
-	?>
-</table>
-<?php
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
-	cRender::html_footer();
+<h2>Tiers Activity in application (<?=$app?>)</h2>
+<?php
+//-----------------------------------------------
+$oResponse =cAppdyn::GET_Tiers($app);
+foreach ( $oResponse as $oTier){
+	?><div class="cRender::getRowClass()"><?php
+		$sTier=$oTier->name;
+		if (cFilter::isTierFilteredOut($sTier)) continue;
+		
+		cRenderMenus::show_tier_functions($sTier, $oTier->id);
+		$aMetrics = [];
+		$aMetrics[] = ["Calls per min",cAppDynMetric::tierCallsPerMin($sTier)];
+		$aMetrics[] = ["Response time in ms", cAppDynMetric::tierResponseTimes($sTier)];
+		cRender::render_metrics_table($aid, $aMetrics,2,null);			
+	?></div><?php
+}
+cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+
+cRender::html_footer();
 ?>

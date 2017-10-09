@@ -48,7 +48,7 @@ cRender::force_login();
 <?php
 $title ="$app&gtWeb Real User Monitoring Stats";
 cRender::show_time_options( $title); 
-cRender::show_apps_menu("Show Stats for:", "rumstats.php");
+cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
 $oTimes = cRender::get_times();
 
 //#############################################################

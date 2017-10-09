@@ -66,7 +66,7 @@ $aid = cHeader::get(cRender::APP_ID_QS);
 
 $title= "$app&gt;Information Points";
 cRender::show_time_options($title); 
-cRender::show_apps_menu("Information Points for", "appinfo.php");
+cRenderMenus::show_apps_menu("Information Points for", "appinfo.php");
 
 //####################################################################
 //retrieve tiers

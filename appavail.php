@@ -55,7 +55,7 @@ $aid = cHeader::get(cRender::APP_ID_QS);
 
 $title= "$app&gt;Availability";
 cRender::show_time_options($title); 
-cRender::show_apps_menu("Availability", "appavail.php");
+cRenderMenus::show_apps_menu("Availability", "appavail.php");
 
 //####################################################################
 //retrieve tiers

@@ -61,7 +61,7 @@ foreach ( $aApps as $oApp){
 	?>
 	<table class="maintable">
 		<tr class="<?=$sClass?>"><td colspan=4>
-			<?=cRender::show_app_functions($oApp->name, $oApp->id)?>
+			<?=cRenderMenus::show_app_functions($oApp->name, $oApp->id)?>
 		</td></tr>
 		<?php
 			$aTiers =cAppdyn::GET_Tiers($oApp->name);

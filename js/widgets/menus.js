@@ -86,6 +86,9 @@ $.widget( "ck.appdmenu",{
 			case "tiernodesmenu":
 				this.pr__showTierNodesMenu();
 				break;
+			case "tierfunctions":
+				this.pr__showTierFunctions();
+				break;
 			default:
 				$.error("unknown menu type: " + oOptions.MenuType);
 		}
@@ -235,6 +238,41 @@ $.widget( "ck.appdmenu",{
 	},
 	
 	//****************************************************************
+	pr__showAppsMenu: function(){
+		var oOptions, oElement;
+		oOptions = this.options;
+		oElement = this.element;
+		
+		var sThisID = cBrowser.data[cMenus.APPID_QS];
+		var sUrl = oElement.attr("url") + oElement.attr("extra");
+		
+		var oSelect = $("<select>");
+			var oOption = $("<option>",{selected:1,disabled:1}).append(oElement.attr("caption"));
+			oSelect.append(oOption);
+
+			var sApp, sAppid, oParams, oOption;
+			var iCount = 1;
+			
+			while (true){
+				sApp = oElement.attr("appname."+iCount);
+				if (!sApp) break;
+				sAppid = oElement.attr("appid."+iCount);
+				
+				oParams = {};
+				oParams[cMenus.APP_QS] = sApp;
+				oParams[cMenus.APPID_QS] = sAppid;
+					
+				oOption = this.pr__addToGroup(oSelect, sApp, cBrowser.buildUrl(sUrl, oParams));
+				if (sAppid == sThisID)	oOption.attr("disabled",1);
+				iCount++;
+			}
+		//add and make the menu a selectmenu
+		var oThis = this;		
+		oElement.append(oSelect);
+		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
+	},
+	
+	//****************************************************************
 	pr__showTierMenu: function(){
 		var oOptions, oElement;
 		oOptions = this.options;
@@ -273,34 +311,32 @@ $.widget( "ck.appdmenu",{
 	},
 	
 	//****************************************************************
-	pr__showAppsMenu: function(){
+	pr__showTierFunctions: function(){
 		var oOptions, oElement;
 		oOptions = this.options;
 		oElement = this.element;
 		
-		var sThisID = cBrowser.data[cMenus.APPID_QS];
-		var sUrl = oElement.attr("url") + oElement.attr("extra");
-		
-		var oSelect = $("<select>");
-			var oOption = $("<option>",{selected:1,disabled:1}).append(oElement.attr("caption"));
-			oSelect.append(oOption);
+		var sApp = cBrowser.data[cMenus.APP_QS];
+		var sThisTier = cBrowser.data[cMenus.TIER_QS];
+		var sTier = sThisTier;
+		if (!sTier) sTier = oElement.attr("tier");
 
-			var sApp, sAppid, oParams, oOption;
-			var iCount = 1;
+		var oSelect = $("<select>");
+			//--------------------------------------------------------------------
+			var oOption = $("<option>",{selected:1,disabled:1}).append(sTier);
+			oSelect.append(oOption);
 			
-			while (true){
-				sApp = oElement.attr("appname."+iCount);
-				if (!sApp) break;
-				sAppid = oElement.attr("appid."+iCount);
-				
-				oParams = {};
-				oParams[cMenus.APP_QS] = sApp;
-				oParams[cMenus.APPID_QS] = sAppid;
-					
-				oOption = this.pr__addToGroup(oSelect, sApp, cBrowser.buildUrl(sUrl, oParams));
-				if (sAppid == sThisID)	oOption.attr("disabled",1);
-				iCount++;
-			}
+			if (!sThisTier)
+				this.pr__addToGroup(oSelect, "Tier Overview", this.pr__get_base_tier_QS("tier.php"));
+			else
+				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS("tiers.php"));
+						
+			//--------------------------------------------------------------------
+			this.pr__addToGroup(oSelect, "External Calls", this.pr__get_base_tier_QS("tierextgraph.php"));
+			this.pr__addToGroup(oSelect, "Infrastructure Overview", this.pr__get_base_tier_QS("tierinfrstats.php"));
+			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS("appservice.php"));
+			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS("apptrans.php"));
+
 		//add and make the menu a selectmenu
 		var oThis = this;		
 		oElement.append(oSelect);
@@ -318,11 +354,21 @@ $.widget( "ck.appdmenu",{
 	
 	//****************************************************************
 	pr__get_base_tier_QS: function(psBaseUrl){
+		oElement = this.element;
 		var oParams = {};
+		
 		oParams[cMenus.APP_QS]= cBrowser.data[cMenus.APP_QS];
 		oParams[cMenus.APPID_QS]= cBrowser.data[cMenus.APPID_QS];
-		oParams[cMenus.TIER_ID_QS]= cBrowser.data[cMenus.TIER_ID_QS];
-		oParams[cMenus.TIER_QS]= cBrowser.data[cMenus.TIER_QS];
+		
+		var sTier, sTid, sNode;
+		sTier = oElement.attr("tier");
+		sTid = oElement.attr("tid");
+		sNode = oElement.attr("node");
+		if (!sNode) sNode = cBrowser.data[cMenus.NODE_QS];
+		
+		oParams[cMenus.TIER_ID_QS]= (sTid?sTid:cBrowser.data[cMenus.TIER_ID_QS]);
+		oParams[cMenus.TIER_QS]= (sTier?sTier:cBrowser.data[cMenus.TIER_QS]);
+		if (sNode)	oParams[cMenus.NODE_QS]= sNode;
 		
 		return cBrowser.buildUrl(psBaseUrl,oParams);
 	},

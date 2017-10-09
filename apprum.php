@@ -53,7 +53,7 @@ cChart::do_header();
 $title ="$app&gt;Web Real User Monitoring";
 cRender::show_time_options( $title); 
 
-cRender::show_apps_menu("Show Web RUM for:", "apprum.php");
+cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
 cRender::button("Show Page Statistics", "rumstats.php?$sAppQS");
 cRender::appdButton(cAppDynControllerUI::webrum($aid));
 

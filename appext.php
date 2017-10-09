@@ -52,7 +52,7 @@ cChart::$width=cRender::CHART_WIDTH_LETTERBOX/2;
 //####################################################################
 
 cRender::show_time_options("Apps>$app>External Calls"); 
-cRender::show_apps_menu("External Calls", "appext.php");
+cRenderMenus::show_apps_menu("External Calls", "appext.php");
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
 	$aTiers = cAppdyn::GET_Tiers($app);

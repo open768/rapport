@@ -84,7 +84,7 @@ $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 $aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
 
 $oCred = cRender::get_appd_credentials();
-if ($oCred->restricted_login == null)	cRender::show_tier_functions();
+if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
 ?><select id="menuNodes">
 	<option selected disabled>Show Details for</option>

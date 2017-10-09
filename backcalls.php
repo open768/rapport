@@ -57,7 +57,7 @@ $gsBaseUrl = cHttp::build_url("backcalls.php",$sAppQs);
 
 $title= "$app&gt;Remote Service&gt;$gsBackend";
 cRender::show_time_options($title); 
-cRender::show_app_functions();
+cRenderMenus::show_app_functions();
 ?>
 <select id="menuBackends">
 	<option selected disabled>Remote Services</option>

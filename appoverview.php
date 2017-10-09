@@ -56,7 +56,7 @@ cRender::show_time_options( $title);
 
 
 //####################################################################
-cRender::show_apps_menu("Show Overview for:","appoverview.php");
+cRenderMenus::show_apps_menu("Show Overview for:","appoverview.php");
 $gsAppQs = cRender::get_base_app_QS();
 cRender::appdButton(cAppDynControllerUI::application($aid));
 
@@ -116,7 +116,7 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 		//------------------------------------------------
 		echo "<tr class='$sClass' align='left'>";
 			echo "<th colspan='5'>";
-				cRender::show_tier_functions($sTier, $oTier->id);
+				cRenderMenus::show_tier_functions($sTier, $oTier->id);
 			echo "</th>";
 		echo "</tr>";
 		echo "<tr class='$sClass'>";

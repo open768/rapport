@@ -46,7 +46,7 @@ $aMetrics = cRender::getInfrastructureMetricTypes();
 
 //####################################################################
 cRender::show_top_banner("Agents for $app"); 
-cRender::show_apps_menu("Show Agents for...", "appnodes.php");
+cRenderMenus::show_apps_menu("Show Agents for...", "appnodes.php");
 ?>
 <select id="showMenu">
 	<option selected disabled>Show...</option>

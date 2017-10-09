@@ -59,7 +59,7 @@ cRender::show_time_options( $sTitle);
 <h2><?=$sTitle?></h2>
 <?php
 //####################################################################
-cRender::show_apps_menu("Infrastructure Overview for $gsApp","appinfra.php");
+cRenderMenus::show_apps_menu("Infrastructure Overview for $gsApp","appinfra.php");
 ?><p><?php
 
 //####################################################################
@@ -69,7 +69,7 @@ cChart::$width=cRender::CHART_WIDTH_LARGE/4;
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 	
-	cRender::show_tier_functions($oTier->name, $oTier->id);
+	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
 	$aMetricTypes = cRender::getInfrastructureMetricTypes();
 
 	$aMetrics = [];

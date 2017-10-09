@@ -99,7 +99,7 @@ const TOTALCOL_WIDTH=150;
 		$sClass = cRender::getRowClass();
 		?><tr class="<?=$sClass?>"><td colspan="5" align="left">
 			<?php
-				cRender::show_app_functions($oApp->name, $oApp->id);
+				cRenderMenus::show_app_functions($oApp->name, $oApp->id);
 			?>
 			<select id="Agent<?=$oApp->id?>">
 				<option disabled selected>Show Agent...</option>
@@ -108,7 +108,7 @@ const TOTALCOL_WIDTH=150;
 			</select>
 			<script language="JavaScript">
 				$(	function(){
-					$("#Agent<?=$oApp->id?>").selectmenu({change:common_onListChange, width:200});
+					$("#Agent<?=$oApp->id?>").selectmenu({change:common_onListChange});
 				});
 			</script>
 		</tr>

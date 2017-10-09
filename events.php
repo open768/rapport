@@ -41,7 +41,7 @@ cRender::force_login();
 
 //####################################################################
 cRender::show_time_options("Events");
-cRender::show_apps_menu("Events", "events.php", $app);
+cRenderMenus::show_apps_menu("Events", "events.php", $app);
 cRender::appdButton(cAppDynControllerUI::events($aid));
 
 $oTimes = cRender::get_times();

@@ -67,8 +67,8 @@ cRender::show_time_options( $title);
 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
-	cRender::show_tier_functions();
-	cRender::show_tier_menu("change tier", "tiertransgraph.php");
+	cRenderMenus::show_tier_functions();
+	cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");
 	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($tier));
 	?>
 	<select id="nodesMenu">

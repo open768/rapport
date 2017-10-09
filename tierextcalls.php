@@ -53,8 +53,8 @@ cRender::html_header("External tier calls");
 cRender::force_login();
 
 cRender::show_time_options("External calls from $tier in $app"); 
-cRender::show_tier_functions();
-cRender::show_tier_menu("Change Tier to", "tierextcalls.php");
+cRenderMenus::show_tier_functions();
+cRenderMenus::show_tier_menu("Change Tier to", "tierextcalls.php");
 cRender::button("Graph it", cHttp::build_url("tierextgraph.php?",$gsTierQs));
 cRender::button("ext calls for ($app) app", cHttp::build_url("appext.php?",$gsAppQs));
 

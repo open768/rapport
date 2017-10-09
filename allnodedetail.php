@@ -92,7 +92,7 @@ $sDetailRootQS = cHttp::build_url("allnodedetail.php", $sAppQS);
 
 //####################################################################
 cRender::show_time_options($sTitle); 
-cRender::show_apps_menu("Show detail for", "allnodedetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
+cRenderMenus::show_apps_menu("Show detail for", "allnodedetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
 
 $aMetrics = cRender::getInfrastructureMetricTypes();
 ?>

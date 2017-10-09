@@ -20,6 +20,120 @@ require_once("$root/inc/inc-filter.php");
 
 //#######################################################################
 //#######################################################################
+class cRenderMenus{
+	//******************************************************************************************
+	public static function show_app_functions($psApp=null, $psAppID=null){
+
+		$oCred = cRender::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			cRender::button($psApp,null);
+			return;
+		}
+		
+		if (($psApp == null) || ($psAppID == null)) {
+			$psApp = cHeader::get(cRender::APP_QS);
+			$psAppID = cHeader::get(cRender::APP_ID_QS);
+		}
+		?>
+			<span type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
+		<?php
+	}
+
+	//******************************************************************************************
+	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	
+		$oCred = cRender::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			cRender::button($psCaption,null);
+			return;
+		}
+		
+		$sApps_fragment = cRender::get_apps_fragment();
+
+		?>
+			<span type="appdmenus" menu="appsmenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sApps_fragment?>></span>
+		<?php
+		self::show_app_functions();
+	}
+	
+	//******************************************************************************************
+	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+		$oCred = cRender::get_appd_credentials();
+		if ($oCred->restricted_login)	return;
+
+		$sCurrentTier = cHeader::get(cRender::TIER_QS);
+		$sCurrentTID = cHeader::get(cRender::TIER_ID_QS);
+		$sApp = cHeader::get(cRender::APP_QS);
+		
+		try{
+			$oTiers = cAppDyn::GET_Tiers($sApp);
+		}
+		catch (Exception $e)
+		{
+			cRender::errorbox("Oops unable to get tier data from controller");
+			exit;
+		}
+		
+		$sFragment = "";
+		$iCount = 1;
+		foreach ($oTiers as $oTier){
+			$sFragment .= " tname.$iCount=\"$oTier->name\" tid.$iCount=\"$oTier->id\" ";
+			$iCount++;
+		}
+		
+		?>
+			<span type="appdmenus" menu="tiermenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sFragment?>></span>
+		<?php
+	}
+
+	//******************************************************************************************
+	public static function 	show_tiernodes_menu($psCaption, $psUrl){
+		$app = cHeader::get(cRender::APP_QS);
+		$tier = cHeader::get(cRender::TIER_QS);
+		$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
+		$sFragment = "";
+		
+		$iCount = 1;
+		foreach ($aNodes as $oNode){
+			$sFragment .= " node.$iCount=\"$oNode->name\"";
+			$iCount++;
+		}
+		
+		?>
+			<span type="appdmenus" menu="tiernodesmenu"  caption="<?=$psCaption?>" url="<?=$psUrl?>" <?=$sFragment?>></span>
+		<?php
+	}
+	
+	//******************************************************************************************
+	public static function logout_menu(){
+		$oCred = cRender::get_appd_credentials();
+		if ($oCred->restricted_login){
+			cRender::button("<nobr>Back to Login</nobr>", "index.php");
+			return;
+		}
+		
+		$sApps_fragment = cRender::get_apps_fragment();
+
+		?>
+			<span type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></span>
+		<?php
+	}
+	
+	//******************************************************************************************
+	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
+		$oCred = cRender::get_appd_credentials();
+		if ($oCred->restricted_login) {
+			cRender::button($psTier,null);
+			return;
+		}
+		?>
+			<span type="appdmenus" menu="tierfunctions"  tier="<?=$psTier?>" tid="<?=$psTierID?>" node="<?=$psNode?>"></span>
+		<?php
+	}
+}
+
+//#######################################################################
+//#######################################################################
 class cRender{
 	//************************************************************
 	const APP_QS = "app";
@@ -461,7 +575,7 @@ class cRender{
 				<input type="hidden" name="url" value="<?=$sUrl?>">
 				<table class="timebox"><tr>
 					<td>
-						<?=self::pr__logout_menu()?>
+						<?=cRenderMenus::logout_menu()?>
 					</td>
 					<td >
 						<?=$sAccount?><br>
@@ -662,23 +776,9 @@ class cRender{
 	//############################################################################
 	//# Menus
 	//############################################################################
-	private static function pr__logout_menu(){
-		
-		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login){
-			self::button("<nobr>Back to Login</nobr>", "index.php");
-			return;
-		}
-		
-		$sApps_fragment = self::pr__get_apps_fragment();
-
-		?>
-			<span type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></span>
-		<?php
-	}
 	
 	//******************************************************************************************
-	private static function pr__get_apps_fragment(){
+	public static function get_apps_fragment(){
 		try{
 			$oApps = cAppDyn::GET_Applications();
 		}
@@ -697,155 +797,7 @@ class cRender{
 		return $sApps_fragment;
 	}
 	
-	//******************************************************************************************
-	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
-	
-		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			self::button($psCaption,null);
-			return;
-		}
-		
-		$sApps_fragment = self::pr__get_apps_fragment();
 
-		?>
-			<span type="appdmenus" menu="appsmenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sApps_fragment?>></span>
-		<?php
-		self::show_app_functions();
-	}
-	
-	//******************************************************************************************
-	public static function show_app_functions($psApp=null, $psAppID=null){
-
-		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			self::button($psApp,null);
-			return;
-		}
-		
-		if (($psApp == null) || ($psAppID == null)) {
-			$psApp = cHeader::get(self::APP_QS);
-			$psAppID = cHeader::get(self::APP_ID_QS);
-		}
-		?>
-			<span type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
-		<?php
-	}
-	
-	//******************************************************************************************
-	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
-	
-		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login)	return;
-
-		$sCurrentTier = cHeader::get(self::TIER_QS);
-		$sCurrentTID = cHeader::get(self::TIER_ID_QS);
-		$sApp = cHeader::get(self::APP_QS);
-		
-		try{
-			$oTiers = cAppDyn::GET_Tiers($sApp);
-		}
-		catch (Exception $e)
-		{
-			self::errorbox("Oops unable to get tier data from controller");
-			exit;
-		}
-		
-		$sFragment = "";
-		$iCount = 1;
-		foreach ($oTiers as $oTier){
-			$sFragment .= " tname.$iCount=\"$oTier->name\" tid.$iCount=\"$oTier->id\" ";
-			$iCount++;
-		}
-		
-		?>
-			<span type="appdmenus" menu="tiermenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sFragment?>></span>
-		<?php
-	}
-	
-	//******************************************************************************************
-	public static function show_tiernodes_menu($psCaption, $psUrl){
-		$app = cHeader::get(cRender::APP_QS);
-		$tier = cHeader::get(cRender::TIER_QS);
-		$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
-		$sFragment = "";
-		
-		$iCount = 1;
-		foreach ($aNodes as $oNode){
-			$sFragment .= " node.$iCount=\"$oNode->name\"";
-			$iCount++;
-		}
-		
-		?>
-			<span type="appdmenus" menu="tiernodesmenu"  caption="<?=$psCaption?>" url="<?=$psUrl?>" <?=$sFragment?>></span>
-		<?php
-	}
-
-	//******************************************************************************************
-	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
-		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			self::button($psTier,null);
-			return;
-		}
-		
-		//-------------------------------------------------------------------------------------
-		$sTier = $psTier;
-		$sTierID = $psTierID;
-		$sNode = $psNode;
-		$sCurrentTier = cHeader::get(self::TIER_QS);
-		
-		if (($sTier == null) || ($sTierID == null)) {
-			$sTier = cHeader::get(self::TIER_QS);
-			$sTierID = cHeader::get(self::TIER_ID_QS);
-		}
-		
-		//-------------------------------------------------------------------------------------
-		if ($sNode == null)
-			$sNode = cHeader::get(self::NODE_QS);
-
-		//-------------------------------------------------------------------------------------
-		$sMenuID = "menuShowTier$sTierID";
-		$sApp = cHeader::get(self::APP_QS);
-		
-		$sAppQs = self::get_base_app_qs();
-		$sTierQs = self::build_tier_qs($sAppQs, $sTier, $sTierID);
-		if ($sNode) $sTierQs = cHttp::build_qs($sTierQs, self::NODE_QS, $sNode);
-		
-		$sTransUrl = cHttp::build_url("apptrans.php", $sAppQs);
-		$sTransUrl = cHttp::build_url($sTransUrl, cFilter::makeTierFilter($sTier));
-		
-		$sServicePtUrl = cHttp::build_url("appservice.php", $sAppQs);
-		$sServicePtUrl = cHttp::build_url($sServicePtUrl, cFilter::makeTierFilter($sTier));
-
-
-		?>
-		<select id="<?=$sMenuID?>">
-			<optgroup label="Tier">
-				<option selected disabled><?=$sTier?></option>
-				<option value="<?=cHttp::build_url("tier.php",$sTierQs)?>">Tier Overview</option>
-				<?php
-				if ($sCurrentTier !== null){?>
-					<option value="<?=cHttp::build_url("tiers.php",$sAppQs)?>">Back to (<?=$sApp?>) Application</option>
-				<?php }
-				?>
-			</optgroup>
-			<option value="<?=cHttp::build_url("tierextgraph.php",$sTierQs)?>">External Calls</option>
-			<option value="<?=cHttp::build_url("tierinfrstats.php",$sTierQs)?>">Infrastructure Overview</option>
-			<option value="<?=cHttp::build_url("tierjmx.php?$sTierQs", self::METRIC_TYPE_QS, self::METRIC_TYPE_JMX_DBPOOLS)?>">Java Connection Pools</option>
-			<option value="<?=$sServicePtUrl?>">Service End Points</option>
-			<option value="<?=$sTransUrl?>">Transactions</option>
-		</select>
-		<script language="JavaScript">
-			$(onLoadStyleTierActions);
-			function  onLoadStyleTierActions(){
-				$("#<?=$sMenuID?>").selectmenu({change:common_onListChange,width:250});
-			}
-		</script>
-		<?php
-		
-	}
-	
 	//#####################################################################################
 	//#####################################################################################
 	//* 2 column table with captions and metrics
