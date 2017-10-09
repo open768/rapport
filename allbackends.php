@@ -76,9 +76,8 @@ foreach ($oApps as $oApp){
 	$sUrl = cHttp::build_url("backends.php", cRender::APP_QS, $sApp);
 	$sUrl = cHttp::build_url($sUrl, cRender::APP_ID_QS, $sID);
 	?>
-		<a name="<?=$sID?>"><?php 	
-			cRender::button("$oApp->name", $sUrl); 
-		?></a>
+		<div class="<?=cRender::getRowClass();?>">
+		<a name="<?=$sID?>"><?=cRender::button("$oApp->name", $sUrl);?></a>
 		<table class="maintable"><?php
 			$aBackends = cAppdyn::GET_Backends($sApp);
 			foreach ($aBackends as $oItem){

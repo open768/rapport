@@ -67,46 +67,27 @@ $oBackends =cAppdyn::GET_Backends($app);
 
 
 // work through each tier
-?>
-<h2>Overall Statistics for <?=$app?>
-<table class="maintable">
-	<tr class="<?=cRender::getRowClass()?>">
-		<td><?php
-			$sMetric=cAppDynMetric::appCallsPerMin();
-			cChart::add("Overall Calls per min", $sMetric, $app);	
-		?></td>
-		<td><?php
-			$sMetric=cAppDynMetric::appResponseTimes();
-			cChart::add("Overall Response Times", $sMetric, $app);	
-		?></td>
-	</tr>
-</table>
-<p>
+?><h2>Overall Statistics for <?=$app?><?php
+$aMetrics = [];
+$aMetrics[] = ["Overall Calls per min", cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = ["Overall Response Times", cAppDynMetric::appResponseTimes()];
+cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());
 
-<h2>Remote Services for <?=$app?></h2>
-<table class='maintable'>
+?><h2>Remote Services for <?=$app?></h2>
 	<?php
 	$sBackendURL = cHttp::build_url("backcalls.php",$sAppQs );
 	foreach ( $oBackends as $oBackend){
 		$sBackend = $oBackend->name;
 		$sClass = cRender::getRowClass();
-		?><tr class="<?=$sClass?>" ><td colspan="2"><?php
+		?><div class="<?=$sClass?>" ><?php
 			cRender::button($sBackend, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $sBackend));
-		?></td></tr>
-		<tr class="<?=$sClass?>">
-			<td><?php
-				$sMetric=cAppDynMetric::backendCallsPerMin($sBackend);
-				cChart::add("Calls per min ($sBackend)", $sMetric, $app);	
-			?></td>
-			<td><?php
-				$sMetric=cAppDynMetric::backendResponseTimes($sBackend);
-				cChart::add("Response Times ($sBackend)", $sMetric, $app);	
-			?></td>
-		</tr><?php
+			$aMetrics = [];
+			$aMetrics[] = ["Calls per min ($sBackend)", cAppDynMetric::backendCallsPerMin($sBackend)];
+			$aMetrics[] = ["Response Times ($sBackend)", cAppDynMetric::backendResponseTimes($sBackend)];
+			cRender::render_metrics_table($aid, $aMetrics,2,$sClass);
+		?></div><?php
 	}
-	?>
-</table>
-<?php
+			
 cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
 cRender::html_footer();
