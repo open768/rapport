@@ -48,23 +48,13 @@ cChart::$width=cRender::CHART_WIDTH_LARGE;
 
 //####################################################################
 cRender::show_time_options( "All Applications - Time in Databases"); 
-cRender::button("back to apps", "apps.php",false);
-cRender::button("Events", "events.php?".cRender::APP_QS."=".cAppDynCore::DATABASE_APPLICATION."&".cRender::APP_ID_QS."=null");
-cRender::button("All RUM Page Requests", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_RUMCALLS,false);
-cRender::button("All RUM Response times", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_RUMRESPONSE,false);
-cRender::button("All Application Response times", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_TRANSRESPONSE,false);
-echo "All Time in Databases";
 cRender::appdButton(cAppDynControllerUI::databases());
-
 
 //####################################################################
 $oResponse = cAppDyn::GET_Databases();
 if (count($oResponse) == 0){
-	?>
-		<div class='maintable'>No Monitored Databases found</div>
-	<?php
-}
-else{
+	cRender::messagebox("No Monitored Databases found");
+}else{
 	?>
 		<table class="maintable">
 		<?php	

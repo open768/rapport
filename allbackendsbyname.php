@@ -48,7 +48,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 
 $title ="All Remote Services";
 cRender::show_time_options( $title); 

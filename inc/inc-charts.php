@@ -24,7 +24,7 @@ class cChart{
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
 		<DIV 
 			type="appdchart" 
-			appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" 
+			appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" previous="<?=$pbPreviousPeriod?>"
 			width="<?=self::$width?>" height="<?=$piHeight?>" 
 			showZoom="<?=self::$show_zoom?>"
 			showCompare="<?=self::$show_compare?>"

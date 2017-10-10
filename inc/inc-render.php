@@ -636,7 +636,7 @@ class cRender{
 		?>
 			<div class="timebox"><table width="100%"><tr>
 				<td width="150">
-					<?=($bLoggedin?self::pr__logout_menu():"")?>
+					<?=($bLoggedin?cRenderMenus::logout_menu():"")?>
 				</td>
 				<td  width="75%">
 					<?=$sAccount?><br>

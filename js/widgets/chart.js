@@ -29,11 +29,13 @@ var cCharts={
 				var sAppName = oElement.attr("appName");
 				var sMetric = oElement.attr("metric");
 				var sTitle = oElement.attr("title");
+				var sPrevious = oElement.attr("previous");
 				
 				oElement.appdchart({
 					appName:sAppName,
 					title:sTitle,
 					metric:sMetric,
+					previous_period:sPrevious,
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
 					showZoom:oElement.attr("showZoom"),
@@ -63,6 +65,7 @@ var cCharts={
 		}
 	}
 }
+cCharts.queue.maxTransfers = 3	; 	//dont overload the controller
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,7 +90,8 @@ $.widget( "ck.appdchart",{
 		onClick:null,
 		shortNoData:false,
 		showZoom:true,
-		onSelect: null
+		onSelect: null,
+		previous_period:false
 	},
 	
 	consts:{
@@ -95,6 +99,7 @@ $.widget( "ck.appdchart",{
 		METRIC_QS:"met",
 		TITLE_QS:"tit",
 		DIV_QS:"div",
+		PREVIOUS_QS: "prv",
 		METRIC_API:"rest/getMetric.php",
 		NO_DATA_HEIGHT: 90,
 		SHORT_NO_DATA_HEIGHT: 40,
@@ -125,7 +130,7 @@ $.widget( "ck.appdchart",{
 		//check for required options
 		var oOptions = this.options;
 		if (!oOptions.title)	{		$.error("title  missing!");			}
-		if (!oOptions.appName)	{		$.error("application  missing!");	}
+		//if (!oOptions.appName)	{		$.error("application  missing!");	}
 		if (!oOptions.metric)	{		$.error("metric  missing!");		}
 		if (!oOptions.width)	{		$.error("width missing!");		}
 		if (!oOptions.height)	{		$.error("height missing!");		}
@@ -139,7 +144,7 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 		
 		oElement.empty();
-		oElement.append("I'm invisible apparently");
+		oElement.append("Waiting to become visible");
 		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
 	},
 
@@ -176,12 +181,13 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading...");
+		oElement.append(oLoader).append("Queueing...");
 		
 		//add the data request to the http queue
 		var oItem = new cHttpQueueItem();
 		oItem.url = this.pr__get_chart_url();
 
+		bean.on(oItem, "start", 	function(){oThis.onStart(oItem);}	);				
 		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
 		cCharts.queue.add(oItem);
@@ -199,6 +205,23 @@ $.widget( "ck.appdchart",{
 		oElement.append(oDiv);
 	},
 
+	//*******************************************************************
+	onStart: function(poItem){
+		var oElement = this.element;
+		if (cCharts.queue.stopping) return;
+		
+		if (!oElement.visible()){
+			poItem.abort = true;
+			this.pr__setInView();
+			return;
+		}
+		
+		oElement.empty();
+		var oLoader = $("<DIV>");
+		oLoader.gSpinner({scale: .25});
+		oElement.append(oLoader).append("Loading...");
+	},
+	
 	//*******************************************************************
 	onResponse: function(poHttp){
 		var oThis = this;
@@ -240,7 +263,8 @@ $.widget( "ck.appdchart",{
 		
 		var oParams={};
 		oParams[oConsts.METRIC_QS]=oOptions.metric;
-		oParams[oConsts.APP_QS]=oOptions.appName;
+		if (oOptions.appName)
+			oParams[oConsts.APP_QS]=oOptions.appName;
 		oParams[oConsts.TITLE_QS]=oOptions.title;
 		var sUrl = cBrowser.buildUrl(oConsts.compare_url, oParams);
 		window.open(sUrl);		
@@ -283,9 +307,9 @@ $.widget( "ck.appdchart",{
 		
 		var oParams = {};
 		oParams[ oConsts.METRIC_QS ] = oOptions.metric;
-		oParams[ oConsts.APP_QS ] = oOptions.appName;
+		if (oOptions.appName) oParams[ oConsts.APP_QS ] = oOptions.appName;
 		oParams[ oConsts.DIV_QS ] = "";
-		//if (poItem.previous) sUrl=sUrl+"&<?=cRender::PREVIOUS_QS?>=1";
+		if (oOptions.previous_period) oParams[ oConsts.PREVIOUS_QS ] = 1;
 		
 		sUrl = cBrowser.buildUrl(this.consts.METRIC_API, oParams);
 		return sUrl;
@@ -357,6 +381,11 @@ $.widget( "ck.appdchart",{
 		var oDiv = oChartDiv[0];
 		var dStart = new Date(poJson.epoch_start);
 		var dEnd = new Date(poJson.epoch_end);
+		if (oOptions.previous_period){
+			var iDiff = poJson.epoch_end - poJson.epoch_start;
+			dEnd = new Date(poJson.epoch_start);
+			dStart = new Date(dEnd - iDiff);
+		}
 		
 		oChart = new google.visualization.LineChart( oDiv );
 		var oChartOptions = {
