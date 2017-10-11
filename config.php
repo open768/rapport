@@ -38,33 +38,27 @@ require_once("$phpinc/appdynamics/account.php");
 //####################################################################
 cRender::html_header("configuration");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-<?php
 
 //####################################################################
 $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 
 cRender::show_top_banner("Configuration"); 
-cRender::button("Back to Apps", "apps.php", false);
-cRender::button("License Usage", "usage.php", false);
-echo "Configuration ";
-cRender::button("All Browser RUM", "all.php?".cRender::METRIC_TYPE_QS."=".cRender::METRIC_TYPE_RUMCALLS, false);
-cRender::button("All Time in Databases", "alldb.php",false);
 
+
+//####################################################################
 function sort_config($a,$b){
 	return strcmp($a->description, $b->description );
 }
-
-//####################################################################
 $aConfig=cAppDyn::GET_configuration();
 uasort($aConfig,"sort_config");
+$sStyle = cRender::getRowClass();			
 
 //cDebug::vardump($aConfig,true);
 ?>
-	<table class="maintable" border="1" cellspacing=0 cellpadding=2>
-		<tr>
+<h2>Controller Configuration</h2>
+	<table border="1" cellspacing=0 cellpadding=2>
+		<tr class="<?=$sStyle?>">
 			<th>Description</th>
 			<th>Value</th>
 		</tr>
@@ -72,12 +66,13 @@ uasort($aConfig,"sort_config");
 			foreach ( $aConfig as $oItem){
 				$sValue = str_replace( ",", ", ", $oItem->value);
 				$sValue = str_replace( ",  ", ", ", $sValue);
+				
 				$sDesc = $oItem->description;
 				if (stristr($sDesc,"password")) $sValue = "**********";
-				echo "<tr>";
-					echo "<td valign='top'>$sDesc</td>";
-					echo "<td>$sValue</td>";
-				echo "</tr>";
+				?><tr>
+					<td valign='top'><?=$sDesc?></td>
+					<td><font face="courier"><?=$sValue?></font></td>
+				</tr><?php
 			}
 		?>
 	</table><?php

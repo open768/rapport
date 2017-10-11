@@ -349,34 +349,48 @@ class cRender{
 		
 			$tierlink=self::getTierLink($psApp, $psAppID, $psTier,  $psTid);
 			
-			echo "<table border=1 cellspacing=0>";
-			echo "<tr><th width=700>$tierlink</th><th colspan=4>Calls per min</th><th rowspan=2 width=80>max response Times (ms)</th></tr>";
-			echo "<tr><th width=700>other tier</th><th width=80>max</th><th width=80>min</th><th width=80>avg</th><th width=80>total</th></tr>";
+			?><table border=1 cellspacing=0>
+				<tr>
+					<th width=700><?=$tierlink?></th>
+					<th colspan=4>Calls per min</th>
+					<th rowspan=2 width=80>max response Times (ms)</th>
+				</tr>
+				<tr>
+					<th width=700>other tier</th>
+					<th width=80>max</th>
+					<th width=80>min</th>
+					<th width=80>avg</th>
+					<th width=80>total</th>
+				</tr><?php
 
-			foreach ( $poData as $detail){
-				$other_tier = $detail->name;
-				$oCalls = $detail->calls;
-				$oTimes = $detail->times;
-				
-				if ($oCalls){
-						
-					if ($oCalls->sum > 0){	
-						echo "<tr>";
-							if ($showlink==1)
-								echo "<td><a href='tiertotier.php?app=$psApp&from=$psTier&to=$other_tier'>$other_tier</a></td>";
-							else
-								echo "<td>$other_tier</td>";
-							echo "<td align=middle>$oCalls->max</td>";
-							echo "<td align=middle>$oCalls->min</td>";
-							echo "<td align=middle>$oCalls->avg</td>";
-							echo "<td align=middle>$oCalls->sum</td>";
-							if ($oTimes)
-								echo "<td align=middle bgcolor=lightgrey>$oTimes->max</td>";
-						echo "</tr>";
+				foreach ( $poData as $detail){
+					$other_tier = $detail->name;
+					$oCalls = $detail->calls;
+					$oTimes = $detail->times;
+					
+					if ($oCalls){
+							
+						if ($oCalls->sum > 0){	
+							?><tr><?php
+								if ($showlink==1){
+									?><td><a href='tiertotier.php?app=$psApp&from=$psTier&to=$other_tier'>$other_tier</a></td><?php
+								}else{
+									?><td><?=$other_tier?></td><?php
+								}
+								?>
+									<td align="middle"><?=$oCalls->max?></td>
+									<td align="middle"><?=$oCalls->min?></td>
+									<td align="middle"><?=$oCalls->avg?></td>
+									<td align="middle"><?=$oCalls->sum?></td>
+								<?php
+								if ($oTimes){
+									?><td align="middle" bgcolor="lightgrey"><?=$oTimes->max?></td><?php
+								}
+							?></tr><?php
+						}
 					}
-				}
 			}
-			echo "</table>";
+			?></table><?php
 		}
 	}
 
@@ -439,7 +453,7 @@ class cRender{
 	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
 		$oCred = self::get_appd_credentials();
 		if ($oCred->restricted_login && ($psUrl !=="index.php")){
-			echo "<a class='fake_blue_button'>$psCaption</a>&nbsp;";
+			?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
 			return;
 		}
 		
@@ -527,7 +541,7 @@ class cRender{
 		</script>
 		<table border=0 width="100%" class="footer"><tr><td>
 				<div class="licenseBox">
-				Copyright (c) 2013-2016 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu Ltd</a>
+				Copyright (c) 2013-2017 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu Ltd</a>
 				<p>
 				This software is protected by copyright under the terms of the 
 				Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
@@ -797,25 +811,27 @@ class cRender{
 	//#####################################################################################
 	//#####################################################################################
 	//* 2 column table with captions and metrics
-	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null){ 
+	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null){ 
 		$iCol = 0;
 		$iOldWidth = cChart::$width;
-		cChart::$width = self::CHART_WIDTH_LETTERBOX / $piMaxCols;
+		cChart::$width = ($piWidth?$piWidth:self::CHART_WIDTH_LETTERBOX / $piMaxCols);
 		if ($piHeight==null) $piHeight = self::CHART_HEIGHT_SMALL;
 		
 		?><table class="maintable"><?php
 			foreach ($paTable as $aItem){
-				if ($iCol == 0) echo "<tr class=\"$psRowClass\">";
+				if ($iCol == 0) {
+					?><tr class="<?=$psRowClass?>"><?php
+				}
 				$iCol++;
-				if (count($aItem) ==1)
-					echo "<th>".$aItem[0]."</th>";
-				else{
-					echo "<td>";
+				if (count($aItem) ==1){
+					?><th><?=$aItem[0]?></th><?php
+				}else{
+					?><td><?php
 							cChart::add($aItem[0], $aItem[1], $psApp, $piHeight);
-					echo "</td>";
+					?></td><?php
 				}
 				if ($iCol==$piMaxCols){
-					echo "</tr>";
+					?></tr><?php
 					$iCol = 0;
 				}
 			}
@@ -878,8 +894,5 @@ class cRender{
 		ksort($aCols, SORT_NUMERIC);
 		return (array_keys($aCols));
 	}
-	
-	
-
 }
 ?>

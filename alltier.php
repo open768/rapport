@@ -58,45 +58,23 @@ foreach ( $aApps as $oApp){
 	if (cFilter::isAppFilteredOut($oApp->name)) continue;
 	$sAppQS = cRender::build_app_qs($oApp->name, $oApp->id);
 	$sClass = cRender::getRowClass();
-	?>
-	<table class="maintable">
-		<tr class="<?=$sClass?>"><td colspan=4>
-			<?=cRenderMenus::show_app_functions($oApp->name, $oApp->id)?>
-		</td></tr>
-		<?php
-			$aTiers =cAppdyn::GET_Tiers($oApp->name);
-			foreach ($aTiers as $oTier){ 
-				if (cFilter::isTierFilteredOut($oTier->name)) continue;
-				?>	
-				<tr class="<?=$sClass?>">
-					<td width="50"><?=$oTier->name?></td>
-					<td><?php
-						$sMetric=cAppDynMetric::tierCallsPerMin($oTier->name);
-						cChart::add("calls: $oTier->name", $sMetric, $oApp->name, cRender::CHART_HEIGHT_SMALL);	
-					?></td>
-					<td><?php
-						$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
-						cChart::add("Response: $oTier->name", $sMetric, $oApp->name, cRender::CHART_HEIGHT_SMALL);
-					?></td>
-					<td width="30"><?php
-						$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
-						cRender::button("Go", "tier.php?$sTierQs")
-					?></td>
-				</tr>
-			<?php }
+	?><DIV><?php
+		cRenderMenus::show_app_functions($oApp->name, $oApp->id);
+		$aTiers =cAppdyn::GET_Tiers($oApp->name);
+		$aMetrics = [];
+		foreach ($aTiers as $oTier){ 
+			if (cFilter::isTierFilteredOut($oTier->name)) continue;
+			
+			$aMetrics[] = [$oTier->name];
+			$aMetrics[] = ["calls: $oTier->name", cAppDynMetric::tierCallsPerMin($oTier->name)];
+			$aMetrics[] = ["Response: $oTier->name", cAppDynMetric::tierResponseTimes($oTier->name)];
+			$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
+			$aMetrics[] = [	cRender::button_code("Go", "tier.php?$sTierQs") ];
 		}
-	?>
-	</table>
-	
-	<script language="javascript">
-		function hide_row(poData){ //override
-			var sDivID = poData.oItem.chart;
-			$("#"+sDivID).closest("TABLE").closest("TR").hide(); //the whole row
-		}
-		bean.on(cChartBean,CHART__NODATA_EVENT,hide_row);
-	</script>
-<?php
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+		cRender::render_metrics_table($oApp->name,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
+	?></div><?php
+}
+cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
-	cRender::html_footer();
+cRender::html_footer();
 ?>
