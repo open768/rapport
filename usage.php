@@ -44,7 +44,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width= cRender::CHART_WIDTH_LARGE;
 
 //####################################################################
 $sUsage = cHeader::get(cRender::USAGE_QS);

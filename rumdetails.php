@@ -141,7 +141,7 @@ $class=cRender::getRowClass();
 ?>
 
 <?php
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+	cChart::do_footer();
 
 	cRender::html_footer();
 ?>

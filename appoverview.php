@@ -49,7 +49,7 @@ cRender::force_login();
 <?php
 cChart::$show_export_all = false;
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
+
 
 $title ="$gsApp&gt;Overview";
 cRender::show_time_options( $title); 
@@ -82,7 +82,6 @@ $aMetrics  = [
 	["Exceptions", cAppDynMetric::appExceptionsPerMin()]
 ];
 $class=cRender::getRowClass();
-cChart::$width=cRender::CHART_WIDTH_LARGE/3;
 cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 
 //####################################################################
@@ -90,7 +89,6 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 	//-----------------------------------------------
 	$oResponse =cAppdyn::GET_Tiers($gsApp);
 	$sClass=cRender::getRowClass();
-	cChart::$width=cRender::CHART_WIDTH_LARGE/5;
 	$iHeight=100;
 
 	foreach ( $oResponse as $oTier){
@@ -134,7 +132,6 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 <h2><a name="trans">Transactions</a></h2>
 <?php
 $aTiers =cAppdyn::GET_Tiers($gsApp);
-cChart::$width=cRender::CHART_WIDTH_LARGE/4;
 $iHeight=100;
 
 foreach ($aTiers as $oTier){
@@ -181,7 +178,7 @@ foreach ($aTiers as $oTier){
 //####################################################################
 	
 	
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+	cChart::do_footer();
 
 	cRender::html_footer();
 ?>

@@ -43,7 +43,7 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE;
+cChart::$width=cRender::CHART_WIDTH_LARGE -200;
 
 
 //####################################################################
@@ -55,7 +55,9 @@ $oResponse = cAppDyn::GET_Databases();
 if (count($oResponse) == 0){
 	cRender::messagebox("No Monitored Databases found");
 }else{
+	//tables are needed here as each chart is for a different application
 	?>
+		<h2>Databases</h2>
 		<table class="maintable">
 		<?php	
 			//display the results
@@ -64,19 +66,18 @@ if (count($oResponse) == 0){
 				$sDB=$oDB->name;
 				$sMetric = cAppDynMetric::databaseTimeSpent($sDB);
 
-				echo "<tr>";
-					echo "<td class='$class'>";
-						cRender::button($sDB, "db.php?".cRender::DB_QS."=$sDB", false);
-						echo "<br>";
+				?><tr class="<?=$class?>">
+					<td><?=cRender::button_code($sDB, "db.php?".cRender::DB_QS."=$sDB", false)?></td>
+					<td><?php
 						cChart::add($sDB, $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
-					echo "</td>";
-				echo "</tr>";
+					?></td>
+				</tr><?php
 			}
 		?>
 		</table>
 	<?php
 	}
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+	cChart::do_footer();
 
 	cRender::html_footer();
 ?>

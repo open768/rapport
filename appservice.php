@@ -46,7 +46,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width = cRender::CHART_WIDTH_LETTERBOX/4;
 
 //####################################################################
 //get passed in values
@@ -66,6 +65,9 @@ if (cFilter::isFiltered()){
 $oTimes = cRender::get_times();
 $aTiers = cAppdyn::GET_Tiers($app, $oTimes);
 
+function pr__sort_endpoints($a,$b){
+	return strcmp($a->name, $b->name);
+}
 
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
@@ -76,41 +78,25 @@ foreach ($aTiers as $oTier){
 		cRender::messagebox("no Service endpoints found for $oTier->name");
 		continue;
 	}
-	
+	uasort($aEndPoints, "pr__sort_endpoints");
+
 	//****************************************************************************************
 	?><p><?php
 	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
-	?><table class="maintable">
-		<tr>
-			<th>End Point</th>
-			<th>Activity</th>
-			<th>Response Times in ms</th>
-			<th>Errors per minute</th>
-		</tr>
-		<?php
-			foreach ($aEndPoints as $oEndPoint){
-				?><tr class="<?=cRender::getRowClass()?>">
-					<td><?=$oEndPoint->name?></td>
-					<td><?php	
-						$sMetricUrl = cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name);
-						cChart::add("Calls", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
-					?></td>
-					<td><?php	
-						$sMetricUrl = cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name);
-						cChart::add("Response", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
-					?></td>
-					<td><?php	
-						$sMetricUrl = cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name);
-						cChart::add("Errors", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
-					?></td>
-				</tr><?php
-			}
-		?>
-	</table><?php 
+	$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
+	$aMetrics = [];
+	foreach ($aEndPoints as $oEndPoint){
+		$aMetrics[] = [$oEndPoint->name];
+		$aMetrics[] = ["Calls", cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = ["Response", cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = ["Errors", cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
+	}
+	$sClass = cRender::getRowClass();
+	cRender::render_metrics_table($app,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3, $aHeaders);
 }
 
 //####################################################################
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 
 cRender::html_footer();
 ?>

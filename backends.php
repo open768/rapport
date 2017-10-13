@@ -46,8 +46,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
-
 
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
@@ -88,7 +86,7 @@ cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());
 		?></div><?php
 	}
 			
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 
 cRender::html_footer();
 ?>

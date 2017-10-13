@@ -44,7 +44,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/3;
 
 //####################################################################
 cRender::show_time_options( "All Tiers"); 
@@ -74,7 +73,7 @@ foreach ( $aApps as $oApp){
 		cRender::render_metrics_table($oApp->name,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php
 }
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 
 cRender::html_footer();
 ?>

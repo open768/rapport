@@ -99,7 +99,7 @@ cRender::button("back to $app RUM details", "rumstats.php?$gsAppQS");
 ?>
 
 <?php
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+	cChart::do_footer();
 
 	cRender::html_footer();
 ?>

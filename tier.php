@@ -102,6 +102,6 @@ if ($oCred->restricted_login == null){
 	cRender::render_metrics_table($app, $aMetrics, 3, $sClass);
 
 //####################################################################
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 cRender::html_footer();
 ?>

@@ -46,7 +46,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width = cRender::CHART_WIDTH_LETTERBOX/4;
 
 //####################################################################
 //get passed in values
@@ -83,7 +82,7 @@ else{
 }
 
 //####################################################################
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 
 cRender::html_footer();
 ?>

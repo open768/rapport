@@ -812,13 +812,20 @@ class cRender{
 	//#####################################################################################
 	//#####################################################################################
 	//* 2 column table with captions and metrics
-	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null){ 
+	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null, $paHeaders=null){ 
 		$iCol = 0;
 		$iOldWidth = cChart::$width;
 		cChart::$width = ($piWidth?$piWidth:self::CHART_WIDTH_LETTERBOX / $piMaxCols);
 		if ($piHeight==null) $piHeight = self::CHART_HEIGHT_SMALL;
 		
 		?><table class="maintable"><?php
+			if ($paHeaders){
+				?><tr><?php
+					foreach ($paHeaders as $sItem){
+						?><th><?=$sItem?></th><?php
+					}
+				?></tr><?php
+			}
 			foreach ($paTable as $aItem){
 				if ($iCol == 0) {
 					?><tr class="<?=$psRowClass?>"><?php
@@ -828,7 +835,7 @@ class cRender{
 					?><th><?=$aItem[0]?></th><?php
 				}else{
 					?><td><?php
-							cChart::add($aItem[0], $aItem[1], $psApp, $piHeight);
+						cChart::add($aItem[0], $aItem[1], $psApp, $piHeight);
 					?></td><?php
 				}
 				if ($iCol==$piMaxCols){

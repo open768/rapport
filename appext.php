@@ -47,7 +47,6 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LETTERBOX/2;
 
 //####################################################################
 
@@ -100,6 +99,6 @@ foreach ( $oResponse as $oExtTier){
 cRender::render_metrics_table($app, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
 //##################################################################
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 cRender::html_footer();
 ?>

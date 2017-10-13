@@ -118,7 +118,7 @@ if ($oCred->restricted_login == null){
 <?php
 
 //################ CHART
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 
 cRender::html_footer();
 ?>

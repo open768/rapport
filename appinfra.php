@@ -64,7 +64,6 @@ cRenderMenus::show_apps_menu("Infrastructure Overview for $gsApp","appinfra.php"
 
 //####################################################################
 $aTiers =cAppdyn::GET_Tiers($gsApp);
-cChart::$width=cRender::CHART_WIDTH_LARGE/4;
 
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
@@ -84,6 +83,6 @@ foreach ($aTiers as $oTier){
 
 //####################################################################
 //####################################################################
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cChart::do_footer();
 cRender::html_footer();
 ?>
