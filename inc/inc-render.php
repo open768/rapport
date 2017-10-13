@@ -560,7 +560,8 @@ class cRender{
 				Charts built using <a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
 				uses <a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license<br>
 				uses <a href="https://gist.github.com/umidjons/8396981">pub sub pattern</a> by Baylor Rae licensed under the GNU General Public license<br>
-				No passwords are stored overnight in this van.
+				No passwords are stored by this application.<br>
+				AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
 				</small>
 		</td></tr></table>
 		

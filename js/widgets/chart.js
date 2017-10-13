@@ -144,7 +144,11 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 		
 		oElement.empty();
-		oElement.append("Waiting to become visible");
+		oElement.append("Waiting to become visible ");
+		var oButton = $("<button>").append("load");
+		oElement.append(oButton);
+		oButton.click( 		function(){oThis.onInView(true);}		);
+		
 		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
 	},
 

@@ -13,7 +13,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-//####################################################################
 $root=realpath(".");
 $phpinc = realpath("$root/../phpinc");
 $jsinc = "../jsinc";
@@ -35,47 +34,34 @@ require_once("inc/inc-charts.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
-$SHOW_PROGRESS=false;
-set_time_limit(200); 
 
-//####################################################################
-cRender::html_header("App Activity");
-cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
-cChart::do_header();
-
-//####################################################################
-//get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
-
-
-$title= "$app&gt;Availability";
-cRender::show_time_options($title); 
-cRenderMenus::show_apps_menu("Availability", "appavail.php");
-
-//####################################################################
-//retrieve tiers
-$oResponse =cAppdyn::GET_Tiers($app);
-
-// work through each tier
-?><h2>Availability for <?=$app?></h2><?php
-
-$aMetrics = [];
-foreach ( $oResponse as $oItem){
-	$tier = $oItem->name;
-	$tid= $oItem->id;
-
-	$aMetrics[] = ["'$tier': Server availability",cAppDynMetric::InfrastructureMachineAvailability($tier)];
-	$aMetrics[] = ["'$tier': infrastructure availability",cAppDynMetric::InfrastructureAgentAvailability($tier)];
+$sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
+switch($sMetricType){
+	case cRender::METRIC_TYPE_RUMCALLS:
+	case cRender::METRIC_TYPE_RUMRESPONSE:
+		$sTitle1 = "Web Browser Page Requests";
+		$sMetric1 = cAppDynMetric::webrumCallsPerMin();
+		$sTitle2 = "Web Browser Page Response";
+		$sMetric2 = cAppDynMetric::webrumResponseTimes();
+		break;
+	case cRender::METRIC_TYPE_RESPONSE_TIMES:
+	case cRender::METRIC_TYPE_ACTIVITY:
+	default:
+		$sTitle1 = "Application Activity";
+		$sMetric1 = cAppDynMetric::appCallsPerMin();
+		$sTitle2 = "Application Response Times";
+		$sMetric2 = cAppDynMetric::appResponseTimes();
+		break;
 }
-$sClass = cRender::getRowClass();
-cRender::render_metrics_table($app,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
-	
-cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
 
+//####################################################################
+cRender::html_header("About");
+
+//####################################################################
+cRender::show_time_options( "About"); 
+?>
+		<h2>About the Reporter for Appdynamics&trade;</h2>
+
+<?php
 cRender::html_footer();
 ?>

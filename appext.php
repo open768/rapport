@@ -80,42 +80,26 @@ if ($oCred->restricted_login == null){
 //####################################################################
 $oResponse =cAppdyn::GET_AppExtTiers($app);
 
-?>
+?><h2>Overall statistics for <?=$app?></h2><?php
+$aMetrics = [];
+$aMetrics[] = ["Calls per min",cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = ["Response Time",cAppDynMetric::appResponseTimes()];
+cRender::render_metrics_table($app, $aMetrics,2,cRender::getRowClass());
 
-<h2>Overall statistics for <?=$app?></h2>
-<table class="maintable">
-	<tr class="<?=cRender::getRowClass()?>">
-		<td><?php
-			$sMetricUrl = cAppDynMetric::appCallsPerMin();
-			cChart::add("Calls per min", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-		?></td>
-		<td><?php
-			$sMetricUrl = cAppDynMetric::appResponseTimes();
-			cChart::add("Response time", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-		?></td>
-	</tr>
-</table>
+//##################################################################
+?><h2>External calls from <?=$app?></h2><?php
+$aMetrics = [];
 
-<h2>External calls from <?=$app?></h2>
-<table class="maintable"><?php
-	foreach ( $oResponse as $oExtTier){
-		$class=cRender::getRowClass();
-		$sName = $oExtTier->name;
-		?><tr class="<?=$class?>">
-			<td><?php
-				$sMetricUrl = cAppDynMetric::backendCallsPerMin($sName);
-				cChart::add("Calls per min to ($sName)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-			?></td>
-			<td><?php
-				$sMetricUrl = cAppDynMetric::backendResponseTimes($sName);
-				cChart::add("Response time to ($sName)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-			?></td>
-		</tr><?php
-	}
-?>
-</table>
-<?php
-	cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+foreach ( $oResponse as $oExtTier){
+	$class=cRender::getRowClass();
+	$sName = $oExtTier->name;
+	$aMetrics[] = [$sName];
+	$aMetrics[] = ["Calls per min to ($sName)",cAppDynMetric::backendCallsPerMin($sName)];
+	$aMetrics[] = ["Response time to ($sName)",cAppDynMetric::backendResponseTimes($sName)];
+}
+cRender::render_metrics_table($app, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
-	cRender::html_footer();
+//##################################################################
+cChart::do_footer("chart_getUrl", "chart_jsonCallBack");
+cRender::html_footer();
 ?>

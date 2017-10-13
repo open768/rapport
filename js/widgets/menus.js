@@ -158,6 +158,7 @@ $.widget( "ck.appdmenu",{
 			
 			oParams = {};
 			oParams[cMenus.IGNORE_REF_QS] = 1;
+			this.pr__addToGroup( oSelect, "About...", "about.php");
 			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl("index.php", oParams));
 			this.pr__addToGroup( oSelect, "Login Token", "authtoken.php");
 			this.pr__addToGroup( oSelect, "Link to this page", "link.php");
