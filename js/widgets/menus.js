@@ -12,6 +12,7 @@ var cMenus={
 	METRIC_TYPE_QS:"mt",
 	METRIC_TYPE_ACTIVITY: "mac",
 	METRIC_TYPE_RUMCALLS:"mrc",
+	METRIC_TYPE_INFR_AVAIL:"mtia",
 	NODE_QS:"nd",
 	TIER_QS:"tier",
 	TIER_ID_QS: "tid",
@@ -77,6 +78,9 @@ $.widget( "ck.appdmenu",{
 			case "appsmenu": 
 				this.pr__showAppsMenu();
 				break;
+			case "appagents":
+				this.pr__showAppAgentsMenu();
+				break;
 			case "logoutmenu":
 				this.pr__showLogoutMenu();
 				break;
@@ -128,7 +132,7 @@ $.widget( "ck.appdmenu",{
 			//- - - - - - - - Application Functions group
 			oGroup = $("<optgroup>",{label:"Application Functions"});
 				this.pr__addToGroup(oGroup, "Activity", cBrowser.buildUrl("tiers.php", oParams));
-				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl("appnodes.php", oParams));
+				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl("appagents.php", oParams));
 				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl("appavail.php", oParams));
 				this.pr__addToGroup(oGroup, "Events", cBrowser.buildUrl("events.php", oParams));
 				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl("appext.php", oParams));
@@ -148,6 +152,41 @@ $.widget( "ck.appdmenu",{
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 
+	
+	//****************************************************************
+	pr__showAppAgentsMenu: function(){
+		var oElement = this.element;
+		
+		//check for required options
+		var sAppname = oElement.attr("appname");
+		if (!sAppname) {	$.error("appname attr missing!");	}
+		var sAppid = oElement.attr("appid");
+		if (!sAppid)	{	$.error("appid attr missing!");		}
+
+		//build the params
+
+		//build the select menu
+		var oSelect = $("<select>");
+			var oOption = $("<option>",{selected:1,disabled:1}).append("Show Agent...");
+			oSelect.append(oOption);
+
+			var oParams = {};
+			oParams[cMenus.APP_QS] = sAppname;
+			oParams[cMenus.APPID_QS] = sAppid;
+			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl("appagents.php", oParams));
+
+			oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL;
+			this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl("appagentdetail.php", oParams));
+			
+			
+			
+			//<option value="<?=$sAgentStatsUrl?>">Activity</option>
+		
+		//add and make the menu a selectmenu
+		var oThis = this;		
+		oElement.append(oSelect);
+		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);		
+	},
 	
 	//****************************************************************
 	pr__showLogoutMenu: function(){

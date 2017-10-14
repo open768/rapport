@@ -58,7 +58,7 @@ function sort_by_tier($a, $b){
 <table class="maintable" width="100%">
 <?php	
 	foreach ($maApps as $oApp){
-		$sAppUrl = cHttp::build_url("appnodes.php", cRender::build_app_qs($oApp->name, $oApp->id));
+		$sAppUrl = cHttp::build_url("appagents.php", cRender::build_app_qs($oApp->name, $oApp->id));
 		$sClass = cRender::getRowClass();
 
 		?>

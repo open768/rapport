@@ -86,31 +86,17 @@ const TOTALCOL_WIDTH=150;
 	$oGrandTotal = new cAgentTotals();
 	
 	foreach ($moApps as $oApp){
-		$sAppQs = cRender::build_app_qs($oApp->name, $oApp->id);
-		$sAgentNamesUrl = "appnodes.php?$sAppQs";
-		$sAgentStatsUrl = "allnodedetail.php?".cHttp::build_qs($sAppQs, cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_INFR_AVAIL);
-
 		$aAppData = get_app_node_data($oApp->id);
 		$oAppTotals = new cAgentTotals();
-		
-		
+				
 		if (count($aAppData) == 0) continue;
 		
 		$sClass = cRender::getRowClass();
 		?><tr class="<?=$sClass?>"><td colspan="5" align="left">
 			<?php
 				cRenderMenus::show_app_functions($oApp->name, $oApp->id);
+				cRenderMenus::show_app_agent_menu($oApp->name, $oApp->id);
 			?>
-			<select id="Agent<?=$oApp->id?>">
-				<option disabled selected>Show Agent...</option>
-				<option value="<?=$sAgentNamesUrl?>">Details</option>
-				<option value="<?=$sAgentStatsUrl?>">Activity</option>
-			</select>
-			<script language="JavaScript">
-				$(	function(){
-					$("#Agent<?=$oApp->id?>").selectmenu({change:common_onListChange});
-				});
-			</script>
 		</tr>
 		<tr class="tableheader">
 			<th width="<?=BLANK_WIDTH?>"></th>

@@ -43,7 +43,7 @@ $nodeID = cHeader::get(cRender::NODE_ID_QS);
 $sAppQS = cRender::get_base_app_QS();
 
 cRender::show_top_banner("Node details: $node"); 
-cRender::button("Back to all nodes", "appnodes.php?$sAppQS");
+cRender::button("Back to all nodes", "appagents.php?$sAppQS");
 cRender::appdButton(cAppDynControllerUI::nodeDashboard($aid,$nodeID));
 
 ?>

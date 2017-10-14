@@ -88,11 +88,12 @@ $sTitle  = $oMetric->caption;
 //####################################################################
 $sAppQS = cRender::get_base_app_QS();
 
-$sDetailRootQS = cHttp::build_url("allnodedetail.php", $sAppQS);
+$sDetailRootQS = cHttp::build_url("appagentdetail.php", $sAppQS);
 
 //####################################################################
 cRender::show_time_options($sTitle); 
-cRenderMenus::show_apps_menu("Show detail for", "allnodedetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
+cRenderMenus::show_app_agent_menu($app, $aid);
+cRenderMenus::show_apps_menu("Show detail for", "appagentdetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
 
 $aMetrics = cRender::getInfrastructureMetricTypes();
 ?>

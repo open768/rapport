@@ -74,7 +74,7 @@ $showlink = cCommon::get_session($LINK_SESS_KEY);
 $aMetrics = cRender::getInfrastructureMetricTypes();
 $oCred = cRender::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
-$sAllNodeUrl = cHttp::build_url("allnodedetail.php",$sAppQS);
+$sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
 $sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType)
 
 ?>

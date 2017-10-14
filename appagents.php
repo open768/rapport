@@ -41,12 +41,13 @@ $aid = cHeader::get(cRender::APP_ID_QS);
 $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
 $sAppQS = cRender::get_base_app_QS();
-$sShowBaseUrl = cHttp::build_url("appnodes.php",$sAppQS);
+$sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
 $aMetrics = cRender::getInfrastructureMetricTypes();
 
 //####################################################################
 cRender::show_top_banner("Agents for $app"); 
-cRenderMenus::show_apps_menu("Show Agents for...", "appnodes.php");
+cRenderMenus::show_app_agent_menu($app, $aid);
+cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
 ?>
 <select id="showMenu">
 	<option selected disabled>Show...</option>
@@ -62,7 +63,7 @@ cRenderMenus::show_apps_menu("Show Agents for...", "appnodes.php");
 	</script>
 <?php
 $oCred = cRender::get_appd_credentials();
-$sDetailBaseUrl =  cHttp::build_url("allnodedetail.php",$sAppQS);
+$sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
 
 if ($oCred->restricted_login == null){ 
 	?><select id="nodeMenu">

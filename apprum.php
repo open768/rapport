@@ -44,17 +44,12 @@ $sAppQS = cRender::get_base_app_QS();
 //####################################################################
 cRender::html_header("Web browser - Real user monitoring");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 $title ="$app&gt;Web Real User Monitoring";
 cRender::show_time_options( $title); 
 
 cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
-cRender::button("Show Page Statistics", "rumstats.php?$sAppQS");
 cRender::appdButton(cAppDynControllerUI::webrum($aid));
 
 //####################################################################
@@ -65,6 +60,7 @@ $aMetrics[] = ["Overall response time in ms", cAppDynMetric::appResponseTimes()]
 cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
 
 ?><h2>Browser Stats for (<?=$app?>)</h2><?php
+cRender::button("Show Page Statistics", "rumstats.php?$sAppQS");
 $aMetrics = [];
 $aMetrics[] = ["Page requests per minute",cAppDynMetric::webrumCallsPerMin()];
 $aMetrics[] = ["Page response time",cAppDynMetric::webrumResponseTimes()];

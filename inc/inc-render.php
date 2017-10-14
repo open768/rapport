@@ -38,6 +38,21 @@ class cRenderMenus{
 			<span type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
 		<?php
 	}
+	//******************************************************************************************
+	public static function show_app_agent_menu($psApp=null, $psAppID=null){
+
+		$oCred = cRender::get_appd_credentials();
+		if ($oCred->restricted_login) 
+			return;
+		
+		if (($psApp == null) || ($psAppID == null)) {
+			$psApp = cHeader::get(cRender::APP_QS);
+			$psAppID = cHeader::get(cRender::APP_ID_QS);
+		}
+		?>
+			<span type="appdmenus" menu="appagents" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
+		<?php
+	}
 
 	//******************************************************************************************
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
