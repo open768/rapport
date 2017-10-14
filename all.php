@@ -63,17 +63,16 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-cRender::show_time_options( "All Applications - $sTitle1"); 
-		
+cRender::show_time_options( "All Applications - $sTitle1"); 		
 
 //####################################################################
-$oResponse = cAppDyn::GET_Applications();
-if ( count($oResponse) == 0)
+$aResponse = cAppDyn::GET_Applications();
+if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else{
 	?><div ><?php	
 		//display the results
-		foreach ( $oResponse as $oApp){
+		foreach ( $aResponse as $oApp){
 			if (cFilter::isAppFilteredOut($oApp->name)) continue;
 			$sClass = cRender::getRowClass();			
 			$aMetrics = [[$sTitle1, $sMetric1],[$sTitle2, $sMetric2]];

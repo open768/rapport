@@ -136,7 +136,10 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oGroup, "Remote Services", cBrowser.buildUrl("backends.php", oParams));
 				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl("appservice.php", oParams));
 				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl("apptrans.php", oParams));
-				this.pr__addToGroup(oGroup, "Web Real User Monitoring", cBrowser.buildUrl("apprum.php", oParams));
+				oGroup2 = $("<optgroup>",{label:"Web Real User Monitoring"});
+					this.pr__addToGroup(oGroup2, "Overall stats", cBrowser.buildUrl("apprum.php", oParams));
+					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl("rumstats.php", oParams));
+				oGroup.append(oGroup2);
 			oSelect.append(oGroup);
 		
 		//add and make the menu a selectmenu

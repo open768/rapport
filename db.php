@@ -40,12 +40,7 @@ $sDB = cHeader::get(cRender::DB_QS);
 //####################################################################
 cRender::html_header("Database - $sDB");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 
 //####################################################################
 cRender::show_time_options( "Summary Database information  - $sDB"); 
@@ -53,23 +48,18 @@ cRender::button("back to all databases", "alldb.php",false);
 cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false);
 
 //####################################################################
-cChart::$width=cRender::CHART_WIDTH_LARGE;
-?>
-	<table class="maintable"><tr><td>
-	<?php	
-		$sMetric = cAppDynMetric::databaseTimeSpent($sDB);
-		cChart::add("Time spent in Database", $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
+$aMetrics=[];
 
-		$sMetric = cAppDynMetric::databaseCalls($sDB);
-		cChart::add("Database Calls", $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
+$sMetric = cAppDynMetric::databaseTimeSpent($sDB);
+$aMetrics[] = ["Time spent in Database", $sMetric];
+$sMetric = cAppDynMetric::databaseCalls($sDB);
+$aMetrics[] = ["Database Calls", $sMetric];
+$sMetric = cAppDynMetric::databaseConnections($sDB);
+$aMetrics[] = ["Database Connections", $sMetric];
+cRender::render_metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,1,cRender::getRowClass());
 
-		$sMetric = cAppDynMetric::databaseConnections($sDB);
-		cChart::add("Database Connections", $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
 
-	?>
-	</td></tr></table>
-<?php
-	cChart::do_footer();
+cChart::do_footer();
 
-	cRender::html_footer();
+cRender::html_footer();
 ?>

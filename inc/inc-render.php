@@ -134,16 +134,17 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function get_apps_fragment(){
 		try{
-			$oApps = cAppDyn::GET_Applications();
+			$aApps = cAppDyn::GET_Applications();
 		}
 		catch (Exception $e)
 		{
 			cRender::errorbox("Oops unable to get application data from controller");
 			exit;
 		}
+		uasort($aApps,"sort_by_app_name" );
 		$iCount=0;
 		$sApps_fragment = "";
-		foreach ($oApps as $oApp){
+		foreach ($aApps as $oApp){
 			$iCount++;
 			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
 		}
@@ -151,6 +152,10 @@ class cRenderMenus{
 		return $sApps_fragment;
 	}
 
+}
+
+function sort_by_app_name($a,$b){
+	return strcasecmp($a->name, $b->name);
 }
 
 //#######################################################################

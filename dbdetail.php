@@ -40,41 +40,32 @@ $sDB = cHeader::get(cRender::DB_QS);
 //####################################################################
 cRender::html_header("Database - $sDB");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 
 //####################################################################
 cRender::show_time_options( "Detailed Database information  - $sDB"); 
 cRender::button("back to all databases", "alldb.php",false);
-cRender::button("Back to $sDB", "db.php?".cRender::DB_QS."=$sDB",false);
+cRender::button("Back to Summary", "db.php?".cRender::DB_QS."=$sDB",false);
 
 $aStats = cAppDyn::GET_Database_ServerStats($sDB);
 $sMetricPrefix = cAppDynMetric::databaseServerStats($sDB);
 //####################################################################
-?>
-	<table class="maintable"><tr><td>
-	<?php	
-		$sMetric = cAppDynMetric::databaseCalls($sDB);
-		cChart::add("Database Calls", $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
-	?>
-	</td></tr></table>
-	<p>
-	<h2>Database specific statistics</h2>
-	<table class="maintable"><?php	
-		foreach ($aStats as $oRow){
-			$sClass=cRender::getRowClass();
-			$sMetric = $sMetricPrefix."|$oRow->name";
-			echo "<tr class='$sClass'><td>";
-				cChart::add($oRow->name, $sMetric, cAppDynCore::DATABASE_APPLICATION, 200);
-			echo "</td></tr>";
-		}	
-	?></table>
-<?php
-	cChart::do_footer();
 
-	cRender::html_footer();
+$aMetrics = [];
+$sMetric = cAppDynMetric::databaseCalls($sDB);
+$aMetrics[] = ["Database Calls", $sMetric];
+cRender::render_metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,1,cRender::getRowClass());
+
+//***************************************************************************
+?><h2>Database specific statistics</h2><?php
+$aMetrics = [];
+foreach ($aStats as $oRow){
+	$sMetric = $sMetricPrefix."|$oRow->name";
+	$aMetrics[] = [$oRow->name, $sMetric];
+}
+cRender::render_metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,2,cRender::getRowClass());
+
+//***************************************************************************
+cChart::do_footer();
+cRender::html_footer();
 ?>

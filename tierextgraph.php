@@ -72,50 +72,32 @@ if ($oCred->restricted_login == null){
 ?>
 <h2>External calls made from (<?=$tier?>) tier</h2>
 <h3>Overall Stats for tier</h3>
-<table class="maintable"><tr class="<?=cRender::getRowClass()?>">
-	<td><?php
-		$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-		cChart::add("Overall Calls per min for ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-	?></td>
-	<td class="<?=cRender::getRowClass()?>"><?php
-		$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-		cChart::add("Overall  response times in ms for ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-	?></td>
-</tr></table>
-<p>
-<!-- ***************************************************** -->
 <?php
+	$aMetrics=[];
+	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
+	$aMetrics[] = ["Overall Calls per min for ($tier) tier", $sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
+	$aMetrics[] = ["Overall  response times in ms for ($tier) tier", $sMetricUrl];
+	cRender::render_metrics_table($app,$aMetrics,2,cRender::getRowClass());
+
+
 	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($app, $tier);
 	$linkUrl = cHttp::build_url("tiertotier.php", $gsAppQs);
 	$linkUrl = cHttp::build_url($linkUrl, cRender::FROM_TIER_QS, $tier);
 	$linkUrl = cHttp::build_url($linkUrl, cRender::TIER_ID_QS, $tid);
-?>
-<h3>External calls</h3>
-<table class="maintable"><?php
+?><h3>External calls</h3><?php
+	$aMetrics=[];
+	
 	foreach ($oResponse as $oDetail){
 		$sTierTo = $oDetail->name;
-		$sClass = cRender::getRowClass();
-
-		?><tr class="<?=$sClass?>" ><td colspan="3">
-			<?=$sTierTo?>
-		</td></tr>
-		<tr class="<?=$sClass?>">
-			<td><?php
-				$sMetric=cAppDynMetric::tierExtCallsPerMin($tier, $sTierTo);
-				cChart::add("Calls per min", $sMetric, $app, cRender::CHART_HEIGHT_LETTERBOX2);	
-			?></td>
-			<td><?php
-				$sMetric=cAppDynMetric::tierExtResponseTimes($tier, $sTierTo);
-				cChart::add("Response Times in ms", $sMetric, $app, cRender::CHART_HEIGHT_LETTERBOX2);	
-			?></td>
-			<td><?php
-				cRender::button("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo));
-			?></td>
-		</tr><?php
+		$aMetrics[] = [$sTierTo];
+		$sMetric=cAppDynMetric::tierExtCallsPerMin($tier, $sTierTo);
+		$aMetrics[] = ["Calls per min", $sMetric];
+		$sMetric=cAppDynMetric::tierExtResponseTimes($tier, $sTierTo);
+		$aMetrics[] = ["Response Times in ms", $sMetric];
+		$aMetrics[] = [cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
-?></table>
-<p>
-<?php
+	cRender::render_metrics_table($app,$aMetrics,4,cRender::getRowClass());
 
 //################ CHART
 cChart::do_footer();
