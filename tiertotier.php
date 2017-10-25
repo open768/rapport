@@ -50,38 +50,24 @@ $gsTierQS = cRender::build_tier_qs($gsAppQS, $fromtier, $tid);
 //####################################################################
 cRender::html_header("External tier calls");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
-
 
 //####################################################################
 $title =  "$app&gt;$fromtier&gt; to tier $totier";		
 cRender::show_time_options($title); 
+cRenderMenus::show_tier_functions($fromtier,$tid);
+cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
 ?>
 <h2>Tier activity details<h2>
 <h3>from (<?=$fromtier?>) to (<?=$totier?>)</h3>
 <p>
 <?php
-	cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
-?>
-<table class="maintable">
-	<tr class="<?=cRender::getRowClass()?>"><td>
-	<?php
-		$sMetricUrl = cAppDynMetric::tierExtCallsPerMin($fromtier, $totier);
-		cChart::add("Calls per min from ($fromtier) to ($totier)", $sMetricUrl, $app);
-	?>
-	</td></tr>
-	<tr class="<?=cRender::getRowClass()?>"><td>
-	<?php
-		$sMetricUrl = cAppDynMetric::tierExtResponseTimes($fromtier, $totier);
-		cChart::add("Response Times in ms from ($fromtier) to ($totier)", $sMetricUrl, $app);
-	?>
-	</td></tr>
-</table>
-<?php
+	$aMetrics=[];
+	$sMetricUrl=cAppDynMetric::tierExtCallsPerMin($fromtier, $totier);
+	$aMetrics[] = ["Calls per min from ($fromtier) to ($totier)", $sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierExtResponseTimes($fromtier, $totier);
+	$aMetrics[] = ["Response Times in ms from ($fromtier) to ($totier)", $sMetricUrl];
+	cRender::render_metrics_table($app,$aMetrics,1,cRender::getRowClass());
 
 //####################################################################
 //################ CHART

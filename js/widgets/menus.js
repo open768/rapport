@@ -130,12 +130,13 @@ $.widget( "ck.appdmenu",{
 			oSelect.append(oGroup);
 		
 			//- - - - - - - - Application Functions group
-			oGroup = $("<optgroup>",{label:"Application Functions"});
-				this.pr__addToGroup(oGroup, "Activity", cBrowser.buildUrl("tiers.php", oParams));
+			oGroup = $("<optgroup>",{label:"Show..."});
+				this.pr__addToGroup(oGroup, "Activity (tiers)", cBrowser.buildUrl("tiers.php", oParams));
 				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl("appagents.php", oParams));
 				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl("appavail.php", oParams));
 				this.pr__addToGroup(oGroup, "Events", cBrowser.buildUrl("events.php", oParams));
 				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl("appext.php", oParams));
+				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl("appinfra.php", oParams));
 				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl("appinfo.php", oParams));
 				this.pr__addToGroup(oGroup, "Remote Services", cBrowser.buildUrl("backends.php", oParams));
 				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl("appservice.php", oParams));

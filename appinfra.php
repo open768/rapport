@@ -59,7 +59,7 @@ cRender::show_time_options( $sTitle);
 <h2><?=$sTitle?></h2>
 <?php
 //####################################################################
-cRenderMenus::show_apps_menu("Infrastructure Overview for $gsApp","appinfra.php");
+cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 ?><p><?php
 
 //####################################################################

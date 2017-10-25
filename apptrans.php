@@ -119,6 +119,8 @@ cRender::force_login();
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
+$tier = cHeader::get(cRender::TIER_QS);
+$tid = cHeader::get(cRender::TIER_ID_QS);
 $gsAppQS = cRender::get_base_app_qs();
 
 //header
@@ -144,6 +146,8 @@ $aTiers =cAppdyn::GET_Tiers($app);
 	foreach ( $aTiers as $oTier){
 		//get the transaction names for the Tier
 		if (cFilter::isTierFilteredOut($oTier->name)) continue;
+		if ($tid && ($oTier->id != $tid)) continue;
+		
 		
 		$aTrans = cAppdyn::GET_tier_transaction_names($app, $oTier->name);	
 		if (!$aTrans) continue;
@@ -156,7 +160,7 @@ $aTiers =cAppdyn::GET_Tiers($app);
 
 		//display the transaction data
 		?><div class="<?=cRender::getRowClass()?>"><?php
-			cRender::button($oTier->name, $sUrl);
+			cRender::button("transactions for $oTier->name", $sUrl);
 			render_tier_transactions($app, $oTier->name, $oTier->id);
 		?></div><?php
 	}

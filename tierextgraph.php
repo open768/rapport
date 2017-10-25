@@ -97,7 +97,7 @@ if ($oCred->restricted_login == null){
 		$aMetrics[] = ["Response Times in ms", $sMetric];
 		$aMetrics[] = [cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
-	cRender::render_metrics_table($app,$aMetrics,4,cRender::getRowClass());
+	cRender::render_metrics_table($app,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
 //################ CHART
 cChart::do_footer();

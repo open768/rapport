@@ -109,78 +109,48 @@ cRender::appdButton(cAppDynControllerUI::tier($aid,$tid));
 <h2>Transactions for (<?=$tier?>) tier <?=$sExtraCaption?></h2>
 
 <h3>Overall Stats for (<?=$tier?>) tier</h3>
-<table class="maintable">
-	<tr class="<?=cRender::getRowClass()?>">
-		<td ><?php
-			$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-			cChart::add("Overall Calls per min ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
-		?></td>
-		<td ><?php
-			$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-			cChart::add("Overall  response times (ms) ($tier) tier", $sMetricUrl, $app, cRender::CHART_HEIGHT_SMALL);
-		?></td>
-	</tr>
-</table>
-
 <?php
-if ($node){ ?>
-	<h3>Stats for (<?=$node?>) Server</h3>
-	<table class="maintable">
-		<tr class="<?=cRender::getRowClass()?>">
-			<td ><?php
-				$sMetricUrl=cAppDynMetric::tierNodeCallsPerMin($tier, $node);
-				cChart::add("Overall  response times (ms) ($node) server", $sMetricUrl, $app);
-			?></td>
-			<td ><?php
-				$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($tier, $node);
-				cChart::add("Overall  response times (ms) ($node) server", $sMetricUrl, $app);
-			?></td>
-		</tr>
-	</table>
-<?php }
+	$aMetrics=[];
+	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
+	$aMetrics[] = ["Overall Calls per min ($tier) tier", $sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
+	$aMetrics[] = ["Overall  response times (ms) ($tier) tier", $sMetricUrl];
+	cRender::render_metrics_table($app,$aMetrics,2,cRender::getRowClass());
+
+
+if ($node){ 
+	?><h3>Stats for (<?=$node?>) Server</h3><?php
+	$aMetrics=[];
+	$sMetricUrl=cAppDynMetric::tierNodeCallsPerMin($tier, $node);
+	$aMetrics[] = ["Overall  Calls per min ($node) server", $sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($tier, $node);
+	$aMetrics[] = ["Overall  response times (ms) ($node) server", $sMetricUrl];
+	cRender::render_metrics_table($app,$aMetrics,2,cRender::getRowClass());
+}
 
 //################################################################################################
 $aResponse =cAppdyn::GET_tier_transaction_names($app, $tier);
-?>
-	<p>
-	<h3>Transaction Details</h3>
-	
-	<table class="maintable">
-		<tr>
-			<th>Calls Per minute</th>
-			<th>Response Times in ms</th>
-		</tr>
-	<?php
-		if ($aResponse){
-			foreach ($aResponse as $oTrans){
-				$sTrans = $oTrans->name;
-				$sTrId = $oTrans->id;
-				$sLink = cHttp::build_url("transdetails.php?$gsTierQs",cRender::TRANS_QS, $sTrans);
-				$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrId);
-				
-				if ($node) cHttp::build_url($sLink,cRender::NODE_QS,$node);
-				
-				?><tr class="<?=cRender::getRowClass()?>">
-					<td><?php
-						$sMetricUrl=cAppdynMetric::transCallsPerMin($tier, $sTrans, $node);
-						cChart::add("Calls ($sTrans)", $sMetricUrl, $app, cRender::CHART_HEIGHT_TINY);
-					?></td>
-					<td><?php
-						$sMetricUrl=cAppdynMetric::transResponseTimes($tier, $sTrans, $node);
-						$sDivID = cChart::add("Response ($sTrans)", $sMetricUrl, $app, cRender::CHART_HEIGHT_TINY);
-					?></td>
-					<td id="<?=$sDivID?>Go"><?php
-						cRender::button("Go",$sLink);
-					?></td>
-				</tr><?php
-			}
-		}else{
-			?><tr><td>No transactions found</td></tr><?php
-		}
-	?>
-	</table>
-	<p>
-<?php
+?><p><h3>Transaction Details</h3><?php
+if ($aResponse){
+	$aMetrics=[];
+	foreach ($aResponse as $oTrans){
+		$sTrans = $oTrans->name;
+		$sTrId = $oTrans->id;
+		$sLink = cHttp::build_url("transdetails.php?$gsTierQs",cRender::TRANS_QS, $sTrans);
+		$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrId);
+		
+		if ($node) cHttp::build_url($sLink,cRender::NODE_QS,$node);
+		
+		$sMetricUrl=cAppdynMetric::transCallsPerMin($tier, $sTrans, $node);
+		$aMetrics[] = ["Calls ($sTrans)", $sMetricUrl];
+		$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $sTrans,$node);
+		$aMetrics[] = ["Response ($sTrans)", $sMetricUrl];
+		$aMetrics[] = [cRender::button_code("Go",$sLink)];
+	}
+	cRender::render_metrics_table($app,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
+}else{
+	cRender::messagebox("No transactions found");
+}
 //###############################################
 cChart::do_footer();
 cRender::html_footer();

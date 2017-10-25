@@ -95,28 +95,6 @@ cRender::show_time_options($sTitle);
 cRenderMenus::show_app_agent_menu($app, $aid);
 cRenderMenus::show_apps_menu("Show detail for", "appagentdetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
 
-$aMetrics = cRender::getInfrastructureMetricTypes();
-?>
-<select id="MetricMenu">
-	<option selected disabled>Infrastructure details for all Servers:</option>
-	<?php
-		foreach ($aMetrics as $sMetricType){
-			$oMetric = cRender::getInfrastructureMetric($app,null,$sMetricType);
-			$sMetricUrl = cHttp::build_url($sDetailRootQS, cRender::METRIC_TYPE_QS, $sMetricType);
-			?>
-				<option <?=($sMetricType == $gsMetricType?"disabled":"")?> value="<?=$sMetricUrl?>"><?=$oMetric->short?></option>
-			<?php
-		}
-	?>
-</select>
-<script language="javascript">
-$(  
-	function(){
-		$("#MetricMenu").selectmenu({change:common_onListChange});
-	}  
-);
-</script>
-<?php
 cRender::appdButton(cAppDynControllerUI::nodes($aid), "All nodes");
 //####################################################################
 ?>
@@ -136,80 +114,35 @@ if ($iNodes==0){
 	<?php
 }else{
 ?>
-	<script language="javascript">
-		var iTotalNodes=<?=count_nodes($aResponse)?>;
-		var iNoData = 0;
-		
-		function hide_chart(poData){ //override
-			var sDivID = poData.oItem.chart;
-			var sCaption = poData.oItem.caption;
-			$("#"+sDivID).closest("TABLE").closest("TR").empty(); //the whole row
-			iTotalNodes--;
-			$("#count").html(iTotalNodes);
-			iNoData++;
-			$("#nodata").html(iNoData);
-			$("#nodatabody").append(sCaption).append("<BR>");
-		}
-		bean.on(cChartBean,CHART__NODATA_EVENT,hide_chart);
-	</script>
 	<p>
-	<h2>There are <span id="count"><?=count_nodes($aResponse);?></span> nodes . <a href="#no_data_anchor">An additional (<span id="nodata">0</span> reported no data)</a></h2>
-	<p>
-	<table class="maintable" border="1" cellspacing="0" cellpadding="2">
-		<tr>
-			<th>Tier</th>
-			<th width="200">Node Name</th>
-			<th></th>
-		</tr>
 		<?php
+			$sAppQS = cRender::get_base_app_QS();
 			foreach ($aResponse as $aTierNodes){
 				if (cFilter::isTierFilteredOut($aTierNodes[0]->tierName)) continue;
 				
+				?><hr><?php
 				$tid = $aTierNodes[0]->tierId;
 				$tier = $aTierNodes[0]->tierName;
-				
-				$class=cRender::getRowClass();
+
+				cRenderMenus::show_tier_functions($tier, $tid);
 				$sTierQS = cHttp::build_qs($sAppQS, cRender::TIER_QS, $tier);
 				$sTierQS = cHttp::build_qs($sTierQS , cRender::TIER_ID_QS, $tid);
-				$sTierRootUrl=cHttp::build_url("tierinfrstats.php",$sTierQS);
-				$sDiskRootUrl=cHttp::build_url("nodedisks.php", $sTierQS);
-				
-				//-- figure out how many rows to span
-				$iRowSpan=1;
+				$sTierRootUrl=cHttp::build_url("tierinfrstats.php",$sTierQS);				
+				$aMetrics = [];
 				foreach ($aTierNodes as $oNode){
 					$sNode = $oNode->name;
-					if (cFilter::isNodeFilteredOut($sNode)) continue;
-					$iRowSpan++;
-				}
 
-				?><tr class="<?=$class?>">
-					<td rowspan="<?=$iRowSpan?>"><?=cRender::button($tier,$sTierRootUrl)?></td>
-				</tr><?php
-				
-				sort ($aTierNodes);
-				foreach ($aTierNodes as $oNode){
-					$sNode = $oNode->name;
-					if (cFilter::isNodeFilteredOut($sNode)) continue;
 					$oMetric = cRender::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
-					
 					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRender::NODE_QS,$sNode);
-					$sDiskUrl = cHttp::build_url($sDiskRootUrl,cRender::NODE_QS,$sNode);
 					
-					?><tr class="<?=$class?>">
-						<td><?php cChart::add($oMetric->caption, $oMetric->metric, $app, 100);?></td>
-						<td>
-							<?=cRender::button("go",$sDetailUrl)?>
-							<?=($gsMetricType==cRender::METRIC_TYPE_INFR_DISK_FREE?cRender::button("disks", $sDiskUrl):"")?>
-						</td>
-					</tr><?php
+					$aMetrics[] = [$oMetric->caption, $oMetric->metric];
+					$aMetrics[] = [cRender::button_code("go",$sDetailUrl)];
+					
 				}
+				cRender::render_metrics_table($aid, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 			}
 		?>
-	</table>
 	<p>
-	<h2><a name="no_data_anchor">No data reported for the following</a></h2>
-	<table class="maintable"><tr><td id="nodatabody">
-	</td></tr></table>
 <?php
 }
 cChart::do_footer();
