@@ -84,72 +84,50 @@ cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 ?>
 <h2>(<?=$gsBackend?>) Remote Service</h2>
 <h3>Overall Application Statistics</h3>
-<table class='maintable'>
-	<tr class="<?=$sClass?>">
-		<td><?php
-			$sMetricUrl=cAppDynMetric::appCallsPerMin();
-			cChart::add("Overall Calls per min ($app)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-		?></td>
-		<td><?php
-			$sMetricUrl=cAppDynMetric::appResponseTimes();
-			cChart::add("Overall Response Times in ms ($app)", $sMetricUrl, cRender::CHART_HEIGHT_LETTERBOX2);
-		?></td>
-	</tr>
-</table>
-<p>
 <?php
-//****************************************************************************
-$sClass = cRender::getRowClass();
+	$aMetrics = [];
+	$aMetrics[]= [cChart::LABEL=>"Overall Calls per min ($app)", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+	$aMetrics[]= [cChart::LABEL=>"Overall Response Times in ms ($app)", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+	
+	cChart::metrics_table($app, $aMetrics, 2, cRender::getRowClass());
 ?>
-<h3><?=$gsBackend?> Statistics</h3>
-<table class='maintable'>
-	<tr class="<?=$sClass?>">
-	<td><?php
-		$sMetricUrl=cAppDynMetric::backendCallsPerMin($gsBackend);
-		cChart::add("Calls per min for ($gsBackend)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-	?></td>
-	<td><?php
-		$sMetricUrl=cAppDynMetric::backendResponseTimes($gsBackend);
-		cChart::add("Response Times in ms for ($gsBackend)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
-	?></td>
-	</tr>
-
-</table>
+<p>
+<h3> Statistics for remote service (<?=$gsBackend?>)</h3>
+<?php
+	$aMetrics = [];
+	$aMetrics[]= [cChart::LABEL=>"Calls per min ($gsBackend)", cChart::METRIC=>cAppDynMetric::backendCallsPerMin($gsBackend)];
+	$aMetrics[]= [cChart::LABEL=>"Response Times in ms ($gsBackend)", cChart::METRIC=>cAppDynMetric::backendResponseTimes($gsBackend)];
+	cChart::metrics_table($app, $aMetrics, 2, cRender::getRowClass());
+?>
 <p>
 
-<div id="divWorking">
-<?php
-//****************************************************************************
-$oResponse =cAppdyn::GET_BackendCallerTiers($app,$gsBackend);
-?>
-</div>
+<div id="divWorking"><?php
+	$oResponse =cAppdyn::GET_BackendCallerTiers($app,$gsBackend);
+?></div>
 <script language="javascript">
 	$(function(){$("#divWorking").hide();})
 </script>
 
-<h3>Tiers Calling <?=$gsBackend?></h3>
-<table class='maintable'>
-	<?php
+<h3>Tiers Calling <?=$gsBackend?></h3><?php
+	$aMetrics = [];
 	foreach ( $oResponse as $oItem){
 		
 		$tier = $oItem->tier;
 		$metric = $oItem->name;
 		$sClass = cRender::getRowClass();
 
-		?><tr class="<?=$sClass?>">
-			<td ><?php
-				$sMetricUrl = cAppDynMetric::tierExtCallsPerMin($tier, $metric);
-				cChart::add("Calls per min from ($tier) to ($gsBackend)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);	
-			?></td>
-			<td><?php
-				$sMetricUrl = cAppDynMetric::tierExtResponseTimes($tier, $metric);
-				cChart::add("Response Times in ms from ($tier) to ($gsBackend)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);	
-			?></td>
-		</tr><?php
+		$aMetrics[]= [
+			cChart::LABEL=>"Calls per min from ($tier) to ($gsBackend)", 
+			cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($tier, $metric),
+			cChart::STYLE=>cRender::getRowClass()
+		];
+		$aMetrics[]= [
+			cChart::LABEL=>"Response Times in ms from ($tier) to ($gsBackend)", 
+			cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($tier, $metric)
+		];
 	}
-	?>
-</table>
-<?php
+	cChart::metrics_table($app, $aMetrics, 2, cRender::getRowClass());
+
 cChart::do_footer();
 
 cRender::html_footer();

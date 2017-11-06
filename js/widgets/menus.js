@@ -81,8 +81,8 @@ $.widget( "ck.appdmenu",{
 			case "appagents":
 				this.pr__showAppAgentsMenu();
 				break;
-			case "logoutmenu":
-				this.pr__showLogoutMenu();
+			case "topmenu":
+				this.pr__showTopMenu();
 				break;
 			case "tiermenu":
 				this.pr__showTierMenu();
@@ -190,7 +190,7 @@ $.widget( "ck.appdmenu",{
 	},
 	
 	//****************************************************************
-	pr__showLogoutMenu: function(){
+	pr__showTopMenu: function(){
 		var oOptions, oElement, oParams, oGroup;
 		oOptions = this.options;
 		oElement = this.element;
@@ -206,8 +206,20 @@ $.widget( "ck.appdmenu",{
 			this.pr__addToGroup( oSelect, "Login Token", "authtoken.php");
 			this.pr__addToGroup( oSelect, "Link to this page", "link.php");
 			
+			//- - - - -Check group
+			oGroup = $("<optgroup>",{label:"Check"});
+				this.pr__addToGroup( oGroup, "Configuration", "config.php");
+				this.pr__addToGroup( oGroup, "License Usage", "usage.php");
+				this.pr__addToGroup( oGroup, "One Click Checkup", "checkup.php");
+			oSelect.append(oGroup);
+			
+			//- - - - -Dashboards group
+			oGroup = $("<optgroup>",{label:"Dashboards"});
+				this.pr__addToGroup( oGroup, "Launch", "dashboards.php");
+			oSelect.append(oGroup);
+				
 			//- - - - -All group
-			oGroup = $("<optgroup>",{label:"All"});
+			oGroup = $("<optgroup>",{label:"General"});
 				this.pr__addToGroup( oGroup, "Agents", "allagents.php");
 				
 				oParams = {};
@@ -218,16 +230,14 @@ $.widget( "ck.appdmenu",{
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
 				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl("all.php", oParams));
 				
-				this.pr__addToGroup( oGroup, "Configuration", "config.php");
 				this.pr__addToGroup( oGroup, "Databases", "alldb.php");
-				this.pr__addToGroup( oGroup, "License Usage", "usage.php");
 				this.pr__addToGroup( oGroup, "Remote Services", "allbackends.php");
 				this.pr__addToGroup( oGroup, "Tiers", "alltier.php");
 				
 			oSelect.append(oGroup);
 			
 			//- - - - -App Overview group
-			oGroup = $("<optgroup>",{label:"Application Overview for ..."});
+			oGroup = $("<optgroup>",{label:"Overview for ..."});
 			
 			var sApp, sAppid;
 			var iCount = 1;

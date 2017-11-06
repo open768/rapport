@@ -19,9 +19,11 @@ class cChart{
 	public static $show_zoom = true;
 	public static $show_compare = true;
 	public static $show_export_all = true;
-	const METRIC="1";
-	const TYPE="2";
-	const LABEL="3";
+	const METRIC="m";
+	const TYPE="t";
+	const LABEL="l";
+	const APP="a";
+	const STYLE="s";
 
 	//****************************************************************************
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
@@ -59,10 +61,6 @@ class cChart{
 		cChart::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
 		if ($piHeight==null) $piHeight = cRender::CHART_HEIGHT_SMALL;
 		
-		$sType = "graph";
-		if (array_key_exists(cChart::TYPE,$paTable)){
-			$sType = $paTable[cChart::TYPE];
-		}
 		
 		?><table class="maintable"><?php
 			if ($paHeaders){
@@ -73,15 +71,35 @@ class cChart{
 				?></tr><?php
 			}
 			foreach ($paTable as $aItem){
-				if ($iCol == 0) {
-					?><tr class="<?=$psRowClass?>"><?php
+				$sType = "graph";
+				if (array_key_exists(cChart::TYPE,$aItem)){
+					$sType = $aItem[cChart::TYPE];
 				}
+				
+				if ($iCol == 0) {
+					$sClass = $psRowClass;
+					if (array_key_exists(cChart::STYLE, $aItem)) $sClass = $aItem[cChart::STYLE];
+					?><tr class="<?=$sClass?>"><?php
+				}
+				
 				$iCol++;
-				if ($sType == cChart::LABEL){
+				if ($sType === cChart::LABEL){
 					?><th><?=$aItem[cChart::LABEL]?></th><?php
 				}else{
 					?><td><?php
-						cChart::add($aItem[cChart::LABEL], $aItem[cChart::METRIC], $psApp, $piHeight);
+						$sApp = $psApp;
+						if (array_key_exists(cChart::APP,$aItem)){
+							$sApp = $aItem[cChart::APP];
+						}
+						if (! array_key_exists(cChart::LABEL, $aItem)){
+							cDebug::write("no label");
+							cDebug::vardump($aItem,true);
+						}elseif (! array_key_exists(cChart::METRIC, $aItem)){
+							cDebug::write("no metric");
+							cDebug::vardump($aItem,true);
+						}else{
+							cChart::add($aItem[cChart::LABEL], $aItem[cChart::METRIC], $sApp, $piHeight);
+						}
 					?></td><?php
 				}
 				if ($iCol==$piMaxCols){

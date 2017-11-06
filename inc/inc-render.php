@@ -120,7 +120,7 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function logout_menu(){
+	public static function top_menu(){
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login){
 			cRender::button("<nobr>Back to Login</nobr>", "index.php");
@@ -130,7 +130,7 @@ class cRenderMenus{
 		$sApps_fragment = self::get_apps_fragment();
 
 		?>
-			<span type="appdmenus" menu="logoutmenu" <?=$sApps_fragment?>></span>
+			<span type="appdmenus" menu="topmenu" <?=$sApps_fragment?>></span>
 		<?php
 	}
 	
@@ -626,7 +626,7 @@ class cRender{
 				<input type="hidden" name="url" value="<?=$sUrl?>">
 				<table class="timebox"><tr>
 					<td>
-						<?=cRenderMenus::logout_menu()?>
+						<?=cRenderMenus::top_menu()?>
 					</td>
 					<td >
 						<?=$sAccount?><br>
@@ -666,7 +666,7 @@ class cRender{
 		?>
 			<div class="timebox"><table width="100%"><tr>
 				<td width="150">
-					<?=($bLoggedin?cRenderMenus::logout_menu():"")?>
+					<?=($bLoggedin?cRenderMenus::top_menu():"")?>
 				</td>
 				<td  width="75%">
 					<?=$sAccount?><br>
