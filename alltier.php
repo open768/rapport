@@ -65,12 +65,12 @@ foreach ( $aApps as $oApp){
 			if (cFilter::isTierFilteredOut($oTier->name)) continue;
 			
 			$aMetrics[] = [$oTier->name];
-			$aMetrics[] = ["calls: $oTier->name", cAppDynMetric::tierCallsPerMin($oTier->name)];
-			$aMetrics[] = ["Response: $oTier->name", cAppDynMetric::tierResponseTimes($oTier->name)];
+			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($oTier->name)];
+			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cAppDynMetric::tierResponseTimes($oTier->name)];
 			$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
-			$aMetrics[] = [	cRender::button_code("Go", "tier.php?$sTierQs") ];
+			$aMetrics[] = [	cChart::TYPE=>"label", cChart::LABEL=>cRender::button_code("Go", "tier.php?$sTierQs") ];
 		}
-		cRender::render_metrics_table($oApp->name,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::metrics_table($oApp->name,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php
 }
 cChart::do_footer();

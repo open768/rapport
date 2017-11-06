@@ -51,12 +51,12 @@ cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false
 $aMetrics=[];
 
 $sMetric = cAppDynMetric::databaseTimeSpent($sDB);
-$aMetrics[] = ["Time spent in Database", $sMetric];
+$aMetrics[] = [cChart::LABEL=>"Time spent in Database", cChart::METRIC=>$sMetric];
 $sMetric = cAppDynMetric::databaseCalls($sDB);
-$aMetrics[] = ["Database Calls", $sMetric];
+$aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
 $sMetric = cAppDynMetric::databaseConnections($sDB);
-$aMetrics[] = ["Database Connections", $sMetric];
-cRender::render_metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,1,cRender::getRowClass());
+$aMetrics[] = [cChart::LABEL=>"Database Connections", cChart::METRIC=>$sMetric];
+cChart::metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,1,cRender::getRowClass());
 
 
 cChart::do_footer();

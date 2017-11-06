@@ -75,9 +75,12 @@ else{
 		foreach ( $aResponse as $oApp){
 			if (cFilter::isAppFilteredOut($oApp->name)) continue;
 			$sClass = cRender::getRowClass();			
-			$aMetrics = [[$sTitle1, $sMetric1],[$sTitle2, $sMetric2]];
+			$aMetrics = [
+				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1],
+				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
+			];
 			cRenderMenus::show_app_functions($oApp->name, $oApp->id);
-			cRender::render_metrics_table($oApp->id, $aMetrics,2,$sClass);
+			cChart::metrics_table($oApp->id, $aMetrics,2,$sClass);
 		}
 	?></div><?php
 }

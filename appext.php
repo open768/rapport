@@ -81,9 +81,9 @@ $oResponse =cAppdyn::GET_AppExtTiers($app);
 
 ?><h2>Overall statistics for <?=$app?></h2><?php
 $aMetrics = [];
-$aMetrics[] = ["Calls per min",cAppDynMetric::appCallsPerMin()];
-$aMetrics[] = ["Response Time",cAppDynMetric::appResponseTimes()];
-cRender::render_metrics_table($app, $aMetrics,2,cRender::getRowClass());
+$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+cChart::metrics_table($app, $aMetrics,2,cRender::getRowClass());
 
 //##################################################################
 ?><h2>External calls from <?=$app?></h2><?php
@@ -93,10 +93,10 @@ foreach ( $oResponse as $oExtTier){
 	$class=cRender::getRowClass();
 	$sName = $oExtTier->name;
 	$aMetrics[] = [$sName];
-	$aMetrics[] = ["Calls per min to ($sName)",cAppDynMetric::backendCallsPerMin($sName)];
-	$aMetrics[] = ["Response time to ($sName)",cAppDynMetric::backendResponseTimes($sName)];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName)];
+	$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cAppDynMetric::backendResponseTimes($sName)];
 }
-cRender::render_metrics_table($app, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+cChart::metrics_table($app, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
 //##################################################################
 cChart::do_footer();

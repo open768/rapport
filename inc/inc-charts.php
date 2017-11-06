@@ -19,6 +19,9 @@ class cChart{
 	public static $show_zoom = true;
 	public static $show_compare = true;
 	public static $show_export_all = true;
+	const METRIC="1";
+	const TYPE="2";
+	const LABEL="3";
 
 	//****************************************************************************
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
@@ -46,6 +49,50 @@ class cChart{
 			$(cCharts.loadCharts(<?=self::$show_export_all?>));
 		</script>
 		<?php
+	}
+	//#####################################################################################
+	//#####################################################################################
+	//* 2 column table with captions and metrics
+	public static function metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null, $paHeaders=null){ 
+		$iCol = 0;
+		$iOldWidth = cChart::$width;
+		cChart::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
+		if ($piHeight==null) $piHeight = cRender::CHART_HEIGHT_SMALL;
+		
+		$sType = "graph";
+		if (array_key_exists(cChart::TYPE,$paTable)){
+			$sType = $paTable[cChart::TYPE];
+		}
+		
+		?><table class="maintable"><?php
+			if ($paHeaders){
+				?><tr><?php
+					foreach ($paHeaders as $sItem){
+						?><th><?=$sItem?></th><?php
+					}
+				?></tr><?php
+			}
+			foreach ($paTable as $aItem){
+				if ($iCol == 0) {
+					?><tr class="<?=$psRowClass?>"><?php
+				}
+				$iCol++;
+				if ($sType == cChart::LABEL){
+					?><th><?=$aItem[cChart::LABEL]?></th><?php
+				}else{
+					?><td><?php
+						cChart::add($aItem[cChart::LABEL], $aItem[cChart::METRIC], $psApp, $piHeight);
+					?></td><?php
+				}
+				if ($iCol==$piMaxCols){
+					?></tr><?php
+					$iCol = 0;
+				}
+			}
+			if ($iCol !== 0) echo "</tr>";
+		?></table><?php 
+		
+		cChart::$width = $iOldWidth;
 	}
 }
 ?>

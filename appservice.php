@@ -86,13 +86,13 @@ foreach ($aTiers as $oTier){
 	$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
 	$aMetrics = [];
 	foreach ($aEndPoints as $oEndPoint){
-		$aMetrics[] = [$oEndPoint->name];
-		$aMetrics[] = ["Calls", cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name)];
-		$aMetrics[] = ["Response", cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
-		$aMetrics[] = ["Errors", cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name];
+		$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
 	}
 	$sClass = cRender::getRowClass();
-	cRender::render_metrics_table($app,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3, $aHeaders);
+	cChart::metrics_table($app,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3, $aHeaders);
 }
 
 //####################################################################

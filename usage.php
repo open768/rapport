@@ -79,10 +79,10 @@ $aMods = $oMods->modules;
 sort ($aMods);
 $aMetrics = [];
 foreach ($aMods as $oModule)
-	$aMetrics[] = [$oModule->name, cAppdynMetric::moduleUsage($oModule->name, $sUsage)];
+	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cAppdynMetric::moduleUsage($oModule->name, $sUsage)];
 
 $sClass=cRender::getRowClass();
-cRender::render_metrics_table(null, $aMetrics,3, $sClass, null);
+cChart::metrics_table(null, $aMetrics,3, $sClass, null);
 
 cChart::do_footer();
 cRender::html_footer();

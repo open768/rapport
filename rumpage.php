@@ -62,16 +62,16 @@ cRender::appdButton(cAppDynControllerUI::webrum($aid));
 ?><H2>Real User Monitoring Details for (<?=$rum_page?>)</h2><?php
 $aMetrics = [];
 $sMetricUrl=cAppDynMetric::webrumPageCallsPerMin($rum_type, $rum_page);
-$aMetrics[] = ["Page requests: $rum_page", $sMetricUrl];
+$aMetrics[] = [cChart::LABEL=>"Page requests: $rum_page", cChart::METRIC=>$sMetricUrl];
 $sMetricUrl=cAppDynMetric::webrumPageResponseTimes($rum_type, $rum_page);
-$aMetrics[] = ["Page Response times: $rum_page", $sMetricUrl];
+$aMetrics[] = [cChart::LABEL=>"Page Response times: $rum_page", cChart::METRIC=>$sMetricUrl];
 $sMetricUrl=cAppDynMetric::webrumPageTCPTime($rum_type, $rum_page);
-$aMetrics[] = ["Page connection time", $sMetricUrl];
+$aMetrics[] = [cChart::LABEL=>"Page connection time", cChart::METRIC=>$sMetricUrl];
 $sMetricUrl=cAppDynMetric::webrumPageServerTime($rum_type, $rum_page);
-$aMetrics[] = ["Page Server time", $sMetricUrl];
+$aMetrics[] = [cChart::LABEL=>"Page Server time", cChart::METRIC=>$sMetricUrl];
 $sMetricUrl=cAppDynMetric::webrumPageFirstByte($rum_type, $rum_page);
-$aMetrics[] = ["Page first byte time", $sMetricUrl];
-cRender::render_metrics_table($app, $aMetrics,2,cRender::getRowClass());			
+$aMetrics[] = [cChart::LABEL=>"Page first byte time", cChart::METRIC=>$sMetricUrl];
+cChart::metrics_table($app, $aMetrics,2,cRender::getRowClass());			
 
 cChart::do_footer();
 cRender::html_footer();

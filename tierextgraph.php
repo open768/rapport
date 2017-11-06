@@ -49,10 +49,6 @@ $gsTierQs = cRender::get_base_tier_QS();
 //################### CHART HEADER ########################################
 cRender::html_header("External tier calls");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 
@@ -63,9 +59,9 @@ $tierQS = cRender::get_base_tier_QS();
 cRender::show_time_options($title); 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
+	cRenderMenus::show_app_functions();
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
-	cRender::button("summary", cHttp::build_url("tierextcalls.php", $tierQS));
 }
 
 //************* basic information about the tier *********************
@@ -75,10 +71,10 @@ if ($oCred->restricted_login == null){
 <?php
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-	$aMetrics[] = ["Overall Calls per min for ($tier) tier", $sMetricUrl];
+	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-	$aMetrics[] = ["Overall  response times in ms for ($tier) tier", $sMetricUrl];
-	cRender::render_metrics_table($app,$aMetrics,2,cRender::getRowClass());
+	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
+	cChart::metrics_table($app,$aMetrics,2,cRender::getRowClass());
 
 
 	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($app, $tier);
@@ -92,12 +88,12 @@ if ($oCred->restricted_login == null){
 		$sTierTo = $oDetail->name;
 		$aMetrics[] = [$sTierTo];
 		$sMetric=cAppDynMetric::tierExtCallsPerMin($tier, $sTierTo);
-		$aMetrics[] = ["Calls per min", $sMetric];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric];
 		$sMetric=cAppDynMetric::tierExtResponseTimes($tier, $sTierTo);
-		$aMetrics[] = ["Response Times in ms", $sMetric];
-		$aMetrics[] = [cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
+		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
+		$aMetrics[] = [cChart::TYPE=>"label", cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
-	cRender::render_metrics_table($app,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+	cChart::metrics_table($app,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
 //################ CHART
 cChart::do_footer();

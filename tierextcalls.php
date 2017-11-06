@@ -53,26 +53,17 @@ cRender::html_header("External tier calls");
 cRender::force_login();
 
 cRender::show_time_options("External calls from $tier in $app"); 
-cRenderMenus::show_tier_functions();
-cRenderMenus::show_tier_menu("Change Tier to", "tierextcalls.php");
-cRender::button("Graph it", cHttp::build_url("tierextgraph.php?",$gsTierQs));
-cRender::button("ext calls for ($app) app", cHttp::build_url("appext.php?",$gsAppQs));
+$oCred = cRender::get_appd_credentials();
+if ($oCred->restricted_login == null){
+	cRenderMenus::show_app_functions();
+	cRenderMenus::show_tier_functions();
+	cRenderMenus::show_tier_menu("Change Tier to", "tierextcalls.php");
+}
 
 //####################################################################
 cCommon::flushprint ("<br>");
-
 $oTimes = cRender::get_times();
-?>
-	<span id="progress"><?php
-		$oResponse =cAppdyn::GET_Tier_ext_details($app, $tier, $oTimes);
-	?></span>
-	<script language="javascript">
-		function clearProgresStatus(){
-			$("#progress").hide();
-		}
-		$(clearProgresStatus);
-	</script>
-<?php
+$oResponse =cAppdyn::GET_Tier_ext_details($app, $tier, $oTimes);
 cRender::render_tier_ext($app, $aid, $tier, $tid, $oResponse);
 
 cRender::html_footer();

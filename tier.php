@@ -74,32 +74,32 @@ if ($oCred->restricted_login == null){
 	$sClass = cRender::getRowClass();			
 	$aMetrics = [];
 	$sMetricUrl=cAppDynMetric::appCallsPerMin();
-	$aMetrics[]= ["Overall Calls per min ($app) application", $sMetricUrl];
+	$aMetrics[]= [cChart::LABEL=>"Overall Calls per min ($app) application", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::appResponseTimes();
-	$aMetrics[]= ["Overall response time in ms ($app) application", $sMetricUrl];
+	$aMetrics[]= [cChart::LABEL=>"Overall response time in ms ($app) application", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-	$aMetrics[]= ["Calls per min for ($tier) tier", $sMetricUrl];
+	$aMetrics[]= [cChart::LABEL=>"Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-	$aMetrics[]= ["Response times in ms for ($tier) tier", $sMetricUrl];
-	cRender::render_metrics_table($app, $aMetrics, 2, $sClass);
+	$aMetrics[]= [cChart::LABEL=>"Response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
+	cChart::metrics_table($app, $aMetrics, 2, $sClass);
 ?>
 <h2>(<?=$tier?>) Dashboard</h2>
 <?php
 	$aMetrics = [];
-	$aMetrics[] = ["Slow Calls", cAppDynMetric::tierSlowCalls($tier)];
-	$aMetrics[] = ["Very Slow Calls", cAppDynMetric::tierVerySlowCalls($tier)];
-	$aMetrics[] = ["CPU Busy", cAppDynMetric::InfrastructureCpuBusy($tier)];
-	$aMetrics[] = ["Disk Free", cAppDynMetric::InfrastructureDiskFree($tier)];
-	$aMetrics[] = ["Errors Per Min", cAppDynMetric::tierErrorsPerMin($tier)];
-	$aMetrics[] = ["Exceptions Per Min", cAppDynMetric::tierExceptionsPerMin($tier)];
-	$aMetrics[] = ["Java Heap Used", cAppDynMetric::InfrastructureJavaHeapUsed($tier)];
-	$aMetrics[] = [".Net Heap used", cAppDynMetric::InfrastructureDotnetHeapUsed($tier)];
-	$aMetrics[] = ["Network In", cAppDynMetric::InfrastructureNetworkIncoming($tier)];
-	$aMetrics[] = ["Network Out", cAppDynMetric::InfrastructureNetworkOutgoing($tier)];
-	$aMetrics[] = ["Machine Availability", cAppDynMetric::InfrastructureMachineAvailability($tier)];
-	$aMetrics[] = ["Agent Availability", cAppDynMetric::InfrastructureAgentAvailability($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cAppDynMetric::tierSlowCalls($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cAppDynMetric::tierVerySlowCalls($tier)];
+	$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cAppDynMetric::InfrastructureCpuBusy($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Disk Free", cChart::METRIC=>cAppDynMetric::InfrastructureDiskFree($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Errors Per Min", cChart::METRIC=>cAppDynMetric::tierErrorsPerMin($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Exceptions Per Min", cChart::METRIC=>cAppDynMetric::tierExceptionsPerMin($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureJavaHeapUsed($tier)];
+	$aMetrics[] = [cChart::LABEL=>".Net Heap used", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Network In", cChart::METRIC=>cAppDynMetric::InfrastructureNetworkIncoming($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Network Out", cChart::METRIC=>cAppDynMetric::InfrastructureNetworkOutgoing($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Machine Availability", cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($tier)];
+	$aMetrics[] = [cChart::LABEL=>"Agent Availability", cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($tier)];
 	$sClass=cRender::getRowClass();
-	cRender::render_metrics_table($app, $aMetrics, 3, $sClass);
+	cChart::metrics_table($app, $aMetrics, 3, $sClass);
 
 //####################################################################
 cChart::do_footer();

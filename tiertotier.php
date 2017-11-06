@@ -64,10 +64,10 @@ cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextg
 <?php
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierExtCallsPerMin($fromtier, $totier);
-	$aMetrics[] = ["Calls per min from ($fromtier) to ($totier)", $sMetricUrl];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierExtResponseTimes($fromtier, $totier);
-	$aMetrics[] = ["Response Times in ms from ($fromtier) to ($totier)", $sMetricUrl];
-	cRender::render_metrics_table($app,$aMetrics,1,cRender::getRowClass());
+	$aMetrics[] = [cChart::LABEL=>"Response Times in ms from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];
+	cChart::metrics_table($app,$aMetrics,1,cRender::getRowClass());
 
 //####################################################################
 //################ CHART

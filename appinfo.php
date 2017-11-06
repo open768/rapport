@@ -70,12 +70,12 @@ else{
 			$aMetrics=[];
 			
 			$sMetricUrl = cAppdynMetric::infoPointCallsPerMin($oInfoPoint->name);
-			$aMetrics[] = ["Calls", $sMetricUrl];
+			$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl = cAppdynMetric::infoPointResponseTimes($oInfoPoint->name);
-			$aMetrics[] = ["Response", $sMetricUrl];
+			$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl = cAppdynMetric::infoPointErrorsPerMin($oInfoPoint->name);
-			$aMetrics[] = ["Errors", $sMetricUrl];
-			cRender::render_metrics_table($aid, $aMetrics,3,cRender::getRowClass());
+			$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>$sMetricUrl];
+			cChart::metrics_table($aid, $aMetrics,3,cRender::getRowClass());
 
 		?></div><?php
 	}

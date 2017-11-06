@@ -383,14 +383,13 @@ class cRender{
 					<th width=80>total</th>
 				</tr><?php
 
-				foreach ( $poData as $detail){
-					$other_tier = $detail->name;
-					$oCalls = $detail->calls;
-					$oTimes = $detail->times;
+				foreach ( $poData as $oDetail){
+					cDebug::write("DEBUG: ".$oDetail->name);
+					$other_tier = $oDetail->name;
+					$oCalls = $oDetail->calls;
+					$oTimes = $oDetail->times;
 					
-					if ($oCalls){
-							
-						if ($oCalls->sum > 0){	
+					if ($oCalls && $oTimes && ($oTimes->max > 0)){
 							?><tr><?php
 								if ($showlink==1){
 									?><td><a href='tiertotier.php?app=$psApp&from=$psTier&to=$other_tier'>$other_tier</a></td><?php
@@ -402,12 +401,8 @@ class cRender{
 									<td align="middle"><?=$oCalls->min?></td>
 									<td align="middle"><?=$oCalls->avg?></td>
 									<td align="middle"><?=$oCalls->sum?></td>
-								<?php
-								if ($oTimes){
-									?><td align="middle" bgcolor="lightgrey"><?=$oTimes->max?></td><?php
-								}
-							?></tr><?php
-						}
+									<td align="middle" bgcolor="lightgrey"><?=$oTimes->max?></td>
+							</tr><?php
 					}
 			}
 			?></table><?php
@@ -826,47 +821,6 @@ class cRender{
 			}	
 
 			return (object)["metric"=>$sMetricUrl, "caption"=>$sCaption, "short"=>$sShortCaption , "type"=>$psMetricType];
-	}
-
-
-	//#####################################################################################
-	//#####################################################################################
-	//* 2 column table with captions and metrics
-	public static function render_metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null, $paHeaders=null){ 
-		$iCol = 0;
-		$iOldWidth = cChart::$width;
-		cChart::$width = ($piWidth?$piWidth:self::CHART_WIDTH_LETTERBOX / $piMaxCols);
-		if ($piHeight==null) $piHeight = self::CHART_HEIGHT_SMALL;
-		
-		?><table class="maintable"><?php
-			if ($paHeaders){
-				?><tr><?php
-					foreach ($paHeaders as $sItem){
-						?><th><?=$sItem?></th><?php
-					}
-				?></tr><?php
-			}
-			foreach ($paTable as $aItem){
-				if ($iCol == 0) {
-					?><tr class="<?=$psRowClass?>"><?php
-				}
-				$iCol++;
-				if (count($aItem) ==1){
-					?><th><?=$aItem[0]?></th><?php
-				}else{
-					?><td><?php
-						cChart::add($aItem[0], $aItem[1], $psApp, $piHeight);
-					?></td><?php
-				}
-				if ($iCol==$piMaxCols){
-					?></tr><?php
-					$iCol = 0;
-				}
-			}
-			if ($iCol !== 0) echo "</tr>";
-		?></table><?php 
-		
-		cChart::$width = $iOldWidth;
 	}
 
 

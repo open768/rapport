@@ -74,11 +74,11 @@ foreach ($aTiers as $oTier){
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($oTier->name,null,$sMetricType);
-		$aMetrics[] = [$oMetric->caption, $oMetric->metric];
+		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
 	}
 	
 	$sClass = cRender::getRowClass();
-	cRender::render_metrics_table($gsApp,$aMetrics,4,$sClass);
+	cChart::metrics_table($gsApp,$aMetrics,4,$sClass);
 }
 
 //####################################################################

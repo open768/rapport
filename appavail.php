@@ -69,12 +69,12 @@ foreach ( $oResponse as $oItem){
 	$tier = $oItem->name;
 	$tid= $oItem->id;
 
-	$aMetrics[] = [cRender::button_code($tier, cRender::getTierLinkUrl($app,$aid,$tier,$tid))];	
-	$aMetrics[] = ["'$tier': Server availability",cAppDynMetric::InfrastructureMachineAvailability($tier)];
-	$aMetrics[] = ["'$tier': infrastructure availability",cAppDynMetric::InfrastructureAgentAvailability($tier)];
+	$aMetrics[] = [cChart::TYPE=>"label", cChart::LABEL=>cRender::button_code($tier, cRender::getTierLinkUrl($app,$aid,$tier,$tid))];	
+	$aMetrics[] = [cChart::LABEL=>"'$tier': Server availability",cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($tier)];
+	$aMetrics[] = [cChart::LABEL=>"'$tier': infrastructure availability",cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($tier)];
 }
 $sClass = cRender::getRowClass();
-cRender::render_metrics_table($app,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
+cChart::metrics_table($app,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
 	
 cChart::do_footer();
 

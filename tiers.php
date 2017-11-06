@@ -61,9 +61,9 @@ cRender::appdButton(cAppDynControllerUI::application($aid));
 <h2>Overall Activity in <?=$app?></h2>
 <?php
 $aMetrics = [];
-$aMetrics[] = ["Overall Calls per min",cAppDynMetric::appCallsPerMin()];
-$aMetrics[] = ["Overall response time in ms", cAppDynMetric::appResponseTimes()];
-cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
+$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+cChart::metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
 ?>
 <p>
 
@@ -78,9 +78,9 @@ foreach ( $oResponse as $oTier){
 		
 		cRenderMenus::show_tier_functions($sTier, $oTier->id);
 		$aMetrics = [];
-		$aMetrics[] = ["Calls per min",cAppDynMetric::tierCallsPerMin($sTier)];
-		$aMetrics[] = ["Response time in ms", cAppDynMetric::tierResponseTimes($sTier)];
-		cRender::render_metrics_table($aid, $aMetrics,2,null);			
+		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
+		cChart::metrics_table($aid, $aMetrics,2,null);			
 	?></div><?php
 }
 cChart::do_footer();

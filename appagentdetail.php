@@ -135,11 +135,11 @@ if ($iNodes==0){
 					$oMetric = cRender::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
 					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRender::NODE_QS,$sNode);
 					
-					$aMetrics[] = [$oMetric->caption, $oMetric->metric];
-					$aMetrics[] = [cRender::button_code("go",$sDetailUrl)];
+					$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
+					$aMetrics[] = [cChart::TYPE=>"label",cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
 					
 				}
-				cRender::render_metrics_table($aid, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+				cChart::metrics_table($aid, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 			}
 		?>
 	<p>

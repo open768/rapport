@@ -73,16 +73,16 @@ cRender::appdButton(cAppDynControllerUI::application($aid));
 <h2><a name="app">Application Overview</a></h2>
 <?php 
 $aMetrics  = [
-	["response time in ms", cAppDynMetric::appResponseTimes()],
-	["Calls per min", cAppDynMetric::appCallsPerMin()],
-	["Slow Calls", cAppDynMetric::appSlowCalls()],
-	["Very Slow Calls", cAppDynMetric::appVerySlowCalls()],
-	["Stalled", cAppDynMetric::appStalledCount()],
-	["Errors per min", cAppDynMetric::appErrorsPerMin()],
-	["Exceptions", cAppDynMetric::appExceptionsPerMin()]
+	[cChart::LABEL=>"response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()],
+	[cChart::LABEL=>"Calls per min", cChart::METRIC=>cAppDynMetric::appCallsPerMin()],
+	[cChart::LABEL=>"Slow Calls", cChart::METRIC=>cAppDynMetric::appSlowCalls()],
+	[cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cAppDynMetric::appVerySlowCalls()],
+	[cChart::LABEL=>"Stalled", cChart::METRIC=>cAppDynMetric::appStalledCount()],
+	[cChart::LABEL=>"Errors per min", cChart::METRIC=>cAppDynMetric::appErrorsPerMin()],
+	[cChart::LABEL=>"Exceptions", cChart::METRIC=>cAppDynMetric::appExceptionsPerMin()]
 ];
 $class=cRender::getRowClass();
-cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
+cChart::metrics_table($gsApp, $aMetrics,3, $class, null);
 
 //####################################################################
 ?><h2><a name="tperf">Tier Performance</a></h2><?php
@@ -98,12 +98,12 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 			//------------------------------------------------
 			cRenderMenus::show_tier_functions($sTier, $oTier->id);
 			$aMetrics = [];
-			$aMetrics[] = ["Calls Per min ", cAppDynMetric::tierCallsPerMin($sTier)];
-			$aMetrics[] = ["Response Times", cAppDynMetric::tierResponseTimes($sTier)];
-			$aMetrics[] = ["CPU Busy", cAppDynMetric::InfrastructureCpuBusy($sTier)];
-			$aMetrics[] = ["Java Heap Used", cAppDynMetric::InfrastructureJavaHeapUsed($sTier)];
-			$aMetrics[] = [".Net Heap Used", cAppDynMetric::InfrastructureDotnetHeapUsed($sTier)];
-			cRender::render_metrics_table($gsApp, $aMetrics,3,$sClass);
+			$aMetrics[] = [cChart::LABEL=>"Calls Per min ", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
+			$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
+			$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cAppDynMetric::InfrastructureCpuBusy($sTier)];
+			$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureJavaHeapUsed($sTier)];
+			$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($sTier)];
+			cChart::metrics_table($gsApp, $aMetrics,3,$sClass);
 		?></div><?php
 	}
 	
@@ -118,12 +118,12 @@ cRender::render_metrics_table($gsApp, $aMetrics,3, $class, null);
 			cRender::button($oBackend->name, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $oBackend->name));
 			$aMetrics = [];
 			$sMetricUrl=cAppDynMetric::backendCallsPerMin($oBackend->name);
-			$aMetrics[] = ["Calls per min", $sMetricUrl];
+			$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl=cAppDynMetric::backendResponseTimes($oBackend->name);
-			$aMetrics[] = ["Response Times", $sMetricUrl];
+			$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl=cAppDynMetric::backendErrorsPerMin($oBackend->name);
-			$aMetrics[] = ["Errors Per min", $sMetricUrl];
-			cRender::render_metrics_table($gsApp, $aMetrics,3,$sClass);
+			$aMetrics[] = [cChart::LABEL=>"Errors Per min", cChart::METRIC=>$sMetricUrl];
+			cChart::metrics_table($gsApp, $aMetrics,3,$sClass);
 		?></div><?php
 	}
 
@@ -155,18 +155,18 @@ foreach ($aTiers as $oTier){
 				
 				$aMetrics = [];
 					$sMetricUrl=cAppdynMetric::transCallsPerMin($sTier, $sTrans);
-					$aMetrics[] = ["Calls per min", $sMetricUrl];
+					$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetricUrl];
 					
 					$sMetricUrl=cAppdynMetric::transResponseTimes($sTier, $sTrans);
-					$aMetrics[] = ["Response times", $sMetricUrl];
+					$aMetrics[] = [cChart::LABEL=>"Response times", cChart::METRIC=>$sMetricUrl];
 
 					$sMetricUrl=cAppdynMetric::transErrors($sTier, $sTrans);
-					$aMetrics[] = ["Error", $sMetricUrl];
+					$aMetrics[] = [cChart::LABEL=>"Error", cChart::METRIC=>$sMetricUrl];
 					
 					$sMetricUrl=cAppdynMetric::transCpuUsed($sTier, $sTrans);
-					$aMetrics[] = ["CPU Used", $sMetricUrl];
+					$aMetrics[] = [cChart::LABEL=>"CPU Used", cChart::METRIC=>$sMetricUrl];
 					
-				cRender::render_metrics_table($gsApp, $aMetrics,4,$sClass);
+				cChart::metrics_table($gsApp, $aMetrics,4,$sClass);
 			?></div><?php
 		}
 	

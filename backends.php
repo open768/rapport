@@ -67,9 +67,9 @@ $oBackends =cAppdyn::GET_Backends($app);
 // work through each tier
 ?><h2>Overall Statistics for <?=$app?><?php
 $aMetrics = [];
-$aMetrics[] = ["Overall Calls per min", cAppDynMetric::appCallsPerMin()];
-$aMetrics[] = ["Overall Response Times", cAppDynMetric::appResponseTimes()];
-cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());
+$aMetrics[] = [cChart::LABEL=>"Overall Calls per min", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Overall Response Times", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+cChart::metrics_table($aid, $aMetrics,2,cRender::getRowClass());
 
 ?><h2>Remote Services for <?=$app?></h2>
 	<?php
@@ -80,9 +80,9 @@ cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());
 		?><div class="<?=$sClass?>" ><?php
 			cRender::button($sBackend, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $sBackend));
 			$aMetrics = [];
-			$aMetrics[] = ["Calls per min ($sBackend)", cAppDynMetric::backendCallsPerMin($sBackend)];
-			$aMetrics[] = ["Response Times ($sBackend)", cAppDynMetric::backendResponseTimes($sBackend)];
-			cRender::render_metrics_table($aid, $aMetrics,2,$sClass);
+			$aMetrics[] = [cChart::LABEL=>"Calls per min ($sBackend)", cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sBackend)];
+			$aMetrics[] = [cChart::LABEL=>"Response Times ($sBackend)", cChart::METRIC=>cAppDynMetric::backendResponseTimes($sBackend)];
+			cChart::metrics_table($aid, $aMetrics,2,$sClass);
 		?></div><?php
 	}
 			

@@ -55,19 +55,19 @@ cRender::appdButton(cAppDynControllerUI::webrum($aid));
 //####################################################################
 ?><h2>Overall Statistics</h2><?php
 $aMetrics = [];
-$aMetrics[] = ["Overall Calls per min",cAppDynMetric::appCallsPerMin()];
-$aMetrics[] = ["Overall response time in ms", cAppDynMetric::appResponseTimes()];
-cRender::render_metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
+$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+cChart::metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
 
 ?><h2>Browser Stats for (<?=$app?>)</h2><?php
 cRender::button("Show Page Statistics", "rumstats.php?$sAppQS");
 $aMetrics = [];
-$aMetrics[] = ["Page requests per minute",cAppDynMetric::webrumCallsPerMin()];
-$aMetrics[] = ["Page response time",cAppDynMetric::webrumResponseTimes()];
-$aMetrics[] = ["Page connection time",cAppDynMetric::webrumTCPTime()];
-$aMetrics[] = ["Page Server time",cAppDynMetric::webrumServerTime()];
-$aMetrics[] = ["Page first byte time",cAppDynMetric::webrumFirstByte()];
-cRender::render_metrics_table($app, $aMetrics,2,cRender::getRowClass());			
+$aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cAppDynMetric::webrumCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Page response time",cChart::METRIC=>cAppDynMetric::webrumResponseTimes()];
+$aMetrics[] = [cChart::LABEL=>"Page connection time",cChart::METRIC=>cAppDynMetric::webrumTCPTime()];
+$aMetrics[] = [cChart::LABEL=>"Page Server time",cChart::METRIC=>cAppDynMetric::webrumServerTime()];
+$aMetrics[] = [cChart::LABEL=>"Page first byte time",cChart::METRIC=>cAppDynMetric::webrumFirstByte()];
+cChart::metrics_table($app, $aMetrics,2,cRender::getRowClass());			
 
 
 cChart::do_footer();

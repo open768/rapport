@@ -112,20 +112,20 @@ cRender::appdButton(cAppDynControllerUI::tier($aid,$tid));
 <?php
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-	$aMetrics[] = ["Overall Calls per min ($tier) tier", $sMetricUrl];
+	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min ($tier) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-	$aMetrics[] = ["Overall  response times (ms) ($tier) tier", $sMetricUrl];
-	cRender::render_metrics_table($app,$aMetrics,2,cRender::getRowClass());
+	$aMetrics[] = [cChart::LABEL=>"Overall response times (ms) ($tier) tier", cChart::METRIC=>$sMetricUrl];
+	cChart::metrics_table($app,$aMetrics,2,cRender::getRowClass());
 
 
 if ($node){ 
 	?><h3>Stats for (<?=$node?>) Server</h3><?php
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierNodeCallsPerMin($tier, $node);
-	$aMetrics[] = ["Overall  Calls per min ($node) server", $sMetricUrl];
+	$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($tier, $node);
-	$aMetrics[] = ["Overall  response times (ms) ($node) server", $sMetricUrl];
-	cRender::render_metrics_table($app,$aMetrics,2,cRender::getRowClass());
+	$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
+	cChart::metrics_table($app,$aMetrics,2,cRender::getRowClass());
 }
 
 //################################################################################################
@@ -142,12 +142,12 @@ if ($aResponse){
 		if ($node) cHttp::build_url($sLink,cRender::NODE_QS,$node);
 		
 		$sMetricUrl=cAppdynMetric::transCallsPerMin($tier, $sTrans, $node);
-		$aMetrics[] = ["Calls ($sTrans)", $sMetricUrl];
+		$aMetrics[] = [cChart::LABEL=>"Calls ($sTrans)", cChart::METRIC=>$sMetricUrl];
 		$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $sTrans,$node);
-		$aMetrics[] = ["Response ($sTrans)", $sMetricUrl];
-		$aMetrics[] = [cRender::button_code("Go",$sLink)];
+		$aMetrics[] = [cChart::LABEL=>"Response ($sTrans)", cChart::METRIC=>$sMetricUrl];
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("Go",$sLink)];
 	}
-	cRender::render_metrics_table($app,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
+	cChart::metrics_table($app,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
 }else{
 	cRender::messagebox("No transactions found");
 }
