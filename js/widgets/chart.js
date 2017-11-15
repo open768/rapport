@@ -1,6 +1,3 @@
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 //###############################################################################
 var cCharts={
 	queue: new cHttpQueue,
@@ -106,7 +103,9 @@ $.widget( "ck.appdchart",{
 		csv_url:"rest/getMetric.php",
 		zoom_url:"metriczoom.php",
 		compare_url:"compare.php",
-		WAIT_VISIBLE:1200
+		WAIT_VISIBLE:1200,
+		INFO_WIDTH:70,
+		BUTTON_HEIGHT:35
 	},
 
 	//#################################################################
@@ -125,7 +124,8 @@ $.widget( "ck.appdchart",{
 		if (!cHttp2){					$.error("http2 class is missing! check includes");	}
 		if (!this.element.gSpinner){ 	$.error("gSpinner is missing! check includes");		}
 		if (!$.event.special.inview){	$.error("inview class is missing! check includes");	}
-		if (!oElement.visible ) 		$.error("visible class is missing! check includes");	
+		//if (!oElement.visible ) 		$.error("visible class is missing! check includes");	
+		if (!oElement.inViewport ) 		$.error("inViewport class is missing! check includes");	
 		
 		//check for required options
 		var oOptions = this.options;
@@ -134,6 +134,10 @@ $.widget( "ck.appdchart",{
 		if (!oOptions.metric)	{		$.error("metric  missing!");		}
 		if (!oOptions.width)	{		$.error("width missing!");		}
 		if (!oOptions.height)	{		$.error("height missing!");		}
+		
+		//set the DIV size
+		oElement.width(oOptions.width);
+		oElement.height(oOptions.height);
 		
 		//load content
 		this.pr__setInView();
@@ -145,9 +149,9 @@ $.widget( "ck.appdchart",{
 		
 		oElement.empty();
 		oElement.append("Waiting to become visible ");
-		var oButton = $("<button>").append("load");
-		oElement.append(oButton);
-		oButton.click( 		function(){oThis.onInView(true);}		);
+		var btnForce = $("<button>").append("load");
+		oElement.append(btnForce);
+		btnForce.click( 		function(){oThis.onInView(true);}		);
 		
 		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
 	},
@@ -174,7 +178,7 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 		if (cCharts.queue.stopping) return;
 		
-		if (!oElement.visible()){
+		if (!oElement.inViewport()){
 			this.pr__setInView();
 			return;
 		}
@@ -190,11 +194,29 @@ $.widget( "ck.appdchart",{
 		//add the data request to the http queue
 		var oItem = new cHttpQueueItem();
 		oItem.url = this.pr__get_chart_url();
+		oItem.fnCheckContinue = function(){return oThis.checkContinue();};
 
 		bean.on(oItem, "start", 	function(){oThis.onStart(oItem);}	);				
 		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
 		cCharts.queue.add(oItem);
+	},
+	
+	//*******************************************************************
+	checkContinue: function(){
+		var oThis = this;
+		var oOptions = this.options;
+		var oElement = oThis.element;
+		var bOK = true;
+		
+		if (!oElement.inViewport()){
+			this.pr__setInView();
+			bOK = false;
+		}
+		
+		cDebug.write("Chart is visible:" + bOK.toString() + " app:" + oOptions.appName + " Metric:" + oOptions.metric);
+		
+		return bOK;
 	},
 	
 	//*******************************************************************
@@ -214,7 +236,7 @@ $.widget( "ck.appdchart",{
 		var oElement = this.element;
 		if (cCharts.queue.stopping) return;
 		
-		if (!oElement.visible()){
+		if (!oElement.inViewport()){
 			poItem.abort = true;
 			this.pr__setInView();
 			return;
@@ -377,7 +399,7 @@ $.widget( "ck.appdchart",{
 		
 		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width, height:oOptions.height});
+		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width - this.consts.INFO_WIDTH, height:oOptions.height - this.consts.BUTTON_HEIGHT});
 		var oCell = $("<TD>");
 		oCell.append(oChartDiv);
 		oRow.append(oCell);
@@ -415,7 +437,7 @@ $.widget( "ck.appdchart",{
 		oChart.draw(oData, oChartOptions);
 		
 		//display maximumes and observed values
-		var oCell = $("<TD>");
+		var oCell = $("<TD>", {class:"infopanel"});
 		oCell.append("<nobr>Max: "+ iMax + "</nobr><p>");
 		oCell.append("<b>Observed:</b><br>");
 		oCell.append("<nobr>Max: "+ iMax + "</nobr><br>");

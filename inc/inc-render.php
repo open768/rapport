@@ -525,6 +525,7 @@ class cRender{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/common.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/http.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
 			
 			<script src="js/widgets/chart.js"></script>
 			<script src="js/widgets/menus.js"></script>
