@@ -71,7 +71,9 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		$sError = $e->getMessage();
 		cRender::show_top_banner("Unable to Login !"); 
 		cRender::errorbox($sError);
-		cRender::button("Back to login", "index.php", false);
+		try{
+			cRender::button("Back to login", "index.php", false);
+		} catch (Exception $e){}
 		exit;
 	}
 	
@@ -114,7 +116,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	cRender::html_header("login");
 	?>
 		<form method="POST" action="index.php">
-		<table width="100%" height="100%"><tr><td align="center" valign="middle">
+		<table width="100%" height="75%"><tr><td align="center" valign="middle">
 			<table class="loginbox">
 				<tr>
 					<td colspan=3><div class="logotable">
@@ -151,6 +153,12 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 			</table>
 			<input type="hidden" name="<?=cLogin::KEY_REFERRER?>" value="<?=$_SERVER['HTTP_REFERER']?>">
 			<input type="hidden" name="<?=cRender::IGNORE_REF_QS?>" value="<?=cHeader::get(cRender::IGNORE_REF_QS)?>">
+			<p>
+			<div class="recommend">
+				No login credentials are stored by this application.
+				<p>
+				We recommend creating a specific username in your controller to provide access to your controller using this application.
+			</div>
 			<?php
 				if (cDebug::is_debugging()){
 					?><input type="hidden" name="<?=cDebug::DEBUG_STR?>" value="1"><?php

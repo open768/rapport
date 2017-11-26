@@ -17,6 +17,15 @@ h2
 	padding: 5px;
 }
 
+.recommend{
+	border:2px solid darkcyan;
+	background-color:#eeeeee;
+	padding:3px;
+	/* font*/
+	color:FireBrick;
+	font-size:15px;
+}
+
 .blue_button
 {
 	/* This button was generated using CSSButtonGenerator.com */
@@ -201,17 +210,6 @@ h2
 	padding:5px;
 	padding-right:10px;
 	width:100%;
-}
-
-.logoimage
-{
-	content: url("http://www.applicationperformance.com/wp-content/uploads/2013-2016/04/AP-logo-340x156.png");
-	height:50;
-}
-.loginimage
-{
-	content: url("http://www.applicationperformance.com/wp-content/uploads/2013-2016/04/AP-logo-340x156.png");
-	height:80;
 }
 
 .licenseBox{

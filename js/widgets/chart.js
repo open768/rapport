@@ -136,8 +136,8 @@ $.widget( "ck.appdchart",{
 		if (!oOptions.height)	{		$.error("height missing!");		}
 		
 		//set the DIV size
-		oElement.width(oOptions.width);
-		oElement.height(oOptions.height);
+		oElement.width(oOptions.width );
+		oElement.height(oOptions.height );
 		
 		//load content
 		this.pr__setInView();
@@ -399,7 +399,7 @@ $.widget( "ck.appdchart",{
 		
 		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width - this.consts.INFO_WIDTH, height:oOptions.height - this.consts.BUTTON_HEIGHT});
+		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH, height:oOptions.height-this.consts.BUTTON_HEIGHT });
 		var oCell = $("<TD>");
 		oCell.append(oChartDiv);
 		oRow.append(oCell);
