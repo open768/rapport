@@ -69,7 +69,7 @@ foreach ( $oResponse as $oItem){
 	$tier = $oItem->name;
 	$tid= $oItem->id;
 
-	$aMetrics[] = [cChart::TYPE=>"label", cChart::LABEL=>cRender::button_code($tier, cRender::getTierLinkUrl($app,$aid,$tier,$tid))];	
+	$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code($tier, cRender::getTierLinkUrl($app,$aid,$tier,$tid))];	
 	$aMetrics[] = [cChart::LABEL=>"'$tier': Server availability",cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($tier)];
 	$aMetrics[] = [cChart::LABEL=>"'$tier': infrastructure availability",cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($tier)];
 }

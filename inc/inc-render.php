@@ -22,35 +22,28 @@ require_once("$root/inc/inc-filter.php");
 //#######################################################################
 class cRenderMenus{
 	//******************************************************************************************
-	public static function show_app_functions($psApp=null, $psAppID=null){
-
+	public static function show_app_functions($poApp=null){
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psApp,null);
 			return;
 		}
 		
-		if (($psApp == null) || ($psAppID == null)) {
-			$psApp = cHeader::get(cRender::APP_QS);
-			$psAppID = cHeader::get(cRender::APP_ID_QS);
-		}
+		if ($poApp == null) $poApp = cRender::get_current_app();
 		?>
-			<span type="appdmenus" menu="appfunctions" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
+			<span type="appdmenus" menu="appfunctions" appname="<?=$poApp->name?>" appid="<?=$poApp->id?>"></span>
 		<?php
 	}
 	//******************************************************************************************
-	public static function show_app_agent_menu($psApp=null, $psAppID=null){
+	public static function show_app_agent_menu($poApp = null){
 
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) 
 			return;
 		
-		if (($psApp == null) || ($psAppID == null)) {
-			$psApp = cHeader::get(cRender::APP_QS);
-			$psAppID = cHeader::get(cRender::APP_ID_QS);
-		}
+		if ($poApp == null) $poApp = cRender::get_current_app();
 		?>
-			<span type="appdmenus" menu="appagents" appname="<?=$psApp?>" appid="<?=$psAppID?>"></span>
+			<span type="appdmenus" menu="appagents" appname="<?=$poApp->name?>" appid="<?=$poApp->id?>"></span>
 		<?php
 	}
 
@@ -281,6 +274,12 @@ class cRender{
 	private static $AppdCredentials = null;
 
 
+	public static function get_current_app(){
+		$sApp = cHeader::get(cRender::APP_QS);
+		$sAID = cHeader::get(cRender::APP_ID_QS);
+		return new cAppDApp($sApp, $sAID);
+	}
+	
 	//**************************************************************************
 	public static function get_appd_credentials(){
 		$oCred = self::$AppdCredentials;

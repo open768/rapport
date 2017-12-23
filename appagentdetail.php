@@ -92,7 +92,7 @@ $sDetailRootQS = cHttp::build_url("appagentdetail.php", $sAppQS);
 
 //####################################################################
 cRender::show_time_options($sTitle); 
-cRenderMenus::show_app_agent_menu($app, $aid);
+cRenderMenus::show_app_agent_menu();
 cRenderMenus::show_apps_menu("Show detail for", "appagentdetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
 
 cRender::appdButton(cAppDynControllerUI::nodes($aid), "All nodes");
@@ -136,7 +136,7 @@ if ($iNodes==0){
 					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRender::NODE_QS,$sNode);
 					
 					$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
-					$aMetrics[] = [cChart::TYPE=>"label",cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
+					$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
 					
 				}
 				cChart::metrics_table($aid, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);

@@ -79,8 +79,8 @@ else{
 				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1],
 				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
 			];
-			cRenderMenus::show_app_functions($oApp->name, $oApp->id);
-			cChart::metrics_table($oApp->id, $aMetrics,2,$sClass);
+			cRenderMenus::show_app_functions($oApp);
+			cChart::metrics_table($oApp->name, $aMetrics,2,$sClass);
 		}
 	?></div><?php
 }

@@ -225,9 +225,9 @@ if ($node){ ?>
 					
 					$aMetrics = [];
 					$sMetricUrl=cAppDynMetric::transExtCalls($tier, $trans, $other);
-					$aMetrics[] = ["Calls per min to: $other", $sMetricUrl];
+					$aMetrics[] = [cChart::LABEL=>"Calls per min to: $other", cChart::METRIC=>$sMetricUrl];
 					$sMetricUrl=cAppDynMetric::transExtResponseTimes($tier, $trans, $other);
-					$aMetrics[] = ["response times: $other", $sMetricUrl];
+					$aMetrics[] = [cChart::LABEL=>"response times: $other", cChart::METRIC=>$sMetricUrl];
 					cChart::metrics_table($app, $aMetrics, 2, $sClass, cRender::CHART_HEIGHT_SMALL);
 				?></DIV><?php
 			}

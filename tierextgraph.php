@@ -86,12 +86,12 @@ if ($oCred->restricted_login == null){
 	
 	foreach ($oResponse as $oDetail){
 		$sTierTo = $oDetail->name;
-		$aMetrics[] = [$sTierTo];
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo];
 		$sMetric=cAppDynMetric::tierExtCallsPerMin($tier, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric];
 		$sMetric=cAppDynMetric::tierExtResponseTimes($tier, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
-		$aMetrics[] = [cChart::TYPE=>"label", cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
 	cChart::metrics_table($app,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 

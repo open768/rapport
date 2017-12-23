@@ -58,17 +58,17 @@ foreach ( $aApps as $oApp){
 	$sAppQS = cRender::build_app_qs($oApp->name, $oApp->id);
 	$sClass = cRender::getRowClass();
 	?><DIV><?php
-		cRenderMenus::show_app_functions($oApp->name, $oApp->id);
+		cRenderMenus::show_app_functions($oApp);
 		$aTiers =cAppdyn::GET_Tiers($oApp->name);
 		$aMetrics = [];
 		foreach ($aTiers as $oTier){ 
 			if (cFilter::isTierFilteredOut($oTier->name)) continue;
 			
-			$aMetrics[] = [$oTier->name];
+			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oTier->name];
 			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($oTier->name)];
 			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cAppDynMetric::tierResponseTimes($oTier->name)];
 			$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
-			$aMetrics[] = [	cChart::TYPE=>"label", cChart::LABEL=>cRender::button_code("Go", "tier.php?$sTierQs") ];
+			$aMetrics[] = [	cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", "tier.php?$sTierQs") ];
 		}
 		cChart::metrics_table($oApp->name,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php

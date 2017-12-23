@@ -94,8 +94,8 @@ const TOTALCOL_WIDTH=150;
 		$sClass = cRender::getRowClass();
 		?><tr class="<?=$sClass?>"><td colspan="5" align="left">
 			<?php
-				cRenderMenus::show_app_functions($oApp->name, $oApp->id);
-				cRenderMenus::show_app_agent_menu($oApp->name, $oApp->id);
+				cRenderMenus::show_app_functions($oApp);
+				cRenderMenus::show_app_agent_menu($oApp);
 			?>
 		</tr>
 		<tr class="tableheader">
