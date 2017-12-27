@@ -55,7 +55,11 @@ class cChart{
 	//#####################################################################################
 	//#####################################################################################
 	//* 2 column table with captions and metrics
-	public static function metrics_table($psApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null, $paHeaders=null){ 
+	public static function metrics_table($poApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null, $paHeaders=null){ 
+		if (gettype($poApp) !== "object"){
+			cDebug::error("app must be an object");
+		}
+			
 		$iCol = 0;
 		$iOldWidth = cChart::$width;
 		cChart::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
@@ -87,7 +91,7 @@ class cChart{
 					?><th><?=$aItem[cChart::LABEL]?></th><?php
 				}else{
 					?><td><?php
-						$sApp = $psApp;
+						$sApp = $poApp->name;
 						if (array_key_exists(cChart::APP,$aItem)){
 							$sApp = $aItem[cChart::APP];
 						}

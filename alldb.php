@@ -69,7 +69,7 @@ if (count($oResponse) == 0){
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sButton];
 		$aMetrics[] = [cChart::LABEL => $sDB, cChart::METRIC=>$sMetric, cChart::APP=>cAppDynCore::DATABASE_APPLICATION];
 	}
-	cChart::metrics_table(cAppDynCore::DATABASE_APPLICATION, $aMetrics, 2, cRender::getRowClass());
+	cChart::metrics_table(cAppDApp::$db_app, $aMetrics, 2, cRender::getRowClass());
 }
 cChart::do_footer();
 

@@ -85,7 +85,7 @@ $oApps = cAppDyn::GET_Applications();
 				$aMetrics[] = [cChart::LABEL=>"Calls Per minute: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
 				$sMetricUrl = cAppDynMetric::backendResponseTimes($sBackend);
 				$aMetrics[] = [cChart::LABEL=>"Response Times: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
-				cChart::metrics_table($oApp->name, $aMetrics, 2, cRender::getRowClass());
+				cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 
 				$sGoUrl = cHttp::build_url("backcalls.php", cRender::APP_QS, $oApp->name);
 				$sGoUrl = cHttp::build_url($sGoUrl, cRender::APP_ID_QS, $oApp->id);

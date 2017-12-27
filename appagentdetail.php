@@ -36,6 +36,7 @@ require_once("inc/inc-render.php");
 
 cRender::html_header("Application node detail ");
 cRender::force_login();
+$oApp = cRender::get_current_app();
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
@@ -139,7 +140,7 @@ if ($iNodes==0){
 					$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
 					
 				}
-				cChart::metrics_table($aid, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+				cChart::metrics_table($oApp, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 			}
 		?>
 	<p>

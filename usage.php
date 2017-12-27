@@ -82,7 +82,7 @@ foreach ($aMods as $oModule)
 	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cAppdynMetric::moduleUsage($oModule->name, $sUsage)];
 
 $sClass=cRender::getRowClass();
-cChart::metrics_table(null, $aMetrics,3, $sClass, null);
+cChart::metrics_table(cAppDApp::$null_app, $aMetrics,3, $sClass, null);
 
 cChart::do_footer();
 cRender::html_footer();

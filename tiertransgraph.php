@@ -51,6 +51,8 @@ $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
+
 $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRender::get_base_app_QS();
 $gsTierQs=cRender::get_base_tier_QS();
@@ -115,7 +117,7 @@ cRender::appdButton(cAppDynControllerUI::tier($aid,$tid));
 	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min ($tier) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
 	$aMetrics[] = [cChart::LABEL=>"Overall response times (ms) ($tier) tier", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($app,$aMetrics,2,cRender::getRowClass());
+	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 
 
 if ($node){ 
@@ -125,7 +127,7 @@ if ($node){
 	$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($tier, $node);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($app,$aMetrics,2,cRender::getRowClass());
+	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 }
 
 //################################################################################################
@@ -147,7 +149,7 @@ if ($aResponse){
 		$aMetrics[] = [cChart::LABEL=>"Response ($sTrans)", cChart::METRIC=>$sMetricUrl];
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("Go",$sLink)];
 	}
-	cChart::metrics_table($app,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
+	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
 }else{
 	cRender::messagebox("No transactions found");
 }

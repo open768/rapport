@@ -39,6 +39,7 @@ require_once("inc/inc-render.php");
 $gsApp = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $gsAppQs = cRender::get_base_app_QS();
+$oApp = cRender::get_current_app();
 
 //####################################################################
 cRender::html_header("$gsApp Overview");
@@ -82,7 +83,7 @@ $aMetrics  = [
 	[cChart::LABEL=>"Exceptions", cChart::METRIC=>cAppDynMetric::appExceptionsPerMin()]
 ];
 $class=cRender::getRowClass();
-cChart::metrics_table($gsApp, $aMetrics,3, $class, null);
+cChart::metrics_table($oApp, $aMetrics,3, $class, null);
 
 //####################################################################
 ?><h2><a name="tperf">Tier Performance</a></h2><?php
@@ -103,7 +104,7 @@ cChart::metrics_table($gsApp, $aMetrics,3, $class, null);
 			$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cAppDynMetric::InfrastructureCpuBusy($sTier)];
 			$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureJavaHeapUsed($sTier)];
 			$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($sTier)];
-			cChart::metrics_table($gsApp, $aMetrics,3,$sClass);
+			cChart::metrics_table($oApp, $aMetrics,3,$sClass);
 		?></div><?php
 	}
 	
@@ -123,7 +124,7 @@ cChart::metrics_table($gsApp, $aMetrics,3, $class, null);
 			$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl=cAppDynMetric::backendErrorsPerMin($oBackend->name);
 			$aMetrics[] = [cChart::LABEL=>"Errors Per min", cChart::METRIC=>$sMetricUrl];
-			cChart::metrics_table($gsApp, $aMetrics,3,$sClass);
+			cChart::metrics_table($oApp, $aMetrics,3,$sClass);
 		?></div><?php
 	}
 
@@ -166,7 +167,7 @@ foreach ($aTiers as $oTier){
 					$sMetricUrl=cAppdynMetric::transCpuUsed($sTier, $sTrans);
 					$aMetrics[] = [cChart::LABEL=>"CPU Used", cChart::METRIC=>$sMetricUrl];
 					
-				cChart::metrics_table($gsApp, $aMetrics,4,$sClass);
+				cChart::metrics_table($oApp, $aMetrics,4,$sClass);
 			?></div><?php
 		}
 	

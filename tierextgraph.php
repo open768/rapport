@@ -42,6 +42,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
+$oApp = cRender::get_current_app();
 
 $gsAppQs = cRender::get_base_app_QS();
 $gsTierQs = cRender::get_base_tier_QS();
@@ -74,7 +75,7 @@ if ($oCred->restricted_login == null){
 	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($app,$aMetrics,2,cRender::getRowClass());
+	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 
 
 	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($app, $tier);
@@ -93,7 +94,7 @@ if ($oCred->restricted_login == null){
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
-	cChart::metrics_table($app,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
 //################ CHART
 cChart::do_footer();

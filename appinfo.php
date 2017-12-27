@@ -51,7 +51,7 @@ cChart::do_header();
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
-
+$oApp = cRender::get_current_app();
 
 $title= "$app&gt;Information Points";
 cRender::show_time_options($title); 
@@ -75,7 +75,7 @@ else{
 			$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl = cAppdynMetric::infoPointErrorsPerMin($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>$sMetricUrl];
-			cChart::metrics_table($aid, $aMetrics,3,cRender::getRowClass());
+			cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 
 		?></div><?php
 	}

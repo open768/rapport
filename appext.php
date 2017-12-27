@@ -38,6 +38,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 $SHOW_PROGRESS=true;
 $app = cHeader::get(cRender::APP_QS);
 $gsAppQS = cRender::get_base_app_QS();
+$oApp = cRender::get_current_app();
 
 //####################################################################
 cRender::html_header("External Calls");
@@ -83,7 +84,7 @@ $oResponse =cAppdyn::GET_AppExtTiers($app);
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cAppDynMetric::appResponseTimes()];
-cChart::metrics_table($app, $aMetrics,2,cRender::getRowClass());
+cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 //##################################################################
 ?><h2>External calls from <?=$app?></h2><?php
@@ -96,7 +97,7 @@ foreach ( $oResponse as $oExtTier){
 	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName)];
 	$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cAppDynMetric::backendResponseTimes($sName)];
 }
-cChart::metrics_table($app, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
 
 //##################################################################
 cChart::do_footer();

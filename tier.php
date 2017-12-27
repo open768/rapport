@@ -40,7 +40,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 //display the results
 $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
-
+$oApp = cRender::get_current_app();
 $SHOW_PROGRESS=true;
 
 $sAppQs = cRender::get_base_app_QS();
@@ -81,7 +81,7 @@ if ($oCred->restricted_login == null){
 	$aMetrics[]= [cChart::LABEL=>"Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass()];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
 	$aMetrics[]= [cChart::LABEL=>"Response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($app, $aMetrics, 2, $sClass);
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
 ?>
 <h2>(<?=$tier?>) Dashboard</h2>
 <?php
@@ -99,7 +99,7 @@ if ($oCred->restricted_login == null){
 	$aMetrics[] = [cChart::LABEL=>"Machine Availability", cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($tier)];
 	$aMetrics[] = [cChart::LABEL=>"Agent Availability", cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($tier)];
 	$sClass=cRender::getRowClass();
-	cChart::metrics_table($app, $aMetrics, 3, $sClass);
+	cChart::metrics_table($oApp, $aMetrics, 3, $sClass);
 
 //####################################################################
 cChart::do_footer();

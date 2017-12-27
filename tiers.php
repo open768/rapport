@@ -38,7 +38,7 @@ require_once("inc/inc-render.php");
 //-----------------------------------------------
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
-
+$oApp = cRender::get_current_app();
 //####################################################################
 cRender::html_header("Tiers in Application $app");
 cRender::force_login();
@@ -63,7 +63,7 @@ cRender::appdButton(cAppDynControllerUI::application($aid));
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
-cChart::metrics_table($aid, $aMetrics,2,cRender::getRowClass());			
+cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 ?>
 <p>
 
@@ -80,7 +80,7 @@ foreach ( $oResponse as $oTier){
 		$aMetrics = [];
 		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
 		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
-		cChart::metrics_table($aid, $aMetrics,2,null);			
+		cChart::metrics_table($oApp, $aMetrics,2,null);			
 	?></div><?php
 }
 cChart::do_footer();

@@ -51,7 +51,7 @@ cChart::do_header();
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
-
+$oApp = cRender::get_current_app();
 
 $title= "$app&gt;Service EndPoints";
 cRender::show_time_options($title); 
@@ -92,7 +92,7 @@ foreach ($aTiers as $oTier){
 		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
 	}
 	$sClass = cRender::getRowClass();
-	cChart::metrics_table($app,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3, $aHeaders);
+	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3, $aHeaders);
 }
 
 //####################################################################

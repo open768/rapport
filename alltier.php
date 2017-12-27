@@ -70,7 +70,7 @@ foreach ( $aApps as $oApp){
 			$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
 			$aMetrics[] = [	cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", "tier.php?$sTierQs") ];
 		}
-		cChart::metrics_table($oApp->name,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php
 }
 cChart::do_footer();

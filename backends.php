@@ -50,6 +50,7 @@ cChart::do_header();
 //get passed in values
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 
 $sAppQs = cRender::get_base_app_QS();
 
@@ -69,7 +70,7 @@ $oBackends =cAppdyn::GET_Backends($app);
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Overall Response Times", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
-cChart::metrics_table($aid, $aMetrics,2,cRender::getRowClass());
+cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 ?><h2>Remote Services for <?=$app?></h2>
 	<?php
@@ -82,7 +83,7 @@ cChart::metrics_table($aid, $aMetrics,2,cRender::getRowClass());
 			$aMetrics = [];
 			$aMetrics[] = [cChart::LABEL=>"Calls per min ($sBackend)", cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sBackend)];
 			$aMetrics[] = [cChart::LABEL=>"Response Times ($sBackend)", cChart::METRIC=>cAppDynMetric::backendResponseTimes($sBackend)];
-			cChart::metrics_table($aid, $aMetrics,2,$sClass);
+			cChart::metrics_table($oApp, $aMetrics,2,$sClass);
 		?></div><?php
 	}
 			

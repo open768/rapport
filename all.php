@@ -80,7 +80,7 @@ else{
 				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
 			];
 			cRenderMenus::show_app_functions($oApp);
-			cChart::metrics_table($oApp->name, $aMetrics,2,$sClass);
+			cChart::metrics_table($oApp, $aMetrics,2,$sClass);
 		}
 	?></div><?php
 }

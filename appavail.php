@@ -49,6 +49,8 @@ cChart::do_header();
 
 //####################################################################
 //get passed in values
+
+$oApp = cRender::get_current_app();
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 
@@ -59,22 +61,22 @@ cRenderMenus::show_apps_menu("Availability", "appavail.php");
 
 //####################################################################
 //retrieve tiers
-$oResponse =cAppdyn::GET_Tiers($app);
+$oResponse =cAppdyn::GET_Tiers($oApp->name);
 
 // work through each tier
-?><h2>Availability for <?=$app?></h2><?php
+?><h2>Availability for <?=$oApp->name?></h2><?php
 
 $aMetrics = [];
 foreach ( $oResponse as $oItem){
 	$tier = $oItem->name;
 	$tid= $oItem->id;
 
-	$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code($tier, cRender::getTierLinkUrl($app,$aid,$tier,$tid))];	
+	$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code($tier, cRender::getTierLinkUrl($oApp->name,$oApp->id,$tier,$tid))];	
 	$aMetrics[] = [cChart::LABEL=>"'$tier': Server availability",cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($tier)];
 	$aMetrics[] = [cChart::LABEL=>"'$tier': infrastructure availability",cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($tier)];
 }
 $sClass = cRender::getRowClass();
-cChart::metrics_table($app,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
+cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
 	
 cChart::do_footer();
 

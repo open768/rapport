@@ -41,6 +41,7 @@ $aid = cHeader::get(cRender::APP_ID_QS);
 $rum_page = cHeader::get(cRender::RUM_PAGE_QS);
 $rum_type = cHeader::get(cRender::RUM_TYPE_QS);
 $gsAppQS = cRender::get_base_app_QS();
+$oApp = cRender::get_current_app();
 
 //####################################################################
 $title ="$app&gtWeb Real User Monitoring Details&gt;$rum_page";
@@ -71,7 +72,7 @@ $sMetricUrl=cAppDynMetric::webrumPageServerTime($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Server time", cChart::METRIC=>$sMetricUrl];
 $sMetricUrl=cAppDynMetric::webrumPageFirstByte($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page first byte time", cChart::METRIC=>$sMetricUrl];
-cChart::metrics_table($app, $aMetrics,2,cRender::getRowClass());			
+cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
 cChart::do_footer();
 cRender::html_footer();

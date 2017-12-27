@@ -48,6 +48,7 @@ cChart::do_header();
 //####################################################################
 $gsApp = cHeader::get(cRender::APP_QS);
 $giAid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $gsAppQs = cRender::get_base_app_QS();
 
 //####################################################################
@@ -78,7 +79,7 @@ foreach ($aTiers as $oTier){
 	}
 	
 	$sClass = cRender::getRowClass();
-	cChart::metrics_table($gsApp,$aMetrics,4,$sClass);
+	cChart::metrics_table($oApp,$aMetrics,4,$sClass);
 }
 
 //####################################################################

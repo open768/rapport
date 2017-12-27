@@ -54,6 +54,7 @@ $gsBackend = cHeader::get(cRender::BACKEND_QS);
 $sAppQs = cRender::get_base_app_QS();
 $oBackends =cAppdyn::GET_Backends($app);
 $gsBaseUrl = cHttp::build_url("backcalls.php",$sAppQs);
+$oApp = cRender::get_current_app();
 
 $title= "$app&gt;Remote Service&gt;$gsBackend";
 cRender::show_time_options($title); 
@@ -89,7 +90,7 @@ cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 	$aMetrics[]= [cChart::LABEL=>"Overall Calls per min ($app)", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 	$aMetrics[]= [cChart::LABEL=>"Overall Response Times in ms ($app)", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 	
-	cChart::metrics_table($app, $aMetrics, 2, cRender::getRowClass());
+	cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 ?>
 <p>
 <h3> Statistics for remote service (<?=$gsBackend?>)</h3>
@@ -97,7 +98,7 @@ cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 	$aMetrics = [];
 	$aMetrics[]= [cChart::LABEL=>"Calls per min ($gsBackend)", cChart::METRIC=>cAppDynMetric::backendCallsPerMin($gsBackend)];
 	$aMetrics[]= [cChart::LABEL=>"Response Times in ms ($gsBackend)", cChart::METRIC=>cAppDynMetric::backendResponseTimes($gsBackend)];
-	cChart::metrics_table($app, $aMetrics, 2, cRender::getRowClass());
+	cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 ?>
 <p>
 
@@ -126,7 +127,7 @@ cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 			cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($tier, $metric)
 		];
 	}
-	cChart::metrics_table($app, $aMetrics, 2, cRender::getRowClass());
+	cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 
 cChart::do_footer();
 

@@ -54,7 +54,7 @@ $sMetricPrefix = cAppDynMetric::databaseServerStats($sDB);
 $aMetrics = [];
 $sMetric = cAppDynMetric::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
-cChart::metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,1,cRender::getRowClass());
+cChart::metrics_table(cAppDApp::$db_app,$aMetrics,1,cRender::getRowClass());
 
 //***************************************************************************
 ?><h2>Database specific statistics</h2><?php
@@ -63,7 +63,7 @@ foreach ($aStats as $oRow){
 	$sMetric = $sMetricPrefix."|$oRow->name";
 	$aMetrics[] = [cChart::LABEL=>$oRow->name, cChart::METRIC=>$sMetric];
 }
-cChart::metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,2,cRender::getRowClass());
+cChart::metrics_table(cAppDApp::$db_app,$aMetrics,2,cRender::getRowClass());
 
 //***************************************************************************
 cChart::do_footer();
