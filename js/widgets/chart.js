@@ -394,8 +394,8 @@ $.widget( "ck.appdchart",{
 		// create a table
 		var oTable = $("<TABLE>", {border:0,width:"100%"});
 		var oRow = $("<TR>");
-		oTable.append(oRow);
-		oElement.append(oTable);
+		oTable.append(oRow);		
+		oElement.append(oTable);		//have to add the element here otherwise google charts donw work properly
 		
 		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
@@ -438,6 +438,24 @@ $.widget( "ck.appdchart",{
 		
 		//display maximumes and observed values
 		var oCell = $("<TD>", {class:"infopanel"});
+		var oNobr = $("<nobr>");
+		var oButton = $("<button>",{class:"csv_button",title:"download as CSV"}).button({icon:"ui-icon-document"});
+			oButton.click(		function(){ oThis.onClickCSV()}		);
+			oNobr.append(oButton);
+		
+		if (oOptions.showZoom){
+			var oButton = $("<button>",{class:"csv_button",title:"Zoom"}).button({icon:"ui-icon-zoomin"});
+			oButton.click(		function(){ oThis.onClickZoom()}		);
+			oNobr.append(oButton);
+		}
+
+		if (oOptions.showCompare){
+			var oButton = $("<button>",{class:"csv_button",title:"Compare"}).button({icon:"ui-icon-shuffle"});
+			oButton.click(		function(){ oThis.onClickCompare()}		);
+			oNobr.append(oButton);
+		}
+		oCell.append(oNobr);		
+		oCell.append("<p>");
 		oCell.append("<nobr>Max: "+ iMax + "</nobr><p>");
 		oCell.append("<b>Observed:</b><br>");
 		oCell.append("<nobr>Max: "+ iMax + "</nobr><br>");
@@ -447,28 +465,6 @@ $.widget( "ck.appdchart",{
 
 		// show the buttons below the graph for now
 		// todo make the buttons a context dropdown to save screen space
-		var oRow = $("<TR>");
-		var oCell = $("<TD>",{colspan:2});
 		
-		var oButton = $("<button>",{class:"csv_button"}).button();
-			oButton.append("CSV");
-			oButton.click(		function(){ oThis.onClickCSV()}		);
-			oCell.append(oButton);
-		
-		if (oOptions.showZoom){
-			var oButton = $("<button>",{class:"csv_button"}).button();
-			oButton.append("Zoom");
-			oButton.click(		function(){ oThis.onClickZoom()}		);
-			oCell.append(oButton);
-		}
-
-		if (oOptions.showCompare){
-			var oButton = $("<button>",{class:"csv_button"}).button();
-			oButton.append("Compare");
-			oButton.click(		function(){ oThis.onClickCompare()}		);
-			oCell.append(oButton);
-		}
-		oRow.append(oCell);
-		oTable.append(oRow);
 	}
 });

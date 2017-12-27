@@ -56,7 +56,7 @@ $sMetric = cAppDynMetric::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
 $sMetric = cAppDynMetric::databaseConnections($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Connections", cChart::METRIC=>$sMetric];
-cChart::metrics_table(cAppDynCore::DATABASE_APPLICATION,$aMetrics,1,cRender::getRowClass());
+cChart::metrics_table(cAppDApp::$db_app,$aMetrics,1,cRender::getRowClass());
 
 
 cChart::do_footer();

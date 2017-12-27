@@ -38,32 +38,12 @@ cAppDynCredentials::clear_session();
 cDebug::check_GET_or_POST();
 
 //####################################################################
-class cLogin{
-	const KEY_HOST = "h";
-	const KEY_ACCOUNT = "a";
-	const KEY_USERNAME = "u";
-	const KEY_PASSWORD = "p";
-	const KEY_HTTPS = "ss";
-	const KEY_REFERRER = "r";
-	const KEY_SUBMIT = "s";
-}
-
-//####################################################################
-
 if (cHeader::get(cLogin::KEY_SUBMIT))
 {
 	cDebug::write("submit seen");
 	$oCred = new cAppDynCredentials();
-	$oCred->host = cHeader::get(cLogin::KEY_HOST);
-	$oCred->account  = cHeader::get(cLogin::KEY_ACCOUNT);
-	$oCred->username  = cHeader::get(cLogin::KEY_USERNAME);
-	$oCred->password  = cHeader::get(cLogin::KEY_PASSWORD);
-	
-	$sUse_https = cHeader::get(cLogin::KEY_HTTPS);
-	
-	$oCred->use_https = ($sUse_https=="yes");
 	try{
-		$oCred->save();
+		$oCred->load_from_header();
 	}	
 	catch (Exception $e)
 	{
