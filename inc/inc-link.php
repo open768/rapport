@@ -36,8 +36,6 @@ class cLinkPage{
 	
 		//-- get the unique key for the hash
 		$oCred = new cAppDynCredentials();
-		$oCred->load();
-
 		$oTimes = cRender::get_times();
 
 		$sKey = $sReferrer."#H".$oCred->host."#U".$oCred->username."#S".$oTimes->start."#E".$oTimes->end;
@@ -75,7 +73,6 @@ class cLinkPage{
 
 			$sReferrer = cHeader::get_referer();
 			$oAppdynCredentials = new cAppDynCredentials();
-			$oAppdynCredentials->load();
 
 			$oData = new cLinkPageData;
 			$oData->page = $sReferrer;

@@ -285,7 +285,7 @@ class cRender{
 		$oCred = self::$AppdCredentials;
 		if (!$oCred){
 			$oCred = new cAppDynCredentials;
-			$oCred->load();
+			$oCred->check();
 			self::$AppdCredentials = $oCred;
 		}
 		return $oCred;
