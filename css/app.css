@@ -88,9 +88,15 @@ h2
 	text-decoration: none;
 }
 
+.buttonpanel
+{
+	width:25px;
+}
+
 .infopanel
 {
 	font-size:9px;
+	width:70px;
 }
 
 }

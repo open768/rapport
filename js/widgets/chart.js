@@ -105,6 +105,7 @@ $.widget( "ck.appdchart",{
 		compare_url:"compare.php",
 		WAIT_VISIBLE:1200,
 		INFO_WIDTH:70,
+		BUTTON_WIDTH:30,
 		BUTTON_HEIGHT:35
 	},
 
@@ -397,9 +398,28 @@ $.widget( "ck.appdchart",{
 		oTable.append(oRow);		
 		oElement.append(oTable);		//have to add the element here otherwise google charts donw work properly
 		
+		// buttons the the left of the chart
+		var oCell = $("<TD>", {class:"buttonpanel"});
+		var oButton = $("<button>",{class:"csv_button",title:"download as CSV"}).button({icon:"ui-icon-document"});
+			oButton.click(		function(){ oThis.onClickCSV()}		);
+			oCell.append(oButton);
+		
+		if (oOptions.showZoom){
+			var oButton = $("<button>",{class:"csv_button",title:"Zoom"}).button({icon:"ui-icon-zoomin"});
+			oButton.click(		function(){ oThis.onClickZoom()}		);
+			oCell.append(oButton);
+		}
+
+		if (oOptions.showCompare){
+			var oButton = $("<button>",{class:"csv_button",title:"Compare"}).button({icon:"ui-icon-shuffle"});
+			oButton.click(		function(){ oThis.onClickCompare()}		);
+			oCell.append(oButton);
+		}
+		oRow.append(oCell);
+		
 		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH, height:oOptions.height-this.consts.BUTTON_HEIGHT });
+		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height-this.consts.BUTTON_HEIGHT });
 		var oCell = $("<TD>");
 		oCell.append(oChartDiv);
 		oRow.append(oCell);
@@ -438,29 +458,9 @@ $.widget( "ck.appdchart",{
 		
 		//display maximumes and observed values
 		var oCell = $("<TD>", {class:"infopanel"});
-		var oNobr = $("<nobr>");
-		var oButton = $("<button>",{class:"csv_button",title:"download as CSV"}).button({icon:"ui-icon-document"});
-			oButton.click(		function(){ oThis.onClickCSV()}		);
-			oNobr.append(oButton);
-		
-		if (oOptions.showZoom){
-			var oButton = $("<button>",{class:"csv_button",title:"Zoom"}).button({icon:"ui-icon-zoomin"});
-			oButton.click(		function(){ oThis.onClickZoom()}		);
-			oNobr.append(oButton);
-		}
-
-		if (oOptions.showCompare){
-			var oButton = $("<button>",{class:"csv_button",title:"Compare"}).button({icon:"ui-icon-shuffle"});
-			oButton.click(		function(){ oThis.onClickCompare()}		);
-			oNobr.append(oButton);
-		}
-		oCell.append(oNobr);		
-		oCell.append("<p>");
-		oCell.append("<nobr>Max: "+ iMax + "</nobr><p>");
-		oCell.append("<b>Observed:</b><br>");
-		oCell.append("<nobr>Max: "+ iMax + "</nobr><br>");
-		oCell.append("<nobr>Avg: "+ iAvgObs + "</nobr><br>");
-		oCell.append("<nobr>Min: "+ iMin + "</nobr><br>");
+		oCell.append("Max: "+ iMax + "<br>");
+		oCell.append("Avg: "+ iAvgObs + "<br>");
+		oCell.append("Min: "+ iMin + "<br>");
 		oRow.append(oCell);
 
 		// show the buttons below the graph for now
