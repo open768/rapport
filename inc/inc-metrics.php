@@ -21,31 +21,7 @@ require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/hash.php");
 
-//######################################################################
-class cMetricItem{
-	public $value;
-	public $max;
-	public $date;
-}
 
-//######################################################################
-class cMetricOutput{
-	public $div;
-	public $metric;
-	public $app;
-	public $data = [];
-	public $epoch_start;
-	public $epoch_end;
-	
-	public function add($psDate, $piValue, $piMax = null){
-		$oItem = new cMetricItem;
-		$oItem->value = $piValue;
-		$oItem->max = $piMax;
-		$oItem->date = $psDate;
-		
-		$this->data[] = $oItem;
-	}
-}
 
 //######################################################################
 class cMergedMetrics{
@@ -166,7 +142,11 @@ class cMetric{
 			}
 			
 			try{
-				$aData = cAppDynCore::GET_MetricData($psApp, $psMetric, $oTime, false);
+				if (cAppDyn::is_demo()){
+					$aData = cAppDynDemo::GET_MetricData($psApp, $psMetric, $oTime, false);
+				}else{
+					$aData = cAppDynCore::GET_MetricData($psApp, $psMetric, $oTime, false);
+				}
 			}
 			catch (Exception $e){}
 			if ($aData){

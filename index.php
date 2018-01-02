@@ -138,6 +138,15 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				No login credentials are stored by this application.
 				<p>
 				We recommend creating a specific username in your controller to provide access to your controller using this application.
+				<p>
+				<form action='index.php' method='POST'>
+					<input type='hidden' name='a' value='demo'>
+					<input type='hidden' name='u' value='demo'>
+					<input type='hidden' name='p' value='d3m0'>
+					<input type='hidden' name='h' value='demo'>
+					<input type='hidden' name='ss' value='no'>
+					<input type='submit' name='s' value='click this for a Demo' class="blue_button">
+				</form>
 			</div>
 			<?php
 				if (cDebug::is_debugging()){
@@ -149,6 +158,8 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 			?>
 			
 		</td></tr></table>
+		</form>
+		<form>
 		</form>
 	<?php
 	cRender::html_footer();
