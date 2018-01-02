@@ -95,8 +95,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 }else{
 	cRender::html_header("login");
 	?>
-		<form method="POST" action="index.php">
-		<table width="100%" height="75%"><tr><td align="center" valign="middle">
+		<form method="GET" action="index.php"><table width="100%" height="75%"><tr><td align="center" valign="middle">
 			<table class="loginbox">
 				<tr>
 					<td colspan=3><div class="logotable">
@@ -157,10 +156,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				}
 			?>
 			
-		</td></tr></table>
-		</form>
-		<form>
-		</form>
+		</td></tr></table></form>
 	<?php
 	cRender::html_footer();
 }
