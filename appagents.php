@@ -36,6 +36,8 @@ require_once("inc/inc-render.php");
 
 cRender::html_header("Application Nodes");
 cRender::force_login();
+
+
 $app = cHeader::get(cRender::APP_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
@@ -48,6 +50,12 @@ $aMetrics = cRender::getInfrastructureMetricTypes();
 cRender::show_top_banner("Agents for $app"); 
 cRenderMenus::show_app_agent_menu();
 cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 ?>
 <select id="showMenu">
 	<option selected disabled>Show...</option>

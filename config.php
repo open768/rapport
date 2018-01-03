@@ -50,6 +50,13 @@ cRender::show_top_banner("Configuration");
 function sort_config($a,$b){
 	return strcmp($a->description, $b->description );
 }
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 $aConfig=cAppDyn::GET_configuration();
 uasort($aConfig,"sort_config");
 $sStyle = cRender::getRowClass();			

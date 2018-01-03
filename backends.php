@@ -61,6 +61,13 @@ cRender::show_time_options($title);
 cRenderMenus::show_apps_menu("Remote Services", "backends.php");
 cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 //retrieve tiers
 $oBackends =cAppdyn::GET_Backends($app);
 

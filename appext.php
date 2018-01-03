@@ -55,6 +55,12 @@ cRender::show_time_options("Apps>$app>External Calls");
 cRenderMenus::show_apps_menu("External Calls", "appext.php");
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 	$aTiers = cAppdyn::GET_Tiers($app);
 
 	?><select id="TierMenu">

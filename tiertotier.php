@@ -62,6 +62,13 @@ cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextg
 <h3>from (<?=$fromtier?>) to (<?=$totier?>)</h3>
 <p>
 <?php
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+	
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierExtCallsPerMin($fromtier, $totier);
 	$aMetrics[] = [cChart::LABEL=>"Calls per min from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];

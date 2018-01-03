@@ -54,6 +54,13 @@ $sNodeUrl = "tierinfrstats.php?$sTierQs&".cRender::NODE_QS."=$node";
 
 cRender::show_time_options("Node disks: $node"); 
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 //####################################################################
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){ 

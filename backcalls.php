@@ -59,6 +59,13 @@ $oApp = cRender::get_current_app();
 $title= "$app&gt;Remote Service&gt;$gsBackend";
 cRender::show_time_options($title); 
 cRenderMenus::show_app_functions();
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 <select id="menuBackends">
 	<option selected disabled>Remote Services</option>

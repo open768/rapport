@@ -43,6 +43,12 @@ cRender::force_login();
 cRender::show_time_options("Events");
 cRenderMenus::show_apps_menu("Events", "events.php", $app);
 cRender::appdButton(cAppDynControllerUI::events($aid));
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 
 $oTimes = cRender::get_times();
 cCommon::flushprint("");

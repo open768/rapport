@@ -72,6 +72,14 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");
 	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($tier));
+
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 	?>
 	<select id="nodesMenu">
 		<option selected disabled>Show...</option>

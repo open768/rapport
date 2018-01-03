@@ -60,6 +60,12 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextcalls.php");
 }
 
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	exit;
+}
+//********************************************************************
 //####################################################################
 cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();

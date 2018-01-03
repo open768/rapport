@@ -57,6 +57,13 @@ $title= "$app&gt;Information Points";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("Information Points for", "appinfo.php");
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 //####################################################################
 //retrieve tiers
 $oTimes = cRender::get_times();

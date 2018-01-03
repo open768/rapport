@@ -46,6 +46,12 @@ cChart::do_header();
 cRender::show_time_options( "Detailed Database information  - $sDB"); 
 cRender::button("back to all databases", "alldb.php",false);
 cRender::button("Back to Summary", "db.php?".cRender::DB_QS."=$sDB",false);
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 
 $aStats = cAppDyn::GET_Database_ServerStats($sDB);
 $sMetricPrefix = cAppDynMetric::databaseServerStats($sDB);

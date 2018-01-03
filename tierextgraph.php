@@ -70,6 +70,13 @@ if ($oCred->restricted_login == null){
 <h2>External calls made from (<?=$tier?>) tier</h2>
 <h3>Overall Stats for tier</h3>
 <?php
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+	
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
 	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl];

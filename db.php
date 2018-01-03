@@ -47,6 +47,7 @@ cRender::show_time_options( "Summary Database information  - $sDB");
 cRender::button("back to all databases", "alldb.php",false);
 cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false);
 
+
 //####################################################################
 $aMetrics=[];
 

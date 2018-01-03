@@ -47,7 +47,14 @@ cChart::do_header();
 
 //####################################################################
 cRender::show_time_options( "All Tiers"); 
-		
+	
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+	
 
 $aApps = cAppDyn::GET_Applications();
 if (count($aApps) == 0) cRender::errorbox("No Applications found");

@@ -125,6 +125,12 @@ $gsAppQS = cRender::get_base_app_qs();
 
 //header
 cRender::show_time_options("Business Transactions - $app"); 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 
 ?><h2>Transaction statistics (<?=$app?>)</h2><?php
 

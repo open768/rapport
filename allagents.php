@@ -79,6 +79,11 @@ const BLANK_WIDTH=200;
 const TIERCOL_WIDTH=300;
 const TOTALCOL_WIDTH=150;
 
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	exit;
+}
+
 //####################################################################
 ?>
 <table class="maintable">

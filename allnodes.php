@@ -52,6 +52,13 @@ function sort_by_tier($a, $b){
 	return strnatcasecmp($a->tierName.$a->machineName, $b->tierName.$b->machineName);
 }
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 <h2>All Nodes for all Applications</h2>
 

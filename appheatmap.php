@@ -68,6 +68,12 @@ else
 ?>
 <h2>Heatmap for <?=$app?></h2>
 <?php
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 
 $oTime= cRender::get_times();
 $oResponse = cAppdynCore::GET_MetricData($aid,$metric, $oTime);

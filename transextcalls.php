@@ -60,6 +60,12 @@ $sBaseUrl = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $trans );
 $sBaseUrl = cHttp::build_url($sBaseUrl,cRender::TRANS_ID_QS , $trid);
 
 $sTierUrl="tiertrans.php?$baseQuery";
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 
 $oResponse =cAppdyn::GET_transExtCalls($app, $tier, $trans);
 ?>

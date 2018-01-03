@@ -110,6 +110,14 @@ function render_table($psType, $paData){
 	<?php
 }
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
+
 //#############################################################
 //get the page metrics
 ?>

@@ -53,6 +53,13 @@ cRender::show_time_options( $title);
 //####################################################################
 $oApps = cAppDyn::GET_Applications();
 cRender::button("Sort by Backend Name", "allbackendsbyname.php");
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 
 <h2><?=$title?></h2>

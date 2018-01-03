@@ -60,6 +60,14 @@ cRender::button("Back to Backends", "backends.php?$sAppQS");
 cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
 cRender::button("Backend Transaction Calls", "backtrans.php?$sBackendQS");
 cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
+
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 <br>
 <span id="progress">

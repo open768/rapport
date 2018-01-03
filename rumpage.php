@@ -58,6 +58,13 @@ cRenderMenus::show_app_functions($app, $aid);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
 cRender::appdButton(cAppDynControllerUI::webrum($aid));
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 //####################################################################
 
 ?><H2>Real User Monitoring Details for (<?=$rum_page?>)</h2><?php

@@ -51,6 +51,10 @@ $title =  "Graphs for transaction calls per minute for transactions for $tier in
 cRender::show_time_options($title); 
 
 
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	exit;
+}
 //####################################################################
 $oResponse =cAppdyn::GET_Tier_transactions($app, $tier);
 

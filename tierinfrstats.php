@@ -78,6 +78,14 @@ if (!$tier){
 	exit;
 }
 
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	exit;
+}
+//********************************************************************
+
+
 //####################################################################
 //other buttons
 $aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	

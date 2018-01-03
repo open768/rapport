@@ -56,6 +56,13 @@ $gsAppQs = cRender::get_base_app_QS();
 $sTitle ="Infrastructure Overview for $gsApp";
 cRender::show_time_options( $sTitle); 
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 <h2><?=$sTitle?></h2>
 <?php

@@ -57,6 +57,13 @@ cRender::show_time_options("$app&gt;$tier");
 
 cChart::do_header();
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 //####################################################################
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){

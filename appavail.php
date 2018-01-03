@@ -66,6 +66,13 @@ $oResponse =cAppdyn::GET_Tiers($oApp->name);
 // work through each tier
 ?><h2>Availability for <?=$oApp->name?></h2><?php
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 $aMetrics = [];
 foreach ( $oResponse as $oItem){
 	$tier = $oItem->name;

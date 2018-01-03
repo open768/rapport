@@ -46,6 +46,13 @@ cRender::show_top_banner("Node details: $node");
 cRender::button("Back to all nodes", "appagents.php?$sAppQS");
 cRender::appdButton(cAppDynControllerUI::nodeDashboard($aid,$nodeID));
 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 <h1>UNDER CONSTRUCTION</h1>
 

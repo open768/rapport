@@ -49,6 +49,14 @@ cChart::do_header();
 $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 cRender::show_top_banner("License Usage for $sUsage month(s)"); 
+
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
+
 ?>
 <h2>License Usage</h2>
 login account needs administrator role for this to work

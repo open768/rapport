@@ -54,6 +54,12 @@ cChart::do_header();
 
 $title ="$gsApp&gt;Overview";
 cRender::show_time_options( $title); 
+	//********************************************************************
+	if (cAppdyn::is_demo()){
+		cRender::errorbox("function not support ed for Demo");
+		exit;
+	}
+	//********************************************************************
 
 
 //####################################################################
