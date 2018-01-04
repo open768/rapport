@@ -94,7 +94,7 @@ if ($oCred->restricted_login == null){
 	
 	foreach ($oResponse as $oDetail){
 		$sTierTo = $oDetail->name;
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo];
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo, cChart::WIDTH=>300];
 		$sMetric=cAppDynMetric::tierExtCallsPerMin($tier, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric];
 		$sMetric=cAppDynMetric::tierExtResponseTimes($tier, $sTierTo);

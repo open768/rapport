@@ -45,6 +45,7 @@ $tid = cHeader::get(cRender::TIER_ID_QS);
 $totier = cHeader::get(cRender::TO_TIER_QS);
 $gsAppQS = cRender::get_base_app_qs();
 $gsTierQS = cRender::build_tier_qs($gsAppQS, $fromtier, $tid);
+$oApp = cRender::get_current_app();
 
 
 //####################################################################
@@ -74,7 +75,7 @@ cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextg
 	$aMetrics[] = [cChart::LABEL=>"Calls per min from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierExtResponseTimes($fromtier, $totier);
 	$aMetrics[] = [cChart::LABEL=>"Response Times in ms from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($app,$aMetrics,1,cRender::getRowClass());
+	cChart::metrics_table($oApp,$aMetrics,1,cRender::getRowClass());
 
 //####################################################################
 //################ CHART

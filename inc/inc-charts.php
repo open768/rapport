@@ -24,6 +24,7 @@ class cChart{
 	const LABEL="l";
 	const APP="a";
 	const STYLE="s";
+	const WIDTH="w";
 
 	//****************************************************************************
 	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
@@ -61,8 +62,8 @@ class cChart{
 		}
 			
 		$iCol = 0;
-		$iOldWidth = cChart::$width;
-		cChart::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
+		$iOldWidth = self::$width;
+		self::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
 		if ($piHeight==null) $piHeight = cRender::CHART_HEIGHT_SMALL;
 		
 		
@@ -76,33 +77,40 @@ class cChart{
 			}
 			foreach ($paTable as $aItem){
 				$sType = "graph";
-				if (array_key_exists(cChart::TYPE,$aItem)){
-					$sType = $aItem[cChart::TYPE];
+				if (array_key_exists(self::TYPE,$aItem)){
+					$sType = $aItem[self::TYPE];
 				}
 				
 				if ($iCol == 0) {
 					$sClass = $psRowClass;
-					if (array_key_exists(cChart::STYLE, $aItem)) $sClass = $aItem[cChart::STYLE];
+					if (array_key_exists(self::STYLE, $aItem)) $sClass = $aItem[self::STYLE];
 					?><tr class="<?=$sClass?>"><?php
 				}
 				
 				$iCol++;
-				if ($sType === cChart::LABEL){
-					?><th><?=$aItem[cChart::LABEL]?></th><?php
+				if ($sType === self::LABEL){
+					$sWidth = "";
+					?><th><?php
+					if ( array_key_exists( self::WIDTH, $aItem)){
+						?><DIV style='max-width:<?=$aItem[self::WIDTH]?>px'><?=$aItem[self::LABEL]?></DIV><?php
+					}else{
+						?><?=$aItem[self::LABEL]?><?php
+					}
+					?></th><?php
 				}else{
 					?><td><?php
 						$sApp = $poApp->name;
-						if (array_key_exists(cChart::APP,$aItem)){
-							$sApp = $aItem[cChart::APP];
+						if (array_key_exists(self::APP,$aItem)){
+							$sApp = $aItem[self::APP];
 						}
-						if (! array_key_exists(cChart::LABEL, $aItem)){
+						if (! array_key_exists(self::LABEL, $aItem)){
 							cDebug::write("no label");
 							cDebug::vardump($aItem,true);
-						}elseif (! array_key_exists(cChart::METRIC, $aItem)){
+						}elseif (! array_key_exists(self::METRIC, $aItem)){
 							cDebug::write("no metric");
 							cDebug::vardump($aItem,true);
 						}else{
-							cChart::add($aItem[cChart::LABEL], $aItem[cChart::METRIC], $sApp, $piHeight);
+							self::add($aItem[self::LABEL], $aItem[self::METRIC], $sApp, $piHeight);
 						}
 					?></td><?php
 				}
@@ -114,7 +122,7 @@ class cChart{
 			if ($iCol !== 0) echo "</tr>";
 		?></table><?php 
 		
-		cChart::$width = $iOldWidth;
+		self::$width = $iOldWidth;
 	}
 }
 ?>

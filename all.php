@@ -64,7 +64,7 @@ cChart::do_header();
 
 //####################################################################
 cRender::show_time_options( "All Applications - $sTitle1"); 		
-
+cRender::appdButton(cAppDynControllerUI::apps_home());
 //####################################################################
 $aResponse = cAppDyn::GET_Applications();
 if ( count($aResponse) == 0)

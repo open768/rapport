@@ -40,6 +40,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 //display the results
 $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
+$tid = cHeader::get(cRender::TIER_ID_QS);
 $oApp = cRender::get_current_app();
 $SHOW_PROGRESS=true;
 
@@ -73,6 +74,7 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_menu("Change Tier", "tier.php");
 	cRenderMenus::show_tiernodes_menu("Tier infrastructure for..", "tierinfrstats.php");	
 }
+cRender::appdButton(cAppDynControllerUI::tier($oApp->id, $tid));
 
 //####################################################################
 ?>
