@@ -275,9 +275,15 @@ class cRender{
 
 
 	public static function get_current_app(){
-		$sApp = cHeader::get(cRender::APP_QS);
-		$sAID = cHeader::get(cRender::APP_ID_QS);
+		$sApp = cHeader::get(self::APP_QS);
+		$sAID = cHeader::get(self::APP_ID_QS);
 		return new cAppDApp($sApp, $sAID);
+	}
+
+	public static function get_current_tier(){
+		$sTier = cHeader::get(self::TIER_QS);
+		$sTID = cHeader::get(self::TIER_ID_QS);
+		return new cAppDTier($sTier, $sTID);
 	}
 	
 	//**************************************************************************

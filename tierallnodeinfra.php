@@ -65,6 +65,7 @@ $title = "$app&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 //stuff for later
 $sAppQS = cRender::get_base_app_QS();
 $sTierQS = cRender::get_base_tier_QS();
+$oApp = cRender::get_current_app();
 
 // show time options
 cRender::show_time_options($title); 
@@ -75,7 +76,7 @@ $aMetrics = cRender::getInfrastructureMetricTypes();
 $oCred = cRender::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
-$sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType)
+$sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 
 	//********************************************************************
 	if (cAppdyn::is_demo()){
@@ -127,28 +128,25 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 ?>
 <h2><?=$oMetricDetails->caption?> for Servers in (<?=$tier?>) Tier</h2>
 <p>
-<table class="maintable">
 <?php
 	$sDiskUrl = cHttp::build_url("nodedisks.php", $sTierQS);
 	$sNodeUrl = cHttp::build_url("tierinfrstats.php",$sTierQS);
+	
+	$aMetrics = [];
+	$iWidth = cRender::CHART_WIDTH_LETTERBOX  - 150;
+
 	foreach ($aNodes as $oNode){
 		$sNode = $oNode->name;
 		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
-		?><tr class=<?=cRender::getRowClass()?>>
-			<td><?php
-				$oMetric = cRender::getInfrastructureMetric($tier,$sNode, $sMetricType);
-				cChart::add($oMetric->caption, $oMetric->metric, $app, 200);
-			?></td>
-			<td><?php
-				cRender::button("Node<br>Infrastructure", cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode));
-				if ($sMetricType==cRender::METRIC_TYPE_INFR_DISK_FREE)
-						cRender::button("Disks",cHttp::build_url($sDiskUrl, cRender::NODE_QS, $sNode));
-			?></td>
-		</tr><?php
+		$oMetric = cRender::getInfrastructureMetric($tier,$sNode, $sMetricType);
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth];
+		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
+		$aMetrics[]= [cChart::TYPE=>cChart::BUTTON,cChart::LABEL=>"Node<br>Infrastructure", cChart::URL=>$sUrl, cChart::WIDTH=>150];
 	}
+	$sClass = cRender::getRowClass();			
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
 ?>
-</table>
 
 <?php
 cChart::do_footer();

@@ -22,16 +22,19 @@ class cChart{
 	const METRIC="m";
 	const TYPE="t";
 	const LABEL="l";
+	const BUTTON="b";
 	const APP="a";
+	const URL="u";
 	const STYLE="s";
 	const WIDTH="w";
 
 	//****************************************************************************
-	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false){ ?>
-		<DIV 
+	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false, $piWidth=null){ 
+		if ($piWidth==null) $piWidth = self::$width;
+	?><DIV 
 			type="appdchart" 
 			appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" previous="<?=$pbPreviousPeriod?>"
-			width="<?=self::$width?>" height="<?=$piHeight?>" 
+			width="<?=$piWidth?>" height="<?=$piHeight?>" 
 			showZoom="<?=self::$show_zoom?>"
 			showCompare="<?=self::$show_compare?>"
 		>
@@ -88,17 +91,31 @@ class cChart{
 				}
 				
 				$iCol++;
-				if ($sType === self::LABEL){
-					$sWidth = "";
-					?><th><?php
-					if ( array_key_exists( self::WIDTH, $aItem)){
-						?><DIV style='max-width:<?=$aItem[self::WIDTH]?>px'><?=$aItem[self::LABEL]?></DIV><?php
-					}else{
+				
+
+				$start_tag = "<td>";
+				$end_tag = "</td>";
+				if ($sType == self::LABEL){
+					$start_tag = "<th>";
+					$end_tag = "</th>";
+				}
+				
+				$iWidth = null;
+				if ( array_key_exists( self::WIDTH, $aItem)) {
+					$iWidth = $aItem[self::WIDTH];
+					$start_tag .= "<div style='width:${iWidth}px;max-width:${iWidth}px;word-break:break-all'>";
+					$end_tag = "</div>$end_tag";
+				}
+
+				?><?=$start_tag?><?php
+				switch ($sType){
+					case self::LABEL:
 						?><?=$aItem[self::LABEL]?><?php
-					}
-					?></th><?php
-				}else{
-					?><td><?php
+						break;
+					case self::BUTTON:
+						cRender::button($aItem[self::LABEL],$aItem[self::URL]);
+						break;
+					default:
 						$sApp = $poApp->name;
 						if (array_key_exists(self::APP,$aItem)){
 							$sApp = $aItem[self::APP];
@@ -110,10 +127,10 @@ class cChart{
 							cDebug::write("no metric");
 							cDebug::vardump($aItem,true);
 						}else{
-							self::add($aItem[self::LABEL], $aItem[self::METRIC], $sApp, $piHeight);
+							self::add($aItem[self::LABEL], $aItem[self::METRIC], $sApp, $piHeight,false, $iWidth);
 						}
-					?></td><?php
 				}
+				?><?=$end_tag?><?php
 				if ($iCol==$piMaxCols){
 					?></tr><?php
 					$iCol = 0;

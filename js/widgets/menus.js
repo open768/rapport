@@ -380,9 +380,8 @@ $.widget( "ck.appdmenu",{
 			var oOption = $("<option>",{selected:1,disabled:1}).append(sTier);
 			oSelect.append(oOption);
 			
-			if (!sThisTier)
-				this.pr__addToGroup(oSelect, "Tier Overview", this.pr__get_base_tier_QS("tier.php"));
-			else
+			this.pr__addToGroup(oSelect, "Tier Overview", this.pr__get_base_tier_QS("tier.php"));
+			if (sThisTier)
 				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS("tiers.php"));
 						
 			//--------------------------------------------------------------------

@@ -69,6 +69,7 @@ $sAppQs = cRender::get_base_app_QS();
 $sTierQs = cRender::get_base_tier_QS();
 $sTierInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
 $sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
+$oApp = cRender::get_current_app();
 
 // show time options
 cRender::show_time_options($title); 
@@ -124,32 +125,37 @@ if ($node) {
 //####################################################################
 ?>
 <p>
-<h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
+<h2>Overall Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
+<?php
 
-<table class="maintable"><?php
+	$aMetrics = [];
+	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
+	$aMetrics[]= [cChart::LABEL=>"Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass()];
+	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
+	$aMetrics[]= [cChart::LABEL=>"Response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
+	$sClass = cRender::getRowClass();			
+	cChart::metrics_table($oApp, $aMetrics, 1, $sClass);
+
+//####################################################################
+?>
+<p>
+<h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
+<?php
 	$aMetricTypes = cRender::getInfrastructureMetricTypes();
 	
 	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
-	
+
+	$aMetrics = [];
+	$iWidth = cRender::CHART_WIDTH_LETTERBOX  - 100;
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
-		?><tr class="<?=cRender::getRowClass()?>">
-			<td>
-				<?php cChart::add($oMetric->caption, $oMetric->metric, $app, 200); ?>
-			</td>
-			<td>
-				<?php
-					cRender::button("All Tier",cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType));
-					if ($node && ($sMetricType==cRender::METRIC_TYPE_INFR_DISK_FREE)){
-						$sDiskUrl = cHttp::build_url("nodedisks.php",$sTierQs);
-						$sDiskUrl = cHttp::build_url($sDiskUrl,cRender::NODE_QS,$node);
-						cRender::button("Disks",$sDiskUrl);
-					}
-				?>
-			</td>
-		</tr><?php
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth];
+		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$aMetrics[]= [cChart::TYPE=>cChart::BUTTON,cChart::LABEL=>"All Tier", cChart::URL=>$sUrl, cChart::WIDTH=>100];
 	}
-?></table>
+	$sClass = cRender::getRowClass();			
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+?>
 
 <?php
 cChart::do_footer();

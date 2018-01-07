@@ -39,10 +39,8 @@ require_once("inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$app = cHeader::get(cRender::APP_QS);
-$tier = cHeader::get(cRender::TIER_QS);
-$tid = cHeader::get(cRender::TIER_ID_QS);
 $oApp = cRender::get_current_app();
+$oTier = cRender::get_current_tier();
 
 $gsAppQs = cRender::get_base_app_QS();
 $gsTierQs = cRender::get_base_tier_QS();
@@ -54,8 +52,8 @@ cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 
 //###################### DATA ########################################
-$title = "$app&gt;$tier&gt;External Calls";
-$tierQS = cRender::get_base_tier_QS();
+$title = "$oApp->name&gt;$oTier->name&gt;External Calls";
+$oTier->nameQS = cRender::get_base_tier_QS();
 
 cRender::show_time_options($title); 
 $oCred = cRender::get_appd_credentials();
@@ -64,10 +62,11 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
 }
+cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
 
 //************* basic information about the tier *********************
 ?>
-<h2>External calls made from (<?=$tier?>) tier</h2>
+<h2>External calls made from (<?=$oTier->name?>) tier</h2>
 <h3>Overall Stats for tier</h3>
 <?php
 	//********************************************************************
@@ -78,26 +77,26 @@ if ($oCred->restricted_login == null){
 	//********************************************************************
 	
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($tier) tier", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
+	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
+	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 
 
-	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($app, $tier);
+	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($oApp->name, $oTier->name);
 	$linkUrl = cHttp::build_url("tiertotier.php", $gsAppQs);
-	$linkUrl = cHttp::build_url($linkUrl, cRender::FROM_TIER_QS, $tier);
-	$linkUrl = cHttp::build_url($linkUrl, cRender::TIER_ID_QS, $tid);
+	$linkUrl = cHttp::build_url($linkUrl, cRender::FROM_TIER_QS, $oTier->name);
+	$linkUrl = cHttp::build_url($linkUrl, cRender::TIER_ID_QS, $oTier->id);
 ?><h3>External calls</h3><?php
 	$aMetrics=[];
 	
 	foreach ($oResponse as $oDetail){
 		$sTierTo = $oDetail->name;
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo, cChart::WIDTH=>300];
-		$sMetric=cAppDynMetric::tierExtCallsPerMin($tier, $sTierTo);
+		$sMetric=cAppDynMetric::tierExtCallsPerMin($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric];
-		$sMetric=cAppDynMetric::tierExtResponseTimes($tier, $sTierTo);
+		$sMetric=cAppDynMetric::tierExtResponseTimes($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}

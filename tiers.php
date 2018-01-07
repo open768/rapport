@@ -36,29 +36,29 @@ require_once("inc/inc-render.php");
 
 
 //-----------------------------------------------
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $oApp = cRender::get_current_app();
+
 //####################################################################
-cRender::html_header("Tiers in Application $app");
+cRender::html_header("Tiers in Application $oApp->name");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
 	
 <?php
 cChart::do_header();
-cRender::show_time_options( $app); 
+cRender::show_time_options( $oApp->name); 
 
 
 //####################################################################
-cRenderMenus::show_apps_menu("Show Tier Activity for:","tiers.php");
+cRenderMenus::show_apps_menu("Application Tier Activity for:","tiers.php");
 $sAppQS = cRender::get_base_app_QS();
 
-cRender::appdButton(cAppDynControllerUI::application($aid));
+cRender::appdButton(cAppDynControllerUI::application($oApp));
+cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Transactions");
 
 //####################################################################
 ?>
-<h2>Overall Activity in <?=$app?></h2>
+<h2>Overall Activity in <?=$oApp->name?></h2>
 <?php
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
@@ -67,10 +67,10 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 ?>
 <p>
 
-<h2>Tiers Activity in application (<?=$app?>)</h2>
+<h2>Tiers Activity in application (<?=$oApp->name?>)</h2>
 <?php
 //-----------------------------------------------
-$oResponse =cAppdyn::GET_Tiers($app);
+$oResponse =cAppdyn::GET_Tiers($oApp->name);
 foreach ( $oResponse as $oTier){
 	?><div class="cRender::getRowClass()"><?php
 		$sTier=$oTier->name;
