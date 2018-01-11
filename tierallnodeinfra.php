@@ -78,12 +78,13 @@ if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
 $sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 ?>
 <select id="menuDetails">

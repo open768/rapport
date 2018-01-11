@@ -60,12 +60,13 @@ cRender::button("Response time", "transreport.php?$baseQuery");
 cRender::button("Server stats", "csv/serverstats.php?$baseQuery");
 cRender::button("activity", "activity.php?$baseQuery");
 cCommon::flushprint( "<br><i>NB - only shows business transactions - not activity on all tiers</i>");
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 
 //retrieve tiers

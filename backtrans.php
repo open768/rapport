@@ -64,12 +64,13 @@ cRender::button("Back to Backends", "appbackends.php?$sAppQS");
 cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
 cRender::button("Backend Transaction Timings", "backtransresponse.php?$sBackendQS");
 echo "<br>";
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 ?>
 <span id="progress"><?php

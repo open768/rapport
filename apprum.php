@@ -53,12 +53,13 @@ cRender::show_time_options( $title);
 cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
 cRender::appdButton(cAppDynControllerUI::webrum($aid));
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 //####################################################################
 ?><h2>Overall Statistics</h2><?php

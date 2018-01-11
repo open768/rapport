@@ -63,11 +63,6 @@ if (cFilter::isFiltered()){
 //####################################################################
 //retrieve tiers
 //********************************************************************
-if (cAppdyn::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
-	exit;
-}
-//********************************************************************
 
 	$oTimes = cRender::get_times();
 $aTiers = cAppdyn::GET_Tiers($app, $oTimes);

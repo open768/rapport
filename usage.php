@@ -50,12 +50,13 @@ $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 cRender::show_top_banner("License Usage for $sUsage month(s)"); 
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 ?>
 <h2>License Usage</h2>

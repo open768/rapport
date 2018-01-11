@@ -37,7 +37,6 @@ require_once("inc/inc-render.php");
 
 //-----------------------------------------------
 $gsApp = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $gsAppQs = cRender::get_base_app_QS();
 $oApp = cRender::get_current_app();
 
@@ -54,18 +53,12 @@ cChart::do_header();
 
 $title ="$gsApp&gt;Overview";
 cRender::show_time_options( $title); 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
 
 
 //####################################################################
 cRenderMenus::show_apps_menu("Show Overview for:","appoverview.php");
 $gsAppQs = cRender::get_base_app_QS();
-cRender::appdButton(cAppDynControllerUI::application($aid));
+cRender::appdButton(cAppDynControllerUI::application($oApp));
 
 //####################################################################
 ?>
@@ -138,6 +131,14 @@ cChart::metrics_table($oApp, $aMetrics,3, $class, null);
 ?>
 <h2><a name="trans">Transactions</a></h2>
 <?php
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("Transactions not support ed for Demo");
+	cChart::do_footer();
+	cRender::html_footer();
+	exit;
+}
+
 $aTiers =cAppdyn::GET_Tiers($gsApp);
 $iHeight=100;
 

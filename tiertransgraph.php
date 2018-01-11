@@ -67,18 +67,21 @@ $sExtraCaption = ($node?"($node) node":"");
 $title= "$app&gt;$tier $sExtraCaption&gt;Transactions";
 cRender::show_time_options( $title); 
 
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
+
+
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");
 	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($tier));
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
 
 	?>
 	<select id="nodesMenu">

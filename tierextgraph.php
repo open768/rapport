@@ -56,6 +56,15 @@ $title = "$oApp->name&gt;$oTier->name&gt;External Calls";
 $oTier->nameQS = cRender::get_base_tier_QS();
 
 cRender::show_time_options($title); 
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
+
+
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();
@@ -69,12 +78,6 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 <h2>External calls made from (<?=$oTier->name?>) tier</h2>
 <h3>Overall Stats for tier</h3>
 <?php
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
 	
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);

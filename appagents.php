@@ -50,11 +50,12 @@ $aMetrics = cRender::getInfrastructureMetricTypes();
 cRender::show_top_banner("Agents for $app"); 
 cRenderMenus::show_app_agent_menu();
 cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
 	//********************************************************************
 ?>
 <select id="showMenu">

@@ -99,12 +99,13 @@ cRenderMenus::show_apps_menu("Show detail for", "appagentdetail.php","&".cRender
 cRender::appdButton(cAppDynControllerUI::nodes($aid), "All nodes");
 //####################################################################
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 ?>
 <p>

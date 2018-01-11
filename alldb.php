@@ -50,12 +50,13 @@ cChart::$width=cRender::CHART_WIDTH_LARGE -200;
 cRender::show_time_options( "All Applications - Time in Databases"); 
 cRender::appdButton(cAppDynControllerUI::databases());
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 //####################################################################
 $oResponse = cAppDyn::GET_Databases();

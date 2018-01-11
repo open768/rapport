@@ -50,6 +50,7 @@ cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 	//********************************************************************
 	if (cAppdyn::is_demo()){
 		cRender::errorbox("function not support ed for Demo");
+		cRender::html_footer();
 		exit;
 	}
 	//********************************************************************

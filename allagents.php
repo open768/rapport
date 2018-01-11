@@ -81,6 +81,7 @@ const TOTALCOL_WIDTH=150;
 
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
 	exit;
 }
 

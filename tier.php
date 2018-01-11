@@ -49,12 +49,13 @@ cRender::show_time_options("$oApp->name&gt;$oTier->name");
 
 cChart::do_header();
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRender::html_footer();
+	exit;
+}
+//********************************************************************
 
 //####################################################################
 $oCred = cRender::get_appd_credentials();
