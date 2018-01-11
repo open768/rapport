@@ -138,7 +138,7 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl("appext.php", oParams));
 				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl("appinfra.php", oParams));
 				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl("appinfo.php", oParams));
-				this.pr__addToGroup(oGroup, "Remote Services", cBrowser.buildUrl("backends.php", oParams));
+				this.pr__addToGroup(oGroup, "Remote Services", cBrowser.buildUrl("appbackends.php", oParams));
 				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl("appservice.php", oParams));
 				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl("apptrans.php", oParams));
 				oGroup2 = $("<optgroup>",{label:"Web Real User Monitoring"});

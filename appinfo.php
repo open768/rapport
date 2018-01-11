@@ -41,33 +41,21 @@ set_time_limit(200);
 //####################################################################
 cRender::html_header("Information Points");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 //####################################################################
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $oApp = cRender::get_current_app();
 
-$title= "$app&gt;Information Points";
+$title= "$oApp->name&gt;Information Points";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("Information Points for", "appinfo.php");
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
 
 //####################################################################
 //retrieve tiers
 $oTimes = cRender::get_times();
-$aInfoPoints = cAppdyn::GET_AppInfoPoints($app, $oTimes);
+$aInfoPoints = cAppdyn::GET_AppInfoPoints($oApp->name, $oTimes);
 cDebug::vardump($aInfoPoints, true);
 if (count($aInfoPoints) == 0)
 	cRender::messagebox("No information points found");
@@ -76,13 +64,14 @@ else{
 		?><div class="<?=cRender::getRowClass()?>"><?php
 			$aMetrics=[];
 			
+			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oInfoPoint->name, cChart::WIDTH=>180];
 			$sMetricUrl = cAppdynMetric::infoPointCallsPerMin($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl = cAppdynMetric::infoPointResponseTimes($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>$sMetricUrl];
 			$sMetricUrl = cAppdynMetric::infoPointErrorsPerMin($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>$sMetricUrl];
-			cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
+			cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 
 		?></div><?php
 	}

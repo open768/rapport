@@ -40,12 +40,6 @@ require_once("inc/inc-render.php");
 //####################################################################
 cRender::html_header("All Remote Services");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-	
-<?php
 cChart::do_header();
 $title ="All Remote Services";
 cRender::show_time_options( $title); 
@@ -73,7 +67,7 @@ cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 foreach ($oApps as $oApp){
 	$sApp = $oApp->name;
 	$sID = $oApp->id;
-	$sUrl = cHttp::build_url("backends.php", cRender::APP_QS, $sApp);
+	$sUrl = cHttp::build_url("appbackends.php", cRender::APP_QS, $sApp);
 	$sUrl = cHttp::build_url($sUrl, cRender::APP_ID_QS, $sID);
 	
 	?><div class="<?=cRender::getRowClass();?>">

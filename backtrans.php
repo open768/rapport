@@ -60,7 +60,7 @@ $sBackendQS = cHttp::build_QS($sAppQS, cRender::BACKEND_QS, $backend);
 
 $title= "$app&gt;Backend Transactions&gt;$backend";
 cRender::show_time_options($title); 
-cRender::button("Back to Backends", "backends.php?$sAppQS");
+cRender::button("Back to Backends", "appbackends.php?$sAppQS");
 cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
 cRender::button("Backend Transaction Timings", "backtransresponse.php?$sBackendQS");
 echo "<br>";

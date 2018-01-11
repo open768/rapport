@@ -144,7 +144,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 					<input type='hidden' name='p' value='d3m0'>
 					<input type='hidden' name='h' value='demo'>
 					<input type='hidden' name='ss' value='no'>
-					<input type='submit' name='s' value='click this for a Demo' class="blue_button">
+					<input type='submit' name='s' value='See this application in Demo Mode' class="blue_button">
 				</form>
 			</div>
 			<?php

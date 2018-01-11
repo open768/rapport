@@ -562,17 +562,17 @@ class cRender{
 		</script>
 		<table border=0 width="100%" class="footer"><tr><td>
 				<div class="licenseBox">
-				Copyright (c) 2013-2017 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu Ltd</a>
+				Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a>
 				<p>
 				This software is protected by copyright under the terms of the 
 				Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
 				http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 				<p>
-				USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
+				USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
 				<p>
 				For licenses that allow for commercial use please contact cluck@chickenkatsu.co.uk.<br>
+				You may commercially evaluate this software for no more than 1 calendar month<br>
 				We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a>
-				
 				</pre></div>
 				<div class="paidLicenseBox">
 				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>--><br>

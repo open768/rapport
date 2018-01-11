@@ -56,7 +56,7 @@ $sBackendQS = cHttp::build_QS($sAppQS, cRender::BACKEND_QS, $backend);
 
 $title= "$app&gt;Backend Transaction response times&gt;$backend";
 cRender::show_time_options($title); 
-cRender::button("Back to Backends", "backends.php?$sAppQS");
+cRender::button("Back to Backends", "appbackends.php?$sAppQS");
 cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
 cRender::button("Backend Transaction Calls", "backtrans.php?$sBackendQS");
 cRender::appdButton(cAppDynControllerUI::remoteServices($aid));

@@ -36,32 +36,23 @@ require_once("inc/inc-render.php");
 
 set_time_limit(200); // huge time limit as this takes a long time
 $SHOW_PROGRESS=true;
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $gsAppQS = cRender::get_base_app_QS();
 $oApp = cRender::get_current_app();
 
 //####################################################################
 cRender::html_header("External Calls");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 //####################################################################
 
-cRender::show_time_options("Apps>$app>External Calls"); 
+cRender::show_time_options("Apps>$oApp->name>External Calls"); 
 cRenderMenus::show_apps_menu("External Calls", "appext.php");
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
 	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
-	$aTiers = cAppdyn::GET_Tiers($app);
+	$aTiers = cAppdyn::GET_Tiers($oApp->name);
 
 	?><select id="TierMenu">
 		<option selected disabled>Show external calls for Tiers...</option>
@@ -84,16 +75,16 @@ if ($oCred->restricted_login == null){
 }
 
 //####################################################################
-$oResponse =cAppdyn::GET_AppExtTiers($app);
+$oResponse =cAppdyn::GET_AppExtTiers($oApp->name);
 
-?><h2>Overall statistics for <?=$app?></h2><?php
+?><h2>Overall statistics for <?=$oApp->name?></h2><?php
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 //##################################################################
-?><h2>External calls from <?=$app?></h2><?php
+?><h2>External calls from <?=$oApp->name?></h2><?php
 $aMetrics = [];
 
 foreach ( $oResponse as $oExtTier){

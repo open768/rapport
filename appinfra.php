@@ -37,10 +37,6 @@ require_once("inc/inc-render.php");
 //####################################################################
 cRender::html_header("Infrastructure");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::$show_export_all = false;
 cChart::do_header();
 
@@ -56,12 +52,6 @@ $gsAppQs = cRender::get_base_app_QS();
 $sTitle ="Infrastructure Overview for $gsApp";
 cRender::show_time_options( $sTitle); 
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
 
 ?>
 <h2><?=$sTitle?></h2>

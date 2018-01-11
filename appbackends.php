@@ -41,45 +41,31 @@ set_time_limit(200);
 //####################################################################
 cRender::html_header("Backends");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $oApp = cRender::get_current_app();
-
 $sAppQs = cRender::get_base_app_QS();
 
 
-$title= "$app;Backends";
+$title= "$oApp->name;Backends";
 
 cRender::show_time_options($title); 
-cRenderMenus::show_apps_menu("Remote Services", "backends.php");
-cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
-
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
+cRenderMenus::show_apps_menu("Remote Services", "appbackends.php");
+cRender::appdButton(cAppDynControllerUI::remoteServices($oApp->id));
 
 //retrieve tiers
-$oBackends =cAppdyn::GET_Backends($app);
+$oBackends =cAppdyn::GET_Backends($oApp->name);
 
 
 // work through each tier
-?><h2>Overall Statistics for <?=$app?><?php
+?><h2>Overall Statistics for <?=$oApp->name?><?php
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Overall Response Times", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
-?><h2>Remote Services for <?=$app?></h2>
+?><h2>Remote Services for <?=$oApp->name?></h2>
 	<?php
 	$sBackendURL = cHttp::build_url("backcalls.php",$sAppQs );
 	foreach ( $oBackends as $oBackend){

@@ -51,11 +51,9 @@ cChart::do_header();
 //get passed in values
 
 $oApp = cRender::get_current_app();
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 
 
-$title= "$app&gt;Availability";
+$title= "$oApp->name&gt;Availability";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("Availability", "appavail.php");
 
@@ -66,21 +64,12 @@ $oResponse =cAppdyn::GET_Tiers($oApp->name);
 // work through each tier
 ?><h2>Availability for <?=$oApp->name?></h2><?php
 
-	//********************************************************************
-	if (cAppdyn::is_demo()){
-		cRender::errorbox("function not support ed for Demo");
-		exit;
-	}
-	//********************************************************************
 
 $aMetrics = [];
-foreach ( $oResponse as $oItem){
-	$tier = $oItem->name;
-	$tid= $oItem->id;
-
-	$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code($tier, cRender::getTierLinkUrl($oApp->name,$oApp->id,$tier,$tid))];	
-	$aMetrics[] = [cChart::LABEL=>"'$tier': Server availability",cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($tier)];
-	$aMetrics[] = [cChart::LABEL=>"'$tier': infrastructure availability",cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($tier)];
+foreach ( $oResponse as $oTier){
+	$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code($oTier->name, cRender::getTierLinkUrl($oApp->name,$oApp->id,$oTier->name,$oTier->id))];	
+	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': Server availability",cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($oTier->name)];
+	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': infrastructure availability",cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($oTier->name)];
 }
 $sClass = cRender::getRowClass();
 cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
