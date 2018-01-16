@@ -55,10 +55,11 @@ class cAgentTotals {
 	}
 }
 
-function get_app_node_data($psAid){
+function get_app_node_data($poApp){
 	$aTierData = [];
 	
-	$aResponse = cAppDyn::GET_AppNodes($psAid);
+	cDebug::write($poApp->name . ":" . $poApp->id);
+	$aResponse = cAppDyn::GET_AppNodes($poApp->id);
 	foreach ($aResponse as $aNodes)
 		foreach ($aNodes as $oNode){
 			$sTier = $oNode ->tierName;
@@ -68,7 +69,7 @@ function get_app_node_data($psAid){
 			if ($oNode->machineAgentPresent) $aTierData[$sTier]->machine ++;
 			if ($oNode->appAgentPresent) $aTierData[$sTier]->appserver++;
 		}
-	
+	cDebug::vardump($aTierData);
 	return $aTierData;
 }
 
@@ -92,7 +93,7 @@ if (cAppdyn::is_demo()){
 	$oGrandTotal = new cAgentTotals();
 	
 	foreach ($moApps as $oApp){
-		$aAppData = get_app_node_data($oApp->id);
+		$aAppData = get_app_node_data($oApp);
 		$oAppTotals = new cAgentTotals();
 				
 		if (count($aAppData) == 0) continue;
