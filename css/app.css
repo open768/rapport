@@ -17,6 +17,13 @@ h2
 	padding: 5px;
 }
 
+.bad_row{
+	background-color:#ffe6e6;
+}
+.good_row{
+	background-color:#e6ffe6;
+}
+
 .recommend{
 	border:2px solid darkcyan;
 	background-color:#eeeeee;

@@ -47,16 +47,93 @@ if (!$sUsage) $sUsage = 1;
 cRender::show_top_banner("One Click Checkup"); 
 ?>
 <h2>One Click Checkup</h2>
-not implemented 
-<ul>
-	<li>no more than 125 trans per application
-	<li>no more than 50 transactions per tier
-	<li>overflowing transactions
-	<li>overflowing backends
-	<li>overflowing remote services
-	<li>errors
-	<li>slow transactions
-</ul>
+
 <?php
+function output_row($pbBad, $psCaption, $psContent){
+	$sClass = ($pbBad?"bad_row":"good_row");
+	?><tr class="<?=$sClass?>">
+		<th align='left' width='400'><?=$psCaption?>: </th>
+		<td><?=$psContent?></td>
+	</tr><?php
+}
+
+//####################################################################
+$aResponse = cAppDyn::GET_Applications();
+foreach ( $aResponse as $oApp){
+	?><div><table width="100%"><?php
+		cRenderMenus::show_app_functions($oApp);
+		cCommon::flushprint("");
+		
+		//************************************************************************************
+		$aTrans = cAppdyn::GET_Transactions($oApp->name);
+		cDebug::vardump($aTrans);
+		
+		$iCount = count($aTrans);
+		$sCaption = "There are $iCount BTs.";
+		$bBad = true;
+		if ($iCount < 5)
+			$sCaption .= " There are too few BTs - check BT detection configuration";
+		elseif ($iCount >=250)
+			$sCaption .= " This must be below 250. <b>Investigate configuration</b>";
+		elseif ($iCount >=200)
+			$sCaption .= " The number of transactions is on the high side. Above 250 will affect correlation";
+		else{
+			$bBad = false;
+			$sCaption .= " Thats good.";
+		}
+		output_row($bBad, "Total number of Business Transactions in Application: $oApp->name", $sCaption);
+		
+		//************************************************************************************
+		$aTierCount = [];
+		$aOverflowing = [];
+		foreach ($aTrans as $oTrans){
+			$sTier = $oTrans->tierName;
+			if (! array_key_exists($sTier, $aTierCount)) $aTierCount[$sTier] = 0;
+			$aTierCount[$sTier] = $aTierCount[$sTier] +1;
+			
+			if ($oTrans->name === cAppDyn::APPDYN_OVERFLOWING_BT)
+				$aOverflowing[$sTier] = 1;	
+		}
+		
+		foreach ($aTierCount as $sTier=>$iCount){
+			$bBad = true;
+			$sCaption = "there are $iCount BTs.";
+			if ($iCount < 5)
+				$sCaption .= " There are too few BTs for this tier - check BT detection configuration";
+			elseif ($iCount >=50)
+				$sCaption .= " This must be below 50. <b>Investigate instrumentation</b>";
+			elseif ($iCount >=40)
+				$sCaption .= " The number of transactions is on the high side. Above 50 will affect correlation";
+			else{
+				$bBad = false;
+				$sCaption .= " Thats good.";
+			}
+			output_row($bBad, "Business Transactions for Tier: '$sTier'", $sCaption);
+			
+			if (array_key_exists($sTier, $aOverflowing))
+				output_row(true, "Overflowing Business Transactions for Tier: $sTier", "<b>Investigate</b> instrumentation for Tier: $sTier");
+	
+		}
+
+		//************************************************************************************
+		$aBackends = cAppdyn::GET_Backends($oApp->name);
+		$iCount = count($aBackends);
+		$bBad = true;
+		$sCaption = "There are $iCount remote services.";
+		if ($iCount >=50)
+			$sCaption .= " its a little on the high side";
+		elseif ($iCount >=100)
+			$sCaption .= " this doesnt look right, check the detection";
+		else{
+			$bBad = false;
+			$sCaption .= " Thats looks ok.";
+		}
+		output_row($bBad, "Remote services used by Application: $oApp->name", $sCaption);
+				
+		//************************************************************************************
+	?></table></div><p><?php
+	cCommon::flushprint("");
+}
+
 cRender::html_footer();
 ?>
