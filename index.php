@@ -95,43 +95,45 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 }else{
 	cRender::html_header("login");
 	?>
-		<form method="GET" action="index.php"><table width="100%" height="75%"><tr><td align="center" valign="middle">
-			<table class="loginbox">
-				<tr>
-					<td colspan=3><div class="logotable">
-						<table width="100%"><tr>
-							<td align="left"><font class="logintext">Login</font></td>
-							<td align="right"><span class="loginimage"></span></td>
-						</tr></table>
-					</div></td>
-				</tr>
-				<tr>
-					<td align="right">Account:</td>
-					<td><input type="text" name="<?=cLogin::KEY_ACCOUNT?>"></td>
-				</tr>
-				<tr>
-					<td align="right">username:</td>
-					<td><input type="text" name="<?=cLogin::KEY_USERNAME?>"></td>
-				</tr>
-				<tr>
-					<td align="right">password:</td>
-					<td><input type="password" name="<?=cLogin::KEY_PASSWORD?>"></td>
-				</tr>
-				<tr>
-					<td align="right">Controller hostname:</td>
-					<td><input type="text" name="<?=cLogin::KEY_HOST?>" size="40"></td>
-				</tr>
-				<tr>
-					<td align="right">use https:</td>
-					<td><select name="<?=cLogin::KEY_HTTPS?>">
-						<option selected value="yes">yes</option>
-						<option  value="no">no</option>
-					</select></td>
-				</tr>
-				<tr><td colspan="2"><input type="submit" name="<?=cLogin::KEY_SUBMIT?>" class="blue_button"></td></tr>
-			</table>
-			<input type="hidden" name="<?=cLogin::KEY_REFERRER?>" value="<?=$_SERVER['HTTP_REFERER']?>">
-			<input type="hidden" name="<?=cRender::IGNORE_REF_QS?>" value="<?=cHeader::get(cRender::IGNORE_REF_QS)?>">
+		<table width="100%" height="75%"><tr><td align="center" valign="middle">
+			<form method="GET" action="index.php">
+				<table class="loginbox">
+					<tr>
+						<td colspan=3><div class="logotable">
+							<table width="100%"><tr>
+								<td align="left"><font class="logintext">Login</font></td>
+								<td align="right"><span class="loginimage"></span></td>
+							</tr></table>
+						</div></td>
+					</tr>
+					<tr>
+						<td align="right">Account:</td>
+						<td><input type="text" name="<?=cLogin::KEY_ACCOUNT?>"></td>
+					</tr>
+					<tr>
+						<td align="right">username:</td>
+						<td><input type="text" name="<?=cLogin::KEY_USERNAME?>"></td>
+					</tr>
+					<tr>
+						<td align="right">password:</td>
+						<td><input type="password" name="<?=cLogin::KEY_PASSWORD?>"></td>
+					</tr>
+					<tr>
+						<td align="right">Controller hostname:</td>
+						<td><input type="text" name="<?=cLogin::KEY_HOST?>" size="40"></td>
+					</tr>
+					<tr>
+						<td align="right">use https:</td>
+						<td><select name="<?=cLogin::KEY_HTTPS?>">
+							<option selected value="yes">yes</option>
+							<option  value="no">no</option>
+						</select></td>
+					</tr>
+					<tr><td colspan="2"><input type="submit" name="<?=cLogin::KEY_SUBMIT?>" class="blue_button"></td></tr>
+				</table>
+				<input type="hidden" name="<?=cLogin::KEY_REFERRER?>" value="<?=$_SERVER['HTTP_REFERER']?>">
+				<input type="hidden" name="<?=cRender::IGNORE_REF_QS?>" value="<?=cHeader::get(cRender::IGNORE_REF_QS)?>">
+			</form>
 			<p>
 			<div class="recommend">
 				No login credentials are stored by this application.
@@ -154,9 +156,8 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				if (cDebug::is_extra_debugging()){
 					?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
 				}
-			?>
-			
-		</td></tr></table></form>
+			?>			
+		</td></tr></table>
 	<?php
 	cRender::html_footer();
 }

@@ -85,14 +85,10 @@ foreach ( $aResponse as $oApp){
 		
 		//************************************************************************************
 		$aTierCount = [];
-		$aOverflowing = [];
 		foreach ($aTrans as $oTrans){
 			$sTier = $oTrans->tierName;
 			if (! array_key_exists($sTier, $aTierCount)) $aTierCount[$sTier] = 0;
 			$aTierCount[$sTier] = $aTierCount[$sTier] +1;
-			
-			if ($oTrans->name === cAppDyn::APPDYN_OVERFLOWING_BT)
-				$aOverflowing[$sTier] = 1;	
 		}
 		
 		foreach ($aTierCount as $sTier=>$iCount){
@@ -109,10 +105,7 @@ foreach ( $aResponse as $oApp){
 				$sCaption .= " Thats good.";
 			}
 			output_row($bBad, "Business Transactions for Tier: '$sTier'", $sCaption);
-			
-			if (array_key_exists($sTier, $aOverflowing))
-				output_row(true, "Overflowing Business Transactions for Tier: $sTier", "<b>Investigate</b> instrumentation for Tier: $sTier");
-	
+				
 		}
 
 		//************************************************************************************
