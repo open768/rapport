@@ -34,7 +34,7 @@ require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
 
-cRender::html_header("All Nodes");
+cRender::html_header("All Agent Versions");
 cRender::force_login();
 const TIER_WIDTH=150;
 const ID_WIDTH=30;
@@ -43,7 +43,7 @@ const AGENT_WIDTH=150;
 
 
 //####################################################################
-cRender::show_top_banner("All Nodes"); 
+cRender::show_top_banner("All AgentVersions"); 
 
 $maApps = cAppDyn::GET_Applications();
 $bShown = false;
@@ -60,26 +60,45 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
+$sVersion = cAppdyn::GET_Controller_version();
 ?>
-<h2>All Nodes for all Applications</h2>
+<h2>Contents</h2>
+<ul>
+	<li><a href="#1">Controller Version</a>
+	<li><a href="#2">Machine and App Agentsn</a>
+	<li><a href="#3">Database Agents</a>
+	<li><a href="#4">Other Agents</a>
+</ul>
+<p>
+<h2><a name="1">Controller Version</a></h2>
+<?=$sVersion?>
+<p>
+<?php
+cRender::button("latest AppDynamics Agents", "https://download.appdynamics.com/download/");	
+?>
 
-<table class="maintable" width="100%">
+<p>
+<h2><a name="2">Machine and App Agents</h2>
+
+<table class="maintable" cellpadding="4">
 <?php	
 	foreach ($maApps as $oApp){
 		$sAppUrl = cHttp::build_url("appagents.php", cRender::build_app_qs($oApp->name, $oApp->id));
 		$sClass = cRender::getRowClass();
 
 		?>
-		<tr class="<?=$sClass?>"><td colspan="9" align="left" valign="bottom">
-			<h3><?=cRender::button($oApp->name, $sAppUrl)?></h3>
-			<!-- <a class="blue_button" href="<?=$sAppUrl?>"><?=$oApp->name?></a>-->
+		<tr class="<?=$sClass?>"><td colspan="5" align="left" valign="bottom">
+			<p>
+			<?php
+				cRenderMenus::show_app_functions($oApp);
+			?>
 		</td></tr>
 		<tr class="tableheader">
-			<th width="<?=TIER_WIDTH?>">Tier</th>
-			<th width="<?=NAME_WIDTH?>" colspan="3">Machine</th>
-			<th width="<?=NAME_WIDTH?>" colspan="2" >Node</th>
-			<th width="<?=AGENT_WIDTH?>">Machine Agent</th>
-			<th width="<?=AGENT_WIDTH*2?>" colspan="2">App Agent</th>
+			<th >Tier</th>
+			<th >Machine</th>
+			<th >Node</th>
+			<th >Machine Agent</th>
+			<th >App Agent</th>
 		</tr>
 		<?php
 		$aMachines = cAppDyn::GET_AppNodes($oApp->id);
@@ -91,20 +110,13 @@ if (cAppdyn::is_demo()){
 
 		foreach ($aData as $oNode){ ?>
 			<tr class="<?=$sClass?>">
-				<td width="<?=TIER_WIDTH?>"><?=$oNode->tierName?></td>
-				<td width="<?=NAME_WIDTH?>"><?=$oNode->machineName?></td>
-				<td width="<?=ID_WIDTH?>"><i><?=$oNode->machineOSType?></i></td>
-				<td width="<?=ID_WIDTH?>"><?=$oNode->machineId?></td>
-				<td width="<?=NAME_WIDTH?>"><?=$oNode->name?></td>
-				<td width="<?=ID_WIDTH?>"><?=$oNode->id?></td>
-				<td width="<?=AGENT_WIDTH?>"><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
-				<td width="<?=AGENT_WIDTH?>"><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
-				<td width="<?=AGENT_WIDTH?>"><?=$oNode->agentType?></td>
+				<td ><?=$oNode->tierName?></td>
+				<td ><?=$oNode->machineName?></td>
+				<td ><?=$oNode->name?></td>
+				<td ><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
+				<td ><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
 			</tr><?php
 		}
-		?>
-			<tr class="<?=$sClass?>"><td colspan="9">&nbsp;</td></tr>
-		<?php
 	
 		if (cDebug::is_debugging() && !$bShown){
 			$bShown = true;
@@ -114,8 +126,16 @@ if (cAppdyn::is_demo()){
 ?>
 </table>
 
+<!-- ############################################################ -->
+<p>
+<h2><a name="3">Database</a> Agents</h2>
+Work in Progress
+<!-- ############################################################ -->
+<p>
+<h2><a name="4">More</a> Agents</h2>
+Work in Progress
+
 <?php
 //####################################################################
-cRender::button("Show All Agents", "allagents.php");	
 cRender::html_footer();
 ?>

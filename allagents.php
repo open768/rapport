@@ -149,6 +149,6 @@ if (cAppdyn::is_demo()){
 	</tr>
 </table><?php
 
-cRender::button("Show All Agent Versions", "allnodes.php");	
+cRender::button("Show All Agent Versions", "allagentversions.php");	
 cRender::html_footer();
 ?>
