@@ -87,15 +87,42 @@ function render_app_agents(){
 					$aData[] = $oNode;
 			uasort($aData, "sort_by_tier");
 
-			foreach ($aData as $oNode){ ?>
-				<tr class="<?=$sClass?>">
-					<td ><?=$oNode->tierName?></td>
-					<td ><?=$oNode->machineName?></td>
-					<td ><?=$oNode->name?></td>
-					<td ><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
-					<td ><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
-				</tr><?php
+			if ( count($aData) == 0){
+				?><tr class="<?=$sClass?>"><td colspan="5">NO Agents found</td></tr><?php
 			}
+			else
+				foreach ($aData as $oNode){ ?>
+					<tr class="<?=$sClass?>">
+						<td ><?=$oNode->tierName?></td>
+						<td ><?=$oNode->machineName?></td>
+						<td ><?=$oNode->name?></td>
+						<td ><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
+						<td ><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
+					</tr><?php
+				}
+		}
+	?></table><?php
+}
+
+//********************************************************************
+function render_db_agents(){
+	cCommon::flushprint("");
+	$aAgents = cAppDynRestUI::GET_database_agents();
+	?><table class="maintable" cellpadding="4">
+		<tr class="tableheader">
+			<th>Name</th>
+			<th>Hostname</th>
+			<th>Version</th>
+			<th>Status</th>			
+		</tr><?php
+		$sClass = cRender::getRowClass();
+		foreach ($aAgents as $oAgent){
+			?><tr class="<?=$sClass?>">
+				<td><?=$oAgent->agentName?></td>
+				<td><?=$oAgent->hostName?></td>
+				<td><?=$oAgent->version?></td>
+				<td><?=$oAgent->status?></td>
+			</tr><?php
 		}
 	?></table><?php
 }
@@ -123,16 +150,14 @@ cRender::button("latest AppDynamics Agents", "https://download.appdynamics.com/d
 <p>
 <!-- ############################################################ -->
 <h2><a name="2">Machine and App Agents</h2>
-<?php //render_app_agents();?>
---DEBUG-- Skipping this
+<?php render_app_agents();?>
 
 <!-- ############################################################ -->
 <p>
 <h2><a name="3">Database</a> Agents</h2>
-Work in Progress
 <?php
-	cDebug::on(true);
-	$aAgents = cAppDynRestUI::GET_database_agents();
+render_db_agents();
+cRender::button("Goto Database Agents", "alldb.php");	
 ?>
 <!-- ############################################################ -->
 <p>
