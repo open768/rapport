@@ -59,7 +59,7 @@ if (cAppdyn::is_demo()){
 
 <?php
 //####################################################################
-$oResult = cAppDyn::GET_Node_details($aid, $nodeID);
+$oResult = cAppDynRestUI::GET_Node_details($aid, $nodeID);
 
 //####################################################################
 cRender::html_footer();

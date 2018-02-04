@@ -45,22 +45,65 @@ const AGENT_WIDTH=150;
 //####################################################################
 cRender::show_top_banner("All AgentVersions"); 
 
-$maApps = cAppDyn::GET_Applications();
-$bShown = false;
-
-function sort_by_tier($a, $b){
-	return strnatcasecmp($a->tierName.$a->machineName, $b->tierName.$b->machineName);
-}
-
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRender::html_footer();
 	exit;
 }
-//********************************************************************
 
+//####################################################################
+function sort_by_tier($a, $b){
+	return strnatcasecmp($a->tierName.$a->machineName, $b->tierName.$b->machineName);
+}
+
+//********************************************************************
+function render_app_agents(){
+	$aApps = cAppDyn::GET_Applications();
+	?><table class="maintable" cellpadding="4"><?php	
+		foreach ($aApps as $oApp){
+			$sAppUrl = cHttp::build_url("appagents.php", cRender::build_app_qs($oApp->name, $oApp->id));
+			$sClass = cRender::getRowClass();
+
+			?>
+			<tr class="<?=$sClass?>"><td colspan="5" align="left" valign="bottom">
+				<p>
+				<?php
+					cRenderMenus::show_app_functions($oApp);
+				?>
+			</td></tr>
+			<tr class="tableheader">
+				<th >Tier</th>
+				<th >Machine</th>
+				<th >Node</th>
+				<th >Machine Agent</th>
+				<th >App Agent</th>
+			</tr>
+			<?php
+			$aMachines = cAppDyn::GET_AppNodes($oApp->id);
+			$aData = [];
+			foreach ( $aMachines as $aNodes)
+				foreach ($aNodes as $oNode)
+					$aData[] = $oNode;
+			uasort($aData, "sort_by_tier");
+
+			foreach ($aData as $oNode){ ?>
+				<tr class="<?=$sClass?>">
+					<td ><?=$oNode->tierName?></td>
+					<td ><?=$oNode->machineName?></td>
+					<td ><?=$oNode->name?></td>
+					<td ><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
+					<td ><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
+				</tr><?php
+			}
+		}
+	?></table><?php
+}
+
+//####################################################################
 $sVersion = cAppdyn::GET_Controller_version();
+
+
 ?>
 <h2>Contents</h2>
 <ul>
@@ -78,58 +121,19 @@ cRender::button("latest AppDynamics Agents", "https://download.appdynamics.com/d
 ?>
 
 <p>
+<!-- ############################################################ -->
 <h2><a name="2">Machine and App Agents</h2>
-
-<table class="maintable" cellpadding="4">
-<?php	
-	foreach ($maApps as $oApp){
-		$sAppUrl = cHttp::build_url("appagents.php", cRender::build_app_qs($oApp->name, $oApp->id));
-		$sClass = cRender::getRowClass();
-
-		?>
-		<tr class="<?=$sClass?>"><td colspan="5" align="left" valign="bottom">
-			<p>
-			<?php
-				cRenderMenus::show_app_functions($oApp);
-			?>
-		</td></tr>
-		<tr class="tableheader">
-			<th >Tier</th>
-			<th >Machine</th>
-			<th >Node</th>
-			<th >Machine Agent</th>
-			<th >App Agent</th>
-		</tr>
-		<?php
-		$aMachines = cAppDyn::GET_AppNodes($oApp->id);
-		$aData = [];
-		foreach ( $aMachines as $aNodes)
-			foreach ($aNodes as $oNode)
-				$aData[] = $oNode;
-		uasort($aData, "sort_by_tier");
-
-		foreach ($aData as $oNode){ ?>
-			<tr class="<?=$sClass?>">
-				<td ><?=$oNode->tierName?></td>
-				<td ><?=$oNode->machineName?></td>
-				<td ><?=$oNode->name?></td>
-				<td ><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
-				<td ><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
-			</tr><?php
-		}
-	
-		if (cDebug::is_debugging() && !$bShown){
-			$bShown = true;
-			cDebug::vardump($aNodes[0],true);
-		}
-	}
-?>
-</table>
+<?php //render_app_agents();?>
+--DEBUG-- Skipping this
 
 <!-- ############################################################ -->
 <p>
 <h2><a name="3">Database</a> Agents</h2>
 Work in Progress
+<?php
+	cDebug::on(true);
+	$aAgents = cAppDynRestUI::GET_database_agents();
+?>
 <!-- ############################################################ -->
 <p>
 <h2><a name="4">More</a> Agents</h2>
