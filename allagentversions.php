@@ -52,23 +52,41 @@ if (cAppdyn::is_demo()){
 	exit;
 }
 
+
 //####################################################################
-function sort_by_tier($a, $b){
-	return strnatcasecmp($a->tierName.$a->machineName, $b->tierName.$b->machineName);
+function get_application_ids(){
+	$aApps = cAppdyn::GET_applications();
+	$aOutput = [];
+	foreach ($aApps as $oApp){
+		$aOutput[ $oApp->id] = $oApp->name;
+	}
+	return $aOutput;
 }
 
-$gaApps = cAppdyn::GET_applications();
+//********************************************************************
+function get_application_from_id($psID){
+	global $gaAppIds;
+	if (array_key_exists($psID, $gaAppIds))
+		return $gaAppIds[$psID];
+	elseif ($psID == "")
+		return "<i>No Application</i>";
+	else
+		return "<i>Unknown Application: $psID</i>";
+}
 
+//********************************************************************
 function parse_version($psInput){
-	if ( preg_match('/\s(v[\.\d]*)\s/', $psInput, $aMatches)){
+	if ( preg_match('/\s(v[\.\d]*)\s/', $psInput, $aMatches))
 		return $aMatches[1];
-	}else{
+	else
 		return $psInput;
-	}
+	
 }
 //********************************************************************
 function render_machine_agents(){
 	global $gaApps;
+	global $gaAppIds;
+	
 	try{
 		$aAgents = cAppDynRestUI::GET_machine_agents();
 	}
@@ -87,7 +105,7 @@ function render_machine_agents(){
 		$sClass = cRender::getRowClass();
 		foreach ($aAgents as $oAgent){
 			?><tr class="<?=$sClass?>">
-				<td><?=$oAgent->applicationIds[0]?></td>
+				<td><?=get_application_from_id($oAgent->applicationIds[0]) ?></td>
 				<td><?=$oAgent->hostName?></td>
 				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
 				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
@@ -160,6 +178,7 @@ function render_db_agents(){
 }
 
 //####################################################################
+$gaAppIds = get_application_ids();
 
 
 ?>
@@ -205,3 +224,4 @@ Work in Progress
 //####################################################################
 cRender::html_footer();
 ?>
+ 
