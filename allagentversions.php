@@ -57,57 +57,88 @@ function sort_by_tier($a, $b){
 	return strnatcasecmp($a->tierName.$a->machineName, $b->tierName.$b->machineName);
 }
 
+$gaApps = cAppdyn::GET_applications();
+
+function parse_version($psInput){
+	if ( preg_match('/\s(v[\.\d]*)\s/', $psInput, $aMatches)){
+		return $aMatches[1];
+	}else{
+		return $psInput;
+	}
+}
 //********************************************************************
-function render_app_agents(){
-	$aApps = cAppDyn::GET_Applications();
-	?><table class="maintable" cellpadding="4"><?php	
-		foreach ($aApps as $oApp){
-			$sAppUrl = cHttp::build_url("appagents.php", cRender::build_app_qs($oApp->name, $oApp->id));
-			$sClass = cRender::getRowClass();
-
-			?>
-			<tr class="<?=$sClass?>"><td colspan="5" align="left" valign="bottom">
-				<p>
-				<?php
-					cRenderMenus::show_app_functions($oApp);
-				?>
-			</td></tr>
-			<tr class="tableheader">
-				<th >Tier</th>
-				<th >Machine</th>
-				<th >Node</th>
-				<th >Machine Agent</th>
-				<th >App Agent</th>
-			</tr>
-			<?php
-			$aMachines = cAppDyn::GET_AppNodes($oApp->id);
-			$aData = [];
-			foreach ( $aMachines as $aNodes)
-				foreach ($aNodes as $oNode)
-					$aData[] = $oNode;
-			uasort($aData, "sort_by_tier");
-
-			if ( count($aData) == 0){
-				?><tr class="<?=$sClass?>"><td colspan="5">NO Agents found</td></tr><?php
-			}
-			else
-				foreach ($aData as $oNode){ ?>
-					<tr class="<?=$sClass?>">
-						<td ><?=$oNode->tierName?></td>
-						<td ><?=$oNode->machineName?></td>
-						<td ><?=$oNode->name?></td>
-						<td ><?=cAppdynUtil::extract_agent_version($oNode->machineAgentVersion)?></td>
-						<td ><?=cAppdynUtil::extract_agent_version($oNode->appAgentVersion)?></td>
-					</tr><?php
-				}
+function render_machine_agents(){
+	global $gaApps;
+	try{
+		$aAgents = cAppDynRestUI::GET_machine_agents();
+	}
+	catch (Exception $e){
+		cRender::errorbox("Oops unable to get machine agent data from controller:<p>".$e->getMessage());		
+		return;
+	}
+	
+	?><table class="maintable" cellpadding="4">
+		<tr class="tableheader">
+			<th>Application</th>
+			<th>Hostname</th>
+			<th>Version</th>
+			<th>Runtime</th>			
+		</tr><?php
+		$sClass = cRender::getRowClass();
+		foreach ($aAgents as $oAgent){
+			?><tr class="<?=$sClass?>">
+				<td><?=$oAgent->applicationIds[0]?></td>
+				<td><?=$oAgent->hostName?></td>
+				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
+				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
+			</tr><?php
 		}
 	?></table><?php
+	cCommon::flushprint("");
+}
+
+//********************************************************************
+function render_app_agents(){
+	global $gaApps;
+	try {
+		$aAgents = cAppDynRestUI::GET_appServer_agents();
+	}
+	catch (Exception $e){
+		cRender::errorbox("Oops unable to get app agent data from controller:<p>".$e->getMessage());		
+		return;
+	}
+	?><table class="maintable" cellpadding="4">
+		<tr class="tableheader">
+			<th>Application</th>
+			<th>Tier</th>
+			<th>Hostname</th>
+			<th>Version</th>
+			<th>Runtime</th>			
+		</tr><?php
+		$sClass = cRender::getRowClass();
+		foreach ($aAgents as $oAgent){
+			?><tr class="<?=$sClass?>">
+				<td><?=$oAgent->applicationName?></td>
+				<td><?=$oAgent->applicationComponentName?></td>
+				<td><?=$oAgent->hostName?></td>
+				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
+				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
+			</tr><?php
+		}
+	?></table><?php
+	cCommon::flushprint("");
 }
 
 //********************************************************************
 function render_db_agents(){
-	cCommon::flushprint("");
-	$aAgents = cAppDynRestUI::GET_database_agents();
+	global $gaApps;
+	try{
+		$aAgents = cAppDynRestUI::GET_database_agents();
+	}
+	catch (Exception $e){
+		cRender::errorbox("Oops unable to get database agent data from controller:<p>".$e->getMessage());		
+		return;
+	}
 	?><table class="maintable" cellpadding="4">
 		<tr class="tableheader">
 			<th>Name</th>
@@ -120,48 +151,54 @@ function render_db_agents(){
 			?><tr class="<?=$sClass?>">
 				<td><?=$oAgent->agentName?></td>
 				<td><?=$oAgent->hostName?></td>
-				<td><?=$oAgent->version?></td>
+				<td><?=parse_version($oAgent->version)?></td>
 				<td><?=$oAgent->status?></td>
 			</tr><?php
 		}
 	?></table><?php
+	cCommon::flushprint("");
 }
 
 //####################################################################
-$sVersion = cAppdyn::GET_Controller_version();
 
 
 ?>
 <h2>Contents</h2>
 <ul>
-	<li><a href="#1">Controller Version</a>
-	<li><a href="#2">Machine and App Agentsn</a>
-	<li><a href="#3">Database Agents</a>
-	<li><a href="#4">Other Agents</a>
+	<li><a href="#c">Controller Version</a>
+	<li><a href="#a">Machine Agents</a>
+	<li><a href="#a">App Agents</a>
+	<li><a href="#d">Database Agents</a>
+	<li><a href="#o">Other Agents</a>
 </ul>
 <p>
-<h2><a name="1">Controller Version</a></h2>
-<?=$sVersion?>
+<h2><a name="c">Controller Version</a></h2>
+<?=cAppdyn::GET_Controller_version();?>
 <p>
 <?php
 cRender::button("latest AppDynamics Agents", "https://download.appdynamics.com/download/");	
 ?>
-
 <p>
+
 <!-- ############################################################ -->
-<h2><a name="2">Machine and App Agents</h2>
+<h2><a name="m">Machine</h2>
+<?php render_machine_agents();?>
+<p>
+
+<!-- ############################################################ -->
+<h2><a name="a">Application</h2>
 <?php render_app_agents();?>
+<p>
 
 <!-- ############################################################ -->
-<p>
-<h2><a name="3">Database</a> Agents</h2>
+<h2><a name="d">Database</a> Agents</h2>
 <?php
 render_db_agents();
 cRender::button("Goto Database Agents", "alldb.php");	
 ?>
-<!-- ############################################################ -->
 <p>
-<h2><a name="4">More</a> Agents</h2>
+<!-- ############################################################ -->
+<h2><a name="o">More</a> Agents</h2>
 Work in Progress
 
 <?php
