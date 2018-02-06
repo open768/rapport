@@ -75,13 +75,28 @@ function get_application_from_id($psID){
 }
 
 //********************************************************************
-function parse_version($psInput){
-	if ( preg_match('/\s(v[\.\d]*)\s/', $psInput, $aMatches))
+function parse_BuildDate($psInput){
+	if ( preg_match('/Build Date ([\d-]*)/', $psInput, $aMatches))
 		return $aMatches[1];
 	else
 		return $psInput;
 	
 }
+//********************************************************************
+function parse_version($psInput){
+	if ( preg_match('/\s(v[\.\d]*)\s/', $psInput, $aMatches))
+		return $aMatches[1];
+	else
+		return $psInput;
+}
+
+//********************************************************************
+function epoch_to_date($psEpoch){
+	$sDate = date("d M Y",$psEpoch/1000);
+	return $sDate;
+}
+
+
 //********************************************************************
 function render_machine_agents(){
 	global $gaApps;
@@ -100,6 +115,8 @@ function render_machine_agents(){
 			<th>Application</th>
 			<th>Hostname</th>
 			<th>Version</th>
+			<th>Build Date</th>			
+			<th>Installed</th>			
 			<th>Runtime</th>			
 		</tr><?php
 		$sClass = cRender::getRowClass();
@@ -108,6 +125,8 @@ function render_machine_agents(){
 				<td><?=get_application_from_id($oAgent->applicationIds[0]) ?></td>
 				<td><?=$oAgent->hostName?></td>
 				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
+				<td><?=parse_buildDate($oAgent->agentDetails->agentVersion)?></td>
+				<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
 				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
 			</tr><?php
 		}
@@ -131,6 +150,7 @@ function render_app_agents(){
 			<th>Tier</th>
 			<th>Hostname</th>
 			<th>Version</th>
+			<th>Installed</th>
 			<th>Runtime</th>			
 		</tr><?php
 		$sClass = cRender::getRowClass();
@@ -140,6 +160,7 @@ function render_app_agents(){
 				<td><?=$oAgent->applicationComponentName?></td>
 				<td><?=$oAgent->hostName?></td>
 				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
+				<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
 				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
 			</tr><?php
 		}
@@ -180,6 +201,10 @@ function render_db_agents(){
 //####################################################################
 $gaAppIds = get_application_ids();
 
+cRender::button("Back to Agents", "allagents.php");	
+cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
+cRender::button("latest AppDynamics versions", "appdversions.php");	
+cRender::appdButton(cAppDynControllerUI::agents(), "Agent Settings");
 
 ?>
 <h2>Contents</h2>
@@ -190,12 +215,12 @@ $gaAppIds = get_application_ids();
 	<li><a href="#d">Database Agents</a>
 	<li><a href="#o">Other Agents</a>
 </ul>
+
 <p>
 <h2><a name="c">Controller Version</a></h2>
 <?=cAppdyn::GET_Controller_version();?>
 <p>
 <?php
-cRender::button("latest AppDynamics Agents", "https://download.appdynamics.com/download/");	
 ?>
 <p>
 
