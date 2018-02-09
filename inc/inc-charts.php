@@ -38,7 +38,7 @@ class cChart{
 			showZoom="<?=self::$show_zoom?>"
 			showCompare="<?=self::$show_compare?>"
 		>
-			Initialising...
+			Initialising: <?=$psCaption?>
 		</DIV>
 	<?php }
 	

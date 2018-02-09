@@ -163,12 +163,13 @@ $.widget( "ck.appdchart",{
 	onInView: function(pbIsInView){
 		var oThis = this;
 		var oElement = oThis.element;
+		var oOptions = this.options;
 
 		//check if element is visible
 		if (!pbIsInView) return;		
 		oElement.off('inview');	//turn off the inview listener
 		oElement.empty();
-		oElement.append("give me a sec.");
+		oElement.append("Initialising: " + oOptions.title);
 
 		setTimeout(	function(){	oThis.onTimer()}, this.consts.WAIT_VISIBLE);
 	},
@@ -177,6 +178,7 @@ $.widget( "ck.appdchart",{
 	onTimer: function(){
 		var oThis = this;
 		var oElement = oThis.element;
+		var oOptions = this.options;
 		if (cCharts.queue.stopping) return;
 		
 		if (!oElement.inViewport()){
@@ -190,7 +192,7 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Queueing...");
+		oElement.append(oLoader).append("Queueing: " + oOptions.title);
 		
 		//add the data request to the http queue
 		var oItem = new cHttpQueueItem();
@@ -235,6 +237,8 @@ $.widget( "ck.appdchart",{
 	//*******************************************************************
 	onStart: function(poItem){
 		var oElement = this.element;
+		var oOptions = this.options;
+
 		if (cCharts.queue.stopping) return;
 		
 		if (!oElement.inViewport()){
@@ -246,7 +250,7 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading...");
+		oElement.append(oLoader).append("Loading: " + oOptions.title);
 	},
 	
 	//*******************************************************************

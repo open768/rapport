@@ -696,15 +696,33 @@ class cRender{
 	}
 	
 	//**************************************************************************
-	public static function getInfrastructureMetricTypes(){
+	public static function getInfrastructureAgentMetricTypes(){
 		$aTypes = 
 		 [
-			self::METRIC_TYPE_ACTIVITY,
-			self::METRIC_TYPE_RESPONSE_TIMES,
 			self::METRIC_TYPE_INFR_AVAIL,
 			self::METRIC_TYPE_INFR_AGENT_METRICS,
 			self::METRIC_TYPE_INFR_AGENT_INVALID_METRICS,
 			self::METRIC_TYPE_INFR_AGENT_LICENSE_ERRORS,
+		];
+		
+		//sort the list
+		$aSortedList = [];
+		foreach ($aTypes as $sMetricType){
+			$oDetails = self::getInfrastructureMetric(null,null,$sMetricType);
+			$aSortedList[$oDetails->caption] = $oDetails;
+		}
+		uksort($aSortedList, "strnatcasecmp");
+		$aTypes = [];
+		foreach ($aSortedList as $oDetails)
+			$aTypes[] = $oDetails->type;
+		
+		return $aTypes;
+	}
+
+	//**************************************************************************
+	public static function getInfrastructureMetricTypes(){
+		$aTypes = 
+		 [
 			self::METRIC_TYPE_INFR_CPU_BUSY,
 			self::METRIC_TYPE_INFR_DISK_FREE,
 			self::METRIC_TYPE_INFR_MEM_FREE,

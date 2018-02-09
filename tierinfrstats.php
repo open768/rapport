@@ -140,6 +140,25 @@ if ($node) {
 //####################################################################
 ?>
 <p>
+<h2>Agent Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
+<?php
+//####################################################################
+	$aMetricTypes = cRender::getInfrastructureAgentMetricTypes();
+	
+	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
+
+	$aMetrics = [];
+	$iWidth = cRender::CHART_WIDTH_LETTERBOX  - 100;
+	foreach ($aMetricTypes as $sMetricType){
+		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth];
+		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$aMetrics[]= [cChart::TYPE=>cChart::BUTTON,cChart::LABEL=>"All Tier", cChart::URL=>$sUrl, cChart::WIDTH=>100];
+	}
+	$sClass = cRender::getRowClass();			
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+?>
+<p>
 <h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
 	$aMetricTypes = cRender::getInfrastructureMetricTypes();
