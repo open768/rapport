@@ -752,16 +752,22 @@ class cRender{
 	
 	//**************************************************************************
 	public static function getInfrastructureMetric($psTier, $psNode=null, $psMetricType){
-			$sNodeCaption = ($psNode?$psNode:$psTier);
+			$sNodeCaption = ($psNode?$psNode:($psTier?$psTier:"App"));
 			
 			switch($psMetricType){
 				case self::METRIC_TYPE_ACTIVITY:
-					$sMetricUrl = cAppDynMetric::tierNodeCallsPerMin($psTier,$psNode);
+					if ($psTier)
+						$sMetricUrl = cAppDynMetric::tierNodeCallsPerMin($psTier,$psNode);
+					else
+						$sMetricUrl = cAppDynMetric::appCallsPerMin();
 					$sCaption = "Calls per min ($sNodeCaption)";
 					$sShortCaption = "Activity";
 					break;
 				case self::METRIC_TYPE_RESPONSE_TIMES:
-					$sMetricUrl = cAppDynMetric::tierNodeResponseTimes($psTier,$psNode);
+					if ($psTier)
+						$sMetricUrl = cAppDynMetric::tierNodeResponseTimes($psTier,$psNode);
+					else
+						$sMetricUrl = cAppDynMetric::appResponseTimes();
 					$sCaption = "response times in ms ($sNodeCaption)";
 					$sShortCaption = "Response";
 					break;

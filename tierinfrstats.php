@@ -135,7 +135,7 @@ if ($node) {
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
 	$aMetrics[]= [cChart::LABEL=>"Response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl];
 	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 1, $sClass);
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
 
 //####################################################################
 ?>
@@ -148,12 +148,10 @@ if ($node) {
 	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
 	$aMetrics = [];
-	$iWidth = cRender::CHART_WIDTH_LETTERBOX  - 100;
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth];
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::TYPE=>cChart::BUTTON,cChart::LABEL=>"All Tier", cChart::URL=>$sUrl, cChart::WIDTH=>100];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
@@ -166,12 +164,10 @@ if ($node) {
 	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
 	$aMetrics = [];
-	$iWidth = cRender::CHART_WIDTH_LETTERBOX  - 100;
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth];
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::TYPE=>cChart::BUTTON,cChart::LABEL=>"All Tier", cChart::URL=>$sUrl, cChart::WIDTH=>100];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);

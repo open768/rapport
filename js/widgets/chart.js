@@ -27,11 +27,13 @@ var cCharts={
 				var sMetric = oElement.attr("metric");
 				var sTitle = oElement.attr("title");
 				var sPrevious = oElement.attr("previous");
+				var sGoURL = oElement.attr("gourl");
 				
 				oElement.appdchart({
 					appName:sAppName,
 					title:sTitle,
 					metric:sMetric,
+					goUrl:sGoURL,
 					previous_period:sPrevious,
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
@@ -288,6 +290,12 @@ $.widget( "ck.appdchart",{
 	},
 	
 	//*******************************************************************
+	onClickGo: function(){
+		var oOptions = this.options;
+		document.location.href = oOptions.goUrl;
+	},
+	
+	//*******************************************************************
 	onClickCompare: function(){
 		var oOptions = this.options;
 		var oConsts = this.consts;
@@ -417,6 +425,12 @@ $.widget( "ck.appdchart",{
 		if (oOptions.showCompare){
 			var oButton = $("<button>",{class:"csv_button",title:"Compare"}).button({icon:"ui-icon-shuffle"});
 			oButton.click(		function(){ oThis.onClickCompare()}		);
+			oCell.append(oButton);
+		}
+
+		if (oOptions.goUrl){
+			var oButton = $("<button>",{class:"csv_button",title:"Go"}).button({icon:"ui-icon-arrowreturn-1-n"});
+			oButton.click(		function(){ oThis.onClickGo()}		);
 			oCell.append(oButton);
 		}
 		oRow.append(oCell);

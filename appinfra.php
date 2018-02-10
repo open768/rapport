@@ -58,21 +58,27 @@ cRender::show_time_options( $sTitle);
 <?php
 //####################################################################
 cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
-?><p><?php
+?>
+<h2>Tiers</h2>
+<?php
+$aActivityMetrics = [cRender::METRIC_TYPE_ACTIVITY, cRender::METRIC_TYPE_RESPONSE_TIMES];
+$aInfraMetricTypes = cRender::getInfrastructureMetricTypes();
+$aAgentMetricTypes = cRender::getInfrastructureAgentMetricTypes();
+$aMetricTypes = array_merge($aActivityMetrics,$aAgentMetricTypes, $aInfraMetricTypes);
 
-//####################################################################
 $aTiers =cAppdyn::GET_Tiers($gsApp);
-
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 	
 	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
-	$aMetricTypes = cRender::getInfrastructureMetricTypes();
+	$sTierQs = cRender::build_tier_qs($gsAppQs,$oTier->name, $oTier->id );
+	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($oTier->name,null,$sMetricType);
-		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
+		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl];
 	}
 	
 	$sClass = cRender::getRowClass();

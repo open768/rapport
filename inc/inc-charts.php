@@ -23,24 +23,27 @@ class cChart{
 	const TYPE="t";
 	const LABEL="l";
 	const BUTTON="b";
+	const GO_URL="gu";
 	const APP="a";
 	const URL="u";
 	const STYLE="s";
 	const WIDTH="w";
 
 	//****************************************************************************
-	public static function add( $psCaption, $psMetric, $psApp, $piHeight=250, $pbPreviousPeriod=false, $piWidth=null){ 
+	public static function add( $psCaption, $psMetric, $psApp, $psGoURL=null, $piHeight=250, $pbPreviousPeriod=false, $piWidth=null){ 
 		if ($piWidth==null) $piWidth = self::$width;
-	?><DIV 
+		?><DIV 
 			type="appdchart" 
 			appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" previous="<?=$pbPreviousPeriod?>"
 			width="<?=$piWidth?>" height="<?=$piHeight?>" 
 			showZoom="<?=self::$show_zoom?>"
 			showCompare="<?=self::$show_compare?>"
+			<?php if($psGoURL){?>
+				goUrl="<?=$psGoURL?>"
+			<?php }?>
 		>
-			Initialising: <?=$psCaption?>
-		</DIV>
-	<?php }
+		Initialising: <?=$psCaption?>
+	</DIV><?php }
 	
 	
 	//****************************************************************************
@@ -117,8 +120,13 @@ class cChart{
 						break;
 					default:
 						$sApp = $poApp->name;
+						$sGoURL = null;
+						
 						if (array_key_exists(self::APP,$aItem)){
 							$sApp = $aItem[self::APP];
+						}
+						if (array_key_exists(self::GO_URL,$aItem)){
+							$sGoURL = $aItem[self::GO_URL];
 						}
 						if (! array_key_exists(self::LABEL, $aItem)){
 							cDebug::write("no label");
@@ -127,7 +135,7 @@ class cChart{
 							cDebug::write("no metric");
 							cDebug::vardump($aItem,true);
 						}else{
-							self::add($aItem[self::LABEL], $aItem[self::METRIC], $sApp, $piHeight,false, $iWidth);
+							self::add($aItem[self::LABEL], $aItem[self::METRIC], $sApp, $sGoURL, $piHeight,false, $iWidth);
 						}
 				}
 				?><?=$end_tag?><?php

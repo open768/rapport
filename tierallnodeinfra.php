@@ -134,19 +134,18 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 	$sNodeUrl = cHttp::build_url("tierinfrstats.php",$sTierQS);
 	
 	$aMetrics = [];
-	$iWidth = cRender::CHART_WIDTH_LETTERBOX  - 150;
+	$iWidth = cRender::CHART_WIDTH_LETTERBOX /3 ;
 
 	foreach ($aNodes as $oNode){
 		$sNode = $oNode->name;
 		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
 		$oMetric = cRender::getInfrastructureMetric($tier,$sNode, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth];
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
-		$aMetrics[]= [cChart::TYPE=>cChart::BUTTON,cChart::LABEL=>"Node<br>Infrastructure", cChart::URL=>$sUrl, cChart::WIDTH=>150];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth, cChart::GO_URL=>$sUrl];
 	}
 	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cChart::metrics_table($oApp, $aMetrics, 3, $sClass);
 ?>
 
 <?php
