@@ -201,9 +201,7 @@ $.widget( "ck.appdchart",{
 		
 		//loading message
 		oElement.empty();
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Queueing: " + oOptions.title);
+		oElement.append("Queueing: " + oOptions.title);
 		
 		//add the data request to the http queue
 		var oItem = new cHttpQueueItem();

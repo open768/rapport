@@ -71,14 +71,14 @@ foreach ( $aApps as $oApp){
 		$aMetrics = [];
 		foreach ($aTiers as $oTier){ 
 			if (cFilter::isTierFilteredOut($oTier->name)) continue;
+			$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
+			$sUrl = "tier.php?$sTierQs";
 			
 			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oTier->name];
-			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($oTier->name)];
-			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cAppDynMetric::tierResponseTimes($oTier->name)];
-			$sTierQs = cRender::build_tier_qs($sAppQS, $oTier->name, $oTier->id );
-			$aMetrics[] = [	cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", "tier.php?$sTierQs") ];
+			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
+			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cAppDynMetric::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
 		}
-		cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php
 }
 cChart::do_footer();
