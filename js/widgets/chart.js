@@ -179,6 +179,7 @@ $.widget( "ck.appdchart",{
 		//check if element is visible
 		if (!pbIsInView) return;		
 		oElement.off('inview');	//turn off the inview listener
+		oElement.attr("class","chart_initialising");
 		oElement.empty();
 		oElement.append("Initialising: " + oOptions.title);
 
@@ -201,6 +202,7 @@ $.widget( "ck.appdchart",{
 		
 		//loading message
 		oElement.empty();
+		oElement.attr("class","chart_queuing");
 		oElement.append("Queueing: " + oOptions.title);
 		
 		//add the data request to the http queue
@@ -257,6 +259,7 @@ $.widget( "ck.appdchart",{
 		}
 		
 		oElement.empty();
+		oElement.attr("class","chart_loading");
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
 		oElement.append(oLoader).append("Loading: " + oOptions.title);
@@ -269,6 +272,7 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 
 		if (cCharts.queue.stopping) return;
+		oElement.attr("class","chart_drawing");
 		
 		var oResponse = poHttp.response;
 		if (oResponse.data.length == 0){

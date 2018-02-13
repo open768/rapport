@@ -232,5 +232,37 @@ h2
 }
 
 
+/*---------------------------------------------------------------------------------*/
+.chart_initialising{
+	background: repeating-linear-gradient(
+		45deg,
+		white,
+		white 10px,
+		gainsboro 10px,
+		gainsboro 20px
+	);	
+}
 
+.chart_queuing{
+	background: repeating-linear-gradient(
+		45deg,
+		white,
+		white 10px,
+		lemonchiffon 10px,
+		lemonchiffon 20px
+	);	
+}
+
+.chart_loading{
+	background: repeating-linear-gradient(
+		45deg,
+		white,
+		white 5px,
+		lavender 5px,
+		lavender 10px
+	);	
+}
+
+.chart_drawing{
+}
  
