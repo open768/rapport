@@ -155,12 +155,11 @@ if ($aResponse){
 		if ($node) cHttp::build_url($sLink,cRender::NODE_QS,$node);
 		
 		$sMetricUrl=cAppdynMetric::transCallsPerMin($tier, $sTrans, $node);
-		$aMetrics[] = [cChart::LABEL=>"Calls ($sTrans)", cChart::METRIC=>$sMetricUrl];
+		$aMetrics[] = [cChart::LABEL=>"Calls ($sTrans)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"];
 		$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $sTrans,$node);
-		$aMetrics[] = [cChart::LABEL=>"Response ($sTrans)", cChart::METRIC=>$sMetricUrl];
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("Go",$sLink)];
+		$aMetrics[] = [cChart::LABEL=>"Response ($sTrans)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"];
 	}
-	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
+	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
 }else{
 	cRender::messagebox("No transactions found");
 }
