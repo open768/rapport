@@ -78,7 +78,7 @@ foreach ($aTiers as $oTier){
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($oTier->name,null,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl];
+		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers"];
 	}
 	
 	$sClass = cRender::getRowClass();

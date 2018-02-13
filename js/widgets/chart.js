@@ -5,6 +5,8 @@ var cCharts={
 	COUNT_FIELD: "ccf",
 	TITLE_FIELD: "ctf.",
 	APP_FIELD: "caf.",
+	show_export_all : true,
+	
 	
 	//*********************************************************
 	rememberChart: function(psApp, psMetric, psTitle){
@@ -13,13 +15,13 @@ var cCharts={
 	},
 	
 	//*********************************************************
-	loadCharts: function(pbShowExportAll){	
+	loadCharts: function(){	
 		var iCount ,oInput;
 		
 		iCount = 0;
 		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:"all_csv.php",target:"_blank"});
 		
-		$("DIV[type='appdchart']").each( 
+		$("DIV[type='appdchart']").each( //all div elements which have their type set to appdchart
 			function(pIndex, pElement){
 				var oElement = $(pElement);
 				
@@ -27,13 +29,15 @@ var cCharts={
 				var sMetric = oElement.attr("metric");
 				var sTitle = oElement.attr("title");
 				var sPrevious = oElement.attr("previous");
-				var sGoURL = oElement.attr("gourl");
+				var sGoURL = oElement.attr("goUrl");
+				var sGoLabel = oElement.attr("goLabel");
 				
 				oElement.appdchart({
 					appName:sAppName,
 					title:sTitle,
 					metric:sMetric,
 					goUrl:sGoURL,
+					goCaption:sGoLabel,
 					previous_period:sPrevious,
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
@@ -42,7 +46,7 @@ var cCharts={
 				});
 					
 				//-------------build the form
-				if(pbShowExportAll){
+				if(this.show_export_all){
 					iCount++;
 					oInput = $("<input>",{type:"hidden",name:cCharts.METRIC_FIELD+iCount,value:sMetric}	);
 					oForm.append(oInput);
@@ -62,17 +66,20 @@ var cCharts={
 			oForm.append(oInput);
 			$("#AllMetrics").empty().append(oForm);
 		}
-	}
+	},
+	
+	init:function(){
+		var oThis = this;
+		//load google charts
+		try{
+			google.charts.load('current', {'packages':['corechart']});
+		}
+		catch (e){}
+		google.charts.setOnLoadCallback( function(){oThis.loadCharts()})
+	},
 }
 cCharts.queue.maxTransfers = 3	; 	//dont overload the controller
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//load google charts
-try{
-	google.charts.load('current', {'packages':['corechart']});
-}
-catch (e){}
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,7 +97,9 @@ $.widget( "ck.appdchart",{
 		shortNoData:false,
 		showZoom:true,
 		onSelect: null,
-		previous_period:false
+		previous_period:false,
+		goUrl:null,
+		goCaption:"Go"
 	},
 	
 	consts:{
@@ -429,7 +438,7 @@ $.widget( "ck.appdchart",{
 		}
 
 		if (oOptions.goUrl){
-			var oButton = $("<button>",{class:"csv_button",title:"Go"}).button({icon:"ui-icon-arrowreturn-1-n"});
+			var oButton = $("<button>",{class:"csv_button",title:oOptions.goCaption}).button({icon:"ui-icon-arrowreturn-1-n"});
 			oButton.click(		function(){ oThis.onClickGo()}		);
 			oCell.append(oButton);
 		}

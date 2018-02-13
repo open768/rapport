@@ -151,7 +151,7 @@ if ($node) {
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Metric for all nodes in Tier:$tier"];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
@@ -167,7 +167,7 @@ if ($node) {
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Metric for all nodes in Tier:$tier"];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);

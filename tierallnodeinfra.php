@@ -127,7 +127,7 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 	
 //####################################################################
 ?>
-<h2><?=$oMetricDetails->caption?> for Servers in (<?=$tier?>) Tier</h2>
+<h2><?=$oMetricDetails->caption?> for all Servers in (<?=$tier?>) Tier</h2>
 <p>
 <?php
 	$sDiskUrl = cHttp::build_url("nodedisks.php", $sTierQS);
@@ -142,7 +142,7 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 		
 		$oMetric = cRender::getInfrastructureMetric($tier,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth, cChart::GO_URL=>$sUrl];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 3, $sClass);

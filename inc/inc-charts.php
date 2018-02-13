@@ -13,38 +13,49 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //array of charts to display
+class cChartItem{
+	public $type = "unknown";
+	public $caption = "not set";
+	public $metric = "not set";
+	public $app = null;
+	public $go_URL = null;
+	public $go_hint = "Go";
+	public $height = 250;
+	public $width = 1000;
+	
+	public function write_html(){
+		?><DIV 
+			type="appdchart" 
+			appName="<?=$this->app?>" metric="<?=$this->metric?>" title="<?=$this->caption?>" previous="<?=cChart::$showPreviousPeriod?>"
+			width="<?=$this->width?>" height="<?=$this->height?>" 
+			showZoom="<?=cChart::$show_zoom?>"
+			showCompare="<?=cChart::$show_compare?>"
+			<?php if($this->go_URL){?>
+				goUrl="<?=$this->go_URL?>" goLabel="<?=$this->go_hint?>"
+			<?php }?>
+		>
+			Initialising: <?=$this->caption?>
+		</DIV><?php
+	}
+}
 
 class cChart{
 	public static $width=1000;
 	public static $show_zoom = true;
 	public static $show_compare = true;
 	public static $show_export_all = true;
+	public static $showPreviousPeriod = true;
+	public static $show_ = true;
 	const METRIC="m";
 	const TYPE="t";
 	const LABEL="l";
 	const BUTTON="b";
 	const GO_URL="gu";
+	const GO_HINT="gh";
 	const APP="a";
 	const URL="u";
 	const STYLE="s";
 	const WIDTH="w";
-
-	//****************************************************************************
-	public static function add( $psCaption, $psMetric, $psApp, $psGoURL=null, $piHeight=250, $pbPreviousPeriod=false, $piWidth=null){ 
-		if ($piWidth==null) $piWidth = self::$width;
-		?><DIV 
-			type="appdchart" 
-			appName="<?=$psApp?>" metric="<?=$psMetric?>" title="<?=$psCaption?>" previous="<?=$pbPreviousPeriod?>"
-			width="<?=$piWidth?>" height="<?=$piHeight?>" 
-			showZoom="<?=self::$show_zoom?>"
-			showCompare="<?=self::$show_compare?>"
-			<?php if($psGoURL){?>
-				goUrl="<?=$psGoURL?>"
-			<?php }?>
-		>
-		Initialising: <?=$psCaption?>
-	</DIV><?php }
-	
 	
 	//****************************************************************************
 	public static function do_header(){
@@ -55,7 +66,7 @@ class cChart{
 		?>
 		<div id="AllMetrics">...</div>
 		<script language="javascript">
-			$(cCharts.loadCharts(<?=self::$show_export_all?>));
+			$(	function(){cCharts.show_export_all=<?=self::$show_export_all?>;cCharts.init();}	);
 		</script>
 		<?php
 	}
@@ -119,24 +130,23 @@ class cChart{
 						cRender::button($aItem[self::LABEL],$aItem[self::URL]);
 						break;
 					default:
-						$sApp = $poApp->name;
-						$sGoURL = null;
+						if (!array_key_exists(self::METRIC, $aItem)) throw new Exception("No Metric Provided");
 						
-						if (array_key_exists(self::APP,$aItem)){
-							$sApp = $aItem[self::APP];
-						}
-						if (array_key_exists(self::GO_URL,$aItem)){
-							$sGoURL = $aItem[self::GO_URL];
-						}
-						if (! array_key_exists(self::LABEL, $aItem)){
-							cDebug::write("no label");
-							cDebug::vardump($aItem,true);
-						}elseif (! array_key_exists(self::METRIC, $aItem)){
-							cDebug::write("no metric");
-							cDebug::vardump($aItem,true);
-						}else{
-							self::add($aItem[self::LABEL], $aItem[self::METRIC], $sApp, $sGoURL, $piHeight,false, $iWidth);
-						}
+						$oItem = new cChartItem();
+						$oItem->app = $poApp->name;
+						$oItem->metric = $aItem[self::METRIC];
+						$oItem->width = self::$width;
+						if ($piHeight) $oItem->height = $piHeight;
+						
+						if (array_key_exists(self::APP,$aItem)) $oItem->app = $aItem[self::APP];
+						if (array_key_exists(self::GO_URL,$aItem)) $oItem->go_URL = $aItem[self::GO_URL];
+						if (array_key_exists(self::GO_HINT,$aItem)) $oItem->go_hint = $aItem[self::GO_HINT];
+						if (array_key_exists(self::LABEL, $aItem)) 
+							$oItem->caption = $aItem[self::LABEL];
+						else
+							$oItem->caption = $aItem[self::METRIC];
+						
+						$oItem->write_html();
 				}
 				?><?=$end_tag?><?php
 				if ($iCol==$piMaxCols){
