@@ -219,9 +219,13 @@ $.widget( "ck.appdmenu",{
 			oSelect.append(oGroup);
 				
 			//- - - - -All group
-			oGroup = $("<optgroup>",{label:"General"});
-				this.pr__addToGroup( oGroup, "Agents", "allagents.php");
-				
+			oGroup = $("<optgroup>",{label:"Agents"});
+				this.pr__addToGroup( oGroup, "Installed", "allagentversions.php");
+				this.pr__addToGroup( oGroup, "Downloads", "appdversions.php");
+			oSelect.append(oGroup);
+			
+			//- - - - -All group
+			oGroup = $("<optgroup>",{label:"General"});			
 				oParams = {};
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
 				this.pr__addToGroup(oGroup, "Application Activity", cBrowser.buildUrl("all.php", oParams));
