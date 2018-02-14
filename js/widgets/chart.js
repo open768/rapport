@@ -17,6 +17,7 @@ var cCharts={
 	//*********************************************************
 	loadCharts: function(){	
 		var iCount ,oInput;
+		var oThis = this;
 		
 		iCount = 0;
 		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:"all_csv.php",target:"_blank"});
@@ -46,7 +47,7 @@ var cCharts={
 				});
 					
 				//-------------build the form
-				if(this.show_export_all){
+				if(oThis.show_export_all){
 					iCount++;
 					oInput = $("<input>",{type:"hidden",name:cCharts.METRIC_FIELD+iCount,value:sMetric}	);
 					oForm.append(oInput);

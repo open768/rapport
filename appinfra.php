@@ -37,7 +37,6 @@ require_once("inc/inc-render.php");
 //####################################################################
 cRender::html_header("Infrastructure");
 cRender::force_login();
-cChart::$show_export_all = false;
 cChart::do_header();
 
 //####################################################################
@@ -62,9 +61,7 @@ cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 <h2>Tiers</h2>
 <?php
 $aActivityMetrics = [cRender::METRIC_TYPE_ACTIVITY, cRender::METRIC_TYPE_RESPONSE_TIMES];
-$aInfraMetricTypes = cRender::getInfrastructureMetricTypes();
-$aAgentMetricTypes = cRender::getInfrastructureAgentMetricTypes();
-$aMetricTypes = array_merge($aActivityMetrics,$aAgentMetricTypes, $aInfraMetricTypes);
+$aMetricTypes = cRender::getInfrastructureMetricTypes();
 
 $aTiers =cAppdyn::GET_Tiers($gsApp);
 foreach ($aTiers as $oTier){

@@ -142,10 +142,10 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 		
 		$oMetric = cRender::getInfrastructureMetric($tier,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::WIDTH=>$iWidth, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
 	}
 	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 3, $sClass);
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
 ?>
 
 <?php

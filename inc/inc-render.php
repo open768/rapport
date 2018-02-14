@@ -228,6 +228,7 @@ class cRender{
 	const METRIC_TYPE_INFR_NETWORK_IN = "mtini";
 	const METRIC_TYPE_INFR_NETWORK_OUT = "mtino";
 	const METRIC_TYPE_INFR_JAVA_HEAP_USED = "mtijhu";
+	const METRIC_TYPE_INFR_JAVA_HEAP_USEDPCT = "mtijup";
 	const METRIC_TYPE_INFR_JAVA_GC_TIME = "mtijgt";
 	const METRIC_TYPE_INFR_JAVA_CPU_USAGE = "mtijcpu";
 	const METRIC_TYPE_INFR_DOTNET_HEAP_USED = "mtidhu";
@@ -696,6 +697,16 @@ class cRender{
 	}
 	
 	//**************************************************************************
+	public static function getInfrastructureMetricTypes(){
+		$aMiscInfraMetricTypes = self::getInfrastructureMiscMetricTypes();
+		$aAgentMetricTypes = self::getInfrastructureAgentMetricTypes();
+		$aMemoryMetricTypes = self::getInfrastructureMemoryMetricTypes();
+		$aMetricTypes = array_merge($aMiscInfraMetricTypes,$aAgentMetricTypes, $aMemoryMetricTypes);
+		uksort($aMetricTypes, "strnatcasecmp");
+		return $aMetricTypes;
+	}
+	
+	//**************************************************************************
 	public static function getInfrastructureAgentMetricTypes(){
 		$aTypes = 
 		 [
@@ -720,18 +731,39 @@ class cRender{
 	}
 
 	//**************************************************************************
-	public static function getInfrastructureMetricTypes(){
+	public static function getInfrastructureMemoryMetricTypes(){
+		$aTypes = 
+		 [
+			self::METRIC_TYPE_INFR_MEM_FREE,
+			self::METRIC_TYPE_INFR_JAVA_HEAP_USEDPCT,
+			self::METRIC_TYPE_INFR_JAVA_HEAP_USED,
+			self::METRIC_TYPE_INFR_JAVA_GC_TIME,
+			self::METRIC_TYPE_INFR_DOTNET_HEAP_USED,
+			self::METRIC_TYPE_INFR_DOTNET_GC_PCT
+		];
+		
+		//sort the list
+		$aSortedList = [];
+		foreach ($aTypes as $sMetricType){
+			$oDetails = self::getInfrastructureMetric(null,null,$sMetricType);
+			$aSortedList[$oDetails->caption] = $oDetails;
+		}
+		uksort($aSortedList, "strnatcasecmp");
+		$aTypes = [];
+		foreach ($aSortedList as $oDetails)
+			$aTypes[] = $oDetails->type;
+		
+		return $aTypes;
+	}
+	
+	//**************************************************************************
+	public static function getInfrastructureMiscMetricTypes(){
 		$aTypes = 
 		 [
 			self::METRIC_TYPE_INFR_CPU_BUSY,
 			self::METRIC_TYPE_INFR_DISK_FREE,
-			self::METRIC_TYPE_INFR_MEM_FREE,
-			self::METRIC_TYPE_INFR_JAVA_HEAP_USED,
-			self::METRIC_TYPE_INFR_JAVA_GC_TIME,
 			self::METRIC_TYPE_INFR_JAVA_CPU_USAGE,
 			self::METRIC_TYPE_INFR_DOTNET_ANON_REQ,
-			self::METRIC_TYPE_INFR_DOTNET_HEAP_USED,
-			self::METRIC_TYPE_INFR_DOTNET_GC_PCT,
 			self::METRIC_TYPE_INFR_NETWORK_IN,
 			self::METRIC_TYPE_INFR_NETWORK_OUT
 		];
@@ -805,6 +837,11 @@ class cRender{
 					$sMetricUrl = cAppDynMetric::InfrastructureJavaHeapUsed($psTier,$psNode);
 					$sCaption = "memory - Java Heap used ($sNodeCaption)";
 					$sShortCaption = "Java Heap used";
+					break;
+				case self::METRIC_TYPE_INFR_JAVA_HEAP_USEDPCT:
+					$sMetricUrl = cAppDynMetric::InfrastructureJavaHeapUsedPct($psTier,$psNode);
+					$sCaption = "memory - Java Heap %Used ($sNodeCaption)";
+					$sShortCaption = "Java Heap %Used";
 					break;
 				case self::METRIC_TYPE_INFR_JAVA_GC_TIME:
 					$sMetricUrl = cAppDynMetric::InfrastructureJavaGCTime($psTier,$psNode);

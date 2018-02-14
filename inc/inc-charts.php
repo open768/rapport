@@ -41,11 +41,10 @@ class cChartItem{
 
 class cChart{
 	public static $width=1000;
-	public static $show_zoom = true;
-	public static $show_compare = true;
-	public static $show_export_all = true;
-	public static $showPreviousPeriod = true;
-	public static $show_ = true;
+	public static $show_zoom = 1;
+	public static $show_compare = 1;
+	public static $show_export_all = 1;
+	public static $showPreviousPeriod = 1;
 	const METRIC="m";
 	const TYPE="t";
 	const LABEL="l";
@@ -63,6 +62,10 @@ class cChart{
 	
 	//****************************************************************************
 	public static function do_footer(){		
+		cDebug::write("export all is : ".self::$show_export_all);
+		cDebug::write("zoom all is : ".self::$show_zoom);
+		cDebug::write("compare all is : ".self::$show_compare);
+		cDebug::write("previous all is : ".self::$showPreviousPeriod);
 		?>
 		<div id="AllMetrics">...</div>
 		<script language="javascript">

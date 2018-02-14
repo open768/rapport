@@ -151,7 +151,21 @@ if ($node) {
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Metric for all nodes in Tier:$tier"];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
+	}
+	$sClass = cRender::getRowClass();			
+	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+?>
+<p>
+<h2>Memory Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
+<?php
+	$aMetricTypes = cRender::getInfrastructureMemoryMetricTypes();
+	
+	$aMetrics = [];
+	foreach ($aMetricTypes as $sMetricType){
+		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
+		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
@@ -159,15 +173,13 @@ if ($node) {
 <p>
 <h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
-	$aMetricTypes = cRender::getInfrastructureMetricTypes();
+	$aMetricTypes = cRender::getInfrastructureMiscMetricTypes();
 	
-	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
-
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cRender::getInfrastructureMetric($tier,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Metric for all nodes in Tier:$tier"];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
