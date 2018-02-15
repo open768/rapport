@@ -53,11 +53,16 @@ cChart::$width=cRender::CHART_WIDTH_LARGE;
 cChart::$show_zoom = false;
 
 //####################################################################
+$oChart = new cChartItem();
+$oChart->metric = $sMetric;
+$oChart->caption = $sTitle;
+$oChart->app = $sApp;
+$oChart->height = 700;
 
 ?>
 	<table class="maintable"><tr><td>
 	<?php
-		cChart::add($sTitle, $sMetric, $sApp, 700);
+		$oChart->write_html();
 	?>
 	</td></tr></table><?php
 
