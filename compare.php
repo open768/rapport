@@ -47,10 +47,7 @@ if (!$sApp) $sApp = "No Application Specified";
 cRender::html_header("compare: $sChartTitle");
 if (!$sMetric ) cDebug::error("Metric missing");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
+
 cRender::show_time_options("<b>comparing</b>: ($sApp): $sChartTitle"); 
 
 //####################################################################
@@ -60,14 +57,25 @@ cChart::$show_compare = false;
 
 //####################################################################
 
+$oChart = new cChartItem();
+$oChart->metric = $sMetric;
+$oChart->caption = $sMetric;
+$oChart->app = $sApp;
+$oChart->height = cRender::CHART_HEIGHT_LETTERBOX;
 ?>
-	<table class="maintable"><tr><td>
-	<?php
-		cChart::add($sMetric, $sMetric, $sApp, cRender::CHART_HEIGHT_LETTERBOX);
-		
-		cChart::add("previous period :$sMetric", $sMetric, $sApp, cRender::CHART_HEIGHT_LETTERBOX, true);
-	?>
-	</td></tr></table><?php
+	<table class="maintable">
+		<tr><td>
+			<?php
+				$oChart->write_html();
+			?>
+		</td></tr>
+		<tr><td>
+			<?php
+				cChart::$showPreviousPeriod = 1;
+				$oChart->write_html();
+			?>
+		</td></tr>
+	</table><?php
 
 cChart::do_footer();
 cRender::html_footer();

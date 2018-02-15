@@ -74,8 +74,63 @@ if (cAppdyn::is_demo()){
 	exit;
 }
 //********************************************************************
+function render_tier_transactions($poApp, $psTier, $psTierID){	
+	global $giTotalTrans;
+	global $node;
+	cDebug::enter();
+	$oTimes = cRender::get_times();
 
+	$sTierQS = cRender::build_tier_qs(cRender::get_base_app_qs(), $psTier, $psTierID);
+	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
+	$iCount = 0;
 
+	$sMetricpath = cAppdynMetric::transResponseTimes($psTier, "*");
+	$aStats = cAppdynCore::GET_MetricData($poApp->name, $sMetricpath, $oTimes,"true",false,true);
+	cDebug::vardump($aStats);
+
+	$aMetrics=[];
+	$iCount  = 0;
+	foreach ($aStats as $oTrans){
+		$oStats =  cAppdynUtil::Analyse_Metrics($oTrans->metricValues);
+		$sTrName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $psTier);
+		try{
+			$sTrID = cAppdynUtil::extract_bt_id($oTrans->metricName);
+		}
+		catch (Exception $e){
+			$sTrID = null;
+		}
+		$sLink = null;
+		
+		if ($oStats->count == 0)	continue;
+		$iCount ++;
+		$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $sTrName);
+		$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
+		
+		if ($node) $sLink = cHttp::build_url($sLink,cRender::NODE_QS,$node);
+		
+		$sMetricUrl=cAppdynMetric::transCallsPerMin($psTier, $sTrName, $node);
+		$aMetrics[] = [
+			cChart::LABEL=>"Calls ($sTrName)", cChart::METRIC=>$sMetricUrl, 
+			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
+		];
+		
+		$sMetricUrl=cAppDynMetric::transResponseTimes($psTier, $sTrName,$node);
+		$aMetrics[] = [
+			cChart::LABEL=>"Response ($sTrName)", cChart::METRIC=>$sMetricUrl, 
+			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
+		];
+	}
+	
+	if ($iCount >0)
+		cChart::metrics_table($poApp,$aMetrics,2,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
+	else{
+		cRender::messagebox("No transactions found");
+	}
+	
+	cDebug::leave();
+}
+
+//********************************************************************
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
@@ -142,27 +197,9 @@ if ($node){
 }
 
 //################################################################################################
-$aResponse =cAppdyn::GET_tier_transaction_names($app, $tier);
 ?><p><h3>Transaction Details</h3><?php
-if ($aResponse){
-	$aMetrics=[];
-	foreach ($aResponse as $oTrans){
-		$sTrans = $oTrans->name;
-		$sTrId = $oTrans->id;
-		$sLink = cHttp::build_url("transdetails.php?$gsTierQs",cRender::TRANS_QS, $sTrans);
-		$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrId);
-		
-		if ($node) cHttp::build_url($sLink,cRender::NODE_QS,$node);
-		
-		$sMetricUrl=cAppdynMetric::transCallsPerMin($tier, $sTrans, $node);
-		$aMetrics[] = [cChart::LABEL=>"Calls ($sTrans)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"];
-		$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $sTrans,$node);
-		$aMetrics[] = [cChart::LABEL=>"Response ($sTrans)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"];
-	}
-	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)"]);
-}else{
-	cRender::messagebox("No transactions found");
-}
+render_tier_transactions($oApp, $tier, $tid);
+
 //###############################################
 cChart::do_footer();
 cRender::html_footer();

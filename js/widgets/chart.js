@@ -29,7 +29,12 @@ var cCharts={
 				var sAppName = oElement.attr("appName");
 				var sMetric = oElement.attr("metric");
 				var sTitle = oElement.attr("title");
-				var sPrevious = oElement.attr("previous");
+				var iPrevious = 0;
+				try {
+					var sPrevious = oElement.attr("previous");
+					iPrevious = parseInt(sPrevious);
+				} catch (e){}
+				
 				var sGoURL = oElement.attr("goUrl");
 				var sGoLabel = oElement.attr("goLabel");
 				
@@ -39,7 +44,7 @@ var cCharts={
 					metric:sMetric,
 					goUrl:sGoURL,
 					goCaption:sGoLabel,
-					previous_period:sPrevious,
+					previous_period:iPrevious,
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
 					showZoom:oElement.attr("showZoom"),
@@ -360,7 +365,10 @@ $.widget( "ck.appdchart",{
 		oParams[ oConsts.METRIC_QS ] = oOptions.metric;
 		if (oOptions.appName) oParams[ oConsts.APP_QS ] = oOptions.appName;
 		oParams[ oConsts.DIV_QS ] = "";
-		if (oOptions.previous_period) oParams[ oConsts.PREVIOUS_QS ] = 1;
+		if (oOptions.previous_period == 1) {
+			oParams[ oConsts.PREVIOUS_QS ] = 1;
+			oOptions.title = "(Previous) " + oOptions.title;
+		}
 		
 		sUrl = cBrowser.buildUrl(this.consts.METRIC_API, oParams);
 		return sUrl;
@@ -457,7 +465,7 @@ $.widget( "ck.appdchart",{
 		var oDiv = oChartDiv[0];
 		var dStart = new Date(poJson.epoch_start);
 		var dEnd = new Date(poJson.epoch_end);
-		if (oOptions.previous_period){
+		if (oOptions.previous_period == 1){
 			var iDiff = poJson.epoch_end - poJson.epoch_start;
 			dEnd = new Date(poJson.epoch_start);
 			dStart = new Date(dEnd - iDiff);

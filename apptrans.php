@@ -166,8 +166,9 @@ $aTiers =cAppdyn::GET_Tiers($app);
 		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
 
 		//display the transaction data
-		?><div class="<?=cRender::getRowClass()?>"><?php
-			cRender::button("transactions for $oTier->name", $sUrl);
+		?><h2>Transactions for <?=$oTier->name?></h2>
+		<div class="<?=cRender::getRowClass()?>"><?php
+			cRender::button("show transaction graphs", $sUrl);
 			render_tier_transactions($app, $oTier->name, $oTier->id);
 		?></div><?php
 	}

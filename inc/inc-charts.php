@@ -44,7 +44,7 @@ class cChart{
 	public static $show_zoom = 1;
 	public static $show_compare = 1;
 	public static $show_export_all = 1;
-	public static $showPreviousPeriod = 1;
+	public static $showPreviousPeriod = 0;
 	const METRIC="m";
 	const TYPE="t";
 	const LABEL="l";
