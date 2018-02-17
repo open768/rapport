@@ -28,13 +28,14 @@ class cChartItem{
 			type="appdchart" 
 			appName="<?=$this->app?>" metric="<?=$this->metric?>" title="<?=$this->caption?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
+			style="width:<?=$this->width?>px;height:<?=$this->height?>px"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			<?php if($this->go_URL){?>
 				goUrl="<?=$this->go_URL?>" goLabel="<?=$this->go_hint?>"
 			<?php }?>
 		>
-			Initialising: <?=$this->caption?>
+			Waiting for charts: <?=$this->caption?>
 		</DIV><?php
 	}
 }

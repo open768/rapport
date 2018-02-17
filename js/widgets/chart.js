@@ -122,8 +122,7 @@ $.widget( "ck.appdchart",{
 		compare_url:"compare.php",
 		WAIT_VISIBLE:1200,
 		INFO_WIDTH:70,
-		BUTTON_WIDTH:30,
-		BUTTON_HEIGHT:35
+		BUTTON_WIDTH:30
 	},
 
 	//#################################################################
@@ -457,7 +456,7 @@ $.widget( "ck.appdchart",{
 		
 		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height-this.consts.BUTTON_HEIGHT });
+		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5});
 		var oCell = $("<TD>");
 		oCell.append(oChartDiv);
 		oRow.append(oCell);
