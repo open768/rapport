@@ -72,7 +72,7 @@ cRender::show_time_options($title);
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 
 //other buttons
-$aMetrics = cRender::getInfrastructureMetricTypes();
+$aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
 $oCred = cRender::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
