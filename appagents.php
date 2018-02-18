@@ -29,6 +29,7 @@ cDebug::check_GET_or_POST();
 //####################################################################
 
 require_once("$phpinc/appdynamics/appdynamics.php");
+require_once("$phpinc/appdynamics/metrics.php");
 require_once("inc/inc-charts.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
@@ -44,7 +45,7 @@ $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
 $sAppQS = cRender::get_base_app_QS();
 $sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
-$aMetrics = cRender::getInfrastructureMetricTypes();
+$aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 //####################################################################
 cRender::show_top_banner("Agents for $app"); 
@@ -79,7 +80,7 @@ if ($oCred->restricted_login == null){
 		<option selected disabled>Show for all Servers...</option>
 		<?php
 			foreach ($aMetrics as $sMetricType){
-				$oMetric = cRender::getInfrastructureMetric($app,null,$sMetricType);
+				$oMetric = cAppDynInfraMetric::getInfrastructureMetric($app,null,$sMetricType);
 				$sDetailUrl = cHttp::build_url($sDetailBaseUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 				?><option value="<?="$sDetailUrl"?>"><?=$oMetric->short?></option><?php
 			}

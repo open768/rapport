@@ -83,7 +83,7 @@ if (!$gsMetricType ){
 	cRender::errorbox("no metric type");
 	exit;
 }
-$oMetric = cRender::getInfrastructureMetric($app,null,$gsMetricType);
+$oMetric = cAppDynInfraMetric::getInfrastructureMetric($app,null,$gsMetricType);
 $sTitle  = $oMetric->caption;
 
 //####################################################################
@@ -142,7 +142,7 @@ if ($iNodes==0){
 				foreach ($aTierNodes as $oNode){
 					$sNode = $oNode->name;
 
-					$oMetric = cRender::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
+					$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
 					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRender::NODE_QS,$sNode);
 					
 					$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];

@@ -58,7 +58,7 @@ set_time_limit(200);
 $app = cHeader::get(cRender::APP_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-$oMetricDetails = cRender::getInfrastructureMetric($app,null,$sMetricType);
+$oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($app,null,$sMetricType);
 
 $title = "$app&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 
@@ -98,7 +98,7 @@ if (cAppdyn::is_demo()){
 	<?php
 		$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQS);
 		foreach ( $aMetrics as $sType){
-			$oMetric = cRender::getInfrastructureMetric($tier,null,$sType);
+			$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier,null,$sType);
 			?>
 				<option <?=($sType==$sMetricType?"disabled":"")?> value="<?=cHttp::build_url($sAllInfraUrl, cRender::METRIC_TYPE_QS, $sType)?>"><?=$oMetric->short?></option>
 			<?php
@@ -122,7 +122,7 @@ $(
 
 //data for the page
 $aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
-$aMetricTypes = cRender::getInfrastructureMetricTypes();
+$aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 	
 //####################################################################
@@ -140,7 +140,7 @@ $aMetricTypes = cRender::getInfrastructureMetricTypes();
 		$sNode = $oNode->name;
 		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
-		$oMetric = cRender::getInfrastructureMetric($tier,$sNode, $sMetricType);
+		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
 	}

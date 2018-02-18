@@ -61,7 +61,7 @@ cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 <h2>Tiers</h2>
 <?php
 $aActivityMetrics = [cRender::METRIC_TYPE_ACTIVITY, cRender::METRIC_TYPE_RESPONSE_TIMES];
-$aMetricTypes = cRender::getInfrastructureMetricTypes();
+$aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 $aTiers =cAppdyn::GET_Tiers($gsApp);
 foreach ($aTiers as $oTier){
@@ -73,7 +73,7 @@ foreach ($aTiers as $oTier){
 
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
-		$oMetric = cRender::getInfrastructureMetric($oTier->name,null,$sMetricType);
+		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers"];
 	}
