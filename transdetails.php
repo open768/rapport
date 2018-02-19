@@ -124,6 +124,7 @@ if ($oCred->restricted_login == null){?>
 }
 $aid = cHeader::get(cRender::APP_ID_QS);
 cRender::appdButton(cAppDynControllerUI::transaction($aid,$trid));
+cDebug::flush();
 
 ?>
 <H2>Contents</h2>
@@ -145,6 +146,7 @@ cRender::appdButton(cAppDynControllerUI::transaction($aid,$trid));
 	$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cAppDynMetric::transErrors($tier, $trans)];
 	$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($tier, $trans)];
 	cChart::metrics_table($oApp, $aMetrics, 3, cRender::getRowClass(), cRender::CHART_HEIGHT_SMALL);
+	cDebug::flush();
 ?>
 
 <p>
@@ -166,6 +168,7 @@ cRender::appdButton(cAppDynControllerUI::transaction($aid,$trid));
 
 // ################################################################################
 // ################################################################################
+cDebug::flush();
 if ($node){ ?>
 	<h2><a name="3">Data</a> for Transaction: (<?=$trans?>) for node (<?=$node?>)</h2>
 	<?php
@@ -221,6 +224,7 @@ if ($node){ ?>
 <!-- #############################################################################-->
 <h2><a name="4">Remote</a>Services for - <?=$tier?> - <?=$trans?></h2>
 	<?php
+		cDebug::flush();
 		//******get the external tiers used by this transaction
 		$oData = cAppdyn::GET_TransExtTiers($app, $tier, $trans);
 		if ($oData){
@@ -248,6 +252,7 @@ if ($node){ ?>
 <!-- #############################################################################-->
 <h2><a name="5">Transaction Snapshots</a></h2>
 <?php
+cDebug::flush();
 $oTimes = cRender::get_times();
 $sAppdUrl = cAppDynControllerUI::transaction_snapshots($aid,$trid, $oTimes);
 $aSnapshots = cAppdyn::GET_snaphot_info($app, $trid, $oTimes);
