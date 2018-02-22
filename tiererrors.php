@@ -36,20 +36,26 @@ require_once("inc/inc-render.php");
 
 
 //-----------------------------------------------
-$app = cHeader::get(cRender::APP_QS);
-$gsAppQS = cRender::get_base_app_QS();
+$oApp = cRender::get_current_app();
+$oTier = cRender::get_current_tier();
+$gsTierQS = cRender::get_base_tier_QS();
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring - Stats");
+$title ="$oApp->name&gt;$oTier->name&gt;Errors and Exceptions";
+cRender::html_header("$title");
 cRender::force_login();
-$title ="$app&gtWeb Real User Monitoring Stats";
 cRender::show_time_options( $title); 
-cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
 $oTimes = cRender::get_times();
 
-$sGraphUrl = cHttp::build_url("rumgraph.php", $gsAppQS);
-cRender::button("Graphs", $sGraphUrl);	
-
+$oCred = cRender::get_appd_credentials();
+if ($oCred->restricted_login == null){
+	cRenderMenus::show_tier_functions();
+	cRenderMenus::show_tier_menu("Change Tier", "tiererrors.php");
+	
+	$sGraphUrl = cHttp::build_url("tiererrorgraphs.php", $gsTierQS);
+	cRender::button("Show Error Graphs", $sGraphUrl);	
+	cRender::appdButton(cAppDynControllerUI::tier_errors($oApp, $oTier));
+}
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
 	return strnatcasecmp($poRow1->metricPath, $poRow2->metricPath);
@@ -58,23 +64,19 @@ function sort_metric_names($poRow1, $poRow2){
 $gsTABLE_ID = 0;
 
 //*****************************************************************************
-function render_table($psType, $paData){
-	global $gsTABLE_ID, $gsAppQS;
+function render_table($paData){
+	global $oTier, $gsTABLE_ID;
 	
-	$gsTABLE_ID++;
 	uasort ($paData, "sort_metric_names");
 	?><table class="maintable" id="TBL<?=$gsTABLE_ID?>">
 		<thead><tr class="tableheader">
 			<th>Name</th>
 			<th>Count</th>
-			<th></th>
-			<th>Max</th>
 			<th>Average</th>
 		</tr></thead>
 		<tbody><?php
 			$sClass= cRender::getRowClass();
 			$iRows = 0;
-			$sBaseQS = cHttp::build_QS($gsAppQS, cRender::RUM_TYPE_QS,$psType);
 				
 			foreach ($paData as $oItem){
 				if ($oItem == null ) continue;
@@ -82,22 +84,20 @@ function render_table($psType, $paData){
 				
 				$oValues = $oItem->metricValues[0];
 				if ($oValues->count == 0 ) continue;
+				
+				$sName = cAppdynUtil::extract_error_name($oTier->name, $oItem->metricPath);
+				
 				$iRows++;
-				$sImgMax = cRender::get_trans_speed_colour($oValues->max);
-				$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
-				$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
 
 				?><tr class="<?=$sClass?>">
-					<td align="right"><a href="rumpage.php?<?=$sDetailQS?>"><?=$sName?></a></td>
+					<td align="left"><?=$sName?></td>
 					<td align="middle"><?=$oValues->count?></td>
-					<td><img src="<?=$sImgMax?>"></td>
-					<td align="middle"><?=$oValues->max?></td>
 					<td align="middle"><?=$oValues->value?></td>
 				</tr><?php
 			}
 			
 			if ($iRows == 0){
-				?><tr class="<?=$sClass?>"><td colspan="5">Nothing found</td></tr><?php
+				?><tr class="<?=$sClass?>"><td colspan="3">Nothing found</td></tr><?php
 			}
 		?></tbody>
 	</table>
@@ -121,20 +121,10 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Page Requests</h2>
+<h2>Errors</h2>
 <?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
-	$aData = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes,"true",false,true);
-	render_table(cAppdynMetric::BASE_PAGES, $aData);
-	
-// ############################################################
-?>
-<h2>Ajax Requests</h2>
-<?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
-	$aData = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes,"true",false,true);
-	render_table(cAppdynMetric::AJAX_REQ, $aData);
-
-	// ############################################################
+	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
+	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+	render_table($aData);
 	cRender::html_footer();
 ?>

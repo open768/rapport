@@ -389,6 +389,7 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS("tiers.php"));
 						
 			//--------------------------------------------------------------------
+			this.pr__addToGroup(oSelect, "Errors", this.pr__get_base_tier_QS("tiererrors.php"));
 			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS("tierextgraph.php"));
 			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS("tierextcalls.php"));
 			this.pr__addToGroup(oSelect, "Infrastructure Overview", this.pr__get_base_tier_QS("tierinfrstats.php"));
