@@ -13,10 +13,15 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //array of charts to display
+class cChartMetricItem{
+	public $metric;
+	public $caption;
+}
+
 class cChartItem{
 	public $type = "unknown";
 	public $caption = "not set";
-	public $metric = "not set";
+	public $metrics = [];
 	public $app = null;
 	public $go_URL = null;
 	public $go_hint = "Go";
@@ -26,7 +31,7 @@ class cChartItem{
 	public function write_html(){
 		?><DIV 
 			type="appdchart" 
-			appName="<?=$this->app?>" metric="<?=$this->metric?>" title="<?=$this->caption?>" previous="<?=cChart::$showPreviousPeriod?>"
+			appName="<?=$this->app?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
 			style="width:<?=$this->width?>px;height:<?=$this->height?>px"
 			showZoom="<?=cChart::$show_zoom?>"
@@ -34,6 +39,12 @@ class cChartItem{
 			<?php if($this->go_URL){?>
 				goUrl="<?=$this->go_URL?>" goLabel="<?=$this->go_hint?>"
 			<?php }?>
+			<?php
+				for ($i=0; $i< count($this->metrics); $i++){
+					$oMetric = $this->metrics[$i];
+					?>metric<?=$i?>="<?=$oMetric->metric?>" title<?=$i?>="<?=$oMetric->caption?>"<?php
+				}
+			?>
 		>
 			Waiting for charts: <?=$this->caption?>
 		</DIV><?php
@@ -138,18 +149,25 @@ class cChart{
 						
 						$oItem = new cChartItem();
 						$oItem->app = $poApp->name;
-						$oItem->metric = $aItem[self::METRIC];
+
+						//--------------------------------------------------
+						$oMetricItem = new cChartMetricItem();
+						$oMetricItem->metric = $aItem[self::METRIC];
+						if (array_key_exists(self::LABEL, $aItem)) 
+							$oMetricItem->caption = $aItem[self::LABEL];
+						else
+							$oMetricItem->caption = $aItem[self::METRIC];
+						$oItem->metrics[] = $oMetricItem;
+						
+						//--------------------------------------------------
 						$oItem->width = self::$width;
 						if ($piHeight) $oItem->height = $piHeight;
 						
 						if (array_key_exists(self::APP,$aItem)) $oItem->app = $aItem[self::APP];
 						if (array_key_exists(self::GO_URL,$aItem)) $oItem->go_URL = $aItem[self::GO_URL];
 						if (array_key_exists(self::GO_HINT,$aItem)) $oItem->go_hint = $aItem[self::GO_HINT];
-						if (array_key_exists(self::LABEL, $aItem)) 
-							$oItem->caption = $aItem[self::LABEL];
-						else
-							$oItem->caption = $aItem[self::METRIC];
 						
+						//--------------------------------------------------
 						$oItem->write_html();
 				}
 				?><?=$end_tag?><?php

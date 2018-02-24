@@ -27,8 +27,8 @@ var cCharts={
 				var oElement = $(pElement);
 				
 				var sAppName = oElement.attr("appName");
-				var sMetric = oElement.attr("metric");
-				var sTitle = oElement.attr("title");
+				var sMetric = oElement.attr("metric0");
+				var sTitle = oElement.attr("title0");
 				var iPrevious = 0;
 				try {
 					var sPrevious = oElement.attr("previous");
