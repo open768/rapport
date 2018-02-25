@@ -133,30 +133,38 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				</table>
 				<input type="hidden" name="<?=cLogin::KEY_REFERRER?>" value="<?=$_SERVER['HTTP_REFERER']?>">
 				<input type="hidden" name="<?=cRender::IGNORE_REF_QS?>" value="<?=cHeader::get(cRender::IGNORE_REF_QS)?>">
+				<?php
+					if (cDebug::is_debugging()){
+						?><input type="hidden" name="<?=cDebug::DEBUG_STR?>" value="1"><?php
+					}
+					if (cDebug::is_extra_debugging()){
+						?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
+					}
+				?>
 			</form>
 			<p>
 			<div class="recommend">
 				No login credentials are stored by this application.
 				<p>
-				We recommend creating a specific username in your controller to provide access to your controller using this application.
+				please ensure that a local user with limited access rights is created in your controller to provide access using this application.
 				<p>
 				<form action='index.php' method='POST'>
 					<input type='hidden' name='a' value='demo'>
 					<input type='hidden' name='u' value='demo'>
 					<input type='hidden' name='p' value='d3m0'>
-					<input type='hidden' name='h' value='demo'>
+					<input type='hidden' name='h' value='<?=cAppDynCore::DEMO_HOST?>'>
 					<input type='hidden' name='ss' value='no'>
 					<input type='submit' name='s' value='See this application in Demo Mode' class="blue_button">
+				<?php
+					if (cDebug::is_debugging()){
+						?><input type="hidden" name="<?=cDebug::DEBUG_STR?>" value="1"><?php
+					}
+					if (cDebug::is_extra_debugging()){
+						?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
+					}
+				?>
 				</form>
 			</div>
-			<?php
-				if (cDebug::is_debugging()){
-					?><input type="hidden" name="<?=cDebug::DEBUG_STR?>" value="1"><?php
-				}
-				if (cDebug::is_extra_debugging()){
-					?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
-				}
-			?>			
 		</td></tr></table>
 	<?php
 	cRender::html_footer();
