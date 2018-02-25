@@ -110,7 +110,7 @@ function render_tier_transactions($poApp, $poTier){
 		</tfoot>
 	</table>
 	<script language="javascript">
-		$( function(){ $("#<?=$psTierID?>").tablesorter();} );
+		$( function(){ $("#<?=$poTier->id?>").tablesorter();} );
 	</script>
 	<?php
 }
