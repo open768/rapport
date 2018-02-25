@@ -68,7 +68,7 @@ foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 	
 	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
-	$sTierQs = cRender::build_tier_qs($gsAppQs,$oTier->name, $oTier->id );
+	$sTierQs = cRender::build_tier_qs($oApp,$oTier );
 	$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
 	$aMetrics = [];

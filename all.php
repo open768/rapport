@@ -43,6 +43,7 @@ switch($sMetricType){
 		$sMetric1 = cAppDynMetric::webrumCallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
 		$sMetric2 = cAppDynMetric::webrumResponseTimes();
+		$sBaseUrl = "apprum.php";
 		break;
 	case cRender::METRIC_TYPE_RESPONSE_TIMES:
 	case cRender::METRIC_TYPE_ACTIVITY:
@@ -51,6 +52,7 @@ switch($sMetricType){
 		$sMetric1 = cAppDynMetric::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
 		$sMetric2 = cAppDynMetric::appResponseTimes();
+		$sBaseUrl = "tiers.php";
 		break;
 }
 
@@ -59,6 +61,7 @@ cRender::html_header("All Applications - $sTitle1");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/widgets/chart.js"></script>
+	<h1><?=$sTitle1?></h1>
 <?php
 cChart::do_header();
 
@@ -75,8 +78,9 @@ else{
 		foreach ( $aResponse as $oApp){
 			if (cFilter::isAppFilteredOut($oApp->name)) continue;
 			$sClass = cRender::getRowClass();			
+			$sUrl = cHttp::build_url($sBaseUrl, cRender::build_app_qs($oApp));
 			$aMetrics = [
-				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1],
+				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],
 				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
 			];
 			cRenderMenus::show_app_functions($oApp);

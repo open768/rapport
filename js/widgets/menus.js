@@ -134,6 +134,7 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oGroup, "Activity (tiers)", cBrowser.buildUrl("tiers.php", oParams));
 				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl("appagents.php", oParams));
 				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl("appavail.php", oParams));
+				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl("apperrors.php", oParams));
 				this.pr__addToGroup(oGroup, "Events", cBrowser.buildUrl("events.php", oParams));
 				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl("appext.php", oParams));
 				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl("appinfra.php", oParams));
@@ -384,7 +385,7 @@ $.widget( "ck.appdmenu",{
 			var oOption = $("<option>",{selected:1,disabled:1}).append(sTier);
 			oSelect.append(oOption);
 			
-			this.pr__addToGroup(oSelect, "Tier Overview", this.pr__get_base_tier_QS("tier.php"));
+			this.pr__addToGroup(oSelect, "Overview", this.pr__get_base_tier_QS("tier.php"));
 			if (sThisTier)
 				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS("tiers.php"));
 						
@@ -392,7 +393,7 @@ $.widget( "ck.appdmenu",{
 			this.pr__addToGroup(oSelect, "Errors", this.pr__get_base_tier_QS("tiererrors.php"));
 			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS("tierextgraph.php"));
 			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS("tierextcalls.php"));
-			this.pr__addToGroup(oSelect, "Infrastructure Overview", this.pr__get_base_tier_QS("tierinfrstats.php"));
+			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS("tierinfrstats.php"));
 			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS("appservice.php"));
 			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS("apptrans.php"));
 

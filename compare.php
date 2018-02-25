@@ -57,9 +57,13 @@ cChart::$show_compare = false;
 
 //####################################################################
 
+$oItem = new cChartMetricItem();
+$oItem->metric = $sMetric;
+$oItem->caption = $sMetric;
+
 $oChart = new cChartItem();
-$oChart->metric = $sMetric;
-$oChart->caption = $sMetric;
+$oChart->metrics[] = $oItem;
+$oChart->title = $sMetric;
 $oChart->app = $sApp;
 $oChart->height = cRender::CHART_HEIGHT_LETTERBOX;
 ?>

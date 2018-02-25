@@ -147,7 +147,7 @@ $.widget( "ck.appdchart",{
 		//check for required options
 		var oOptions = this.options;
 		if (!oOptions.title)	{		$.error("title  missing!");			}
-		//if (!oOptions.appName)	{		$.error("application  missing!");	}
+		//if (!oOptions.appName)	{	$.error("application  missing!");	}
 		if (!oOptions.metric)	{		$.error("metric  missing!");		}
 		if (!oOptions.width)	{		$.error("width missing!");		}
 		if (!oOptions.height)	{		$.error("height missing!");		}
@@ -349,9 +349,10 @@ $.widget( "ck.appdchart",{
 		
 		oElement.empty();
 		var oDiv = $("<DIV>",{class:"chartnodatadiv"});
-		oDiv.height((oOptions.shortNoData?oConsts.SHORT_NO_DATA_HEIGHT:oConsts.NO_DATA_HEIGHT));
+		oDiv.height(oConsts.SHORT_NO_DATA_HEIGHT);
 		oDiv.append("No data found for "+ oOptions.title);
 		oElement.append(oDiv);		
+		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
 	},
 
 	//*******************************************************************

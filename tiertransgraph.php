@@ -52,6 +52,7 @@ $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $aid = cHeader::get(cRender::APP_ID_QS);
 $oApp = cRender::get_current_app();
+$oTier = cRender::get_current_tier();
 
 $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRender::get_base_app_QS();
@@ -74,17 +75,17 @@ if (cAppdyn::is_demo()){
 	exit;
 }
 //********************************************************************
-function render_tier_transactions($poApp, $psTier, $psTierID){	
+function render_tier_transactions($poApp, $poTier){	
 	global $giTotalTrans;
 	global $node;
 	cDebug::enter();
 	$oTimes = cRender::get_times();
 
-	$sTierQS = cRender::build_tier_qs(cRender::get_base_app_qs(), $psTier, $psTierID);
+	$sTierQS = cRender::build_tier_qs($poApp, $poTier);
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 
-	$sMetricpath = cAppdynMetric::transResponseTimes($psTier, "*");
+	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
 	$aStats = cAppdynCore::GET_MetricData($poApp->name, $sMetricpath, $oTimes,"true",false,true);
 	cDebug::vardump($aStats);
 
@@ -92,7 +93,7 @@ function render_tier_transactions($poApp, $psTier, $psTierID){
 	$iCount  = 0;
 	foreach ($aStats as $oTrans){
 		$oStats =  cAppdynUtil::Analyse_Metrics($oTrans->metricValues);
-		$sTrName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $psTier);
+		$sTrName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $poTier->name);
 		try{
 			$sTrID = cAppdynUtil::extract_bt_id($oTrans->metricName);
 		}
@@ -108,13 +109,13 @@ function render_tier_transactions($poApp, $psTier, $psTierID){
 		
 		if ($node) $sLink = cHttp::build_url($sLink,cRender::NODE_QS,$node);
 		
-		$sMetricUrl=cAppdynMetric::transCallsPerMin($psTier, $sTrName, $node);
+		$sMetricUrl=cAppdynMetric::transCallsPerMin($poTier->name, $sTrName, $node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Calls ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
 		];
 		
-		$sMetricUrl=cAppDynMetric::transResponseTimes($psTier, $sTrName,$node);
+		$sMetricUrl=cAppDynMetric::transResponseTimes($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Response ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"

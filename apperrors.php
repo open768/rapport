@@ -37,26 +37,17 @@ require_once("inc/inc-render.php");
 
 //-----------------------------------------------
 $oApp = cRender::get_current_app();
-$oTier = cRender::get_current_tier();
-$gsTierQS = cRender::get_base_tier_QS();
 
 //####################################################################
-$title ="$oApp->name&gt;$oTier->name&gt;Errors and Exceptions";
+$title ="$oApp->name Application Errors and Exceptions";
 cRender::html_header("$title");
-cChart::do_header();
-
 cRender::force_login();
 cRender::show_time_options( $title); 
 $oTimes = cRender::get_times();
 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
-	cRenderMenus::show_tier_functions();
-	cRenderMenus::show_tier_menu("Change Tier", "tiererrors.php");
-	
-	$sGraphUrl = cHttp::build_url("tiererrors.php", $gsTierQS);
-	cRender::button("Show Error Stats", $sGraphUrl);	
-	cRender::appdButton(cAppDynControllerUI::tier_errors($oApp, $oTier));
+	cRenderMenus::show_app_functions($oApp);
 }
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -66,24 +57,65 @@ function sort_metric_names($poRow1, $poRow2){
 $gsTABLE_ID = 0;
 
 //*****************************************************************************
-function render_table($paData){
-	global $oTier, $oApp;
+function render_tier($poTier){
+	global $oApp, $oTimes, $gsTABLE_ID;
 	
-	uasort ($paData, "sort_metric_names");
-	$aMetrics = [];
-				
-	foreach ($paData as $oItem){
-		if ($oItem == null ) continue;
-		if ($oItem->metricValues == null ) continue;
-		
-		$oValues = $oItem->metricValues[0];
-		if ($oValues->count == 0 ) continue;
-		
-		$sName = cAppdynUtil::extract_error_name($oTier->name, $oItem->metricPath);
-		$aMetrics[] = [	cChart::LABEL=>$sName, cChart::METRIC=>$oItem->metricPath];
+	?><h2><?=$poTier->name?></h2><?php
+	$sMetricpath = cAppdynMetric::Errors($poTier->name, "*");
+	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+	if (count($aData) == 0){
+		cRender::messagebox("Nothing found");
+		return;
 	}
-	$sClass = cRender::getRowClass();
-	cChart::metrics_table($oApp, $aMetrics,2, $sClass);
+		
+	uasort ($aData, "sort_metric_names");
+
+	cRenderMenus::show_tier_functions($poTier->name, $poTier->id);
+	$tierQS = cRender::build_tier_qs($oApp, $poTier);
+	$sGraphUrl = cHttp::build_url("tiererrorgraphs.php", $tierQS);
+	cRender::button("Show Error Graphs", $sGraphUrl);	
+	cRender::appdButton(cAppDynControllerUI::tier_errors($oApp, $poTier));
+	
+	?><table class="maintable" id="TBL<?=$gsTABLE_ID?>" width="1024">
+		<thead><tr class="tableheader">
+			<th width="*">Name</th>
+			<th width="50">Count</th>
+			<th width="50">Average</th>
+		</tr></thead>
+		<tbody><?php
+			$sClass= cRender::getRowClass();
+			$iRows = 0;
+				
+			foreach ($aData as $oItem){
+				if ($oItem == null ) continue;
+				if ($oItem->metricValues == null ) continue;
+				
+				$oValues = $oItem->metricValues[0];
+				if ($oValues->count == 0 ) continue;
+				
+				$sName = cAppdynUtil::extract_error_name($poTier->name, $oItem->metricPath);
+				
+				$iRows++;
+
+				?><tr class="<?=$sClass?>">
+					<td align="left"><?=$sName?></td>
+					<td align="middle"><?=$oValues->count?></td>
+					<td align="middle"><?=$oValues->value?></td>
+				</tr><?php
+			}
+			
+		?></tbody>
+	</table>
+	
+		
+	<script language="javascript">
+		$( function(){ $("#TBL<?=$gsTABLE_ID?>").tablesorter();} );
+	</script>
+
+	<?php
+	if ($iRows == 0) cRender::messagebox("Nothing found for: $poTier->name");
+	$gsTABLE_ID++;
+	cDebug::flush();
 }
 
 //********************************************************************
@@ -98,11 +130,14 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Errors</h2>
+<h1>Application Errors (<?=$oApp->name?>)</h1>
 <?php
-	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
-	render_table($aData);
-	cChart::do_footer();
-	cRender::html_footer();
+$aResponse =cAppdyn::GET_Tiers($oApp->name);
+if ( count($aResponse) == 0)
+	cRender::messagebox("Nothing found");
+else
+	foreach ( $aResponse as $oTier)
+		render_tier($oTier);
+
+cRender::html_footer();
 ?>

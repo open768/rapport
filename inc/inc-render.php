@@ -222,15 +222,15 @@ class cRender{
 	const METRIC_TYPE_JMX_DBPOOLS = "mtjdbp";
 	
 	//************************************************************
-	const CHART_WIDTH_LARGE = 940;
+	const CHART_WIDTH_LARGE = 1024;
 	const CHART_HEIGHT_LARGE = 700;
 	const CHART_HEIGHT_SMALL = 125;
 	const CHART_HEIGHT_TINY = 75;
 
-	const CHART_WIDTH_LETTERBOX = 940;
+	const CHART_WIDTH_LETTERBOX = 1024;
 	const CHART_HEIGHT_LETTERBOX = 250;
 	
-	const CHART_WIDTH_LETTERBOX2 = 940;
+	const CHART_WIDTH_LETTERBOX2 = 1024;
 	const CHART_HEIGHT_LETTERBOX2 = 200;
 	
 	//**************************************************************************
@@ -683,16 +683,17 @@ class cRender{
 
 	//#####################################################################################
 	//#####################################################################################
-	public static function build_app_qs( $psApp, $psAppID){
-		$AppQs = cHttp::build_qs(null, self::APP_QS, $psApp);
-		$AppQs = cHttp::build_qs($AppQs, self::APP_ID_QS, $psAppID);
+	public static function build_app_qs( $poApp){
+		$AppQs = cHttp::build_qs(null, self::APP_QS, $poApp->name);
+		$AppQs = cHttp::build_qs($AppQs, self::APP_ID_QS, $poApp->id);
 		return $AppQs;
 	}
 
 	//******************************************************************************************
-	public static function build_tier_qs( $psAppQs, $psTier, $psTierID){
-		$sTierQs = cHttp::build_qs($psAppQs, self::TIER_QS, $psTier);
-		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $psTierID);
+	public static function build_tier_qs( $poApp, $poTier){
+		$sAppQs = self::build_app_qs($poApp);
+		$sTierQs = cHttp::build_qs($sAppQs, self::TIER_QS, $poTier->name);
+		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $poTier->id);
 		return $sTierQs;
 	}
 	//#####################################################################################
