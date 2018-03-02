@@ -53,9 +53,13 @@ cChart::$width=cRender::CHART_WIDTH_LARGE;
 cChart::$show_zoom = false;
 
 //####################################################################
+$oItem = new cChartMetricItem();
+$oItem->metric = $sMetric;
+$oItem->caption = $sTitle;
+
 $oChart = new cChartItem();
-$oChart->metric = $sMetric;
-$oChart->caption = $sTitle;
+$oChart->metrics[] = $oItem;
+$oChart->title = $sTitle;
 $oChart->app = $sApp;
 $oChart->height = 700;
 

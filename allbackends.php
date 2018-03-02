@@ -71,8 +71,9 @@ foreach ($oApps as $oApp){
 	$sUrl = cHttp::build_url("appbackends.php", cRender::APP_QS, $sApp);
 	$sUrl = cHttp::build_url($sUrl, cRender::APP_ID_QS, $sID);
 	
-	?><div class="<?=cRender::getRowClass();?>">
-		<a name="<?=$sID?>"><?=cRender::button("$oApp->name", $sUrl);?></a>
+	?><hr><h2><a name="<?=$sID?>"><?=$oApp->name?></a></h2>
+		<?php cRenderMenus::show_app_functions($oApp); ?>
+		<?=cRender::button("See Details...", $sUrl);?>
 		<?php
 			$aBackends = cAppdyn::GET_Backends($sApp);
 			$aMetrics = [];
@@ -80,9 +81,9 @@ foreach ($oApps as $oApp){
 				$sMetric = cAppDynMetric::backendResponseTimes($oItem->name);
 				$aMetrics[] = [cChart::LABEL=>"Backend Response Times: $oItem->name", cChart::METRIC=>$sMetric];
 			}
-			cChart::metrics_table($oApp, $aMetrics, 3, cRender::getRowClass());
+			cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 		?>
-	</div><?php
+	<?php
 }
 cChart::do_footer();
 cRender::html_footer();

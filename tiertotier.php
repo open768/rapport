@@ -46,7 +46,7 @@ $totier = cHeader::get(cRender::TO_TIER_QS);
 $gsAppQS = cRender::get_base_app_qs();
 $oApp = cRender::get_current_app();
 
-$oFromTier = new cAppDTier($fromtier, $tid);
+$oFromTier = new cAppDTier($oApp, $fromtier, $tid);
 $gsTierQS = cRender::build_tier_qs($oApp, $oFromTier);
 
 

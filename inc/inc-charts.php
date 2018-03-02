@@ -20,7 +20,7 @@ class cChartMetricItem{
 
 class cChartItem{
 	public $type = "unknown";
-	public $caption = "not set";
+	public $caption = null;
 	public $metrics = [];
 	public $app = null;
 	public $go_URL = null;
@@ -33,7 +33,6 @@ class cChartItem{
 			type="appdchart" 
 			appName="<?=$this->app?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
-			style="width:<?=$this->width?>px;height:<?=$this->height?>px"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			<?php if($this->go_URL){?>
@@ -46,7 +45,7 @@ class cChartItem{
 				}
 			?>
 		>
-			Waiting for charts: <?=$this->caption?>
+			Waiting for charts: <?=$this->metrics[0]->caption?>
 		</DIV><?php
 	}
 }
@@ -85,10 +84,65 @@ class cChart{
 		</script>
 		<?php
 	}
+
 	//#####################################################################################
 	//#####################################################################################
-	//* 2 column table with captions and metrics
-	public static function metrics_table($poApp, $paTable, $piMaxCols, $psRowClass, $piHeight = null, $piWidth=null, $paHeaders=null){ 
+	private static function pr_render_item($poApp, $paItem, $piHeight = null, $piWidth=null, $paHeaders=null){
+		$sType = "graph";
+		if (array_key_exists(self::TYPE,$paItem)) $sType = $paItem[self::TYPE];
+
+		switch ($sType){
+			case self::LABEL:
+				?><?=$paItem[self::LABEL]?><?php
+				break;
+			case self::BUTTON:
+				cRender::button($paItem[self::LABEL],$paItem[self::URL]);
+				break;
+			default:
+				if (!array_key_exists(self::METRIC, $paItem)) throw new Exception("No Metric Provided");
+				
+				$oItem = new cChartItem();
+				$oItem->app = $poApp->name;
+
+				//--------------------------------------------------
+				$oMetricItem = new cChartMetricItem();
+				$oMetricItem->metric = $paItem[self::METRIC];
+				if (array_key_exists(self::LABEL, $paItem)){ 
+					$sLabel = $paItem[self::LABEL];
+					if ($sLabel == null) throw new Exception("No Label Provided");
+					$oMetricItem->caption = $sLabel;
+				}else
+					$oMetricItem->caption = $paItem[self::METRIC];
+				$oItem->metrics[] = $oMetricItem;
+				
+				//--------------------------------------------------
+				$oItem->width = self::$width;
+				if ($piWidth) $oItem->width = $piWidth;
+				if ($piHeight) $oItem->height = $piHeight;
+				
+				if (array_key_exists(self::APP,$paItem)) $oItem->app = $paItem[self::APP];
+				if (array_key_exists(self::GO_URL,$paItem)) $oItem->go_URL = $paItem[self::GO_URL];
+				if (array_key_exists(self::GO_HINT,$paItem)) $oItem->go_hint = $paItem[self::GO_HINT];
+				
+				//--------------------------------------------------
+				$oItem->write_html();
+		}		
+	}
+	//#####################################################################################
+	//#####################################################################################
+	public static function render_metrics($poApp, $paItems, $piWidth=cRender::CHART_WIDTH_LETTERBOX, $piHeight = cRender::CHART_HEIGHT_SMALL ){ 
+		?><div><?php
+		foreach ($paItems as $aItem){
+			$sClass= cRender::getRowClass();
+			?><div class="<?=$sClass?>" style="display:inline-block;width:<?=$piWidth?>px;max-width:<?=$piWidth?>px"><?php
+			self::pr_render_item($poApp, $aItem,$piHeight, $piWidth);
+			?></div><?php
+		}
+		?><div><?php
+	}
+	
+	//*********************************************************************************************
+	public static function metrics_table($poApp, $paItems, $piMaxCols, $psRowClass, $piHeight = cRender::CHART_HEIGHT_SMALL, $piWidth=null, $paHeaders=null){ 
 		if (gettype($poApp) !== "object"){
 			cDebug::error("app must be an object");
 		}
@@ -96,7 +150,6 @@ class cChart{
 		$iCol = 0;
 		$iOldWidth = self::$width;
 		self::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
-		if ($piHeight==null) $piHeight = cRender::CHART_HEIGHT_SMALL;
 		
 		
 		?><table class="maintable"><?php
@@ -107,7 +160,7 @@ class cChart{
 					}
 				?></tr><?php
 			}
-			foreach ($paTable as $aItem){
+			foreach ($paItems as $aItem){
 				$sType = "graph";
 				if (array_key_exists(self::TYPE,$aItem)){
 					$sType = $aItem[self::TYPE];
@@ -137,39 +190,7 @@ class cChart{
 				}
 
 				?><?=$start_tag?><?php
-				switch ($sType){
-					case self::LABEL:
-						?><?=$aItem[self::LABEL]?><?php
-						break;
-					case self::BUTTON:
-						cRender::button($aItem[self::LABEL],$aItem[self::URL]);
-						break;
-					default:
-						if (!array_key_exists(self::METRIC, $aItem)) throw new Exception("No Metric Provided");
-						
-						$oItem = new cChartItem();
-						$oItem->app = $poApp->name;
-
-						//--------------------------------------------------
-						$oMetricItem = new cChartMetricItem();
-						$oMetricItem->metric = $aItem[self::METRIC];
-						if (array_key_exists(self::LABEL, $aItem)) 
-							$oMetricItem->caption = $aItem[self::LABEL];
-						else
-							$oMetricItem->caption = $aItem[self::METRIC];
-						$oItem->metrics[] = $oMetricItem;
-						
-						//--------------------------------------------------
-						$oItem->width = self::$width;
-						if ($piHeight) $oItem->height = $piHeight;
-						
-						if (array_key_exists(self::APP,$aItem)) $oItem->app = $aItem[self::APP];
-						if (array_key_exists(self::GO_URL,$aItem)) $oItem->go_URL = $aItem[self::GO_URL];
-						if (array_key_exists(self::GO_HINT,$aItem)) $oItem->go_hint = $aItem[self::GO_HINT];
-						
-						//--------------------------------------------------
-						$oItem->write_html();
-				}
+				self::pr_render_item($poApp, $aItem,$piHeight, $piWidth);
 				?><?=$end_tag?><?php
 				if ($iCol==$piMaxCols){
 					?></tr><?php

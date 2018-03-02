@@ -119,8 +119,6 @@ cRender::html_header("Transactions");
 cRender::force_login();
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $oApp = cRender::get_current_app();
@@ -129,7 +127,7 @@ $oTier = cRender::get_current_tier();
 $gsAppQS = cRender::get_base_app_qs();
 
 //header
-cRender::show_time_options("Business Transactions - $app"); 
+cRender::show_time_options("Business Transactions - $oApp->name"); 
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
@@ -138,7 +136,7 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
-?><h2>Transaction statistics (<?=$app?>)</h2><?php
+?><h2>Transaction statistics (<?=$oApp->name?>)</h2><?php
 
 //header
 cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
@@ -146,12 +144,12 @@ if (cFilter::isFiltered()){
 	$sCleanAppQS = cRender::get_clean_base_app_QS();
 	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
 }
-cRender::appdButton(cAppDynControllerUI::businessTransactions($aid));
+cRender::appdButton(cAppDynControllerUI::businessTransactions($oApp->id));
 
 //####################################################################
 // work through each tier
 $aTierIDsWithData = [];
-$aTiers =cAppdyn::GET_Tiers($app);
+$aTiers =cAppdyn::GET_Tiers($oApp->name);
 ?>
 <div class="maintable"><?php
 	$giTotalTrans = 0;
@@ -161,7 +159,7 @@ $aTiers =cAppdyn::GET_Tiers($app);
 		if ($tid && ($oTier->id != $tid)) continue;
 		
 		
-		$aTrans = cAppdyn::GET_tier_transaction_names($app, $oTier->name);	
+		$aTrans = cAppdyn::GET_tier_transaction_names($oApp->name, $oTier->name);	
 		if (!$aTrans) continue;
 		if (count($aTrans) == 0) continue;
 

@@ -266,9 +266,10 @@ class cRender{
 	}
 
 	public static function get_current_tier(){
+		$oApp = self::get_current_app();
 		$sTier = cHeader::get(self::TIER_QS);
 		$sTID = cHeader::get(self::TIER_ID_QS);
-		return new cAppDTier($sTier, $sTID);
+		return new cAppDTier($oApp, $sTier, $sTID);
 	}
 	
 	//**************************************************************************

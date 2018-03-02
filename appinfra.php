@@ -79,7 +79,7 @@ foreach ($aTiers as $oTier){
 	}
 	
 	$sClass = cRender::getRowClass();
-	cChart::metrics_table($oApp,$aMetrics,4,$sClass);
+	cChart::render_metrics($oApp,$aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 }
 
 //####################################################################

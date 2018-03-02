@@ -199,7 +199,7 @@ if ($node){
 
 //################################################################################################
 ?><p><h3>Transaction Details</h3><?php
-render_tier_transactions($oApp, $tier, $tid);
+render_tier_transactions($oApp, $oTier);
 
 //###############################################
 cChart::do_footer();

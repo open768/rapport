@@ -153,8 +153,10 @@ $.widget( "ck.appdchart",{
 		if (!oOptions.height)	{		$.error("height missing!");		}
 		
 		//set the DIV size
-		oElement.width(oOptions.width );
-		oElement.height(oOptions.height );
+		oElement.outerWidth(oOptions.width );
+		oElement.outerHeight(oOptions.height );
+		oElement.css("max-width",""+oOptions.width+"px");
+		oElement.css("display","inline-block");
 		
 		//load content
 		this.pr__setInView();
@@ -184,8 +186,9 @@ $.widget( "ck.appdchart",{
 		//check if element is visible
 		if (!pbIsInView) return;		
 		oElement.off('inview');	//turn off the inview listener
-		oElement.attr("class","chart_initialising");
 		oElement.empty();
+		oElement.removeClass();
+		oElement.addClass("chart_initialising")
 		oElement.append("Initialising: " + oOptions.title);
 
 		setTimeout(	function(){	oThis.onTimer()}, this.consts.WAIT_VISIBLE);
@@ -264,10 +267,11 @@ $.widget( "ck.appdchart",{
 		}
 		
 		oElement.empty();
-		oElement.attr("class","chart_loading");
+		var oContainer = $("<DIV>").attr("class","chart_loading");;
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading: " + oOptions.title);
+		oContainer.append(oLoader).append("Loading: " + oOptions.title);
+		oElement.append(oContainer);
 	},
 	
 	//*******************************************************************

@@ -41,7 +41,7 @@ if ($sGoKey){
 	
 	//perform the login
 	$oLinkData->credentials->save();
-	cDebug::vardump($oLinkData);
+	
 	//Set the time window
 	if (property_exists($oLinkData,"time_window")){
 		cDebug::write("setting time window");

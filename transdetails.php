@@ -195,27 +195,21 @@ if ($node){ ?>
 	}
 	uasort($aNodes , "sort_nodes");
 	
+	$aMetrics = [];
 	foreach ($aNodes as $oNode){ 
 		$sNodeName = $oNode->name;
-		$sClass = cRender::getRowClass();
-		?>
-		<div class="<?=$sClass?>">
-			<?php
-			$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
-			$sUrl = "transdetails.php?$sNodeQs";
-			cRender::button($oNode->name, $sUrl);
-							
-			$aMetrics = [];
-			$sMetricUrl=cAppDynMetric::transCallsPerMin($tier, $trans, $sNodeName);
-			$aMetrics[] = [cChart::LABEL=>"Calls  ($sNodeName)", cChart::METRIC=>$sMetricUrl];
-			$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $trans, $sNodeName);
-			$aMetrics[] = [cChart::LABEL=>"response ($sNodeName)", cChart::METRIC=>$sMetricUrl];
-			$sMetricUrl=cAppDynMetric::transErrors($tier, $trans, $sNodeName);
-			$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
-			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cRender::CHART_HEIGHT_SMALL);
-
-		?></div><?php
+		$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
+		$sUrl = "transdetails.php?$sNodeQs";
+						
+		$sMetricUrl=cAppDynMetric::transCallsPerMin($tier, $trans, $sNodeName);
+		$aMetrics[] = [cChart::LABEL=>"Calls  ($sNodeName)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>$oNode->name];
+		$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $trans, $sNodeName);
+		$aMetrics[] = [cChart::LABEL=>"response ($sNodeName)", cChart::METRIC=>$sMetricUrl];
+		$sMetricUrl=cAppDynMetric::transErrors($tier, $trans, $sNodeName);
+		$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
 	}
+	$sClass = cRender::getRowClass();
+	cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cRender::CHART_HEIGHT_SMALL);
 }
 ?>
 
