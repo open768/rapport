@@ -188,7 +188,7 @@ $.widget( "ck.appdchart",{
 		oElement.off('inview');	//turn off the inview listener
 		oElement.empty();
 		oElement.removeClass();
-		oElement.addClass("chart_initialising")
+		oElement.addClass("chart_initialising");
 		oElement.append("Initialising: " + oOptions.title);
 
 		setTimeout(	function(){	oThis.onTimer()}, this.consts.WAIT_VISIBLE);
@@ -210,7 +210,8 @@ $.widget( "ck.appdchart",{
 		
 		//loading message
 		oElement.empty();
-		oElement.attr("class","chart_queuing");
+		oElement.removeClass();
+		oElement.addClass("chart_queuing");
 		oElement.append("Queueing: " + oOptions.title);
 		
 		//add the data request to the http queue
@@ -267,11 +268,12 @@ $.widget( "ck.appdchart",{
 		}
 		
 		oElement.empty();
-		var oContainer = $("<DIV>").attr("class","chart_loading");;
+		oElement.removeClass();
+		oElement.addClass("chart_loading");
+		
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
-		oContainer.append(oLoader).append("Loading: " + oOptions.title);
-		oElement.append(oContainer);
+		oElement.append(oLoader).append("Loading: " + oOptions.title);
 	},
 	
 	//*******************************************************************
@@ -352,10 +354,9 @@ $.widget( "ck.appdchart",{
 		var oConsts = this.consts;
 		
 		oElement.empty();
-		var oDiv = $("<DIV>",{class:"chartnodatadiv"});
-		oDiv.height(oConsts.SHORT_NO_DATA_HEIGHT);
-		oDiv.append("No data found for "+ oOptions.title);
-		oElement.append(oDiv);		
+		oElement.removeClass();
+		oElement.addClass("chartnodatadiv");
+		oElement.append("No data found for "+ oOptions.title);
 		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
 	},
 
