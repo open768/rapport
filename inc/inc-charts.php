@@ -31,8 +31,9 @@ class cChartItem{
 	public function write_html(){
 		?><DIV 
 			type="appdchart" 
-			appName="<?=$this->app?>" previous="<?=cChart::$showPreviousPeriod?>"
+			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
+			style="width:<?=$this->width?>px;height=<?=$this->height?>px;display:flex"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			<?php if($this->go_URL){?>
@@ -102,7 +103,7 @@ class cChart{
 				if (!array_key_exists(self::METRIC, $paItem)) throw new Exception("No Metric Provided");
 				
 				$oItem = new cChartItem();
-				$oItem->app = $poApp->name;
+				$oItem->app = $poApp;
 
 				//--------------------------------------------------
 				$oMetricItem = new cChartMetricItem();
@@ -131,14 +132,12 @@ class cChart{
 	//#####################################################################################
 	//#####################################################################################
 	public static function render_metrics($poApp, $paItems, $piWidth=cRender::CHART_WIDTH_LETTERBOX, $piHeight = cRender::CHART_HEIGHT_SMALL ){ 
-		?><div><?php
+		$sClass= cRender::getRowClass();
+		?><div class="<?=$sClass?>"><?php
 		foreach ($paItems as $aItem){
-			$sClass= cRender::getRowClass();
-			?><div class="<?=$sClass?>" style="display:inline-block;width:<?=$piWidth?>px;max-width:<?=$piWidth?>px"><?php
 			self::pr_render_item($poApp, $aItem,$piHeight, $piWidth);
-			?></div><?php
 		}
-		?><div><?php
+		?></div><?php
 	}
 	
 	//*********************************************************************************************

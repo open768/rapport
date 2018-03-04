@@ -71,10 +71,10 @@ class cRenderMenus{
 
 		$sCurrentTier = cHeader::get(cRender::TIER_QS);
 		$sCurrentTID = cHeader::get(cRender::TIER_ID_QS);
-		$sApp = cHeader::get(cRender::APP_QS);
+		$oApp = cRender::get_current_app();
 		
 		try{
-			$oTiers = cAppDyn::GET_Tiers($sApp);
+			$oTiers = cAppDyn::GET_Tiers($oApp);
 		}
 		catch (Exception $e)
 		{
@@ -96,9 +96,9 @@ class cRenderMenus{
 
 	//******************************************************************************************
 	public static function 	show_tiernodes_menu($psCaption, $psUrl){
-		$app = cHeader::get(cRender::APP_QS);
+		$oApp = cRender::get_current_app();
 		$tier = cHeader::get(cRender::TIER_QS);
-		$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
+		$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 		$sFragment = "";
 		
 		$iCount = 1;
@@ -171,9 +171,9 @@ function sort_by_app_name($a,$b){
 class cRender{
 	//************************************************************
 	const APP_QS = "app";
+	const APP_ID_QS = "aid";
 	
 	const DB_QS = "db";
-	const APP_ID_QS = "aid";
 	const IGNORE_REF_QS = "igr";
 	
 	const TIER_QS = "tier";
@@ -256,7 +256,7 @@ class cRender{
 	const CHART_APP_FIELD = "caf";
 	
 	//**************************************************************************
-	private static $AppdCredentials = null;
+	private static $oAppDCredentials = null;
 
 
 	public static function get_current_app(){
@@ -274,11 +274,11 @@ class cRender{
 	
 	//**************************************************************************
 	public static function get_appd_credentials(){
-		$oCred = self::$AppdCredentials;
+		$oCred = self::$oAppDCredentials;
 		if (!$oCred){
 			$oCred = new cAppDynCredentials;
 			$oCred->check();
-			self::$AppdCredentials = $oCred;
+			self::$oAppDCredentials = $oCred;
 		}
 		return $oCred;
 	}
@@ -685,9 +685,9 @@ class cRender{
 	//#####################################################################################
 	//#####################################################################################
 	public static function build_app_qs( $poApp){
-		$AppQs = cHttp::build_qs(null, self::APP_QS, $poApp->name);
-		$AppQs = cHttp::build_qs($AppQs, self::APP_ID_QS, $poApp->id);
-		return $AppQs;
+		$appQS = cHttp::build_qs(null, self::APP_QS, $poApp->name);
+		$appQS = cHttp::build_qs($appQS, self::APP_ID_QS, $poApp->id);
+		return $appQS;
 	}
 
 	//******************************************************************************************

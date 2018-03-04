@@ -55,13 +55,13 @@ cChart::$width=cRender::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
 $gsMetric = cHeader::get(cRender::METRIC_TYPE_QS);
 
 // show time options
-$title = "$app&gt;$tier&gt;Infrastructure&gt;JMX";
+$title = "$oApp->name&gt;$tier&gt;Infrastructure&gt;JMX";
 cRender::show_time_options($title); 
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 if (!$tier){
@@ -81,7 +81,7 @@ $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 
 //####################################################################
 //other buttons
-$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
+$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
@@ -89,7 +89,7 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 ?><select id="menuNodes">
 	<option selected disabled>Show Details for</option>
 	<optgroup label="tiers"><?php
-		$aTiers = cAppdyn::GET_Tiers($app);
+		$aTiers = cAppdyn::GET_Tiers($oApp);
 		$sBaseTierQS = cRender::get_base_app_QS();
 		$sBaseTierQS = cHttp::build_qs($sBaseTierQS, cRender::METRIC_TYPE_QS, $gsMetric);
 		$sBaseTierUrl = cHttp::build_url("tierjmx.php", $sBaseTierQS);
@@ -122,7 +122,7 @@ $(
 
 
 //####################################################################
-$aPools = cAppdyn::GET_JDBC_Pools($app,$tier,$node);
+$aPools = cAppdyn::GET_JDBC_Pools($oApp->name,$tier,$node);
 cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 ?>
 <h2>JDBC Pools for (<?=$tier?>) Tier</h2>
@@ -145,11 +145,11 @@ if ($node){
 			<td><?=$sPool?></td>
 			<td><?php
 				$sMetric = cAppDynMetric::InfrastructureJDBCPoolActive($tier,$node, $sPool);
-				cChart::add("active connections" , $sMetric, $app, 100);
+				cChart::add("active connections" , $sMetric, $oApp->name, 100);
 			?></td>
 			<td><?php
 				$sMetric = cAppDynMetric::InfrastructureJDBCPoolMax($tier,$node, $sPool);
-				cChart::add("Max connections" , $sMetric, $app, 100);
+				cChart::add("Max connections" , $sMetric, $oApp->name, 100);
 			?></td>
 		</tr><?php
 	}

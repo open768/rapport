@@ -41,19 +41,13 @@ set_time_limit(200);
 //####################################################################
 cRender::html_header("Service End Points");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 //####################################################################
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $oApp = cRender::get_current_app();
 
-$title= "$app&gt;Service EndPoints";
+$title= "$oApp->name&gt;Service EndPoints";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("Show Service EndPoints for", "appservice.php");
 if (cFilter::isFiltered()){
@@ -65,7 +59,7 @@ if (cFilter::isFiltered()){
 //********************************************************************
 
 	$oTimes = cRender::get_times();
-$aTiers = cAppdyn::GET_Tiers($app, $oTimes);
+$aTiers = cAppdyn::GET_Tiers($oApp);
 
 function pr__sort_endpoints($a,$b){
 	return strcmp($a->name, $b->name);
@@ -75,7 +69,7 @@ foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 
 	//****************************************************************************************
-	$aEndPoints = cAppdyn::GET_TierServiceEndPoints($app, $oTier->name);
+	$aEndPoints = cAppdyn::GET_TierServiceEndPoints($oApp->name, $oTier->name);
 	if (count($aEndPoints) == 0){
 		cRender::messagebox("no Service endpoints found for $oTier->name");
 		continue;

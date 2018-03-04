@@ -36,16 +36,16 @@ cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
-$app = cHeader::get(cRender::APP_QS) ;
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS) ;
 $trans = cHeader::get(cRender::TRANS_QS) ;
-if ($app == null)	cDebug::error("App not set");
+if ($oApp->name == null)	cDebug::error("App not set");
 if ($tier == null)	cDebug::error("Tier not set");
 if ($trans == null)	cDebug::error("Trans not set");
 
 //*************************************************************************
 $sMetricPath = cAppDynMetric::transExtNames($tier, $trans);
 $oWalker = new cAppDynTransFlow();
-$oWalker->walk($app, $tier, $trans);
+$oWalker->walk($oApp->name, $tier, $trans);
 cCommon::write_json($oWalker);	
 ?>

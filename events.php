@@ -33,16 +33,15 @@ require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
 
 //-----------------------------------------------
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 
-cRender::html_header("Events $app");
+cRender::html_header("Events $oApp->name");
 cRender::force_login();
 
 //####################################################################
 cRender::show_time_options("Events");
-cRenderMenus::show_apps_menu("Events", "events.php", $app);
-cRender::appdButton(cAppDynControllerUI::events($aid));
+cRenderMenus::show_apps_menu("Events", "events.php", $oApp->name);
+cRender::appdButton(cAppDynControllerUI::events($oApp->id));
 
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -74,7 +73,7 @@ function get_BT_from_event($poEvent){
 	return $sBT;
 }
 
-$aEvents = cAppDyn::GET_AppEvents($app, $oTimes);
+$aEvents = cAppDyn::GET_AppEvents($oApp->name, $oTimes);
 uasort($aEvents,"sort_events");
 //cDebug::vardump($aEvents,true);
 

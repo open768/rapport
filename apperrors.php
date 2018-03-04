@@ -132,7 +132,7 @@ if (cAppdyn::is_demo()){
 ?>
 <h1>Application Errors (<?=$oApp->name?>)</h1>
 <?php
-$aResponse =cAppdyn::GET_Tiers($oApp->name);
+$aResponse =cAppdyn::GET_Tiers($oApp);
 if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else

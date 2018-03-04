@@ -55,13 +55,12 @@ cChart::$width=cRender::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
 	
 
-$title = "$app&gt;$tier&gt;Infrastructure";
+$title = "$oApp->name&gt;$tier&gt;Infrastructure";
 
 //stuff for later
 
@@ -90,7 +89,7 @@ if (cAppdyn::is_demo()){
 
 //####################################################################
 //other buttons
-$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
+$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
@@ -98,7 +97,7 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 ?><select id="menuNodes">
 	<option selected disabled>Show Infrastructure Details for</option>
 	<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=$tier?>) tier</option>
-	<option value="<?=$sAppInfraUrl?>">(<?=$app?>) Application</option>
+	<option value="<?=$sAppInfraUrl?>">(<?=$oApp->name?>) Application</option>
 	<optgroup label="Individual Servers"><?php
 		foreach ($aNodes as $oNode){
 			$sNode = $oNode->name;
@@ -115,9 +114,9 @@ $(
 );
 </script><?php
 if ($node) {
-	$sNodeID = cAppdynUtil::get_node_id($aid, $node);
+	$sNodeID = cAppdynUtil::get_node_id($oApp->id, $node);
 	if ($sNodeID){
-		$sUrl = cAppDynControllerUI::nodeDashboard($aid, $sNodeID);
+		$sUrl = cAppDynControllerUI::nodeDashboard($oApp->id, $sNodeID);
 		cRender::appdButton($sUrl);
 	}
 }

@@ -44,7 +44,7 @@ cChart::do_header();
 cChart::$width=cRender::CHART_WIDTH_LARGE;
 
 //####################################################################
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
 
@@ -87,13 +87,13 @@ if ($oCred->restricted_login == null){
 		bean.on(cChartBean,CHART__NODATA_EVENT,hide_chart);
 	</script>
 <?php
-$aDisks = cAppdyn::GET_NodeDisks($app,$tier,$node);
+$aDisks = cAppdyn::GET_NodeDisks($oApp->name,$tier,$node);
 ?>
 
 <h2>Overall Disk Space free in <?=$node?> Server</h3>
 <table class="maintable"><tr><td><?php
 	$sMetricUrl = cAppDynMetric::InfrastructureDiskFree($tier,$node);
-	cChart::add("Overall Disk space Free", $sMetricUrl, $app);
+	cChart::add("Overall Disk space Free", $sMetricUrl, $oApp->name);
 ?></td></tr></table>
 <p>
 <h2>Individual Disks in <?=$node?> Server</h3>
@@ -103,7 +103,7 @@ $aDisks = cAppdyn::GET_NodeDisks($app,$tier,$node);
 		$sMetricUrl = cAppDynMetric::InfrastructureNodeDiskFree($tier,$node,$oDisk->name);
 		?>
 			<tr class="<?=cRender::getRowClass()?>"><td>
-				<?php cChart::add("Disk Available $oDisk->name", $sMetricUrl, $app); ?>
+				<?php cChart::add("Disk Available $oDisk->name", $sMetricUrl, $oApp->name); ?>
 			</td></tr>
 		<?php
 	}

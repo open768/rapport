@@ -73,24 +73,21 @@ $aResponse = cAppDyn::GET_Applications();
 if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else{
-	?><div ><?php	
-		//display the results
-		foreach ( $aResponse as $oApp){
-			if (cFilter::isAppFilteredOut($oApp->name)) continue;
-			$sClass = cRender::getRowClass();			
-			$sUrl = cHttp::build_url($sBaseUrl, cRender::build_app_qs($oApp));
-			$aMetrics = [
-				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],
-				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
-			];
-			cRenderMenus::show_app_functions($oApp);
-			cChart::metrics_table($oApp, $aMetrics,2,$sClass);
-		}
-	?></div><?php
+	//display the results
+	foreach ( $aResponse as $oApp){
+		if (cFilter::isAppFilteredOut($oApp->name)) continue;
+		$sClass = cRender::getRowClass();			
+		$sUrl = cHttp::build_url($sBaseUrl, cRender::build_app_qs($oApp));
+		$aMetrics = [
+			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],
+			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
+		];
+		?><hr><?php
+		cRenderMenus::show_app_functions($oApp);
+		cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/2);
+		?><br><?php
+	}
 }
-?>
-
-<?php
 cChart::do_footer();
 cRender::html_footer();
 ?>

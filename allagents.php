@@ -46,7 +46,7 @@ $moApps = cAppDyn::GET_Applications();
 class cAgentTotals {
 	public $total=0;
 	public $machine=0;
-	public $appserver=0;
+	public $oApp->nameserver=0;
 	
 	public function add($poAgentTotals){
 		$this->total += $poAgentTotals->total;

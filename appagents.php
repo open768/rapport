@@ -39,8 +39,7 @@ cRender::html_header("Application Nodes");
 cRender::force_login();
 
 
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
 $sAppQS = cRender::get_base_app_QS();
@@ -48,7 +47,7 @@ $sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
 $aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 //####################################################################
-cRender::show_top_banner("Agents for $app"); 
+cRender::show_top_banner("Agents for $oApp->name"); 
 cRenderMenus::show_app_agent_menu();
 cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
 //********************************************************************
@@ -80,7 +79,7 @@ if ($oCred->restricted_login == null){
 		<option selected disabled>Show for all Servers...</option>
 		<?php
 			foreach ($aMetrics as $sMetricType){
-				$oMetric = cAppDynInfraMetric::getInfrastructureMetric($app,null,$sMetricType);
+				$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 				$sDetailUrl = cHttp::build_url($sDetailBaseUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 				?><option value="<?="$sDetailUrl"?>"><?=$oMetric->short?></option><?php
 			}
@@ -95,7 +94,7 @@ if ($oCred->restricted_login == null){
 	</script>
 <?php
 }
-cRender::appdButton(cAppDynControllerUI::nodes($aid), "All nodes");
+cRender::appdButton(cAppDynControllerUI::nodes($oApp->id), "All nodes");
 
 //####################################################################
 
@@ -137,7 +136,7 @@ function count_nodes($paData){
 }
 
 //####################################################################
-$aResponse = cAppDyn::GET_AppNodes($aid);
+$aResponse = cAppDyn::GET_AppNodes($oApp->id);
 cdebug::vardump($aResponse);
 $iNodes = count_nodes($aResponse);
 	
@@ -151,7 +150,7 @@ if ($iNodes==0){
 	uasort($aResponse, "pr__sort_nodes");
 ?>
 	<p>
-	<h2>There are <?=$iNodes;?> agents in total in (<?=$app?>)</h2>
+	<h2>There are <?=$iNodes;?> agents in total in (<?=$oApp->name?>)</h2>
 	<p>
 	<table class="maintable">
 		<tr class="tableheader">
@@ -209,7 +208,7 @@ if ($iNodes==0){
 						<td><?php
 							$sNodeUrl = cHttp::build_url("tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cAppDynControllerUI::nodeAgent($aid, $oNode->id), $oNode->id);
+							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp->id, $oNode->id), $oNode->id);
 						?></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
 						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>

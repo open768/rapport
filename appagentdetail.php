@@ -37,8 +37,6 @@ require_once("inc/inc-render.php");
 cRender::html_header("Application node detail ");
 cRender::force_login();
 $oApp = cRender::get_current_app();
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 
 //####################################################################
@@ -75,7 +73,7 @@ function count_nodes($paData){
 }
 
 //####################################################################
-if (!$app ){
+if (!$oApp->name ){
 	cRender::errorbox("no application");
 	exit;
 }
@@ -83,7 +81,7 @@ if (!$gsMetricType ){
 	cRender::errorbox("no metric type");
 	exit;
 }
-$oMetric = cAppDynInfraMetric::getInfrastructureMetric($app,null,$gsMetricType);
+$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricType);
 $sTitle  = $oMetric->caption;
 
 //####################################################################
@@ -94,9 +92,10 @@ $sDetailRootQS = cHttp::build_url("appagentdetail.php", $sAppQS);
 //####################################################################
 cRender::show_time_options($sTitle); 
 cRenderMenus::show_app_agent_menu();
-cRenderMenus::show_apps_menu("Show detail for", "appagentdetail.php","&".cRender::METRIC_TYPE_QS."=$gsMetricType");
 
-cRender::appdButton(cAppDynControllerUI::nodes($aid), "All nodes");
+cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url("appagentdetail.php",cRender::METRIC_TYPE_QS,$gsMetricType));
+
+cRender::appdButton(cAppDynControllerUI::nodes($oApp->id), "All nodes");
 //####################################################################
 
 //********************************************************************
@@ -113,7 +112,7 @@ if (cAppdyn::is_demo()){
 
 <?php
 //####################################################################
-$aResponse = cAppDyn::GET_AppNodes($aid);
+$aResponse = cAppDyn::GET_AppNodes($oApp->id);
 $aResponse= group_by_tier($aResponse);
 uasort($aResponse, "pr__sort_nodes");
 $iNodes = count_nodes($aResponse);

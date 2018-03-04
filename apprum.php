@@ -36,8 +36,6 @@ require_once("inc/inc-render.php");
 
 
 //-----------------------------------------------
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
 $oApp = cRender::get_current_app();
 $sAppQS = cRender::get_base_app_QS();
 
@@ -47,11 +45,11 @@ cRender::html_header("Web browser - Real user monitoring");
 cRender::force_login();
 cChart::do_header();
 
-$title ="$app&gt;Web Real User Monitoring";
+$title ="$oApp->name&gt;Web Real User Monitoring";
 cRender::show_time_options( $title); 
 
 cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
-cRender::appdButton(cAppDynControllerUI::webrum($aid));
+cRender::appdButton(cAppDynControllerUI::webrum($oApp->id));
 
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -68,7 +66,7 @@ $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMet
 $aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
-?><h2>Browser Stats for (<?=$app?>)</h2><?php
+?><h2>Browser Stats for (<?=$oApp->name?>)</h2><?php
 cRender::button("Show Page Statistics", "rumstats.php?$sAppQS");
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cAppDynMetric::webrumCallsPerMin()];

@@ -36,15 +36,14 @@ require_once("inc/inc-render.php");
 
 cRender::html_header("Applications");
 cRender::force_login();
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $node = cHeader::get(cRender::NODE_QS);
 $nodeID = cHeader::get(cRender::NODE_ID_QS);
 $sAppQS = cRender::get_base_app_QS();
 
 cRender::show_top_banner("Node details: $node"); 
 cRender::button("Back to all nodes", "appagents.php?$sAppQS");
-cRender::appdButton(cAppDynControllerUI::nodeDashboard($aid,$nodeID));
+cRender::appdButton(cAppDynControllerUI::nodeDashboard($oApp->id,$nodeID));
 
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -59,7 +58,7 @@ if (cAppdyn::is_demo()){
 
 <?php
 //####################################################################
-$oResult = cAppDynRestUI::GET_Node_details($aid, $nodeID);
+$oResult = cAppDynRestUI::GET_Node_details($oApp->id, $nodeID);
 
 //####################################################################
 cRender::html_footer();

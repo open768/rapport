@@ -36,8 +36,8 @@ cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
-$app = cHeader::get(cRender::APP_QS) ;
-if (!$app) $app = "no application set";
+$oApp = cRender::get_current_app();
+if (!$oApp->name) $oApp->name = "no application set";
 $psMetric = cHeader::get(cRender::METRIC_QS);
 $psDiv = cHeader::get(cRender::DIV_QS);
 $psCSV=cHeader::get(cRender::CSV_QS);
@@ -45,7 +45,7 @@ $psPrevious = cHeader::get(cRender::PREVIOUS_QS);
 
 //*************************************************************************
 cDebug::write("getting metric - $psMetric");
-$oResult = cMetric::get_metric($app, $psMetric, ($psPrevious != null));
+$oResult = cMetric::get_metric($oApp->name, $psMetric, ($psPrevious != null));
 cDebug::write("got metric - $psMetric");
 if ($oResult) $oResult->div = $psDiv;
 
@@ -71,7 +71,7 @@ $sFilename = str_replace("/","_",$psMetric);
 cHeader::set_download_filename("$sFilename.csv");
 
 cCommon::echo("controller,". cAppdynCore::GET_controller());
-cCommon::echo("Application,$app");
+cCommon::echo("Application,$oApp->name");
 cCommon::echo("Date now,".date(DateTime::W3C,time()));
 cCommon::echo("metric,$psMetric");
 cCommon::echo("");

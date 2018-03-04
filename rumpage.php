@@ -36,15 +36,13 @@ require_once("inc/inc-render.php");
 
 
 //-----------------------------------------------
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $rum_page = cHeader::get(cRender::RUM_PAGE_QS);
 $rum_type = cHeader::get(cRender::RUM_TYPE_QS);
 $gsAppQS = cRender::get_base_app_QS();
-$oApp = cRender::get_current_app();
 
 //####################################################################
-$title ="$app&gtWeb Real User Monitoring Details&gt;$rum_page";
+$title ="$oApp->name&gtWeb Real User Monitoring Details&gt;$rum_page";
 cRender::html_header("Web browser - Real user monitoring - $rum_page");
 cRender::show_time_options( $title); 
 cRender::force_login();
@@ -54,9 +52,9 @@ cRender::force_login();
 <?php
 cChart::do_header();
 
-cRenderMenus::show_app_functions($app, $aid);
+cRenderMenus::show_app_functions($oApp->name, $oApp->id);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
-cRender::appdButton(cAppDynControllerUI::webrum($aid));
+cRender::appdButton(cAppDynControllerUI::webrum($oApp->id));
 
 //********************************************************************
 if (cAppdyn::is_demo()){

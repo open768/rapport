@@ -149,7 +149,7 @@ cRender::appdButton(cAppDynControllerUI::businessTransactions($oApp->id));
 //####################################################################
 // work through each tier
 $aTierIDsWithData = [];
-$aTiers =cAppdyn::GET_Tiers($oApp->name);
+$aTiers =cAppdyn::GET_Tiers($oApp);
 ?>
 <div class="maintable"><?php
 	$giTotalTrans = 0;

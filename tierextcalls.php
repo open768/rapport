@@ -38,9 +38,8 @@ require_once("inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
-$aid=cHeader::get(cRender::APP_ID_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $gsAppQs=cRender::get_base_app_QS();
 $gsTierQs=cRender::get_base_tier_QS();
@@ -52,7 +51,7 @@ $SHOW_PROGRESS=true;
 cRender::html_header("External tier calls");
 cRender::force_login();
 
-cRender::show_time_options("External calls from $tier in $app"); 
+cRender::show_time_options("External calls from $tier in $oApp->name"); 
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();
@@ -71,8 +70,8 @@ if (cAppdyn::is_demo()){
 //####################################################################
 cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();
-$oResponse =cAppdyn::GET_Tier_ext_details($app, $tier, $oTimes);
-cRender::render_tier_ext($app, $aid, $tier, $tid, $oResponse);
+$oResponse =cAppdyn::GET_Tier_ext_details($oApp->name, $tier, $oTimes);
+cRender::render_tier_ext($oApp->name, $oApp->id, $tier, $tid, $oResponse);
 
 cRender::html_footer();
 ?>

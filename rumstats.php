@@ -36,13 +36,13 @@ require_once("inc/inc-render.php");
 
 
 //-----------------------------------------------
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $gsAppQS = cRender::get_base_app_QS();
 
 //####################################################################
 cRender::html_header("Web browser - Real user monitoring - Stats");
 cRender::force_login();
-$title ="$app&gtWeb Real User Monitoring Stats";
+$title ="$oApp->name&gtWeb Real User Monitoring Stats";
 cRender::show_time_options( $title); 
 cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
 $oTimes = cRender::get_times();
@@ -124,7 +124,7 @@ if (cAppdyn::is_demo()){
 <h2>Page Requests</h2>
 <?php
 	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
-	$aData = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes,"true",false,true);
+	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
 	render_table(cAppdynMetric::BASE_PAGES, $aData);
 	
 // ############################################################
@@ -132,7 +132,7 @@ if (cAppdyn::is_demo()){
 <h2>Ajax Requests</h2>
 <?php
 	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
-	$aData = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes,"true",false,true);
+	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
 	render_table(cAppdynMetric::AJAX_REQ, $aData);
 
 	// ############################################################

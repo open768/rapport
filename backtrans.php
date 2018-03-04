@@ -51,14 +51,13 @@ cChart::do_header();
 cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $backend = cHeader::get(cRender::BACKEND_QS);
 $sAppQS = cRender::get_base_app_QS();
 $sBackendQS = cHttp::build_QS($sAppQS, cRender::BACKEND_QS, $backend);
 
 
-$title= "$app&gt;Backend Transactions&gt;$backend";
+$title= "$oApp->name&gt;Backend Transactions&gt;$backend";
 cRender::show_time_options($title); 
 cRender::button("Back to Backends", "appbackends.php?$sAppQS");
 cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
@@ -74,7 +73,7 @@ if (cAppdyn::is_demo()){
 
 ?>
 <span id="progress"><?php
-	$aTransactions = cAppdyn::GET_BackendCallerTransactions($app, $backend);
+	$aTransactions = cAppdyn::GET_BackendCallerTransactions($oApp, $backend);
 ?></span>
 <script language="javascript">
 	$("#progress").hide();
@@ -83,11 +82,11 @@ if (cAppdyn::is_demo()){
 <table class='maintable'><tr>
 	<td><?php
 		$sMetricUrl=cAppDynMetric::appCallsPerMin();
-		cChart::add("Overall Calls per min ($app)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
+		cChart::add("Overall Calls per min ($oApp->name)", $sMetricUrl, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);
 	?></td>
 	<td><?php
 		$sMetricUrl=cAppDynMetric::backendCallsPerMin($backend);
-		cChart::add("Overall Calls per min ($backend)", $sMetricUrl, $app, cRender::CHART_HEIGHT_LETTERBOX2);
+		cChart::add("Overall Calls per min ($backend)", $sMetricUrl, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);
 	?></td>
 </tr></table>
 <p>
@@ -98,10 +97,10 @@ if (cAppdyn::is_demo()){
 			?><tr class="<?=cRender::getRowClass()?>">
 				<td><?php
 					$sMetric = $oItem->metric."|".cAppDynMetric::CALLS_PER_MIN;
-					cChart::add($sMetric, $sMetric, $app, cRender::CHART_HEIGHT_LETTERBOX2);	
+					cChart::add($sMetric, $sMetric, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);	
 				?></td><td><?php
 					$sMetric = $oItem->metric."|".cAppDynMetric::RESPONSE_TIME;
-					cChart::add($sMetric, $sMetric, $app, cRender::CHART_HEIGHT_LETTERBOX2);
+					cChart::add($sMetric, $sMetric, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);
 				?></td>
 			</tr><?php
 		}

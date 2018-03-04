@@ -43,11 +43,11 @@ cRender::html_header("External tier calls");
 cRender::force_login();
 
 //display the results
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $gsTierQS = cRender::get_base_tier_qs();
 
-$title =  "Graphs for transaction calls per minute for transactions for $tier in $app";
+$title =  "Graphs for transaction calls per minute for transactions for $tier in $oApp->name";
 cRender::show_time_options($title); 
 
 
@@ -59,7 +59,7 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 //####################################################################
-$oResponse =cAppdyn::GET_Tier_transactions($app, $tier);
+$oResponse =cAppdyn::GET_Tier_transactions($oApp->name, $tier);
 
 $sBaseUrl = cHttp::build_url("transdetails.php", $gsTierQS;) 
 $oTimes = cRender::get_times();
@@ -72,7 +72,7 @@ foreach ($oResponse as $oDetail){
 	cCommon::flushprint ("<h2><a href='$link'>$trans</a></h2>");   
 	
 	$sMetricpath = cAppdynMetric::transCallsPerMin($tier, $trans);
-	$oResponse = cAppdynCore::GET_MetricData($app, $sMetricpath, $oTimes, "false");
+	$oResponse = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes, "false");
 	
 	$iTotalRows = count($oResponse);
     $charturl = generate_chart("ttc", "call per min $trans",  $oResponse);

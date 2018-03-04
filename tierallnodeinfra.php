@@ -55,12 +55,12 @@ cChart::$width=cRender::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-$oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($app,null,$sMetricType);
+$oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 
-$title = "$app&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
+$title = "$oApp->name&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 
 //stuff for later
 $sAppQS = cRender::get_base_app_QS();
@@ -93,7 +93,7 @@ if (cAppdyn::is_demo()){
 		$sDisabled = ($oCred->restricted_login? "disabled": "");
 	?>
 	<option <?=$sDisabled?> value="<?=$sAllNodeUrl?>">
-		All <?=$oMetricDetails->short?> data for (<?=$app?>) Application</option>
+		All <?=$oMetricDetails->short?> data for (<?=$oApp->name?>) Application</option>
 	<optgroup label="Show details of ..">
 	<?php
 		$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQS);
@@ -121,7 +121,7 @@ $(
 <?php
 
 //data for the page
-$aNodes = cAppDyn::GET_TierInfraNodes($app,$tier);	
+$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 	

@@ -39,12 +39,11 @@ const COLUMNS=6;
 error_reporting(E_ALL);
 
 //display the results
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $fromtier = cHeader::get(cRender::FROM_TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $totier = cHeader::get(cRender::TO_TIER_QS);
 $gsAppQS = cRender::get_base_app_qs();
-$oApp = cRender::get_current_app();
 
 $oFromTier = new cAppDTier($oApp, $fromtier, $tid);
 $gsTierQS = cRender::build_tier_qs($oApp, $oFromTier);
@@ -56,7 +55,7 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-$title =  "$app&gt;$fromtier&gt; to tier $totier";		
+$title =  "$oApp->name&gt;$fromtier&gt; to tier $totier";		
 cRender::show_time_options($title); 
 cRenderMenus::show_tier_functions($fromtier,$tid);
 cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));

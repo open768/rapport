@@ -41,16 +41,9 @@ cChart::do_header();
 
 //####################################################################
 //####################################################################
-$gsApp = cHeader::get(cRender::APP_QS);
-$giAid = cHeader::get(cRender::APP_ID_QS);
-$oApp = cRender::get_current_app();
-$gsAppQs = cRender::get_base_app_QS();
-
-//####################################################################
-//####################################################################
-$sTitle ="Infrastructure Overview for $gsApp";
+$sTitle ="Infrastructure Overview for $oApp->name";
 cRender::show_time_options( $sTitle); 
-
+$oApp = cRender::get_current_app();
 
 ?>
 <h2><?=$sTitle?></h2>
@@ -63,7 +56,7 @@ cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 $aActivityMetrics = [cRender::METRIC_TYPE_ACTIVITY, cRender::METRIC_TYPE_RESPONSE_TIMES];
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
-$aTiers =cAppdyn::GET_Tiers($gsApp);
+$aTiers =cAppdyn::GET_Tiers($oApp);
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 	

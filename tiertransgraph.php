@@ -47,11 +47,9 @@ cChart::$width=cRender::CHART_WIDTH_LARGE/2;
 	
 //###################### DATA #############################################################
 //display the results
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
-$oApp = cRender::get_current_app();
 $oTier = cRender::get_current_tier();
 
 $node= cHeader::get(cRender::NODE_QS);
@@ -65,7 +63,7 @@ if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
 
 $sExtraCaption = ($node?"($node) node":"");
 
-$title= "$app&gt;$tier $sExtraCaption&gt;Transactions";
+$title= "$oApp->name&gt;$tier $sExtraCaption&gt;Transactions";
 cRender::show_time_options( $title); 
 
 //********************************************************************
@@ -142,7 +140,7 @@ if ($oCred->restricted_login == null){
 	?>
 	<select id="nodesMenu">
 		<option selected disabled>Show...</option>
-		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for (<?=$app?>) application</option>
+		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for (<?=$oApp->name?>) application</option>
 		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$tier?></option>
 		
 		<optgroup label="Servers">
@@ -150,7 +148,7 @@ if ($oCred->restricted_login == null){
 			if ($node){
 				?><option value="tiertrans.php?<?=$gsTierQs?>">All servers in tier</option><?php
 			}
-			$aNodes = cAppdyn::GET_TierAppNodes($app,$tier);
+			$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$tier);
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
 				$sUrl = cHttp::build_url("tiertransgraph.php",$gsTierQs);
@@ -171,7 +169,7 @@ if ($oCred->restricted_login == null){
 	);
 	</script><?php
 }
-cRender::appdButton(cAppDynControllerUI::tier($aid,$tid));
+cRender::appdButton(cAppDynControllerUI::tier($oApp->id,$tid));
 
 //###############################################
 ?>

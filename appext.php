@@ -52,7 +52,7 @@ cRenderMenus::show_apps_menu("External Calls", "appext.php");
 $oCred = cRender::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
 	//********************************************************************
-	$aTiers = cAppdyn::GET_Tiers($oApp->name);
+	$aTiers = cAppdyn::GET_Tiers($oApp);
 
 	?><select id="TierMenu">
 		<option selected disabled>Show external calls for Tiers...</option>

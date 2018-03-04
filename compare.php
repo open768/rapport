@@ -40,15 +40,15 @@ require_once("$phpinc/appdynamics/account.php");
 $sMetric = cHeader::get(cRender::METRIC_QS);
 
 $sChartTitle = cHeader::get(cRender::TITLE_QS);
-$sApp = cHeader::get(cRender::APP_QS);
-if (!$sApp) $sApp = "No Application Specified";
+$oApp = cRender::get_current_app();
+if (!$oApp->name) $oApp->name = "No Application Specified";
 
 //####################################################################
 cRender::html_header("compare: $sChartTitle");
 if (!$sMetric ) cDebug::error("Metric missing");
 cRender::force_login();
 
-cRender::show_time_options("<b>comparing</b>: ($sApp): $sChartTitle"); 
+cRender::show_time_options("<b>comparing</b>: ($oApp->name): $sChartTitle"); 
 
 //####################################################################
 cChart::do_header();
@@ -64,7 +64,7 @@ $oItem->caption = $sMetric;
 $oChart = new cChartItem();
 $oChart->metrics[] = $oItem;
 $oChart->title = $sMetric;
-$oChart->app = $sApp;
+$oChart->app = $oApp->name;
 $oChart->height = cRender::CHART_HEIGHT_LETTERBOX;
 ?>
 	<table class="maintable">

@@ -48,14 +48,13 @@ $SHOW_PROGRESS=false;
 set_time_limit(200); 
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS) ;
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 
 
 
 
-$title= "$app&gt;Activity&gt;heatmap";
+$title= "$oApp->name&gt;Activity&gt;heatmap";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("heatmap", "appheatmap.php");
 
@@ -66,7 +65,7 @@ else
 	$metric = cAppDynMetric::tierCallsPerMin($tier);
 
 ?>
-<h2>Heatmap for <?=$app?></h2>
+<h2>Heatmap for <?=$oApp->name?></h2>
 <?php
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -77,7 +76,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 $oTime= cRender::get_times();
-$oResponse = cAppdynCore::GET_MetricData($aid,$metric, $oTime);
+$oResponse = cAppdynCore::GET_MetricData($oApp->id,$metric, $oTime);
 $aHeatData = cAppdynUtil::Analyse_heatmap( $oResponse);
 cRender::render_Heatmap($aHeatData["days"], "HeatMap for Days of Week", "hour", "day");
 cRender::render_Heatmap($aHeatData["hours"], "HeatMap for Hours", "hour", "min");

@@ -45,16 +45,15 @@ $showlink = cCommon::get_session($LINK_SESS_KEY);
 set_time_limit(200); 
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 
 //####################################################################
 cRender::html_header("External tier calls");
 cRender::force_login();
 
 // show time options
-$baseQuery ="?".cRender::APP_QS."=$app&".cRender::APP_QS."=$aid";
-cRender::show_time_options("$app&gt;External Calls"); 
+$baseQuery ="?".cRender::APP_QS."=$oApp->name&".cRender::APP_QS."=$oApp->id";
+cRender::show_time_options("$oApp->name&gt;External Calls"); 
 
 cRender::button("Response time", "transreport.php?$baseQuery");
 cRender::button("Server stats", "csv/serverstats.php?$baseQuery");
@@ -70,7 +69,7 @@ if (cAppdyn::is_demo()){
 
 
 //retrieve tiers
-$oResponse =cAppdyn::GET_Tiers($app);
+$oResponse =cAppdyn::GET_Tiers($oApp);
 
 // work through each tier
 foreach ( $oResponse as $oItem){
@@ -79,9 +78,9 @@ foreach ( $oResponse as $oItem){
 	
 	echo "<hr>";
 	
-	$oResponse =cAppdyn::GET_Tier_ext_details($app, $tier);	
+	$oResponse =cAppdyn::GET_Tier_ext_details($oApp->name, $tier);	
 	echo "<br>";
-	cRender::render_tier_ext($app,  $aid, $tier, $tid, $oResponse);
+	cRender::render_tier_ext($oApp->name,  $oApp->id, $tier, $tid, $oResponse);
 }
 echo "</table>";
 cRender::html_footer();

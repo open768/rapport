@@ -41,10 +41,6 @@ $oApp = cRender::get_current_app();
 //####################################################################
 cRender::html_header("Tiers in Application $oApp->name");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 cRender::show_time_options( $oApp->name); 
 
@@ -63,25 +59,23 @@ cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Tra
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
-cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
+cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/2);			
 ?>
 <p>
-
+<!-- ************************************************** -->
 <h2>Tiers Activity in application (<?=$oApp->name?>)</h2>
 <?php
 //-----------------------------------------------
-$oResponse =cAppdyn::GET_Tiers($oApp->name);
+$oResponse =cAppdyn::GET_Tiers($oApp);
 foreach ( $oResponse as $oTier){
-	?><div class="cRender::getRowClass()"><?php
-		$sTier=$oTier->name;
-		if (cFilter::isTierFilteredOut($sTier)) continue;
-		
-		cRenderMenus::show_tier_functions($sTier, $oTier->id);
-		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
-		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
-		cChart::metrics_table($oApp, $aMetrics,2,null);			
-	?></div><?php
+	$sTier=$oTier->name;
+	if (cFilter::isTierFilteredOut($sTier)) continue;
+	
+	cRenderMenus::show_tier_functions($sTier, $oTier->id);
+	$aMetrics = [];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
+	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
+	cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/2);			
 }
 cChart::do_footer();
 

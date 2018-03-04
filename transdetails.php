@@ -51,8 +51,7 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
@@ -70,8 +69,8 @@ $sFilterTierQS = cFilter::makeTierFilter($tier);
 $sFilterTierQS = cHttp::build_QS($sAppQS, $sFilterTierQS);
 
 //**************************************************
-$aNodes = cAppdyn::GET_TierAppNodes($app,$tier);
-cRender::show_time_options("$app&gt;$app&gt;$tier&gt;$trans"); 
+$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$tier);
+cRender::show_time_options("$oApp->name&gt;$oApp->name&gt;$tier&gt;$trans"); 
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
@@ -90,7 +89,7 @@ if ($oCred->restricted_login == null){?>
 					?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
 				}
 			?>
-			<option value="apptrans.php?<?=$sAppQS?>"><?=($app)?> <i>app</i></option>
+			<option value="apptrans.php?<?=$sAppQS?>"><?=($oApp->name)?> <i>app</i></option>
 			<option value="apptrans.php?<?=$sFilterTierQS?>"><?=($tier)?> <i>tier</i></option>
 			<?php
 				if ($node){ 
@@ -122,8 +121,8 @@ if ($oCred->restricted_login == null){?>
 	);
 	</script><?php
 }
-$aid = cHeader::get(cRender::APP_ID_QS);
-cRender::appdButton(cAppDynControllerUI::transaction($aid,$trid));
+$oApp->id = cHeader::get(cRender::APP_ID_QS);
+cRender::appdButton(cAppDynControllerUI::transaction($oApp->id,$trid));
 cDebug::flush();
 
 ?>
@@ -159,7 +158,7 @@ cDebug::flush();
 <script>
 	function load_trans_flow(){
 		var oLoader = new cTransFlow("<?=FLOW_ID?>");
-		oLoader.load("<?=$app?>", "<?=$tier?>", "<?=$trans?>");
+		oLoader.load("<?=$oApp->name?>", "<?=$tier?>", "<?=$trans?>");
 	}
 	$(load_trans_flow);	
 </script>
@@ -220,7 +219,7 @@ if ($node){ ?>
 	<?php
 		cDebug::flush();
 		//******get the external tiers used by this transaction
-		$oData = cAppdyn::GET_TransExtTiers($app, $tier, $trans);
+		$oData = cAppdyn::GET_TransExtTiers($oApp->name, $tier, $trans);
 		if ($oData){
 			foreach ( $oData as $oItem){
 				$other = $oItem->name;
@@ -248,8 +247,8 @@ if ($node){ ?>
 <?php
 cDebug::flush();
 $oTimes = cRender::get_times();
-$sAppdUrl = cAppDynControllerUI::transaction_snapshots($aid,$trid, $oTimes);
-$aSnapshots = cAppdyn::GET_snaphot_info($app, $trid, $oTimes);
+$sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp->id,$trid, $oTimes);
+$aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
 }else{
@@ -268,14 +267,14 @@ if (count($aSnapshots) == 0){
 				foreach ($aSnapshots as $oSnapshot){
 					$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
 					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
-					$sAppdUrl = cAppDynControllerUI::snapshot($aid, $trid, $oSnapshot->requestGUID, $oTimes);
+					$sAppdUrl = cAppDynControllerUI::snapshot($oApp->id, $trid, $oSnapshot->requestGUID, $oTimes);
 					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
 					?>
 					<tr class="<?=cRender::getRowClass()?>">
 						<td><?=$sDate?></td>
 						<td><img src="<?=$sImgUrl?>"></td>
 						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
-						<td><?=cAppdynUtil::get_node_name($aid,$oSnapshot->applicationComponentNodeId)?></td>
+						<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
 						<td><?=$oSnapshot->summary?></td>
 						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
 					</tr>

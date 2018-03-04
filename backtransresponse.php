@@ -48,18 +48,17 @@ cRender::force_login();
 cChart::do_header();
 
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
-$aid = cHeader::get(cRender::APP_ID_QS);
+$oApp = cRender::get_current_app();
 $backend = cHeader::get(cRender::BACKEND_QS);
 $sAppQS = cRender::get_base_app_QS();
 $sBackendQS = cHttp::build_QS($sAppQS, cRender::BACKEND_QS, $backend);
 
-$title= "$app&gt;Backend Transaction response times&gt;$backend";
+$title= "$oApp->name&gt;Backend Transaction response times&gt;$backend";
 cRender::show_time_options($title); 
 cRender::button("Back to Backends", "appbackends.php?$sAppQS");
 cRender::button("Backend Tier Calls", "backcalls.php?$sBackendQS");
 cRender::button("Backend Transaction Calls", "backtrans.php?$sBackendQS");
-cRender::appdButton(cAppDynControllerUI::remoteServices($aid));
+cRender::appdButton(cAppDynControllerUI::remoteServices($oApp->id));
 
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -72,22 +71,22 @@ if (cAppdyn::is_demo()){
 ?>
 <br>
 <span id="progress">
-<?php $aTransactions = cAppdyn::GET_BackendCallerTransactions($app, $backend);?>
+<?php $aTransactions = cAppdyn::GET_BackendCallerTransactions($oApp, $backend);?>
 </span>
 
 
 <table class='maintable'>
 	<tr><td><?php
 		$sMetricUrl=cAppDynMetric::appCallsPerMin();
-		cChart::add("Overall Calls per min ($app)", $sMetricUrl, $app);
+		cChart::add("Overall Calls per min ($oApp->name)", $sMetricUrl, $oApp->name);
 	?></td></tr>
 	<tr><td><?php
 		$sMetricUrl=cAppDynMetric::backendCallsPerMin($backend);
-		cChart::add("Overall Calls per min ($backend)", $sMetricUrl, $app);
+		cChart::add("Overall Calls per min ($backend)", $sMetricUrl, $oApp->name);
 	?></td></tr>
 	<tr><td><?php
 		$sMetricUrl=cAppDynMetric::backendResponseTimes($backend);
-		cChart::add("response times ($backend)", $sMetricUrl, $app);
+		cChart::add("response times ($backend)", $sMetricUrl, $oApp->name);
 	?></td></tr>
 </table>
 <p>
@@ -98,7 +97,7 @@ if (cAppdyn::is_demo()){
 			$sMetric = $oItem->metric."|Average Response Time (ms)";
 
 			echo "<tr><td class='".cRender::getRowClass()."'>";
-				cChart::add($sMetric, $sMetric, $app);	
+				cChart::add($sMetric, $sMetric, $oApp->name);	
 			echo "</td></tr>";
 		}
 	?>

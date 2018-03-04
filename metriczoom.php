@@ -38,14 +38,14 @@ require_once("$phpinc/appdynamics/account.php");
 
 //####################################################################
 $sMetric = cHeader::get(cRender::METRIC_QS);
-$sApp = cHeader::get(cRender::APP_QS);
-if (!$sApp) $sApp = "No Application Specified";
+$oApp = cRender::get_current_app();
+if (!$oApp->name) $oApp->name = "No Application Specified";
 $sTitle = cHeader::get(cRender::TITLE_QS);
 
 //####################################################################
 cRender::html_header($sTitle);
 cRender::force_login();
-cRender::show_time_options("App: $sApp&gt; $sTitle"); 
+cRender::show_time_options("App: $oApp->name&gt; $sTitle"); 
 
 //####################################################################
 cChart::do_header();
@@ -60,7 +60,7 @@ $oItem->caption = $sTitle;
 $oChart = new cChartItem();
 $oChart->metrics[] = $oItem;
 $oChart->title = $sTitle;
-$oChart->app = $sApp;
+$oChart->app = $oApp->name;
 $oChart->height = 700;
 
 ?>

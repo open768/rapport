@@ -41,22 +41,16 @@ set_time_limit(200);
 //####################################################################
 cRender::html_header("Backend Calls");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
-
 //get passed in values
-$app = cHeader::get(cRender::APP_QS);
+$oApp = cRender::get_current_app();
 $gsBackend = cHeader::get(cRender::BACKEND_QS);
 $sAppQs = cRender::get_base_app_QS();
-$oBackends =cAppdyn::GET_Backends($app);
+$oBackends =cAppdyn::GET_Backends($oApp->name);
 $gsBaseUrl = cHttp::build_url("backcalls.php",$sAppQs);
-$oApp = cRender::get_current_app();
 
-$title= "$app&gt;Remote Service&gt;$gsBackend";
+$title= "$oApp->name&gt;Remote Service&gt;$gsBackend";
 cRender::show_time_options($title); 
 cRenderMenus::show_app_functions();
 //********************************************************************
@@ -95,8 +89,8 @@ cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 <h3>Overall Application Statistics</h3>
 <?php
 	$aMetrics = [];
-	$aMetrics[]= [cChart::LABEL=>"Overall Calls per min ($app)", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
-	$aMetrics[]= [cChart::LABEL=>"Overall Response Times in ms ($app)", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+	$aMetrics[]= [cChart::LABEL=>"Overall Calls per min ($oApp->name)", cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+	$aMetrics[]= [cChart::LABEL=>"Overall Response Times in ms ($oApp->name)", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 	
 	cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 ?>
@@ -111,7 +105,7 @@ cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
 <p>
 
 <div id="divWorking"><?php
-	$oResponse =cAppdyn::GET_BackendCallerTiers($app,$gsBackend);
+	$oResponse =cAppdyn::GET_BackendCallerTiers($oApp,$gsBackend);
 ?></div>
 <script language="javascript">
 	$(function(){$("#divWorking").hide();})
