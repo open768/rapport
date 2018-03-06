@@ -533,6 +533,7 @@ class cRender{
 		})(window,document,'script','dataLayer','GTM-PFLM8J');</script>
 		<!-- End Google Tag Manager -->
 		<?php
+		cDebug::flush();
 	}
 	
 	//**************************************************************************
@@ -641,6 +642,7 @@ class cRender{
 				</tr></table>
 			</form>
 		<?php
+		cDebug::flush();
 	}
 	//**************************************************************************
 	public static function show_top_banner( $psTitle){

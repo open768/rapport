@@ -60,7 +60,7 @@ $oItem->caption = $sTitle;
 $oChart = new cChartItem();
 $oChart->metrics[] = $oItem;
 $oChart->title = $sTitle;
-$oChart->app = $oApp->name;
+$oChart->app = $oApp;
 $oChart->height = 700;
 
 ?>

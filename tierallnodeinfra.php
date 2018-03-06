@@ -145,7 +145,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
 	}
 	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 ?>
 
 <?php

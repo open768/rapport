@@ -143,8 +143,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		cChart::LABEL=>"Response times in ms for ($tier) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$tier"
 	];
-	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 
 //####################################################################
 ?>
@@ -163,8 +162,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"
 		];
 	}
-	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 ?>
 <p>
 <h2>Memory Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
@@ -177,8 +175,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
 	}
-	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 ?>
 <p>
 <h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
@@ -191,12 +188,10 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
 	}
-	$sClass = cRender::getRowClass();			
-	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
 ?>
 
 <?php
 cChart::do_footer();
-
 cRender::html_footer();
 ?>
