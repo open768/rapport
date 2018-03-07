@@ -98,7 +98,7 @@ foreach ($aNodes as $oNode){
 	$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
 }
 $sClass = cRender::getRowClass();
-cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cRender::CHART_HEIGHT_SMALL);
+cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
 
 // ################################################################################
 // ################################################################################

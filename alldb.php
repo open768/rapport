@@ -43,7 +43,7 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE -200;
+cChart::$width=cChart::CHART_WIDTH_LARGE -200;
 
 
 //####################################################################

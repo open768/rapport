@@ -48,7 +48,7 @@ cRender::html_header("tier infrastructure");
 <?php
 cRender::force_login();
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE;
+cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //####################################################################
 // huge time limit as this takes a long time//display the results
@@ -134,7 +134,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 	$sNodeUrl = cHttp::build_url("tierinfrstats.php",$sTierQS);
 	
 	$aMetrics = [];
-	$iWidth = cRender::CHART_WIDTH_LETTERBOX /3 ;
+	$iWidth = cChart::CHART_WIDTH_LETTERBOX /3 ;
 
 	foreach ($aNodes as $oNode){
 		$sNode = $oNode->name;
@@ -145,7 +145,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
 	}
 	$sClass = cRender::getRowClass();			
-	cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
+	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 ?>
 
 <?php

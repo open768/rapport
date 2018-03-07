@@ -49,7 +49,7 @@ cRender::show_time_options("App: $oApp->name&gt; $sTitle");
 
 //####################################################################
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE;
+cChart::$width=cChart::CHART_WIDTH_LARGE;
 cChart::$show_zoom = false;
 
 //####################################################################

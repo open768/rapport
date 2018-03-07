@@ -49,7 +49,7 @@ $gsTierQs = cRender::get_base_tier_QS();
 cRender::html_header("External tier calls");
 cRender::force_login();
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
+cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 
 //###################### DATA ########################################
 $title = "$oApp->name&gt;$oTier->name&gt;External Calls";
@@ -103,7 +103,7 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
-	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass(),null,cChart::CHART_WIDTH_LETTERBOX/3);
 
 //################ CHART
 cChart::do_footer();

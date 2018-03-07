@@ -78,7 +78,7 @@ foreach ( $aApps as $oApp){
 			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
 			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cAppDynMetric::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
 		}
-		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php
 }
 cChart::do_footer();

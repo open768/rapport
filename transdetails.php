@@ -146,7 +146,7 @@ cDebug::flush();
 	$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cAppDynMetric::transResponseTimes($tier, $trans)];
 	$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cAppDynMetric::transErrors($tier, $trans)];
 	$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($tier, $trans)];
-	cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/3);
+	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	cDebug::flush();
 ?>
 
@@ -178,7 +178,7 @@ if ($node){ ?>
 		$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cAppDynMetric::transResponseTimes($tier, $trans, $node)];
 		$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cAppDynMetric::transErrors($tier, $trans, $node)];
 		$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($tier, $trans, $node)];
-		cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	?>
 	<h2>Server Data</h2>
 	<?php
@@ -188,7 +188,7 @@ if ($node){ ?>
 		$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cAppDynMetric::InfrastructureJavaGCTime($tier, $node)];
 		$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($tier, $node)];
 		$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetGCTime($tier, $node)];
-		cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 }
 ?>
 
@@ -212,7 +212,7 @@ if ($node){ ?>
 					$sMetricUrl=cAppDynMetric::transExtResponseTimes($tier, $trans, $other);
 					$aMetrics[] = [cChart::LABEL=>"response times: $other", cChart::METRIC=>$sMetricUrl];
 			}
-			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cRender::CHART_HEIGHT_SMALL);
+			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
 		}else
 			echo "<h3>This transaction has no external calls</h3>";
 	?>

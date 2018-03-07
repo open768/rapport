@@ -90,11 +90,11 @@ $aMetrics = [];
 foreach ( $oResponse as $oExtTier){
 	$class=cRender::getRowClass();
 	$sName = $oExtTier->name;
-	$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName];
+	$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>cChart::CHART_WIDTH_LETTERBOX/3];
 	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName)];
 	$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cAppDynMetric::backendResponseTimes($sName)];
 }
-cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 
 //##################################################################
 cChart::do_footer();

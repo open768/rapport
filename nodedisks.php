@@ -41,7 +41,7 @@ cChart::do_header();
 	<script type="text/javascript" src="js/remote.js"></script>
 <?php
 
-cChart::$width=cRender::CHART_WIDTH_LARGE;
+cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //####################################################################
 $oApp = cRender::get_current_app();

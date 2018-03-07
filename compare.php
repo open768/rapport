@@ -52,7 +52,7 @@ cRender::show_time_options("<b>comparing</b>: ($oApp->name): $sChartTitle");
 
 //####################################################################
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LETTERBOX;
+cChart::$width=cChart::CHART_WIDTH_LETTERBOX;
 cChart::$show_compare = false;
 
 //####################################################################
@@ -65,7 +65,7 @@ $oChart = new cChartItem();
 $oChart->metrics[] = $oItem;
 $oChart->title = $sMetric;
 $oChart->app = $oApp->name;
-$oChart->height = cRender::CHART_HEIGHT_LETTERBOX;
+$oChart->height = cChart::CHART_HEIGHT_LETTERBOX;
 ?>
 	<table class="maintable">
 		<tr><td>

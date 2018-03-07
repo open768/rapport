@@ -83,7 +83,7 @@ cRender::button("transactions for this remote service", cHttp::build_url("backtr
 //****************************************************************************
 // work through each tier
 $sClass = cRender::getRowClass();
-cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
+cChart::$width = cChart::CHART_WIDTH_LETTERBOX/2;
 ?>
 <h2>(<?=$gsBackend?>) Remote Service</h2>
 <h3>Overall Application Statistics</h3>

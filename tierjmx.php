@@ -48,7 +48,7 @@ cRender::html_header("tier JMX Database Pools");
 <?php
 cRender::force_login();
 cChart::do_header();
-cChart::$width=cRender::CHART_WIDTH_LARGE;
+cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //####################################################################
 // huge time limit as this takes a long time//display the results
@@ -123,7 +123,7 @@ $(
 
 //####################################################################
 $aPools = cAppdyn::GET_JDBC_Pools($oApp->name,$tier,$node);
-cChart::$width=cRender::CHART_WIDTH_LARGE/2;
+cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 ?>
 <h2>JDBC Pools for (<?=$tier?>) Tier</h2>
 <?php

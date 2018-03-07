@@ -84,7 +84,7 @@ else{
 		];
 		?><hr><?php
 		cRenderMenus::show_app_functions($oApp);
-		cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/2);
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
 		?><br><?php
 	}
 }

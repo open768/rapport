@@ -45,7 +45,7 @@ $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 	
 <?php
 cChart::do_header();
-cChart::$width = cRender::CHART_WIDTH_LARGE;
+cChart::$width = cChart::CHART_WIDTH_LARGE;
 //####################################################################
 function pr__sort_nodes($a,$b){
 	return strcmp($a[0]->tierName, $b[0]->tierName);
@@ -148,7 +148,7 @@ if ($iNodes==0){
 					$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
 					
 				}
-				cChart::metrics_table($oApp, $aMetrics,6,cRender::getRowClass(),null,cRender::CHART_WIDTH_LETTERBOX/3);
+				cChart::metrics_table($oApp, $aMetrics,6,cRender::getRowClass(),null,cChart::CHART_WIDTH_LETTERBOX/3);
 			}
 		?>
 	<p>

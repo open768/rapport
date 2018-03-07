@@ -221,17 +221,6 @@ class cRender{
 	
 	const METRIC_TYPE_JMX_DBPOOLS = "mtjdbp";
 	
-	//************************************************************
-	const CHART_WIDTH_LARGE = 1024;
-	const CHART_HEIGHT_LARGE = 700;
-	const CHART_HEIGHT_SMALL = 125;
-	const CHART_HEIGHT_TINY = 75;
-
-	const CHART_WIDTH_LETTERBOX = 1024;
-	const CHART_HEIGHT_LETTERBOX = 250;
-	
-	const CHART_WIDTH_LETTERBOX2 = 1024;
-	const CHART_HEIGHT_LETTERBOX2 = 200;
 	
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";

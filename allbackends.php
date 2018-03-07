@@ -81,7 +81,7 @@ foreach ($oApps as $oApp){
 				$sMetric = cAppDynMetric::backendResponseTimes($oItem->name);
 				$aMetrics[] = [cChart::LABEL=>"Backend Response Times: $oItem->name", cChart::METRIC=>$sMetric];
 			}
-			cChart::render_metrics($oApp, $aMetrics, cRender::CHART_WIDTH_LETTERBOX/3);
+			cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 		?>
 	<?php
 }

@@ -48,7 +48,7 @@ cRender::force_login();
 	
 <?php
 cChart::do_header();
-cChart::$width = cRender::CHART_WIDTH_LETTERBOX/2;
+cChart::$width = cChart::CHART_WIDTH_LETTERBOX/2;
 
 //get passed in values
 $oApp = cRender::get_current_app();
@@ -82,11 +82,11 @@ if (cAppdyn::is_demo()){
 <table class='maintable'><tr>
 	<td><?php
 		$sMetricUrl=cAppDynMetric::appCallsPerMin();
-		cChart::add("Overall Calls per min ($oApp->name)", $sMetricUrl, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);
+		cChart::add("Overall Calls per min ($oApp->name)", $sMetricUrl, $oApp->name, cChart::CHART_HEIGHT_LETTERBOX2);
 	?></td>
 	<td><?php
 		$sMetricUrl=cAppDynMetric::backendCallsPerMin($backend);
-		cChart::add("Overall Calls per min ($backend)", $sMetricUrl, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);
+		cChart::add("Overall Calls per min ($backend)", $sMetricUrl, $oApp->name, cChart::CHART_HEIGHT_LETTERBOX2);
 	?></td>
 </tr></table>
 <p>
@@ -97,10 +97,10 @@ if (cAppdyn::is_demo()){
 			?><tr class="<?=cRender::getRowClass()?>">
 				<td><?php
 					$sMetric = $oItem->metric."|".cAppDynMetric::CALLS_PER_MIN;
-					cChart::add($sMetric, $sMetric, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);	
+					cChart::add($sMetric, $sMetric, $oApp->name, cChart::CHART_HEIGHT_LETTERBOX2);	
 				?></td><td><?php
 					$sMetric = $oItem->metric."|".cAppDynMetric::RESPONSE_TIME;
-					cChart::add($sMetric, $sMetric, $oApp->name, cRender::CHART_HEIGHT_LETTERBOX2);
+					cChart::add($sMetric, $sMetric, $oApp->name, cChart::CHART_HEIGHT_LETTERBOX2);
 				?></td>
 			</tr><?php
 		}

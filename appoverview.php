@@ -75,7 +75,7 @@ $aMetrics  = [
 	[cChart::LABEL=>"Errors per min", cChart::METRIC=>cAppDynMetric::appErrorsPerMin()],
 	[cChart::LABEL=>"Exceptions", cChart::METRIC=>cAppDynMetric::appExceptionsPerMin()]
 ];
-cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/3);
+cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 cDebug::flush();
 
 //####################################################################
@@ -96,7 +96,7 @@ cDebug::flush();
 		$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cAppDynMetric::InfrastructureCpuBusy($sTier)];
 		$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureJavaHeapUsed($sTier)];
 		$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($sTier)];
-		cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/3);
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	}
 ?><p><?php
 cDebug::flush();
@@ -118,7 +118,7 @@ cDebug::flush();
 			?><hr><?php
 			cRender::button($oBackend->name, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $oBackend->name));
 			?><br><?php
-			cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/3);
+			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	}
 
 //####################################################################

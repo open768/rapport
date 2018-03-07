@@ -72,7 +72,7 @@ foreach ( $oResponse as $oTier){
 	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': infrastructure availability",cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($oTier->name)];
 }
 $sClass = cRender::getRowClass();
-cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/2);
+cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/2);
 	
 cChart::do_footer();
 

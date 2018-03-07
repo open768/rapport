@@ -68,6 +68,18 @@ class cChart{
 	const STYLE="s";
 	const WIDTH="w";
 	
+	//************************************************************
+	const CHART_WIDTH_LARGE = 1024;
+	const CHART_HEIGHT_LARGE = 700;
+	const CHART_HEIGHT_SMALL = 125;
+	const CHART_HEIGHT_TINY = 75;
+
+	const CHART_WIDTH_LETTERBOX = 1024;
+	const CHART_HEIGHT_LETTERBOX = 250;
+	
+	const CHART_WIDTH_LETTERBOX2 = 1024;
+	const CHART_HEIGHT_LETTERBOX2 = 200;
+	
 	//****************************************************************************
 	public static function do_header(){
 	}
@@ -131,7 +143,7 @@ class cChart{
 	}
 	//#####################################################################################
 	//#####################################################################################
-	public static function render_metrics($poApp, $paItems, $piWidth=cRender::CHART_WIDTH_LETTERBOX, $piHeight = cRender::CHART_HEIGHT_SMALL ){ 
+	public static function render_metrics($poApp, $paItems, $piWidth=cChart::CHART_WIDTH_LETTERBOX, $piHeight = cChart::CHART_HEIGHT_SMALL ){ 
 		$sClass= cRender::getRowClass();
 		?><div class="<?=$sClass?>"><?php
 		foreach ($paItems as $aItem){
@@ -141,14 +153,14 @@ class cChart{
 	}
 	
 	//*********************************************************************************************
-	public static function metrics_table($poApp, $paItems, $piMaxCols, $psRowClass, $piHeight = cRender::CHART_HEIGHT_SMALL, $piWidth=null, $paHeaders=null){ 
+	public static function metrics_table($poApp, $paItems, $piMaxCols, $psRowClass, $piHeight = cChart::CHART_HEIGHT_SMALL, $piWidth=null, $paHeaders=null){ 
 		if (gettype($poApp) !== "object"){
 			cDebug::error("app must be an object");
 		}
 			
 		$iCol = 0;
 		$iOldWidth = self::$width;
-		self::$width = ($piWidth?$piWidth:cRender::CHART_WIDTH_LETTERBOX / $piMaxCols);
+		self::$width = ($piWidth?$piWidth:cChart::CHART_WIDTH_LETTERBOX / $piMaxCols);
 		
 		
 		?><table class="maintable"><?php

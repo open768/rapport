@@ -59,7 +59,7 @@ cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Tra
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
-cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/2);			
+cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);			
 ?>
 <p>
 <!-- ************************************************** -->
@@ -75,7 +75,7 @@ foreach ( $oResponse as $oTier){
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
 	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
-	cChart::render_metrics($oApp, $aMetrics,cRender::CHART_WIDTH_LETTERBOX/2);			
+	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);			
 }
 cChart::do_footer();
 

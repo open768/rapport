@@ -88,7 +88,7 @@ foreach ($aTiers as $oTier){
 		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
 	}
 	$sClass = cRender::getRowClass();
-	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cRender::CHART_WIDTH_LETTERBOX/3, $aHeaders);
+	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3, $aHeaders);
 }
 
 //####################################################################
