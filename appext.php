@@ -75,7 +75,6 @@ if ($oCred->restricted_login == null){
 }
 
 //####################################################################
-$oResponse =cAppdyn::GET_AppExtTiers($oApp->name);
 
 ?><h2>Overall statistics for <?=$oApp->name?></h2><?php
 $aMetrics = [];
@@ -87,11 +86,16 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 ?><h2>External calls from <?=$oApp->name?></h2><?php
 $aMetrics = [];
 
+$oResponse =cAppdyn::GET_AppExtTiers($oApp->name);
 foreach ( $oResponse as $oExtTier){
 	$class=cRender::getRowClass();
 	$sName = $oExtTier->name;
+	
+	$sUrl=cHttp::build_qs($gsAppQS,cRender::BACKEND_QS,$oExtTier->name);
+	$sUrl=cHttp::build_url("appexttiers.php", $sUrl);
+
 	$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>cChart::CHART_WIDTH_LETTERBOX/3];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName)];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers"];
 	$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cAppDynMetric::backendResponseTimes($sName)];
 }
 cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());

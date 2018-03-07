@@ -124,6 +124,7 @@ if ($oCred->restricted_login == null){?>
 	);
 	</script><?php
 }
+cRenderMenus::show_tier_functions();
 cRender::appdButton(cAppDynControllerUI::transaction($oApp->id,$trid));
 cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
 cDebug::flush();
