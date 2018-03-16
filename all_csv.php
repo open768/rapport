@@ -23,6 +23,7 @@ require_once("$phpinc/ckinc/http.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("inc/inc-secret.php");
 require_once("inc/inc-render.php");
+require_once("inc/inc-charts.php");
 require_once("inc/inc-metrics.php");
 	
 cSession::set_folder();
@@ -35,7 +36,7 @@ require_once("$phpinc/appdynamics/metrics.php");
 require_once("$phpinc/appdynamics/account.php");
 
 //####################################################################
-$iCount = cHeader::get(cChart::CHART_COUNT_FIELD);
+$iCount = cHeader::get(cRender::CHART_COUNT_FIELD);
 if ($iCount == null)
 	cDebug::error("no Metric count found");
 
@@ -49,9 +50,9 @@ cDebug::write("Generating CSV - please wait");
 //* build up the data into an in memory structure
 $oMerged = new cMergedMetrics();
 for ($i = 1; $i<=$iCount; $i++){
-	$sApp = cHeader::get(cChart::CHART_APP_FIELD."_$i");
-	$sMetric = cHeader::get(cChart::CHART_METRIC_FIELD."_$i");
-	$sTitle  = cHeader::get(cChart::CHART_TITLE_FIELD."_$i");
+	$sApp = cHeader::get(cRender::CHART_APP_FIELD."_$i");
+	$sMetric = cHeader::get(cRender::CHART_METRIC_FIELD."_$i");
+	$sTitle  = cHeader::get(cRender::CHART_TITLE_FIELD."_$i");
 	
 	//get the data
 	cDebug::write("app:$sApp");

@@ -53,7 +53,6 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 
 //###################### DATA ########################################
 $title = "$oApp->name&gt;$oTier->name&gt;External Calls";
-$oTier->nameQS = cRender::get_base_tier_QS();
 
 cRender::show_time_options($title); 
 //********************************************************************
@@ -87,23 +86,23 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 
 
-	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($oApp->name, $oTier->name);
-	$linkUrl = cHttp::build_url("tiertotier.php", $gsAppQs);
-	$linkUrl = cHttp::build_url($linkUrl, cRender::FROM_TIER_QS, $oTier->name);
-	$linkUrl = cHttp::build_url($linkUrl, cRender::TIER_ID_QS, $oTier->id);
 ?><h3>External calls</h3><?php
+	$linkUrl = cHttp::build_url("tierextalltrans.php", $gsTierQs);
+	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($oApp->name, $oTier->name);
+	
 	$aMetrics=[];
 	
-	foreach ($oResponse as $oDetail){
-		$sTierTo = $oDetail->name;
+	foreach ($oResponse as $oExt){
+	
+		$sTierTo = $oExt->name;
+		$sUrl = cHttp::build_url($linkUrl, cRender::BACKEND_QS, $sTierTo);
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo, cChart::WIDTH=>300];
 		$sMetric=cAppDynMetric::tierExtCallsPerMin($oTier->name, $sTierTo);
-		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric, cChart::GO_URL=>$sUrl];
 		$sMetric=cAppDynMetric::tierExtResponseTimes($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code("Go", cHttp::build_url($linkUrl, cRender::TO_TIER_QS, $sTierTo))];
 	}
-	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass(),null,cChart::CHART_WIDTH_LETTERBOX/3);
+	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass());
 
 //################ CHART
 cChart::do_footer();

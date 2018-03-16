@@ -22,7 +22,7 @@ var cCharts={
 		iCount = 0;
 		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:"all_csv.php",target:"_blank"});
 		
-		$("DIV[type='appdchart']").each( //all div elements which have their type set to appdchart
+		$("SPAN[type='appdchart']").each( //all div elements which have their type set to appdchart
 			function(pIndex, pElement){
 				var oElement = $(pElement);
 				
@@ -152,11 +152,14 @@ $.widget( "ck.appdchart",{
 		if (!oOptions.width)	{		$.error("width missing!");		}
 		if (!oOptions.height)	{		$.error("height missing!");		}
 		
+		//set display style
+		oElement.removeClass();
+		oElement.addClass("chart_widget");
+	
 		//set the DIV size
 		oElement.outerWidth(oOptions.width );
 		oElement.outerHeight(oOptions.height );
 		oElement.css("max-width",""+oOptions.width+"px");
-		oElement.css("display","inline-block");
 		
 		//load content
 		this.pr__setInView();
@@ -188,6 +191,7 @@ $.widget( "ck.appdchart",{
 		oElement.off('inview');	//turn off the inview listener
 		oElement.empty();
 		oElement.removeClass();
+		oElement.addClass("chart_widget");
 		oElement.addClass("chart_initialising");
 		oElement.append("Initialising: " + oOptions.title);
 
@@ -211,6 +215,7 @@ $.widget( "ck.appdchart",{
 		//loading message
 		oElement.empty();
 		oElement.removeClass();
+		oElement.addClass("chart_widget");
 		oElement.addClass("chart_queuing");
 		oElement.append("Queueing: " + oOptions.title);
 		
@@ -269,6 +274,7 @@ $.widget( "ck.appdchart",{
 		
 		oElement.empty();
 		oElement.removeClass();
+		oElement.addClass("chart_widget");
 		oElement.addClass("chart_loading");
 		
 		var oLoader = $("<DIV>");
@@ -283,7 +289,10 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 
 		if (cCharts.queue.stopping) return;
-		oElement.attr("class","chart_drawing");
+		oElement.empty();
+		oElement.removeClass();
+		oElement.addClass("chart_widget");
+		oElement.addClass("chart_drawing");
 		
 		var oResponse = poHttp.response;
 		if (oResponse.data.length == 0){
@@ -429,43 +438,27 @@ $.widget( "ck.appdchart",{
 		// set the display range of the chart to match the requested timerange
 		oElement.empty();
 		
-		// create a table
-		var oTable = $("<TABLE>", {border:0,width:"100%"});
-		var oRow = $("<TR>");
-		oTable.append(oRow);		
-		oElement.append(oTable);		//have to add the element here otherwise google charts donw work properly
 		
 		// buttons the the left of the chart
 		var oCell = $("<TD>", {class:"buttonpanel"});
 		var oButton = $("<button>",{class:"csv_button",title:"download as CSV"}).button({icon:"ui-icon-document"});
-			oButton.click(		function(){ oThis.onClickCSV()}		);
-			oCell.append(oButton);
 		
 		if (oOptions.showZoom){
 			var oButton = $("<button>",{class:"csv_button",title:"Zoom"}).button({icon:"ui-icon-zoomin"});
 			oButton.click(		function(){ oThis.onClickZoom()}		);
-			oCell.append(oButton);
 		}
 
 		if (oOptions.showCompare){
 			var oButton = $("<button>",{class:"csv_button",title:"Compare"}).button({icon:"ui-icon-shuffle"});
 			oButton.click(		function(){ oThis.onClickCompare()}		);
-			oCell.append(oButton);
 		}
 
 		if (oOptions.goUrl){
 			var oButton = $("<button>",{class:"csv_button",title:oOptions.goCaption}).button({icon:"ui-icon-arrowreturn-1-n"});
 			oButton.click(		function(){ oThis.onClickGo()}		);
-			oCell.append(oButton);
 		}
-		oRow.append(oCell);
 		
-		// draw the chart
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<DIV>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5});
-		var oCell = $("<TD>");
-		oCell.append(oChartDiv);
-		oRow.append(oCell);
 		
 		var oDiv = oChartDiv[0];
 		var dStart = new Date(poJson.epoch_start);
@@ -498,16 +491,6 @@ $.widget( "ck.appdchart",{
 			interpolateNulls: false
 		};
 		oChart.draw(oData, oChartOptions);
-		
-		//display maximumes and observed values
-		var oCell = $("<TD>", {class:"infopanel"});
-		oCell.append("Max: "+ iMax + "<br>");
-		oCell.append("Avg: "+ iAvgObs + "<br>");
-		oCell.append("Min: "+ iMin + "<br>");
-		oRow.append(oCell);
-
-		// show the buttons below the graph for now
-		// todo make the buttons a context dropdown to save screen space
 		
 	}
 });

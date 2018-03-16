@@ -29,15 +29,16 @@ class cChartItem{
 	public $width = 1000;
 	
 	public function write_html(){
-		?><DIV 
+		?><SPAN 
 			type="appdchart" 
 			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
-			style="width:<?=$this->width?>px;height=<?=$this->height?>px;display:flex"
+			style="width:<?=$this->width?>px;height=<?=$this->height?>px;"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			<?php if($this->go_URL){?>
-				goUrl="<?=$this->go_URL?>" goLabel="<?=$this->go_hint?>"
+				goUrl="<?=$this->go_URL?>" 
+				goLabel="<?=$this->go_hint?>"
 			<?php }?>
 			<?php
 				for ($i=0; $i< count($this->metrics); $i++){
@@ -47,7 +48,7 @@ class cChartItem{
 			?>
 		>
 			Waiting for charts: <?=$this->metrics[0]->caption?>
-		</DIV><?php
+		</SPAN><?php
 	}
 }
 

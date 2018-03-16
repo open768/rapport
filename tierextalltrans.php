@@ -64,6 +64,16 @@ $sUrl = cHttp::build_url("appexttiers.php", $sExtQS);
 //####################################################################
 ?>
 <!-- ************************************************** -->
+<h2>All Calls to <?=$sExt?></h2>
+<?php
+$aMetrics = [];
+$aMetrics[] = [cChart::LABEL=>"$oTier->name Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($oTier->name,$sExt)];
+$aMetrics[] = [cChart::LABEL=>"$oTier->name Response time in ms", cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($oTier->name,$sExt)];
+cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
+
+//####################################################################
+?>
+<p>
 <h2><?=$sTitle?></h2>
 <?php
 //-----------------------------------------------
@@ -77,14 +87,20 @@ foreach ( $aTrans as $oTrans){
 	$sUrl = cHttp::build_qs($sUrl, cRender::TRANS_ID_QS, $oTrans->id);
 	$sUrl = cHttp::build_url("transdetails.php", $sUrl);
 	
-	$aMetrics[] = [cChart::LABEL=>$oTrans->name,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];
 	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name to External Call Calls per min ",
+		cChart::LABEL=>"$oTrans->name Calls per min", 
 		cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name,$oTrans->name),
 		cChart::GO_URL => $sUrl,
 		cChart::GO_HINT => "Transaction"
 	];
-	$aMetrics[] = [cChart::LABEL=>"$oTrans->name to External Call Response time in ms", cChart::METRIC=>cAppDynMetric::transResponseTimes($oTier->name,$oTrans->name)];
+	$aMetrics[] = [
+		cChart::LABEL=>"$oTrans->name to External Calls per min ",
+		cChart::METRIC=>cAppDynMetric::transExtCalls($oTier->name,$oTrans->name, $sExt)
+	];
+	$aMetrics[] = [
+		cChart::LABEL=>"$oTrans->name to External Response time in ms", 
+		cChart::METRIC=>cAppDynMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt)
+	];
 }
 cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 cChart::do_footer();

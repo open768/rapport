@@ -10,13 +10,6 @@ h2
 	color:#2D95BF;
 }
 
-.charttooltip
-{
-	border:2px solid darkcyan;
-	border-radius: 5px;
-	padding: 5px;
-}
-
 .bad_row{
 	background-color:#ffe6e6;
 }
@@ -129,19 +122,6 @@ h2
 	height:300px;
 }
 
-.chartdiv
-{
-	border:1px solid #000000;
-}
-
-.chartnodatadiv
-{
-	border:1px solid #000000;
-	background-color:AliceBlue;
-	font-family: Courier;
-	font-size:12px;
-}
-
 .footer
 {
 	width: 100%;
@@ -233,6 +213,35 @@ h2
 
 
 /*---------------------------------------------------------------------------------*/
+.chartdiv
+{
+	display:inline-block;	
+	border:1px solid #000000;
+}
+
+.chartnodatadiv
+{
+	display:inline-block;	
+	border:1px solid #000000;
+	background-color:AliceBlue;
+	font-family: Courier;
+	font-size:12px;
+}
+
+.charttooltip
+{
+	border:2px solid darkcyan;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.chart_widget
+{
+	display:inline-flex;	
+	vertical-align: top	;
+	/*border:1px solid AliceBlue;*/
+}
+
 .chart_initialising{
 	background: repeating-linear-gradient(
 		45deg,
