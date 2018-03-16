@@ -60,7 +60,7 @@ if (cAppdyn::is_demo()){
 
 ?>
 <h2>License Usage</h2>
-login account needs administrator role for this to work
+login account needs Site Owner role for this to work
 <p>
 <select id="menuTime">
 	<option selected disabled>Show Licenses for</option>
@@ -90,8 +90,7 @@ $aMetrics = [];
 foreach ($aMods as $oModule)
 	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cAppdynMetric::moduleUsage($oModule->name, $sUsage)];
 
-$sClass=cRender::getRowClass();
-cChart::metrics_table(cAppDApp::$null_app, $aMetrics,3, $sClass, null);
+cChart::render_metrics(null, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 
 cChart::do_footer();
 cRender::html_footer();

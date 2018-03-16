@@ -22,7 +22,7 @@ var cCharts={
 		iCount = 0;
 		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:"all_csv.php",target:"_blank"});
 		
-		$("SPAN[type='appdchart']").each( //all div elements which have their type set to appdchart
+		$("SPAN[type='appdchart']").each( //all SPAN elements which have their type set to appdchart
 			function(pIndex, pElement){
 				var oElement = $(pElement);
 				
@@ -165,6 +165,7 @@ $.widget( "ck.appdchart",{
 		this.pr__setInView();
 	},
 	
+	//*******************************************************************
 	pr__setInView: function(){
 		var oThis = this;
 		var oElement = oThis.element;
@@ -254,9 +255,9 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 		
 		oElement.empty();
-		var oDiv = $("<DIV>",{class:"ui-state-error"});
-		oDiv.append((psMessage?psMessage:"There was an error getting chart data"));
-		oElement.append(oDiv);
+		oElement.addClass("ui-state-error");
+		oElement.append("There was an error getting chart data for "+ oOptions.title);
+		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
 	},
 
 	//*******************************************************************
@@ -364,7 +365,7 @@ $.widget( "ck.appdchart",{
 		
 		oElement.empty();
 		oElement.removeClass();
-		oElement.addClass("chartnodatadiv");
+		oElement.addClass("chartnodata");
 		oElement.append("No data found for "+ oOptions.title);
 		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
 	},
@@ -439,7 +440,7 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		
 		// buttons the the left of the chart ----------------------------------------------
-		var oSpan = $("<SPAN>", {class:"buttonpanel"});
+		var oSpan = $("<SPAN>", {class:"chartbuttonpanel"});
 		
 		var oButton = $("<button>",{class:"csv_button",title:"download as CSV"}).button({icon:"ui-icon-document"});
 		oButton.click(		function(){ oThis.onClickCSV()}		);
@@ -466,7 +467,7 @@ $.widget( "ck.appdchart",{
 		
 		// draw the chart ----------------------------------------------------------------
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<SPAN>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5});
+		var oChartDiv= $("<SPAN>",{id:sChartID,class:"chartgraph",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5});
 		oElement.append(oChartDiv);
 		
 		var oDiv = oChartDiv[0];
@@ -502,7 +503,7 @@ $.widget( "ck.appdchart",{
 		oChart.draw(oData, oChartOptions);
 		
 		//display maximumes and observed values --------------------------------------
-		var oSpan = $("<SPAN>", {class:"infopanel"});
+		var oSpan = $("<SPAN>", {class:"chartinfopanel"});
 		oSpan.append("Max: "+ iMax + "<br>");
 		oSpan.append("Avg: "+ iAvgObs + "<br>");
 		oSpan.append("Min: "+ iMin + "<br>");

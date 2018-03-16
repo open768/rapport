@@ -88,17 +88,6 @@ h2
 	text-decoration: none;
 }
 
-.buttonpanel
-{
-	width:25px;
-}
-
-.infopanel
-{
-	font-size:9px;
-	width:70px;
-}
-
 }
 .maintable
 {
@@ -213,13 +202,24 @@ h2
 
 
 /*---------------------------------------------------------------------------------*/
-.chartdiv
+.chartbuttonpanel
+{
+	width:25px;
+}
+
+.chartinfopanel
+{
+	font-size:9px;
+	width:70px;
+}
+
+.chartgraph
 {
 	display:inline-block;	
 	border:1px solid #000000;
 }
 
-.chartnodatadiv
+.chartnodata
 {
 	display:inline-block;	
 	border:1px solid #000000;
