@@ -438,27 +438,36 @@ $.widget( "ck.appdchart",{
 		// set the display range of the chart to match the requested timerange
 		oElement.empty();
 		
+		// buttons the the left of the chart ----------------------------------------------
+		var oSpan = $("<SPAN>", {class:"buttonpanel"});
 		
-		// buttons the the left of the chart
-		var oCell = $("<TD>", {class:"buttonpanel"});
 		var oButton = $("<button>",{class:"csv_button",title:"download as CSV"}).button({icon:"ui-icon-document"});
+		oButton.click(		function(){ oThis.onClickCSV()}		);
+		oSpan.append(oButton);
 		
 		if (oOptions.showZoom){
 			var oButton = $("<button>",{class:"csv_button",title:"Zoom"}).button({icon:"ui-icon-zoomin"});
 			oButton.click(		function(){ oThis.onClickZoom()}		);
+			oSpan.append(oButton);
 		}
 
 		if (oOptions.showCompare){
 			var oButton = $("<button>",{class:"csv_button",title:"Compare"}).button({icon:"ui-icon-shuffle"});
 			oButton.click(		function(){ oThis.onClickCompare()}		);
+			oSpan.append(oButton);
 		}
 
 		if (oOptions.goUrl){
 			var oButton = $("<button>",{class:"csv_button",title:oOptions.goCaption}).button({icon:"ui-icon-arrowreturn-1-n"});
 			oButton.click(		function(){ oThis.onClickGo()}		);
+			oSpan.append(oButton);
 		}
+		oElement.append(oSpan);		
 		
+		// draw the chart ----------------------------------------------------------------
 		var sChartID=oElement.attr("id")+"chart";
+		var oChartDiv= $("<SPAN>",{id:sChartID,class:"chartdiv",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5});
+		oElement.append(oChartDiv);
 		
 		var oDiv = oChartDiv[0];
 		var dStart = new Date(poJson.epoch_start);
@@ -492,5 +501,11 @@ $.widget( "ck.appdchart",{
 		};
 		oChart.draw(oData, oChartOptions);
 		
+		//display maximumes and observed values --------------------------------------
+		var oSpan = $("<SPAN>", {class:"infopanel"});
+		oSpan.append("Max: "+ iMax + "<br>");
+		oSpan.append("Avg: "+ iAvgObs + "<br>");
+		oSpan.append("Min: "+ iMin + "<br>");
+		oElement.append(oSpan);
 	}
 });
