@@ -23,6 +23,7 @@ require_once("$root/inc/inc-filter.php");
 class cRenderMenus{
 	//******************************************************************************************
 	public static function show_app_functions($poApp=null){
+		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psApp,null);
@@ -31,11 +32,16 @@ class cRenderMenus{
 		
 		if ($poApp == null) $poApp = cRender::get_current_app();
 		?>
-			<span type="appdmenus" menu="appfunctions" appname="<?=$poApp->name?>" appid="<?=$poApp->id?>"></span>
+			<span 
+				type="appdmenus" menu="appfunctions" 
+				home="<?=$home?>"
+				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
+			</span>
 		<?php
 	}
 	//******************************************************************************************
 	public static function show_app_agent_menu($poApp = null){
+		global $home;
 
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) 
@@ -43,12 +49,17 @@ class cRenderMenus{
 		
 		if ($poApp == null) $poApp = cRender::get_current_app();
 		?>
-			<span type="appdmenus" menu="appagents" appname="<?=$poApp->name?>" appid="<?=$poApp->id?>"></span>
+			<span 
+				type="appdmenus" menu="appagents" 				
+				home="<?=$home?>"
+				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
+			</span>
 		<?php
 	}
 
 	//******************************************************************************************
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
+		global $home;
 	
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) {
@@ -59,13 +70,19 @@ class cRenderMenus{
 		$sApps_fragment = self::get_apps_fragment();
 
 		?>
-			<span type="appdmenus" menu="appsmenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sApps_fragment?>></span>
+			<span 
+				type="appdmenus" menu="appsmenu" 
+				home="<?=$home?>"
+				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
+				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>>
+			</span>
 		<?php
 		self::show_app_functions();
 	}
 	
 	//******************************************************************************************
 	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login)	return;
 
@@ -90,12 +107,18 @@ class cRenderMenus{
 		}
 		
 		?>
-			<span type="appdmenus" menu="tiermenu" caption="<?=$psCaption?>" url="<?=$psURLFragment?>" extra="<?=$psExtraQS?>" <?=$sFragment?>></span>
+			<span 
+				type="appdmenus" menu="tiermenu" 
+				home="<?=$home?>"
+				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
+				extra="<?=$psExtraQS?>" <?=$sFragment?>>
+			</span>
 		<?php
 	}
 
 	//******************************************************************************************
 	public static function 	show_tiernodes_menu($psCaption, $psUrl){
+		global $home;
 		$oApp = cRender::get_current_app();
 		$tier = cHeader::get(cRender::TIER_QS);
 		$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
@@ -108,12 +131,18 @@ class cRenderMenus{
 		}
 		
 		?>
-			<span type="appdmenus" menu="tiernodesmenu"  caption="<?=$psCaption?>" url="<?=$psUrl?>" <?=$sFragment?>></span>
+			<span 
+				type="appdmenus" menu="tiernodesmenu"  
+				home="<?=$home?>"
+				caption="<?=$psCaption?>" url="<?=$psUrl?>" 
+				<?=$sFragment?>>
+			</span>
 		<?php
 	}
 	
 	//******************************************************************************************
 	public static function top_menu(){
+		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login){
 			cRender::button("<nobr>Back to Login</nobr>", "index.php");
@@ -123,19 +152,28 @@ class cRenderMenus{
 		$sApps_fragment = self::get_apps_fragment();
 
 		?>
-			<span type="appdmenus" menu="topmenu" <?=$sApps_fragment?>></span>
+			<span 
+				type="appdmenus" menu="topmenu" 
+				home="<?=$home?>"
+				<?=$sApps_fragment?>>
+			</span>
 		<?php
 	}
 	
 	//******************************************************************************************
 	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
+		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psTier,null);
 			return;
 		}
 		?>
-			<span type="appdmenus" menu="tierfunctions"  tier="<?=$psTier?>" tid="<?=$psTierID?>" node="<?=$psNode?>"></span>
+			<span 
+				type="appdmenus" menu="tierfunctions"  
+				home="<?=$home?>"
+				tier="<?=$psTier?>" tid="<?=$psTierID?>" node="<?=$psNode?>">
+			</span>
 		<?php
 	}
 	
@@ -183,6 +221,8 @@ class cRender{
 	
 	const TRANS_QS = "trans";
 	const TRANS_ID_QS = "trid";
+	const SNAP_GUID_QS = "snpg";
+	const SNAP_URL_QS = "snpu";
 	
 	const NODE_QS = "nd";
 	const FILTER_NODE_QS = "fnqs";
@@ -480,14 +520,14 @@ class cRender{
 
 	//**************************************************************************
 	public static function html_header ($psTitle){
-		global $jsinc;
+		global $jsinc, $home;
 		?>
 		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 		<html>
 		<head>
 			<title><?=$psTitle?></title>
-			<LINK rel="stylesheet" type="text/css" href="css/app.css" >
-			<link rel="stylesheet" type="text/css" href="css/jquery-ui/jquery-ui.min.css">
+			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/app.css" >
+			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
 			
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -507,9 +547,9 @@ class cRender{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
 			
-			<script src="js/widgets/chart.js"></script>
-			<script src="js/widgets/menus.js"></script>
-			<script src="js/common.js"></script>
+			<script src="<?=$home?>/js/widgets/chart.js"></script>
+			<script src="<?=$home?>/js/widgets/menus.js"></script>
+			<script src="<?=$home?>/js/common.js"></script>
 		</head>
 		<BODY>
 		<!-- Google Tag Manager -->

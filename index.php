@@ -14,9 +14,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 
 //####################################################################
-$root=realpath(".");
+$home=".";
+$root=realpath($home);
 $phpinc = realpath("$root/../phpinc");
-$jsinc = "../jsinc";
+$jsinc = "$home/../jsinc";
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/header.php");
@@ -27,10 +28,10 @@ require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/common.php");
 
-require_once("inc/inc-charts.php");
-require_once("inc/inc-charts.php");
-require_once("inc/inc-secret.php");
-require_once("inc/inc-render.php");
+require_once("$root/inc/inc-charts.php");
+require_once("$root/inc/inc-charts.php");
+require_once("$root/inc/inc-secret.php");
+require_once("$root/inc/inc-render.php");
 	
 cSession::set_folder();
 session_start();
@@ -60,7 +61,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	//---------- where are we going
 	$sReferrer = cHeader::get(cLogin::KEY_REFERRER);
 	$sIgnoreReferrer = cHeader::get(cRender::IGNORE_REF_QS);
-	$sLocation = "all.php";
+	$sLocation = "$home/pages/all/all.php";
 
 	if ($sReferrer && !$sIgnoreReferrer){
 		$aUrl = parse_url($sReferrer);
@@ -86,10 +87,10 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		$sError = $e->getMessage();
 		cRender::show_top_banner("Unable to Login !"); 
 		cRender::errorbox($sError);
-		cRender::button("Back to login", "index.php", false);
+		cRender::button("Back to login", "$home/index.php", false);
 		exit;
 	}
-	cHeader::redirect("all.php");
+	cHeader::redirect("$home/pages/all/all.php");
 	exit();
 	
 }else{

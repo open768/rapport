@@ -48,7 +48,8 @@ $.widget( "ck.appdmenu",{
 		AppName: null,
 		AppID: null,
 		TierName: null,
-		TierID: null
+		TierID: null,
+		home: "."
 	},
 	
 
@@ -69,6 +70,7 @@ $.widget( "ck.appdmenu",{
 		//check for required options
 		var oOptions = this.options;
 		if (!oOptions.MenuType)	{		$.error("MenuType  missing!");			}
+		oOptions.home = oElement.attr("home");
 		
 		//load content
 		switch(oOptions.MenuType){
@@ -119,31 +121,33 @@ $.widget( "ck.appdmenu",{
 		oParams[cMenus.APPID_QS] = sAppid;
 		
 		//build the menu
+		var sAppPrefixUrl = oOptions.home+"/pages/app";
+		var sRumPrefixUrl = oOptions.home+"/pages/rum";
 		var oSelect = $("<select>");
 			//- - - - - - - - Application group
 			var oGroup = $("<optgroup>",{label:"Application"});
 				var oOption = $("<option>",{selected:1,disabled:1}).append(sAppname);
 				oGroup.append(oOption);		
 				
-				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl("appoverview.php", oParams));
+				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams));
 				
 			oSelect.append(oGroup);
 		
 			//- - - - - - - - Application Functions group
 			oGroup = $("<optgroup>",{label:"Show..."});
-				this.pr__addToGroup(oGroup, "Activity (tiers)", cBrowser.buildUrl("tiers.php", oParams));
-				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl("appagents.php", oParams));
-				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl("appavail.php", oParams));
-				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl("apperrors.php", oParams));
-				this.pr__addToGroup(oGroup, "Events", cBrowser.buildUrl("events.php", oParams));
-				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl("appext.php", oParams));
-				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl("appinfra.php", oParams));
-				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl("appinfo.php", oParams));
-				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl("appservice.php", oParams));
-				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl("apptrans.php", oParams));
+				this.pr__addToGroup(oGroup, "Activity (tiers)", cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
+				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
+				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl(sAppPrefixUrl+"/appavail.php", oParams));
+				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl(sAppPrefixUrl+"/apperrors.php", oParams));
+				this.pr__addToGroup(oGroup, "Events", cBrowser.buildUrl(sAppPrefixUrl+"/events.php", oParams));
+				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl(sAppPrefixUrl+"/appext.php", oParams));
+				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl(sAppPrefixUrl+"/appinfra.php", oParams));
+				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl(sAppPrefixUrl+"/appinfo.php", oParams));
+				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl(sAppPrefixUrl+"/appservice.php", oParams));
+				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl(sAppPrefixUrl+"/apptrans.php", oParams));
 				oGroup2 = $("<optgroup>",{label:"Web Real User Monitoring"});
-					this.pr__addToGroup(oGroup2, "Overall stats", cBrowser.buildUrl("apprum.php", oParams));
-					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl("rumstats.php", oParams));
+					this.pr__addToGroup(oGroup2, "Overall stats", cBrowser.buildUrl(sRumPrefixUrl+"/apprum.php", oParams));
+					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams));
 				oGroup.append(oGroup2);
 			oSelect.append(oGroup);
 		
@@ -165,6 +169,7 @@ $.widget( "ck.appdmenu",{
 		if (!sAppid)	{	$.error("appid attr missing!");		}
 
 		//build the params
+		var sAppPrefixUrl = oOptions.home+"/pages/app";
 
 		//build the select menu
 		var oSelect = $("<select>");
@@ -174,10 +179,10 @@ $.widget( "ck.appdmenu",{
 			var oParams = {};
 			oParams[cMenus.APP_QS] = sAppname;
 			oParams[cMenus.APPID_QS] = sAppid;
-			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl("appagents.php", oParams));
+			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
 
 			oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL;
-			this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl("appagentdetail.php", oParams));
+			this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl(sAppPrefixUrl+"/appagentdetail.php", oParams));
 			
 			
 			
@@ -195,6 +200,9 @@ $.widget( "ck.appdmenu",{
 		oOptions = this.options;
 		oElement = this.element;
 		
+		var sAppPrefixUrl = oOptions.home+"/pages/app";
+		var sAllPrefixUrl = oOptions.home+"/pages/all";
+		
 		var oSelect = $("<select>");
 			var oOption = $("<option>",{selected:1,disabled:1}).append("Go...");
 			oSelect.append(oOption);
@@ -208,9 +216,9 @@ $.widget( "ck.appdmenu",{
 			
 			//- - - - -Check group
 			oGroup = $("<optgroup>",{label:"Check"});
-				this.pr__addToGroup( oGroup, "Configuration", "config.php");
-				this.pr__addToGroup( oGroup, "License Usage", "usage.php");
-				this.pr__addToGroup( oGroup, "One Click Checkup", "checkup.php");
+				this.pr__addToGroup( oGroup, "Configuration", sAllPrefixUrl+"/config.php");
+				this.pr__addToGroup( oGroup, "License Usage", sAllPrefixUrl+"/usage.php");
+				this.pr__addToGroup( oGroup, "One Click Checkup", sAllPrefixUrl+"/checkup.php");
 			oSelect.append(oGroup);
 			
 			//- - - - -Dashboards group
@@ -220,23 +228,23 @@ $.widget( "ck.appdmenu",{
 				
 			//- - - - -All group
 			oGroup = $("<optgroup>",{label:"Agents"});
-				this.pr__addToGroup( oGroup, "Installed", "allagentversions.php");
-				this.pr__addToGroup( oGroup, "Downloads", "appdversions.php");
+				this.pr__addToGroup( oGroup, "Installed", sAllPrefixUrl+"/allagentversions.php");
+				this.pr__addToGroup( oGroup, "Downloads", sAllPrefixUrl+"/appdversions.php");
 			oSelect.append(oGroup);
 			
 			//- - - - -All group
 			oGroup = $("<optgroup>",{label:"General"});			
 				oParams = {};
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
-				this.pr__addToGroup(oGroup, "Application Activity", cBrowser.buildUrl("all.php", oParams));
+				this.pr__addToGroup(oGroup, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 				
 				oParams = {};
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
-				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl("all.php", oParams));
+				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 				
 				this.pr__addToGroup( oGroup, "Databases", "alldb.php");
-				this.pr__addToGroup( oGroup, "Remote Services", "allbackends.php");
-				this.pr__addToGroup( oGroup, "Tiers", "alltier.php");
+				this.pr__addToGroup( oGroup, "Remote Services", sAllPrefixUrl+"/allbackends.php");
+				this.pr__addToGroup( oGroup, "Tiers", sAllPrefixUrl+"/alltier.php");
 				
 			oSelect.append(oGroup);
 			
@@ -254,7 +262,7 @@ $.widget( "ck.appdmenu",{
 				oParams = {};
 				oParams[cMenus.APP_QS] = sApp;
 				oParams[cMenus.APPID_QS] = sAppid;
-				this.pr__addToGroup(oGroup, sApp, cBrowser.buildUrl("tiers.php", oParams));
+				this.pr__addToGroup(oGroup, sApp, cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
 				iCount++;
 			}
 			oSelect.append(oGroup);
@@ -378,23 +386,25 @@ $.widget( "ck.appdmenu",{
 		var sThisTier = cBrowser.data[cMenus.TIER_QS];
 		var sTier = sThisTier;
 		if (!sTier) sTier = oElement.attr("tier");
+		var sTierPrefixUrl = oOptions.home+"/pages/tier";
+		var sAppPrefixUrl = oOptions.home+"/pages/app";
 
 		var oSelect = $("<select>");
 			//--------------------------------------------------------------------
 			var oOption = $("<option>",{selected:1,disabled:1}).append(sTier);
 			oSelect.append(oOption);
 			
-			this.pr__addToGroup(oSelect, "Overview", this.pr__get_base_tier_QS("tier.php"));
+			this.pr__addToGroup(oSelect, "Overview", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tier.php"));
 			if (sThisTier)
-				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS("tiers.php"));
+				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS(sAppPrefixUrl+"/tiers.php"));
 						
 			//--------------------------------------------------------------------
-			this.pr__addToGroup(oSelect, "Errors", this.pr__get_base_tier_QS("tiererrors.php"));
-			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS("tierextgraph.php"));
-			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS("tierextcalls.php"));
-			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS("tierinfrstats.php"));
-			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS("appservice.php"));
-			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS("apptrans.php"));
+			this.pr__addToGroup(oSelect, "Errors", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tiererrors.php"));
+			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextgraph.php"));
+			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextcalls.php"));
+			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierinfrstats.php"));
+			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS(sTierPrefixUrl+"/appservice.php"));
+			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS(sAppPrefixUrl+"/apptrans.php"));
 
 		//add and make the menu a selectmenu
 		var oThis = this;		

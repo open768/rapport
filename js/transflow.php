@@ -15,8 +15,8 @@ $root=realpath("..");
 $phpinc = realpath("$root/../phpinc");
 
 //####################################################################
-require_once("../inc/inc-render.php");
-require_once("../inc/inc-charts.php");
+require_once("../$home/inc/inc-render.php");
+require_once("../$home/inc/inc-charts.php");
 //the next line is for notepad++ to get syntax coloring to work
 ?>
 /*<script language="javascript">*/

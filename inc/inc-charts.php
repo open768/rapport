@@ -29,8 +29,10 @@ class cChartItem{
 	public $width = 1000;
 	
 	public function write_html(){
+		global $home;
 		?><SPAN 
 			type="appdchart" 
+			home="<?=$home?>"
 			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
 			style="width:<?=$this->width?>px;height=<?=$this->height?>px;"

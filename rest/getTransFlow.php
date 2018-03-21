@@ -26,8 +26,8 @@ require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/header.php");
-require_once("../inc/inc-render.php");
-require_once("../inc/inc-metrics.php");
+require_once("../$home/inc/inc-render.php");
+require_once("../$home/inc/inc-metrics.php");
 	
 //###################### DATA #############################################
 cSession::set_folder();

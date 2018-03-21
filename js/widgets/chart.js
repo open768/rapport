@@ -29,6 +29,7 @@ var cCharts={
 				var sAppName = oElement.attr("appName");
 				var sMetric = oElement.attr("metric0");
 				var sTitle = oElement.attr("title0");
+				var sHome = oElement.attr("home");
 				var iPrevious = 0;
 				try {
 					var sPrevious = oElement.attr("previous");
@@ -40,6 +41,7 @@ var cCharts={
 				
 				oElement.appdchart({
 					appName:sAppName,
+					home:sHome,
 					title:sTitle,
 					metric:sMetric,
 					goUrl:sGoURL,
@@ -95,6 +97,7 @@ $.widget( "ck.appdchart",{
 	//#################################################################
 	options:{
 		title:null,
+		home:"",
 		appName:null,
 		metric: null,
 		width:null,
@@ -115,11 +118,13 @@ $.widget( "ck.appdchart",{
 		DIV_QS:"div",
 		PREVIOUS_QS: "prv",
 		METRIC_API:"rest/getMetric.php",
+		CHART_PHP_FOLDER:"pages/charts",
 		NO_DATA_HEIGHT: 90,
 		SHORT_NO_DATA_HEIGHT: 40,
-		csv_url:"rest/getMetric.php",
+		csv_url:"allcsv.php",
 		zoom_url:"metriczoom.php",
 		compare_url:"compare.php",
+		
 		WAIT_VISIBLE:1200,
 		INFO_WIDTH:70,
 		BUTTON_WIDTH:30
@@ -317,7 +322,7 @@ $.widget( "ck.appdchart",{
 		oParams[oConsts.APP_QS]=oOptions.appName;
 		oParams[oConsts.TITLE_QS]=oOptions.title;
 		oParams["csv"]=1;
-		var sUrl = cBrowser.buildUrl(oConsts.csv_url, oParams);
+		var sUrl = cBrowser.buildUrl(this.options.home+"/pages/"+oConsts.csv_url, oParams);
 		window.open(sUrl);
 	},
 	
@@ -337,7 +342,7 @@ $.widget( "ck.appdchart",{
 		if (oOptions.appName)
 			oParams[oConsts.APP_QS]=oOptions.appName;
 		oParams[oConsts.TITLE_QS]=oOptions.title;
-		var sUrl = cBrowser.buildUrl(oConsts.compare_url, oParams);
+		var sUrl = cBrowser.buildUrl(oOptions.home+"/"+oConsts.CHART_PHP_FOLDER+"/"+oConsts.compare_url, oParams);
 		window.open(sUrl);		
 	},
 	
@@ -350,7 +355,7 @@ $.widget( "ck.appdchart",{
 		oParams[oConsts.METRIC_QS]=oOptions.metric;
 		oParams[oConsts.APP_QS]=oOptions.appName;
 		oParams[oConsts.TITLE_QS]=oOptions.title;
-		var sUrl = cBrowser.buildUrl(oConsts.zoom_url, oParams);
+		var sUrl = cBrowser.buildUrl(oOptions.home+"/"+oConsts.CHART_PHP_FOLDER+"/"+oConsts.zoom_url, oParams);
 		window.open(sUrl);		
 	},
 	
@@ -385,7 +390,7 @@ $.widget( "ck.appdchart",{
 			oOptions.title = "(Previous) " + oOptions.title;
 		}
 		
-		sUrl = cBrowser.buildUrl(this.consts.METRIC_API, oParams);
+		sUrl = cBrowser.buildUrl(this.options.home+"/"+this.consts.METRIC_API, oParams);
 		return sUrl;
 	},
 	
