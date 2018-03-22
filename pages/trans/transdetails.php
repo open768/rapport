@@ -44,9 +44,8 @@ const FLOW_ID = "trflw";
 cRender::html_header("Transactions");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-	<script type="text/javascript" src="js/transflow.php"></script>
+	<script type="text/javascript" src="<?=$home?>/js/remote.js"></script>	
+	<script type="text/javascript" src="<?=$home?>/js/transflow.js"></script>
 <?php
 cChart::do_header();
 
@@ -162,6 +161,10 @@ cDebug::flush();
 <script>
 	function load_trans_flow(){
 		var oLoader = new cTransFlow("<?=FLOW_ID?>");
+		oLoader.home="<?=$home?>";
+		oLoader.APP_QS="<?=cRender::APP_QS?>";
+		oLoader.TIER_QS="<?=cRender::TIER_QS?>";
+		oLoader.TRANS_QS="<?=cRender::TRANS_QS?>";
 		oLoader.load("<?=$oApp->name?>", "<?=$tier?>", "<?=$trans?>");
 	}
 	$(load_trans_flow);	
@@ -255,7 +258,7 @@ if (count($aSnapshots) == 0){
 					?>
 					<tr class="<?=cRender::getRowClass()?>">
 						<td><?=$sDate?></td>
-						<td><img src="<?=$sImgUrl?>"></td>
+						<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
 						<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
 						<td><a href="snapdetails.php?<?=$sSnapQS?>"><div style="max-width:200px;overflow-wrap:break-word;"><?=$oSnapshot->URL?></div></a></td>

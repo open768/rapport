@@ -121,8 +121,10 @@ $.widget( "ck.appdmenu",{
 		oParams[cMenus.APPID_QS] = sAppid;
 		
 		//build the menu
+		var sTransPrefixUrl = oOptions.home+"/pages/trans";
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sRumPrefixUrl = oOptions.home+"/pages/rum";
+		
 		var oSelect = $("<select>");
 			//- - - - - - - - Application group
 			var oGroup = $("<optgroup>",{label:"Application"});
@@ -144,7 +146,7 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl(sAppPrefixUrl+"/appinfra.php", oParams));
 				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl(sAppPrefixUrl+"/appinfo.php", oParams));
 				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl(sAppPrefixUrl+"/appservice.php", oParams));
-				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl(sAppPrefixUrl+"/apptrans.php", oParams));
+				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl(sTransPrefixUrl+"/apptrans.php", oParams));
 				oGroup2 = $("<optgroup>",{label:"Web Real User Monitoring"});
 					this.pr__addToGroup(oGroup2, "Overall stats", cBrowser.buildUrl(sRumPrefixUrl+"/apprum.php", oParams));
 					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams));
@@ -388,6 +390,7 @@ $.widget( "ck.appdmenu",{
 		if (!sTier) sTier = oElement.attr("tier");
 		var sTierPrefixUrl = oOptions.home+"/pages/tier";
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
+		var sTransPrefixUrl = oOptions.home+"/pages/trans";
 
 		var oSelect = $("<select>");
 			//--------------------------------------------------------------------
@@ -404,7 +407,7 @@ $.widget( "ck.appdmenu",{
 			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextcalls.php"));
 			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierinfrstats.php"));
 			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS(sTierPrefixUrl+"/appservice.php"));
-			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS(sAppPrefixUrl+"/apptrans.php"));
+			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl+"/apptrans.php"));
 
 		//add and make the menu a selectmenu
 		var oThis = this;		

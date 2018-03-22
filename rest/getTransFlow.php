@@ -12,7 +12,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-$root=realpath("..");
+$home = "..";
+$root=realpath($home);
 $phpinc = realpath("$root/../phpinc");
 require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/common.php");
@@ -26,8 +27,8 @@ require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/header.php");
-require_once("../$home/inc/inc-render.php");
-require_once("../$home/inc/inc-metrics.php");
+require_once("$root/inc/inc-render.php");
+require_once("$root/inc/inc-metrics.php");
 	
 //###################### DATA #############################################
 cSession::set_folder();

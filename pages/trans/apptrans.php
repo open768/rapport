@@ -40,7 +40,7 @@ require_once("$root/inc/inc-render.php");
 // common functions
 $giTotalTrans = 0;
 function render_tier_transactions($poApp, $poTier){	
-	global $giTotalTrans;
+	global $giTotalTrans, $home;
 	
 	$oTimes = cRender::get_times();
 	
@@ -89,7 +89,7 @@ function render_tier_transactions($poApp, $poTier){
 					}else
 						echo $sName;
 				?></td>
-				<td><img src="<?=$img?>" align=middle></td>
+				<td><img src="<?=$home?>/<?=$img?>" align=middle></td>
 				<td align="right"><?=$oStats->max?></td>
 				<td align="right"><?=$oStats->avg?></td>
 				<td align=middle><?=$oStats->count?></td>
@@ -165,7 +165,7 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 		if (count($aTrans) == 0) continue;
 
 		//set up urls
-		$sUrl = cHttp::build_url("../tier/tiertransgraph.php", $gsAppQS);
+		$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
 		$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oTier->name);
 		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
 

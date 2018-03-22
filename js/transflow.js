@@ -1,5 +1,3 @@
-<?php
-
 /**************************************************************************
 Copyright (C) Chicken Katsu 2013-2018 
 
@@ -11,18 +9,14 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-$root=realpath("..");
-$phpinc = realpath("$root/../phpinc");
 
-//####################################################################
-require_once("../$home/inc/inc-render.php");
-require_once("../$home/inc/inc-charts.php");
-//the next line is for notepad++ to get syntax coloring to work
-?>
-/*<script language="javascript">*/
 function cTransFlow( psDivID){
 	this.div_id = psDivID;
 	this.data_url = "rest/getTransFlow.php";
+	this.home = ".";
+	this.APP_QS = "";
+	this.TIER_QS = "";
+	this.TRANS_QS = "";
 	
 	//**********************************************************************
 	this.OnJSON = function(poResult){
@@ -56,7 +50,11 @@ function cTransFlow( psDivID){
 	//**********************************************************************
 	this.load = function(psApp, psTier, psTrans) {
 		var oParent = this;
-		var sUrl = this.data_url + "?" + $.param({<?=cRender::APP_QS?>:psApp, <?=cRender::TIER_QS?>:psTier, <?=cRender::TRANS_QS?>:psTrans});
+		var oOptions = {};
+			oOptions[this.APP_QS] = psApp;
+			oOptions[this.TIER_QS] = psTier;
+			oOptions[this.TRANS_QS]= psTrans;
+		var sUrl = this.home + "/" + this.data_url + "?" + $.param(oOptions);
 		$("#"+this.div_id).html("loading transaction flow")
 		write_console("transaction flow url: "+ sUrl);
 		return $.ajax({ //default is async
@@ -67,6 +65,5 @@ function cTransFlow( psDivID){
 		  error: function(){oParent.OnJSONError()},
 		  timeout:this.ajaxTimeout
         });
-
 	}
 }
