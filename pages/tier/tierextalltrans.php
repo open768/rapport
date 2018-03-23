@@ -50,7 +50,7 @@ $sAppQS = cRender::get_base_app_QS();
 $sTierQS = cRender::get_base_tier_QS();
 
 //####################################################################
-$sTitle = "All transactions for External Call: $sExt";
+$sTitle = "All transactions calling External Service: $sExt";
 cRender::html_header($sTitle);
 cRender::force_login();
 cChart::do_header();
@@ -68,14 +68,14 @@ $sUrl = cHttp::build_url("appexttiers.php", $sExtQS);
 <h2>All Calls to <?=$sExt?></h2>
 <?php
 $aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"$oTier->name Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($oTier->name,$sExt)];
-$aMetrics[] = [cChart::LABEL=>"$oTier->name Response time in ms", cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($oTier->name,$sExt)];
+$aMetrics[] = [cChart::LABEL=>"$oTier->name - Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($oTier->name,$sExt)];
+$aMetrics[] = [cChart::LABEL=>"$oTier->name - Response time in ms", cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($oTier->name,$sExt)];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 //####################################################################
 ?>
 <p>
-<h2><?=$sTitle?></h2>
+<h2>All Transactions calling External Service</h2>
 <?php
 //-----------------------------------------------
 
@@ -86,20 +86,20 @@ $aMetrics = [];
 foreach ( $aTrans as $oTrans){
 	$sUrl = cHttp::build_qs($sTierQS, cRender::TRANS_QS, $oTrans->name);
 	$sUrl = cHttp::build_qs($sUrl, cRender::TRANS_ID_QS, $oTrans->id);
-	$sUrl = cHttp::build_url("transdetails.php", $sUrl);
+	$sUrl = cHttp::build_url("$home/pages/trans/transdetails.php", $sUrl);
 	
 	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name Calls per min", 
+		cChart::LABEL=>"$oTrans->name - Calls per min", 
 		cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name,$oTrans->name),
 		cChart::GO_URL => $sUrl,
 		cChart::GO_HINT => "Transaction"
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name to External Calls per min ",
+		cChart::LABEL=>"$oTrans->name to External - Calls per min ",
 		cChart::METRIC=>cAppDynMetric::transExtCalls($oTier->name,$oTrans->name, $sExt)
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name to External Response time in ms", 
+		cChart::LABEL=>"$oTrans->name to External - Response time in ms", 
 		cChart::METRIC=>cAppDynMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt)
 	];
 }

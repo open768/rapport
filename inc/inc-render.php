@@ -26,7 +26,7 @@ class cRenderMenus{
 		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login) {
-			cRender::button($psApp,null);
+			cRender::button($poApp->name,null);
 			return;
 		}
 		
@@ -145,7 +145,7 @@ class cRenderMenus{
 		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login){
-			cRender::button("<nobr>Back to Login</nobr>", "index.php");
+			cRender::button("Back to Login", "$home/index.php");
 			return;
 		}
 		
@@ -487,7 +487,7 @@ class cRender{
 	//**************************************************************************
 	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
 		$oCred = self::get_appd_credentials();
-		if ($oCred->restricted_login && ($psUrl !=="index.php")){
+		if ($oCred->restricted_login &&  !strpos($psUrl,"index.php")){
 			?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
 			return;
 		}

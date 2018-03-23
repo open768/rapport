@@ -80,7 +80,7 @@ foreach ( $oResponse as $oTier){
 	
 	$sUrl = cHttp::build_qs($sExtQS, cRender::TIER_QS, $oTier->name);
 	$sUrl = cHttp::build_qs($sUrl, cRender::TIER_ID_QS, $oTier->id);
-	$sUrl = cHttp::build_url("tierextalltrans.php", $sUrl);
+	$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
 	
 	$aMetrics[] = [cChart::LABEL=>$sTier,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];
 	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($sTier,$sMatched), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"];

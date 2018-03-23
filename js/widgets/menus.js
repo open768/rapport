@@ -211,10 +211,10 @@ $.widget( "ck.appdmenu",{
 			
 			oParams = {};
 			oParams[cMenus.IGNORE_REF_QS] = 1;
-			this.pr__addToGroup( oSelect, "About...", "about.php");
-			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl("index.php", oParams));
-			this.pr__addToGroup( oSelect, "Login Token", "authtoken.php");
-			this.pr__addToGroup( oSelect, "Link to this page", "link.php");
+			this.pr__addToGroup( oSelect, "About...", oOptions.home +"/pages/about.php");
+			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl(oOptions.home +"/pages/index.php", oParams));
+			this.pr__addToGroup( oSelect, "Login Token", oOptions.home +"/pages/authtoken.php");
+			this.pr__addToGroup( oSelect, "Link to this page", oOptions.home +"/pages/link.php");
 			
 			//- - - - -Check group
 			oGroup = $("<optgroup>",{label:"Check"});
@@ -225,7 +225,7 @@ $.widget( "ck.appdmenu",{
 			
 			//- - - - -Dashboards group
 			oGroup = $("<optgroup>",{label:"Dashboards"});
-				this.pr__addToGroup( oGroup, "Launch", "dashboards.php");
+				this.pr__addToGroup( oGroup, "Launch", oOptions.home +"/pages/dash/index.php");
 			oSelect.append(oGroup);
 				
 			//- - - - -All group
@@ -244,7 +244,7 @@ $.widget( "ck.appdmenu",{
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
 				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 				
-				this.pr__addToGroup( oGroup, "Databases", "alldb.php");
+				this.pr__addToGroup( oGroup, "Databases", oOptions.home +"/pages/db/alldb.php");
 				this.pr__addToGroup( oGroup, "Remote Services", sAllPrefixUrl+"/allbackends.php");
 				this.pr__addToGroup( oGroup, "Tiers", sAllPrefixUrl+"/alltier.php");
 				
