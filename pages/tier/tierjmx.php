@@ -56,7 +56,7 @@ cChart::$width=cChart::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
 $gsMetric = cHeader::get(cRender::METRIC_TYPE_QS);
@@ -84,7 +84,7 @@ $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 //other buttons
 $aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
 ?><select id="menuNodes">

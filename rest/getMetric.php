@@ -37,7 +37,7 @@ cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "no application set";
 $psMetric = cHeader::get(cRender::METRIC_QS);
 $psDiv = cHeader::get(cRender::DIV_QS);

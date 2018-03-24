@@ -51,7 +51,7 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
@@ -82,7 +82,7 @@ function sort_nodes($a, $b){
 }
 uasort($aNodes , "sort_nodes");
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){?>
 	<select id="showMenu">
 		<optgroup label="General">

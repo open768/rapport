@@ -45,14 +45,14 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $node= cHeader::get(cRender::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 $sAppQS = cRender::get_base_app_QS();
 $sTierQS = cRender::get_base_tier_QS();
@@ -68,7 +68,7 @@ if (cAppdyn::is_demo()){
 }
 
 //********************************************************************
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 cRender::appdButton(cAppDynControllerUI::transaction($oApp->id,$trid));
 cDebug::flush();
 

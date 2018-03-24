@@ -56,7 +56,7 @@ cChart::$width=cChart::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 $oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
@@ -66,7 +66,7 @@ $title = "$oApp->name&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->captio
 //stuff for later
 $sAppQS = cRender::get_base_app_QS();
 $sTierQS = cRender::get_base_tier_QS();
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 // show time options
 cRender::show_time_options($title); 
@@ -74,7 +74,7 @@ $showlink = cCommon::get_session($LINK_SESS_KEY);
 
 //other buttons
 $aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
 $sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType);

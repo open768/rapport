@@ -40,14 +40,11 @@ const COLUMNS=6;
 error_reporting(E_ALL);
 
 //display the results
-$oApp = cRender::get_current_app();
-$fromtier = cHeader::get(cRender::FROM_TIER_QS);
-$tid = cHeader::get(cRender::TIER_ID_QS);
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 $totier = cHeader::get(cRender::TO_TIER_QS);
-$gsAppQS = cRender::get_base_app_qs();
-$oFromTier = cRender_make_tier_obj($oApp, $fromtier, $tid);
-$gsTierQS = cRender::build_tier_qs($oApp, $oFromTier);
-
+$gsTierQS = cRender::get_base_tier_QS();
+$sTransQs = cHttp::build_qs($gsTierQS, cRender::BACKEND_QS, $totier);
 
 //####################################################################
 cRender::html_header("External tier calls");
@@ -55,13 +52,13 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-$title =  "$oApp->name&gt;$fromtier&gt; to tier $totier";		
+$title =  "$oApp->name&gt;$oTier->name&gt; to tier $totier";		
 cRender::show_time_options($title); 
-cRenderMenus::show_tier_functions(oFromTier);
-cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
+cRenderMenus::show_tier_functions($oTier);
+cRender::button("back to ($oTier->name) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
 ?>
 <h2>Tier activity details<h2>
-<h3>from (<?=$fromtier?>) to (<?=$totier?>)</h3>
+<h3>from (<?=$oTier->name?>) to (<?=$totier?>)</h3>
 <p>
 <?php
 //********************************************************************
@@ -71,12 +68,12 @@ if (cAppdyn::is_demo()){
 	exit;
 }
 //********************************************************************
-	
+	cRender::button("see Calling Transactions", "tierextalltrans.php?$sTransQs" );
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierExtCallsPerMin($fromtier, $totier);
-	$aMetrics[] = [cChart::LABEL=>"Calls per min from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierExtResponseTimes($fromtier, $totier);
-	$aMetrics[] = [cChart::LABEL=>"Response Times in ms from ($fromtier) to ($totier)", cChart::METRIC=>$sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierExtCallsPerMin($oTier->name, $totier);
+	$aMetrics[] = [cChart::LABEL=>"Calls per min from ($oTier->name) to ($totier)", cChart::METRIC=>$sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierExtResponseTimes($oTier->name, $totier);
+	$aMetrics[] = [cChart::LABEL=>"Response Times in ms from ($oTier->name) to ($totier)", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,1,cRender::getRowClass());
 
 //####################################################################

@@ -40,10 +40,9 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$oApp = cRender::get_current_app();
-$oTier = cRender::get_current_tier();
+$oApp = cRenderObjs::get_current_app();
+$oTier = cRenderObjs::get_current_tier();
 
-$gsAppQs = cRender::get_base_app_QS();
 $gsTierQs = cRender::get_base_tier_QS();
 
 //################### CHART HEADER ########################################
@@ -65,12 +64,13 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
 }
+cRender::button("show as table", "tierextcalls.php?$gsTierQs");
 cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
 
 //************* basic information about the tier *********************

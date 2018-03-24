@@ -36,7 +36,7 @@ require_once("$root/inc/inc-render.php");
 
 cRender::html_header("Applications");
 cRender::force_login();
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $node = cHeader::get(cRender::NODE_QS);
 $nodeID = cHeader::get(cRender::NODE_ID_QS);
 $sAppQS = cRender::get_base_app_QS();

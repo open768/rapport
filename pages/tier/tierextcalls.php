@@ -39,26 +39,70 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$oApp = cRender::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
-$tid = cHeader::get(cRender::TIER_ID_QS);
-$gsAppQs=cRender::get_base_app_QS();
-$gsTierQs=cRender::get_base_tier_QS();
+$oApp = cRenderObjs::get_current_app();
+$oTier = cRenderObjs::get_current_tier();
+$gsTierQs = cRender::get_base_tier_QS();
 
 $SHOW_PROGRESS=true;
 
 
+//**************************************************************************
+function render_tier_ext($poApp, $poTier, $poData){
+	global $LINK_SESS_KEY;
+	
+	if (sizeof($poData) > 0){
+	
+		$tierlink=cRender::getTierLink($poApp->name, $poApp->id, $poTier->name,  $poTier->id);
+		
+		?><table border=1 cellspacing=0>
+			<tr>
+				<th width=700><?=$tierlink?></th>
+				<th colspan=4>Calls per min</th>
+				<th rowspan=2 width=80>max response Times (ms)</th>
+			</tr>
+			<tr>
+				<th width=700>other tier</th>
+				<th width=80>max</th>
+				<th width=80>min</th>
+				<th width=80>avg</th>
+				<th width=80>total</th>
+			</tr><?php
+
+			$sBaseQs = cRender::get_base_tier_QS();
+			foreach ( $poData as $oDetail){
+				cDebug::write("DEBUG: ".$oDetail->name);
+				$other_tier = $oDetail->name;
+				$oCalls = $oDetail->calls;
+				$oTimes = $oDetail->times;
+				
+				if ($oCalls && $oTimes && ($oTimes->max > 0)){
+						$sQs = cHttp::build_qs($sBaseQs, cRender::FROM_TIER_QS, $poTier->name);
+						$sQs = cHttp::build_qs($sQs, cRender::TO_TIER_QS, $other_tier);
+						?><tr>
+							<td><a href='tiertotier.php?<?=$sQs?>'><?=$other_tier?></a></td>
+							<td align="middle"><?=$oCalls->max?></td>
+							<td align="middle"><?=$oCalls->min?></td>
+							<td align="middle"><?=$oCalls->avg?></td>
+							<td align="middle"><?=$oCalls->sum?></td>
+							<td align="middle" bgcolor="lightgrey"><?=$oTimes->max?></td>
+						</tr><?php
+				}
+		}
+		?></table><?php
+	}
+}
 //####################################################################
 cRender::html_header("External tier calls");
 cRender::force_login();
 
-cRender::show_time_options("External calls from $tier in $oApp->name"); 
-$oCred = cRender::get_appd_credentials();
+cRender::show_time_options("External calls from $oTier->name in $oApp->name"); 
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextcalls.php");
 }
+
 
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -71,8 +115,10 @@ if (cAppdyn::is_demo()){
 //####################################################################
 cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();
-$oResponse =cAppdyn::GET_Tier_ext_details($oApp->name, $tier, $oTimes);
-cRender::render_tier_ext($oApp->name, $oApp->id, $tier, $tid, $oResponse);
+$oResponse =cAppdyn::GET_Tier_ext_details($oApp->name, $oTier->name, $oTimes);
+cRender::button("show as graphs", "tierextgraph.php?$gsTierQs");
+
+render_tier_ext($oApp, $oTier, $oResponse);
 
 cRender::html_footer();
 ?>

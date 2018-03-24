@@ -39,8 +39,8 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$oApp = cRender::get_current_app();
-$oTier = cRender::get_current_tier();
+$oApp = cRenderObjs::get_current_app();
+$oTier = cRenderObjs::get_current_tier();
 $SHOW_PROGRESS=true;
 
 //####################################################################
@@ -59,7 +59,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 //####################################################################
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("Change Tier", "tier.php");

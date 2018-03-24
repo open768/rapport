@@ -43,7 +43,7 @@ if (cAppdyn::is_demo()){
 }
 
 //-----------------------------------------------
-$oTier = cRender::get_current_tier();
+$oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sExt = cHeader::get(cRender::BACKEND_QS);
 $sAppQS = cRender::get_base_app_QS();

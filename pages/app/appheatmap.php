@@ -49,7 +49,7 @@ $SHOW_PROGRESS=false;
 set_time_limit(200); 
 
 //get passed in values
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 
 

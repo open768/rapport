@@ -24,13 +24,13 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function show_app_functions($poApp=null){
 		global $home;
-		$oCred = cRender::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($poApp->name,null);
 			return;
 		}
 		
-		if ($poApp == null) $poApp = cRender::get_current_app();
+		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
 			<span 
 				type="appdmenus" menu="appfunctions" 
@@ -43,11 +43,11 @@ class cRenderMenus{
 	public static function show_app_agent_menu($poApp = null){
 		global $home;
 
-		$oCred = cRender::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login) 
 			return;
 		
-		if ($poApp == null) $poApp = cRender::get_current_app();
+		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
 			<span 
 				type="appdmenus" menu="appagents" 				
@@ -61,7 +61,7 @@ class cRenderMenus{
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
 		global $home;
 	
-		$oCred = cRender::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psCaption,null);
 			return;
@@ -83,10 +83,10 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function show_tier_menu($psTier, $psURLFragment, $psExtraQS=""){
 		global $home;
-		$oCred = cRender::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login)	return;
 
-		$oApp = cRender::get_current_app();
+		$oApp = cRenderObjs::get_current_app();
 		
 		try{
 			$oTiers = cAppDyn::GET_Tiers($oApp);
@@ -117,7 +117,7 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function 	show_tiernodes_menu($psCaption, $psUrl){
 		global $home;
-		$oApp = cRender::get_current_app();
+		$oApp = cRenderObjs::get_current_app();
 		$tier = cHeader::get(cRender::TIER_QS);
 		$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 		$sFragment = "";
@@ -141,7 +141,7 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function top_menu(){
 		global $home;
-		$oCred = cRender::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login){
 			cRender::button("Back to Login", "$home/index.php");
 			return;
@@ -161,14 +161,14 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function show_tier_functions($poTier = null, $psNode=null){
 		global $home;
-		$oCred = cRender::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 	
 		if ($oCred->restricted_login) {
 			cRender::button($psTier,null);
 			return;
 		}
 		if ($poTier == null){
-			$poTier = cRender::get_current_tier();
+			$poTier = cRenderObjs::get_current_tier();
 		}
 		?>
 			<span 
@@ -204,6 +204,44 @@ class cRenderMenus{
 
 function sort_by_app_name($a,$b){
 	return strcasecmp($a->name, $b->name);
+}
+//#######################################################################
+//#######################################################################
+class cRenderObjs{
+	//**************************************************************************
+	private static $oAppDCredentials = null;
+	
+	//**************************************************************************
+	public static function get_appd_credentials(){
+		$oCred = self::$oAppDCredentials;
+		if (!$oCred){
+			$oCred = new cAppDynCredentials;
+			$oCred->check();
+			self::$oAppDCredentials = $oCred;
+		}
+		return $oCred;
+	}
+	
+	public static function make_app_obj($psApp, $psAID){
+		return new cAppDApp($psApp, $psAID);		
+	}
+	
+	public static function get_current_app(){
+		$sApp = cHeader::get(cRender::APP_QS);
+		$sAID = cHeader::get(cRender::APP_ID_QS);
+		return self::make_app_obj($sApp, $sAID);
+	}
+
+	public static function make_tier_obj($poApp, $psTier, $psTID){
+		return new cAppDTier($poApp, $psTier, $psTID);
+	}
+	
+	public static function get_current_tier(){
+		$oApp = self::get_current_app();
+		$sTier = cHeader::get(cRender::TIER_QS);
+		$sTID = cHeader::get(cRender::TIER_ID_QS);
+		return self::make_tier_obj($oApp, $sTier, $sTID);
+	}
 }
 
 //#######################################################################
@@ -286,41 +324,6 @@ class cRender{
 	const CHART_COUNT_FIELD = "ccf";
 	const CHART_APP_FIELD = "caf";
 	
-	//**************************************************************************
-	private static $oAppDCredentials = null;
-
-
-	public static function make_app_obj($psApp, $psAID){
-		return new cAppDApp($psApp, $psAID);		
-	}
-	
-	public static function get_current_app(){
-		$sApp = cHeader::get(self::APP_QS);
-		$sAID = cHeader::get(self::APP_ID_QS);
-		return self::make_app_obj($sApp, $sAID);
-	}
-
-	public static function make_tier_obj($poApp, $psTier, $psTID){
-		return new cAppDTier($poApp, $psTier, $psTID);
-	}
-	
-	public static function get_current_tier(){
-		$oApp = self::get_current_app();
-		$sTier = cHeader::get(self::TIER_QS);
-		$sTID = cHeader::get(self::TIER_ID_QS);
-		return self::make_tier_obj($oApp, $sTier, $sTID);
-	}
-	
-	//**************************************************************************
-	public static function get_appd_credentials(){
-		$oCred = self::$oAppDCredentials;
-		if (!$oCred){
-			$oCred = new cAppDynCredentials;
-			$oCred->check();
-			self::$oAppDCredentials = $oCred;
-		}
-		return $oCred;
-	}
 	
 	//**************************************************************************
 	public static function get_times(){
@@ -356,7 +359,7 @@ class cRender{
 	//**************************************************************************
 	public static function force_login(){
 		try{
-			$oCred = self::get_appd_credentials();
+			$oCred = cRenderObjs::get_appd_credentials();
 			return $oCred->logged_in();
 		}
 		catch (Exception $e)
@@ -390,54 +393,7 @@ class cRender{
 		<?php
 	}
 	
-	//**************************************************************************
-	public static function render_tier_ext($psApp, $psAppID, $psTier,  $psTid, $poData){
-		global $LINK_SESS_KEY;
-		
-		$showlink = cCommon::get_session($LINK_SESS_KEY);
-		if (sizeof($poData) > 0){
-		
-			$tierlink=self::getTierLink($psApp, $psAppID, $psTier,  $psTid);
-			
-			?><table border=1 cellspacing=0>
-				<tr>
-					<th width=700><?=$tierlink?></th>
-					<th colspan=4>Calls per min</th>
-					<th rowspan=2 width=80>max response Times (ms)</th>
-				</tr>
-				<tr>
-					<th width=700>other tier</th>
-					<th width=80>max</th>
-					<th width=80>min</th>
-					<th width=80>avg</th>
-					<th width=80>total</th>
-				</tr><?php
 
-				foreach ( $poData as $oDetail){
-					cDebug::write("DEBUG: ".$oDetail->name);
-					$other_tier = $oDetail->name;
-					$oCalls = $oDetail->calls;
-					$oTimes = $oDetail->times;
-					
-					if ($oCalls && $oTimes && ($oTimes->max > 0)){
-							?><tr><?php
-								if ($showlink==1){
-									?><td><a href='tiertotier.php?app=$psApp&from=$psTier&to=$other_tier'>$other_tier</a></td><?php
-								}else{
-									?><td><?=$other_tier?></td><?php
-								}
-								?>
-									<td align="middle"><?=$oCalls->max?></td>
-									<td align="middle"><?=$oCalls->min?></td>
-									<td align="middle"><?=$oCalls->avg?></td>
-									<td align="middle"><?=$oCalls->sum?></td>
-									<td align="middle" bgcolor="lightgrey"><?=$oTimes->max?></td>
-							</tr><?php
-					}
-			}
-			?></table><?php
-		}
-	}
 
 
 	//*************************************************************
@@ -488,7 +444,7 @@ class cRender{
 	//**************************************************************************
 	public static function plain_button ($psCaption, $psUrl){
 		
-		$oCred = self::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login) return;
 
 		echo  "<button onclick=\"document.location.href='$psUrl';return false;\">$psCaption</button>";
@@ -496,7 +452,7 @@ class cRender{
 
 	//**************************************************************************
 	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
-		$oCred = self::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login &&  !strpos($psUrl,"index.php")){
 			?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
 			return;
@@ -648,7 +604,7 @@ class cRender{
 		if (strpos($sUrl,"%")) $sUrl = urldecode($sUrl);
 		cDebug::write("return URL is $sUrl");
 		
-		$oCred = self::get_appd_credentials();
+		$oCred = cRenderObjs::get_appd_credentials();
 		$sAccount = $oCred->account;
 		$sHost = $oCred->host;
 		$iDuration = cAppDynCommon::get_duration();
@@ -687,7 +643,7 @@ class cRender{
 	public static function show_top_banner( $psTitle){
 		$bLoggedin = true;
 		try{
-			$oCred = self::get_appd_credentials();
+			$oCred = cRenderObjs::get_appd_credentials();
 			$sAccount = $oCred->account;
 			$sHost = $oCred->host;
 		}catch (Exception $e){

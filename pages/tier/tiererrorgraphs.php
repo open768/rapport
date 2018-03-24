@@ -37,8 +37,8 @@ require_once("$root/inc/inc-render.php");
 
 
 //-----------------------------------------------
-$oApp = cRender::get_current_app();
-$oTier = cRender::get_current_tier();
+$oApp = cRenderObjs::get_current_app();
+$oTier = cRenderObjs::get_current_tier();
 $gsTierQS = cRender::get_base_tier_QS();
 
 //####################################################################
@@ -50,7 +50,7 @@ cRender::force_login();
 cRender::show_time_options( $title); 
 $oTimes = cRender::get_times();
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("Change Tier", "tiererrors.php");

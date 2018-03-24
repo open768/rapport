@@ -34,7 +34,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 //-----------------------------------------------
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 cRender::html_header("Events $oApp->name");
 cRender::force_login();

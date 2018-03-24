@@ -46,7 +46,7 @@ cChart::do_header();
 
 //####################################################################
 //get passed in values
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $oTimes = cRender::get_times();
 
 $title= "$oApp->name&gt;Service EndPoints";

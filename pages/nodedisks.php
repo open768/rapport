@@ -44,7 +44,7 @@ cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //####################################################################
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
 
@@ -63,7 +63,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 //####################################################################
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
 	?><select id="menuBackTo">
 		<option selected disabled>Back to...</option>

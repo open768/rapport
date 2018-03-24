@@ -44,7 +44,7 @@ cRender::html_header("External tier calls");
 cRender::force_login();
 
 //display the results
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $gsTierQS = cRender::get_base_tier_qs();
 

@@ -44,7 +44,7 @@ cChart::do_header();
 //####################################################################
 $sTitle ="Infrastructure Overview for $oApp->name";
 cRender::show_time_options( $sTitle); 
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 ?>
 <h2><?=$sTitle?></h2>

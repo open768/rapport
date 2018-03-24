@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //-----------------------------------------------
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $sAppQS = cRender::get_base_app_QS();
 
 

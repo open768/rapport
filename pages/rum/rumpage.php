@@ -36,7 +36,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //-----------------------------------------------
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $rum_page = cHeader::get(cRender::RUM_PAGE_QS);
 $rum_type = cHeader::get(cRender::RUM_TYPE_QS);
 $gsAppQS = cRender::get_base_app_QS();

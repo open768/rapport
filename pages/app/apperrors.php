@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //-----------------------------------------------
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 //####################################################################
 $title ="$oApp->name Application Errors and Exceptions";
@@ -46,7 +46,7 @@ cRender::force_login();
 cRender::show_time_options( $title); 
 $oTimes = cRender::get_times();
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions($oApp);
 }

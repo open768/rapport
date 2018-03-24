@@ -40,7 +40,7 @@ cRender::html_header("Application Nodes");
 cRender::force_login();
 
 
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
 $sAppQS = cRender::get_base_app_QS();
@@ -72,7 +72,7 @@ if (cAppdyn::is_demo()){
 	);
 	</script>
 <?php
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 $sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
 
 if ($oCred->restricted_login == null){ 

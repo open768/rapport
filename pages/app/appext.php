@@ -37,9 +37,9 @@ require_once("$root/inc/inc-render.php");
 
 set_time_limit(200); // huge time limit as this takes a long time
 $SHOW_PROGRESS=true;
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $gsAppQS = cRender::get_base_app_QS();
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 //####################################################################
 cRender::html_header("External Calls");
@@ -50,7 +50,7 @@ cChart::do_header();
 
 cRender::show_time_options("Apps>$oApp->name>External Calls"); 
 cRenderMenus::show_apps_menu("External Calls", "appext.php");
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
 	//********************************************************************
 	$aTiers = cAppdyn::GET_Tiers($oApp);
@@ -61,7 +61,7 @@ if ($oCred->restricted_login == null){
 			foreach ($aTiers as $oTier){
 				$sUrl = cHttp::build_qs($gsAppQS, cRender::TIER_QS, $oTier->name);
 				$sUrl = cHttp::build_qs($sUrl, cRender::TIER_ID_QS, $oTier->id);
-				?><option value="tierextgraph.php?<?="$sUrl"?>"><?=$oTier->name?></option><?php
+				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=$oTier->name?></option><?php
 			}
 		?>
 	</select>

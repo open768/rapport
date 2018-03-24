@@ -48,10 +48,10 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 	
 //###################### DATA #############################################################
 //display the results
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
-$oTier = cRender::get_current_tier();
+$oTier = cRenderObjs::get_current_tier();
 
 $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRender::get_base_app_QS();
@@ -131,7 +131,7 @@ function render_tier_transactions($poApp, $poTier){
 }
 
 //********************************************************************
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");

@@ -46,7 +46,7 @@ cChart::do_header();
 
 //####################################################################
 //get passed in values
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 $title= "$oApp->name&gt;Information Points";
 cRender::show_time_options($title); 

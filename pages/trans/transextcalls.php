@@ -42,7 +42,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 
 	
 //display the results
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $trans = cHeader::get(cRender::TRANS_QS);

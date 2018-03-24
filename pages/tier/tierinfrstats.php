@@ -56,7 +56,7 @@ cChart::$width=cChart::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $node = cHeader::get(cRender::NODE_QS);
 	
@@ -69,7 +69,7 @@ $sAppQs = cRender::get_base_app_QS();
 $sTierQs = cRender::get_base_tier_QS();
 $sTierInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
 $sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 
 // show time options
 cRender::show_time_options($title); 
@@ -92,7 +92,7 @@ if (cAppdyn::is_demo()){
 //other buttons
 $aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
 ?><select id="menuNodes">

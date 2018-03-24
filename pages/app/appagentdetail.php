@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 
 cRender::html_header("Application node detail ");
 cRender::force_login();
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 $sAppQS = cRender::get_base_app_QS();
 
@@ -133,7 +133,7 @@ if ($iNodes==0){
 				?><hr><?php
 				$tid = $aTierNodes[0]->tierId;
 				$tier = $aTierNodes[0]->tierName;
-				$oTier = cRender::make_tier_obj($oApp, $tier, $tid);
+				$oTier = cRenderObjs::make_tier_obj($oApp, $tier, $tid);
 
 				cRenderMenus::show_tier_functions($oTier);
 				$sTierQS = cHttp::build_qs($sAppQS, cRender::TIER_QS, $tier);

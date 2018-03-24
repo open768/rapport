@@ -32,7 +32,7 @@ cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################################
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
 $index = cHeader::get("id"); //id of HTML div

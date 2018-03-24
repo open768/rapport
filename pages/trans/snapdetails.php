@@ -46,7 +46,7 @@ cRender::force_login();
 
 //####################################################
 //display the results
-$oTier = cRender::get_current_tier();
+$oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
 $trans = cHeader::get(cRender::TRANS_QS);
@@ -67,7 +67,7 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
-$oCred = cRender::get_appd_credentials();
+$oCred = cRenderObjs::get_appd_credentials();
 cRenderMenus::show_tier_functions();
 cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
 cDebug::flush();

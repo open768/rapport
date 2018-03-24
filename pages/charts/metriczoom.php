@@ -39,7 +39,7 @@ require_once("$phpinc/appdynamics/account.php");
 
 //####################################################################
 $sMetric = cHeader::get(cRender::METRIC_QS);
-$oApp = cRender::get_current_app();
+$oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "No Application Specified";
 $sTitle = cHeader::get(cRender::TITLE_QS);
 

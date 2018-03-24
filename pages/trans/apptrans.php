@@ -121,8 +121,8 @@ cRender::force_login();
 //get passed in values
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
-$oApp = cRender::get_current_app();
-$oTier = cRender::get_current_tier();
+$oApp = cRenderObjs::get_current_app();
+$oTier = cRenderObjs::get_current_tier();
 
 $gsAppQS = cRender::get_base_app_qs();
 
