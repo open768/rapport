@@ -61,7 +61,7 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier->name)) continue;
 	
-	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
+	cRenderMenus::show_tier_functions($oTier);
 	$sTierQs = cRender::build_tier_qs($oApp,$oTier );
 	$sAllUrl = cHttp::build_url("../tier/tierallnodeinfra.php", $sTierQs);
 

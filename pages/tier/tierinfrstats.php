@@ -121,8 +121,8 @@ if ($node) {
 		cRender::appdButton($sUrl);
 	}
 }
+cDebug::flush();
 $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
-
 
 //####################################################################
 ?>
@@ -145,6 +145,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$tier"
 	];
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+	cDebug::flush();
 
 //####################################################################
 ?>
@@ -164,6 +165,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+	cDebug::flush();
 ?>
 <p>
 <h2>Memory Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
@@ -177,6 +179,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+	cDebug::flush();
 ?>
 <p>
 <h2>Infrastructure Statistics for(<?=$tier?>) Tier, <?=($node?"($node) Server":"all Servers")?></h2>
@@ -190,6 +193,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$tier"];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+	cDebug::flush();
 ?>
 
 <?php

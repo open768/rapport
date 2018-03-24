@@ -45,8 +45,7 @@ $fromtier = cHeader::get(cRender::FROM_TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $totier = cHeader::get(cRender::TO_TIER_QS);
 $gsAppQS = cRender::get_base_app_qs();
-
-$oFromTier = new cAppDTier($oApp, $fromtier, $tid);
+$oFromTier = cRender_make_tier_obj($oApp, $fromtier, $tid);
 $gsTierQS = cRender::build_tier_qs($oApp, $oFromTier);
 
 
@@ -58,7 +57,7 @@ cChart::do_header();
 //####################################################################
 $title =  "$oApp->name&gt;$fromtier&gt; to tier $totier";		
 cRender::show_time_options($title); 
-cRenderMenus::show_tier_functions($fromtier,$tid);
+cRenderMenus::show_tier_functions(oFromTier);
 cRender::button("back to ($fromtier) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
 ?>
 <h2>Tier activity details<h2>

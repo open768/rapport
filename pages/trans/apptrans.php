@@ -43,9 +43,8 @@ function render_tier_transactions($poApp, $poTier){
 	global $giTotalTrans, $home;
 	
 	$oTimes = cRender::get_times();
-	
 
-	?><table border=1 cellspacing=0 id="<?=$poTier->id?>">
+	?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 id="<?=$poTier->id?>">
 		<thead><tr>
 			<th width=700>transaction</th>
 			<th width=50>&nbsp;</th>
@@ -109,7 +108,7 @@ function render_tier_transactions($poApp, $poTier){
 				showing <?=$iCount?> of <?=count($aStats)?> transactions
 			</td></tr>
 		</tfoot>
-	</table>
+	</table></div>
 	<script language="javascript">
 		$( function(){ $("#<?=$poTier->id?>").tablesorter();} );
 	</script>
@@ -170,11 +169,10 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
 
 		//display the transaction data
-		?><h2>Transactions for <?=$oTier->name?></h2>
-		<div class="<?=cRender::getRowClass()?>"><?php
-			cRender::button("show transaction graphs", $sUrl);
-			render_tier_transactions($oApp, $oTier);
-		?></div><?php
+		?><h2>Transactions for <?=$oTier->name?></h2><?php
+		cRenderMenus::show_tier_functions($oTier);
+		cRender::button("show transaction graphs", $sUrl);
+		render_tier_transactions($oApp, $oTier);
 	}
 	?><div class="<?=cRender::getRowClass()?>">
 			Total Transactions = <?=$giTotalTrans?>

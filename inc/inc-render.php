@@ -81,13 +81,11 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	public static function show_tier_menu($psTier, $psURLFragment, $psExtraQS=""){
 		global $home;
 		$oCred = cRender::get_appd_credentials();
 		if ($oCred->restricted_login)	return;
 
-		$sCurrentTier = cHeader::get(cRender::TIER_QS);
-		$sCurrentTID = cHeader::get(cRender::TIER_ID_QS);
 		$oApp = cRender::get_current_app();
 		
 		try{
@@ -110,7 +108,7 @@ class cRenderMenus{
 			<span 
 				type="appdmenus" menu="tiermenu" 
 				home="<?=$home?>"
-				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
+				caption="<?=$psTier?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>
 			</span>
 		<?php
@@ -161,18 +159,22 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_tier_functions($psTier=null, $psTierID=null, $psNode=null){
+	public static function show_tier_functions($poTier = null, $psNode=null){
 		global $home;
 		$oCred = cRender::get_appd_credentials();
+	
 		if ($oCred->restricted_login) {
 			cRender::button($psTier,null);
 			return;
+		}
+		if ($poTier == null){
+			$poTier = cRender::get_current_tier();
 		}
 		?>
 			<span 
 				type="appdmenus" menu="tierfunctions"  
 				home="<?=$home?>"
-				tier="<?=$psTier?>" tid="<?=$psTierID?>" node="<?=$psNode?>">
+				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
 			</span>
 		<?php
 	}
@@ -288,17 +290,25 @@ class cRender{
 	private static $oAppDCredentials = null;
 
 
+	public static function make_app_obj($psApp, $psAID){
+		return new cAppDApp($psApp, $psAID);		
+	}
+	
 	public static function get_current_app(){
 		$sApp = cHeader::get(self::APP_QS);
 		$sAID = cHeader::get(self::APP_ID_QS);
-		return new cAppDApp($sApp, $sAID);
+		return self::make_app_obj($sApp, $sAID);
 	}
 
+	public static function make_tier_obj($poApp, $psTier, $psTID){
+		return new cAppDTier($poApp, $psTier, $psTID);
+	}
+	
 	public static function get_current_tier(){
 		$oApp = self::get_current_app();
 		$sTier = cHeader::get(self::TIER_QS);
 		$sTID = cHeader::get(self::TIER_ID_QS);
-		return new cAppDTier($oApp, $sTier, $sTID);
+		return self::make_tier_obj($oApp, $sTier, $sTID);
 	}
 	
 	//**************************************************************************

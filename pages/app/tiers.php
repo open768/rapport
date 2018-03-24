@@ -72,7 +72,7 @@ foreach ( $oResponse as $oTier){
 	$sTier=$oTier->name;
 	if (cFilter::isTierFilteredOut($sTier)) continue;
 	
-	cRenderMenus::show_tier_functions($sTier, $oTier->id);
+	cRenderMenus::show_tier_functions($oTier);
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];
 	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];

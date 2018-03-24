@@ -386,8 +386,9 @@ $.widget( "ck.appdmenu",{
 		
 		var sApp = cBrowser.data[cMenus.APP_QS];
 		var sThisTier = cBrowser.data[cMenus.TIER_QS];
-		var sTier = sThisTier;
-		if (!sTier) sTier = oElement.attr("tier");
+		var sTier = oElement.attr("tier");
+		if (!sTier) sTier = sThisTier;
+		
 		var sTierPrefixUrl = oOptions.home+"/pages/tier";
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sTransPrefixUrl = oOptions.home+"/pages/trans";
@@ -406,7 +407,7 @@ $.widget( "ck.appdmenu",{
 			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextgraph.php"));
 			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextcalls.php"));
 			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierinfrstats.php"));
-			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS(sTierPrefixUrl+"/appservice.php"));
+			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS(sAppPrefixUrl+"/appservice.php"));
 			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl+"/apptrans.php"));
 
 		//add and make the menu a selectmenu

@@ -71,7 +71,7 @@ function render_tier($poTier){
 		
 	uasort ($aData, "sort_metric_names");
 
-	cRenderMenus::show_tier_functions($poTier->name, $poTier->id);
+	cRenderMenus::show_tier_functions($poTier);
 	$tierQS = cRender::build_tier_qs($oApp, $poTier);
 	$sGraphUrl = cHttp::build_url("tiererrorgraphs.php", $tierQS);
 	cRender::button("Show Error Graphs", $sGraphUrl);	

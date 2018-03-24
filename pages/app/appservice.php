@@ -47,6 +47,7 @@ cChart::do_header();
 //####################################################################
 //get passed in values
 $oApp = cRender::get_current_app();
+$oTimes = cRender::get_times();
 
 $title= "$oApp->name&gt;Service EndPoints";
 cRender::show_time_options($title); 
@@ -58,8 +59,6 @@ if (cFilter::isFiltered()){
 //####################################################################
 //retrieve tiers
 //********************************************************************
-
-	$oTimes = cRender::get_times();
 $aTiers = cAppdyn::GET_Tiers($oApp);
 
 function pr__sort_endpoints($a,$b){
@@ -79,7 +78,7 @@ foreach ($aTiers as $oTier){
 
 	//****************************************************************************************
 	?><p><?php
-	cRenderMenus::show_tier_functions($oTier->name, $oTier->id);
+	cRenderMenus::show_tier_functions($oTier);
 	$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
 	$aMetrics = [];
 	foreach ($aEndPoints as $oEndPoint){
@@ -90,6 +89,7 @@ foreach ($aTiers as $oTier){
 	}
 	$sClass = cRender::getRowClass();
 	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3, $aHeaders);
+	cDebug::flush();
 }
 
 //####################################################################

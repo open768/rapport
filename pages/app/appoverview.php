@@ -89,7 +89,7 @@ cDebug::flush();
 		$sTier=$oTier->name;
 		//------------------------------------------------
 		?><hr><?php
-		cRenderMenus::show_tier_functions($sTier, $oTier->id);
+		cRenderMenus::show_tier_functions($oTier);
 		?><br><?php
 		$aMetrics = [];
 		$aMetrics[] = [cChart::LABEL=>"Calls Per min ", cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier)];

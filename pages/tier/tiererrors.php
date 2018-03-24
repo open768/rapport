@@ -124,6 +124,7 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Errors</h2>
 <?php
+	cDebug::flush();
 	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
 	render_table($aData);

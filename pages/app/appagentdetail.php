@@ -39,6 +39,7 @@ cRender::html_header("Application node detail ");
 cRender::force_login();
 $oApp = cRender::get_current_app();
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
+$sAppQS = cRender::get_base_app_QS();
 
 //####################################################################
 ?>
@@ -126,15 +127,15 @@ if ($iNodes==0){
 ?>
 	<p>
 		<?php
-			$sAppQS = cRender::get_base_app_QS();
 			foreach ($aResponse as $aTierNodes){
 				if (cFilter::isTierFilteredOut($aTierNodes[0]->tierName)) continue;
 				
 				?><hr><?php
 				$tid = $aTierNodes[0]->tierId;
 				$tier = $aTierNodes[0]->tierName;
+				$oTier = cRender::make_tier_obj($oApp, $tier, $tid);
 
-				cRenderMenus::show_tier_functions($tier, $tid);
+				cRenderMenus::show_tier_functions($oTier);
 				$sTierQS = cHttp::build_qs($sAppQS, cRender::TIER_QS, $tier);
 				$sTierQS = cHttp::build_qs($sTierQS , cRender::TIER_ID_QS, $tid);
 				$sTierRootUrl=cHttp::build_url("tierinfrstats.php",$sTierQS);				

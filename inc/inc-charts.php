@@ -164,6 +164,7 @@ class cChart{
 		$iCol = 0;
 		$iOldWidth = self::$width;
 		self::$width = ($piWidth?$piWidth:cChart::CHART_WIDTH_LETTERBOX / $piMaxCols);
+		if ($piHeight == null) $piHeight= cChart::CHART_HEIGHT_SMALL;
 		
 		
 		?><table class="maintable"><?php

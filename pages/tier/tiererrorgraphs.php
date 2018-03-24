@@ -84,7 +84,7 @@ function render_table($paData){
 		$aMetrics[] = [	cChart::LABEL=>$sName, cChart::METRIC=>$oItem->metricPath];
 	}
 	$sClass = cRender::getRowClass();
-	cChart::metrics_table($oApp, $aMetrics,2, $sClass);
+	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 }
 
 //********************************************************************

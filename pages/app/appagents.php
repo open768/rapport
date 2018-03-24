@@ -184,7 +184,7 @@ if ($iNodes==0){
 						$sQuery = cHttp::build_qs($sAppQS,cRender::TIER_QS,$sTier);
 						$sQuery = cHttp::build_qs($sQuery,cRender::TIER_ID_QS,$sTid);
 						?><td rowspan="<?=$iRowSpan?>"><nobr>
-							<?=cRender::button($sTier, cHttp::build_url("tierinfrstats.php",$sQuery))?>
+							<?=cRender::button($sTier, cHttp::build_url("../tier/tierinfrstats.php",$sQuery))?>
 						</nobr></td><?php
 					}
 				?></tr><?php
@@ -203,11 +203,11 @@ if ($iNodes==0){
 								cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine);
 								echo " ($iMachineID)";
 							}
-							if ($psAggType !== cRender::GROUP_TYPE_TIER) cRender::button($sTier, cHttp::build_url("tierinfrstats.php",$sTierQS));
+							if ($psAggType !== cRender::GROUP_TYPE_TIER) cRender::button($sTier, cHttp::build_url("../tier/tierinfrstats.php",$sTierQS));
 						?></nobr></td>
 						<td><?=$oNode->agentType?></td>
 						<td><?php
-							$sNodeUrl = cHttp::build_url("tierinfrstats.php", $sTierQS);
+							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
 							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp->id, $oNode->id), $oNode->id);
 						?></td>
