@@ -72,7 +72,12 @@ cRenderMenus::show_tier_functions();
 cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
 cDebug::flush();
 
+$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $sSnapGUID, cAppDynRestUI::$oTimes);
+cRender::appdButton($sAppdUrl);
+
+
 ?>
+<!-- ************************************************************** -->
 <H2>Snapshot Details for <?=$sSnapURL?></h2>
 <?php
 	$oData = cAppDynRestUI::GET_snapshot_segments($sSnapGUID);
@@ -81,8 +86,13 @@ cDebug::flush();
 	?><table class="<?=$sClass?>">
 		<th align="right">Business Transaction:</th><td><?=$oData->btName?></td></tr>
 		<th align="right">Number of Segments:</th><td><?=$oData->segmentCount?></td></tr>
-	</table><?php
+		<th align="right">Server:</th><td><?=$oData->requestSegmentData->applicationComponentNodeId?></td></tr>
+	</table>
+
 	
+<!-- ************************************************************** -->
+<H2>Segment Details</h2>
+<?php
 	$oSegment = $oData->requestSegmentData;
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
@@ -92,9 +102,41 @@ cDebug::flush();
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
 		<tr><th align="right">Archived:</th><td><?=$oSegment->archived?></td></tr>
 	</table><?php
+?>
+<!-- ************************************************************** -->
+<H2>Potential Problems</h2>
+<?php
+	cDebug::flush();
+	$aProblems = cAppDynRestUI::GET_snapshot_problems($oApp, $sSnapGUID);
 
-	
-// ################################################################################
+	if (count($aProblems) == 0)
+		cRender::messagebox("No problems found");
+	else{
+		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 id="problems">
+			<thead><tr>
+				<th>Type</th>
+				<th></th>
+				<th>Execution Time</th>
+				<th>Detail</th>
+			</tr></thead>
+			<tbody><?php
+				foreach ($aProblems as $oProblem){
+					?><tr>
+						<td><?=$oProblem->subType?></td>
+						<td><?=$oProblem->problemType?></td>
+						<td><?=$oProblem->executionTimeMs?></td>
+						<td><?=$oProblem->message?></td>
+					</tr><?php
+				}
+			?></tbody>
+		</table></div>
+		<script language="javascript">
+			$( function(){ $("#problems").tablesorter();} );
+		</script>
+		
+		<?php
+	}
+
 // ################################################################################
 cRender::html_footer();
 ?>
