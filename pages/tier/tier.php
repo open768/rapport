@@ -65,7 +65,7 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_menu("Change Tier", "tier.php");
 	cRenderMenus::show_tiernodes_menu("Tier infrastructure for..", "tierinfrstats.php");	
 }
-cRender::appdButton(cAppDynControllerUI::tier($oApp->id, $oTier->id));
+cRender::appdButton(cAppDynControllerUI::tier($oApp, $oTier));
 cRender::appdButton(cAppDynControllerUI::tier_slow_transactions($oApp, $oTier),"Slow Transactions");
 
 //####################################################################

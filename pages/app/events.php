@@ -42,7 +42,7 @@ cRender::force_login();
 //####################################################################
 cRender::show_time_options("Events");
 cRenderMenus::show_apps_menu("Events", "events.php", $oApp->name);
-cRender::appdButton(cAppDynControllerUI::events($oApp->id));
+cRender::appdButton(cAppDynControllerUI::events($oApp));
 
 //********************************************************************
 if (cAppdyn::is_demo()){

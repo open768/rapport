@@ -69,7 +69,7 @@ if (cAppdyn::is_demo()){
 
 //********************************************************************
 $oCred = cRenderObjs::get_appd_credentials();
-cRender::appdButton(cAppDynControllerUI::transaction($oApp->id,$trid));
+cRender::appdButton(cAppDynControllerUI::transaction($oApp,$trid));
 cDebug::flush();
 
 // ################################################################################

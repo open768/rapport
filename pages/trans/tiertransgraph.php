@@ -49,9 +49,8 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 //###################### DATA #############################################################
 //display the results
 $oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
-$tid = cHeader::get(cRender::TIER_ID_QS);
 $oTier = cRenderObjs::get_current_tier();
+$tier = $oTier->name;
 
 $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRender::get_base_app_QS();
@@ -170,7 +169,7 @@ if ($oCred->restricted_login == null){
 	);
 	</script><?php
 }
-cRender::appdButton(cAppDynControllerUI::tier($oApp->id,$tid));
+cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 
 //###############################################
 ?>

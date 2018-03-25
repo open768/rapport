@@ -54,7 +54,7 @@ cChart::do_header();
 
 cRenderMenus::show_app_functions($oApp->name, $oApp->id);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
-cRender::appdButton(cAppDynControllerUI::webrum($oApp->id));
+cRender::appdButton(cAppDynControllerUI::webrum($oApp));
 
 //********************************************************************
 if (cAppdyn::is_demo()){

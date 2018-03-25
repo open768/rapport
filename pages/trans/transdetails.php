@@ -125,7 +125,7 @@ if ($oCred->restricted_login == null){?>
 	</script><?php
 }
 cRenderMenus::show_tier_functions();
-cRender::appdButton(cAppDynControllerUI::transaction($oApp->id,$trid));
+cRender::appdButton(cAppDynControllerUI::transaction($oApp,$trid));
 cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
 cDebug::flush();
 
@@ -229,7 +229,7 @@ if ($node){ ?>
 <?php
 cDebug::flush();
 $oTimes = cRender::get_times();
-$sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp->id,$trid, $oTimes);
+$sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp,$trid, $oTimes);
 $aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
@@ -250,7 +250,7 @@ if (count($aSnapshots) == 0){
 				foreach ($aSnapshots as $oSnapshot){
 					$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
 					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
-					$sAppdUrl = cAppDynControllerUI::snapshot($oApp->id, $trid, $oSnapshot->requestGUID, $oTimes);
+					$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $oSnapshot->requestGUID, $oTimes);
 					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
 					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
 					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $oSnapshot->URL);

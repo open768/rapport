@@ -144,7 +144,7 @@ if (cFilter::isFiltered()){
 	$sCleanAppQS = cRender::get_clean_base_app_QS();
 	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
 }
-cRender::appdButton(cAppDynControllerUI::businessTransactions($oApp->id));
+cRender::appdButton(cAppDynControllerUI::businessTransactions($oApp));
 
 //####################################################################
 // work through each tier

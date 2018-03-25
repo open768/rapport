@@ -97,7 +97,7 @@ cRenderMenus::show_app_agent_menu();
 
 cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url("appagentdetail.php",cRender::METRIC_TYPE_QS,$gsMetricType));
 
-cRender::appdButton(cAppDynControllerUI::nodes($oApp->id), "All nodes");
+cRender::appdButton(cAppDynControllerUI::nodes($oApp), "All nodes");
 //####################################################################
 
 //********************************************************************

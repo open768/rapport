@@ -95,7 +95,7 @@ if ($oCred->restricted_login == null){
 	</script>
 <?php
 }
-cRender::appdButton(cAppDynControllerUI::nodes($oApp->id), "All nodes");
+cRender::appdButton(cAppDynControllerUI::nodes($oApp), "All nodes");
 
 //####################################################################
 
@@ -209,7 +209,7 @@ if ($iNodes==0){
 						<td><?php
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp->id, $oNode->id), $oNode->id);
+							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp, $oNode->id), $oNode->id);
 						?></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
 						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>

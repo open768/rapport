@@ -50,7 +50,7 @@ $title ="$oApp->name&gt;Web Real User Monitoring";
 cRender::show_time_options( $title); 
 
 cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
-cRender::appdButton(cAppDynControllerUI::webrum($oApp->id));
+cRender::appdButton(cAppDynControllerUI::webrum($oApp));
 
 //********************************************************************
 if (cAppdyn::is_demo()){
