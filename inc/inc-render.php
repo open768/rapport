@@ -263,6 +263,7 @@ class cRender{
 	const TRANS_ID_QS = "trid";
 	const SNAP_GUID_QS = "snpg";
 	const SNAP_URL_QS = "snpu";
+	const SNAP_TIME_QS = "snpt";
 	
 	const NODE_QS = "nd";
 	const FILTER_NODE_QS = "fnqs";
@@ -574,7 +575,7 @@ class cRender{
 	
 		//**************************************************************************
 	public static function show_html_time_options(){
-		global $_SERVER;
+		global $_SERVER,$home;
 		
 		$sUrl = urlencode($_SERVER['REQUEST_URI']);
 		echo cAppDynCommon::get_time_label();
@@ -588,7 +589,7 @@ class cRender{
 				if ($iValue== $iDuration){
 					?><button disabled="disabled"><?=$sCaption?></button><?php
 				}else
-					self::button($sCaption, "settime.php?duration=$iValue&url=$sUrl");
+					self::button($sCaption, "$home/pages/settime.php?duration=$iValue&url=$sUrl");
 			?>
 			<br><a href="togglelnk.php?url=<?=$sUrl?>">toggle links</a><p>
 		</td></tr></table><p>
@@ -598,7 +599,7 @@ class cRender{
 
 	//**************************************************************************
 	public static function show_time_options( $psTitle){
-		global $_SERVER;
+		global $_SERVER,$home;
 		
 		$sUrl = $_SERVER['REQUEST_URI'];
 		if (strpos($sUrl,"%")) $sUrl = urldecode($sUrl);
@@ -610,7 +611,7 @@ class cRender{
 		$iDuration = cAppDynCommon::get_duration();
 		
 		?>
-			<form name="frmTime" id="frmTime" action="settime.php" method="get">
+			<form name="frmTime" id="frmTime" action="<?=$home?>/pages/settime.php" method="get">
 				<input type="hidden" name="url" value="<?=$sUrl?>">
 				<table class="timebox"><tr>
 					<td>

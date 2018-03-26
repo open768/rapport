@@ -27,6 +27,7 @@ class cChartItem{
 	public $go_hint = "Go";
 	public $height = 250;
 	public $width = 1000;
+	public $hideIfNoData = false;
 	
 	public function write_html(){
 		global $home;
@@ -38,6 +39,7 @@ class cChartItem{
 			style="width:<?=$this->width?>px;height=<?=$this->height?>px;"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
+			hideIfNoData="<?=$this->hideIfNoData?>"
 			<?php if($this->go_URL){?>
 				goUrl="<?=$this->go_URL?>" 
 				goLabel="<?=$this->go_hint?>"
@@ -63,6 +65,7 @@ class cChart{
 	const METRIC="m";
 	const TYPE="t";
 	const LABEL="l";
+	const HIDEIFNODATA="hind";
 	const BUTTON="b";
 	const GO_URL="gu";
 	const GO_HINT="gh";
@@ -89,10 +92,6 @@ class cChart{
 	
 	//****************************************************************************
 	public static function do_footer(){		
-		cDebug::write("export all is : ".self::$show_export_all);
-		cDebug::write("zoom all is : ".self::$show_zoom);
-		cDebug::write("compare all is : ".self::$show_compare);
-		cDebug::write("previous all is : ".self::$showPreviousPeriod);
 		?>
 		<div id="AllMetrics">...</div>
 		<script language="javascript">
@@ -119,10 +118,13 @@ class cChart{
 				
 				$oItem = new cChartItem();
 				$oItem->app = $poApp;
+				if (array_key_exists(self::HIDEIFNODATA, $paItem))
+					$oItem->hideIfNoData = $paItem[self::HIDEIFNODATA];
 
 				//--------------------------------------------------
 				$oMetricItem = new cChartMetricItem();
 				$oMetricItem->metric = $paItem[self::METRIC];
+				
 				if (array_key_exists(self::LABEL, $paItem)){ 
 					$sLabel = $paItem[self::LABEL];
 					if ($sLabel == null) throw new Exception("No Label Provided");

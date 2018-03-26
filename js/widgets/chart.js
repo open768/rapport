@@ -38,6 +38,7 @@ var cCharts={
 				
 				var sGoURL = oElement.attr("goUrl");
 				var sGoLabel = oElement.attr("goLabel");
+				var sHideIfNoData = oElement.attr("hideIfNoData");
 				
 				oElement.appdchart({
 					appName:sAppName,
@@ -50,7 +51,8 @@ var cCharts={
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
 					showZoom:oElement.attr("showZoom"),
-					showCompare:oElement.attr("showCompare")
+					showCompare:oElement.attr("showCompare"),
+					hideIfNoData:sHideIfNoData
 				});
 					
 				//-------------build the form
@@ -108,7 +110,8 @@ $.widget( "ck.appdchart",{
 		onSelect: null,
 		previous_period:false,
 		goUrl:null,
-		goCaption:"Go"
+		goCaption:"Go",
+		hideIfNoData:false
 	},
 	
 	consts:{
@@ -193,7 +196,8 @@ $.widget( "ck.appdchart",{
 		var oOptions = this.options;
 
 		//check if element is visible
-		if (!pbIsInView) return;		
+		if (!pbIsInView) return;	
+		
 		oElement.off('inview');	//turn off the inview listener
 		oElement.empty();
 		oElement.removeClass();
@@ -243,12 +247,14 @@ $.widget( "ck.appdchart",{
 		var oElement = oThis.element;
 		var bOK = true;
 		
+		oElement.empty();
+		
 		if (!oElement.inViewport()){
 			this.pr__setInView();
 			bOK = false;
-		}
-		
-		cDebug.write("Chart is visible:" + bOK.toString() + " app:" + oOptions.appName + " Metric:" + oOptions.metric);
+			oElement.append("Aborting " + oOptions.title);
+		}else
+			oElement.append("Continuing "+ oOptions.title);		
 		
 		return bOK;
 	},
@@ -370,9 +376,13 @@ $.widget( "ck.appdchart",{
 		
 		oElement.empty();
 		oElement.removeClass();
-		oElement.addClass("chartnodata");
-		oElement.append("No data found for "+ oOptions.title);
-		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
+		if (oOptions.hideIfNoData){
+			oElement.hide();
+		}else{
+			oElement.addClass("chartnodata");
+			oElement.append("No data found for "+ oOptions.title);
+			oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
+		}
 	},
 
 	//*******************************************************************

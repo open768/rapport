@@ -53,12 +53,14 @@ $trans = cHeader::get(cRender::TRANS_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $sSnapGUID = cHeader::get(cRender::SNAP_GUID_QS);
 $sSnapURL = cHeader::get(cRender::SNAP_URL_QS);
+$sSnapTime = cHeader::get(cRender::SNAP_TIME_QS);
 
 $sTierQS = cRender::get_base_tier_QS();
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 cAppDynRestUI::$oTimes = cRender::get_times();
 
-cRender::show_time_options("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans&gt;$sSnapURL"); 
+cRender::show_top_banner("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans&gt;$sSnapURL"); 
+
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
@@ -80,11 +82,15 @@ cRender::appdButton($sAppdUrl);
 <!-- ************************************************************** -->
 <H2>Snapshot Details for <?=$sSnapURL?></h2>
 <?php
-	$oData = cAppDynRestUI::GET_snapshot_segments($sSnapGUID);
+	$oData = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);
+	$iEpoch = (int) ($sSnapTime/1000);
+	$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
 
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
 		<th align="right">Business Transaction:</th><td><?=$oData->btName?></td></tr>
+		<th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
+		<th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
 		<th align="right">Number of Segments:</th><td><?=$oData->segmentCount?></td></tr>
 		<th align="right">Server:</th><td><?=$oData->requestSegmentData->applicationComponentNodeId?></td></tr>
 	</table>
@@ -96,35 +102,31 @@ cRender::appdButton($sAppdUrl);
 	$oSegment = $oData->requestSegmentData;
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
-		<tr><th align="right">thread</th><td><?=$oSegment->threadName?></td></tr>
-		<tr><th align="right">timeTaken:</th><td><?=$oSegment->timeTakenInMilliSecs?></td></tr>
+		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
-		<tr><th align="right">Archived:</th><td><?=$oSegment->archived?></td></tr>
 	</table><?php
 ?>
 <!-- ************************************************************** -->
 <H2>Potential Problems</h2>
 <?php
 	cDebug::flush();
-	$aProblems = cAppDynRestUI::GET_snapshot_problems($oApp, $sSnapGUID);
+	$aProblems = cAppDynRestUI::GET_snapshot_problems($oApp, $sSnapGUID, $sSnapTime);
 
 	if (count($aProblems) == 0)
 		cRender::messagebox("No problems found");
 	else{
-		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 id="problems">
+		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 cellpadding="3" id="problems">
 			<thead><tr>
 				<th>Type</th>
-				<th></th>
-				<th>Execution Time</th>
-				<th>Detail</th>
+				<th>Time</th>
+				<th width="700">Detail</th>
 			</tr></thead>
 			<tbody><?php
 				foreach ($aProblems as $oProblem){
 					?><tr>
-						<td><?=$oProblem->subType?></td>
-						<td><?=$oProblem->problemType?></td>
-						<td><?=$oProblem->executionTimeMs?></td>
+						<td><?=$oProblem->subType?> <?=$oProblem->problemType?></td>
+						<td><?=$oProblem->executionTimeMs?> ms</td>
 						<td><?=$oProblem->message?></td>
 					</tr><?php
 				}
@@ -135,6 +137,26 @@ cRender::appdButton($sAppdUrl);
 		</script>
 		
 		<?php
+	}
+?>
+<!-- ************************************************************** -->
+<H2>Slow DB and Remote Service Calls</h2>
+<?php
+	cDebug::flush();
+	$aProblems = cAppDynRestUI::GET_snapshot_slow_db_and_remote($oApp, $sSnapGUID, $sSnapTime);
+	if (count($aProblems) == 0)
+		cRender::messagebox("not implemented: No slow DB or remote service calls found");
+	else{
+	}
+?>
+<!-- ************************************************************** -->
+<H2>Slow Methods</h2>
+<?php
+	cDebug::flush();
+	$aProblems = cAppDynRestUI::GET_snapshot_slow_methods($oApp, $sSnapGUID, $sSnapTime);
+	if (count($aProblems) == 0)
+		cRender::messagebox("not implemented: No slow methods found");
+	else{
 	}
 
 // ################################################################################

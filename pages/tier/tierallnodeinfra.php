@@ -143,7 +143,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 		
 		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier"];
+		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier", cChart::HIDEIFNODATA=>1];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);

@@ -230,11 +230,11 @@ if ($node){ ?>
 cDebug::flush();
 $oTimes = cRender::get_times();
 $sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp,$trid, $oTimes);
+
 $aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
 }else{
-	cDebug::vardump($aSnapshots[0],true);
 	?>
 		<table class="maintable" id="trans">
 			<thead><tr class="tableheader">
@@ -254,6 +254,7 @@ if (count($aSnapshots) == 0){
 					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
 					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
 					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $oSnapshot->URL);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
 					
 					?>
 					<tr class="<?=cRender::getRowClass()?>">
