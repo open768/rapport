@@ -59,7 +59,7 @@ $gsTABLE_ID = 0;
 
 //*****************************************************************************
 function render_tier($poTier){
-	global $oApp, $oTimes, $gsTABLE_ID;
+	global $oApp, $oTimes, $home, $gsTABLE_ID;
 	
 	?><h2><?=$poTier->name?></h2><?php
 	$sMetricpath = cAppdynMetric::Errors($poTier->name, "*");
@@ -73,7 +73,7 @@ function render_tier($poTier){
 
 	cRenderMenus::show_tier_functions($poTier);
 	$tierQS = cRender::build_tier_qs($oApp, $poTier);
-	$sGraphUrl = cHttp::build_url("tiererrorgraphs.php", $tierQS);
+	$sGraphUrl = cHttp::build_url("../tier/tiererrorgraphs.php", $tierQS);
 	cRender::button("Show Error Graphs", $sGraphUrl);	
 	cRender::appdButton(cAppDynControllerUI::tier_errors($oApp, $poTier));
 	

@@ -72,6 +72,10 @@ if (cAppdyn::is_demo()){
 	cRender::html_footer();
 	exit;
 }
+function sort_by_metricpath($a,$b){
+	return strcasecmp($a->metricPath, $b->metricPath);
+}
+
 //********************************************************************
 function render_tier_transactions($poApp, $poTier){	
 	global $giTotalTrans;
@@ -85,7 +89,7 @@ function render_tier_transactions($poApp, $poTier){
 
 	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
 	$aStats = cAppdynCore::GET_MetricData($poApp->name, $sMetricpath, $oTimes,"true",false,true);
-	cDebug::vardump($aStats);
+	uasort($aStats,"sort_by_metricpath" );
 
 	$aMetrics=[];
 	$iCount  = 0;

@@ -254,7 +254,7 @@ $.widget( "ck.appdchart",{
 			bOK = false;
 			oElement.append("Aborting " + oOptions.title);
 		}else
-			oElement.append("Continuing "+ oOptions.title);		
+			oElement.append("Loading.. "+ oOptions.title);		
 		
 		return bOK;
 	},
@@ -268,6 +268,9 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		oElement.addClass("ui-state-error");
 		oElement.append("There was an error getting chart data for "+ oOptions.title);
+		var btnForce = $("<button>").append("load");
+		oElement.append(btnForce);
+		btnForce.click( 		function(){oThis.onInView(true);}		);
 		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
 	},
 

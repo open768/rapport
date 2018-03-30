@@ -92,15 +92,18 @@ foreach ( $aTrans as $oTrans){
 		cChart::LABEL=>"$oTrans->name - Calls per min", 
 		cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name,$oTrans->name),
 		cChart::GO_URL => $sUrl,
-		cChart::GO_HINT => "Transaction"
+		cChart::GO_HINT => "Transaction",
+		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name to External - Calls per min ",
-		cChart::METRIC=>cAppDynMetric::transExtCalls($oTier->name,$oTrans->name, $sExt)
+		cChart::METRIC=>cAppDynMetric::transExtCalls($oTier->name,$oTrans->name, $sExt),
+		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name to External - Response time in ms", 
-		cChart::METRIC=>cAppDynMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt)
+		cChart::METRIC=>cAppDynMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
+		cChart::HIDEIFNODATA=>1
 	];
 }
 cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
