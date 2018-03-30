@@ -57,7 +57,6 @@ $sSnapTime = cHeader::get(cRender::SNAP_TIME_QS);
 
 $sTierQS = cRender::get_base_tier_QS();
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
-cAppDynRestUI::$oTimes = cRender::get_times();
 
 cRender::show_top_banner("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans&gt;$sSnapURL"); 
 
@@ -74,7 +73,9 @@ cRenderMenus::show_tier_functions();
 cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
 cDebug::flush();
 
-$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $sSnapGUID, cAppDynRestUI::$oTimes);
+$oTime = cAppdynUtil::make_time_obj($sSnapTime);
+cAppDynRestUI::$oTimes = cRender::get_times();
+$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $sSnapGUID, $oTime);
 cRender::appdButton($sAppdUrl);
 
 
@@ -82,17 +83,20 @@ cRender::appdButton($sAppdUrl);
 <!-- ************************************************************** -->
 <H2>Snapshot Details for <?=$sSnapURL?></h2>
 <?php
-	$oData = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);
-	$iEpoch = (int) ($sSnapTime/1000);
-	$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
+	$oData = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
+	/*
+		cDebug::on(true);
+		cDebug::vardump($oData,true);
+		cDebug::off();
+	*/
+	$sDate = cAppdynUtil::timestamp_to_date($sSnapTime);
 
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
-		<th align="right">Business Transaction:</th><td><?=$oData->btName?></td></tr>
-		<th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
-		<th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
-		<th align="right">Number of Segments:</th><td><?=$oData->segmentCount?></td></tr>
-		<th align="right">Server:</th><td><?=$oData->requestSegmentData->applicationComponentNodeId?></td></tr>
+		<tr><th align="right">Business Transaction:</th><td><?=$oData->btName?></td></tr>
+		<tr><th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
+		<tr><th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
+		<tr><th align="right">Number of Segments:</th><td><?=$oData->segmentCount?></td></tr>
 	</table>
 
 	
@@ -105,6 +109,7 @@ cRender::appdButton($sAppdUrl);
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
+		<tr><th align="right">Server:</th><td><?=$oData->requestSegmentData->applicationComponentNodeId?></td></tr>
 	</table><?php
 ?>
 <!-- ************************************************************** -->
@@ -112,6 +117,11 @@ cRender::appdButton($sAppdUrl);
 <?php
 	cDebug::flush();
 	$aProblems = cAppDynRestUI::GET_snapshot_problems($oApp, $sSnapGUID, $sSnapTime);
+	/*
+	cDebug::on(true);
+	cDebug::vardump($aProblems,true);
+	cDebug::off();
+	*/
 
 	if (count($aProblems) == 0)
 		cRender::messagebox("No problems found");
@@ -143,20 +153,51 @@ cRender::appdButton($sAppdUrl);
 <H2>Slow DB and Remote Service Calls</h2>
 <?php
 	cDebug::flush();
-	$aProblems = cAppDynRestUI::GET_snapshot_slow_db_and_remote($oApp, $sSnapGUID, $sSnapTime);
-	if (count($aProblems) == 0)
-		cRender::messagebox("not implemented: No slow DB or remote service calls found");
-	else{
-	}
-?>
-<!-- ************************************************************** -->
-<H2>Slow Methods</h2>
-<?php
-	cDebug::flush();
-	$aProblems = cAppDynRestUI::GET_snapshot_slow_methods($oApp, $sSnapGUID, $sSnapTime);
-	if (count($aProblems) == 0)
-		cRender::messagebox("not implemented: No slow methods found");
-	else{
+	$oData = cAppDynRestUI::GET_snapshot_flow($oApp, $trid, $sSnapGUID, $sSnapTime);
+	$aNodes = $oData->nodes;
+
+	foreach ($aNodes as $oNode){
+		?><h3><?=$oNode->name?></H3><?php
+		$aSegments = $oNode->requestSegmentDataItems;
+		if (count($aSegments)==0) {
+			cRender::messagebox("No data found");
+			continue;
+		}
+		
+		?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>">
+			<thead><tr>
+				<th>Type</th>
+				<th>Called By</th>
+				<th>Detail</th>
+				<th>Count</th>
+				<th>Max</th>
+				<th>Avg</th>
+			</tr></thead>
+			<tbody><?php
+			foreach ($aSegments as $oSegment){
+				$aExitCalls = $oSegment->exitCalls;
+				foreach ($aExitCalls as $oExitCall){
+					/*
+					cDebug::on(true);
+					cDebug::vardump($oExitCall);
+					cDebug::off();
+					*/
+					?><tr>
+						<td><?=$oExitCall->exitPointName?></td>
+						<td><?=$oExitCall->callingMethod?></td>
+						<td><?=$oExitCall->detailString?></td>
+						<td><?=$oExitCall->count?></td>
+						<td><?=$oExitCall->maxTimeTakenInMs?></td>
+						<td><?=$oExitCall->timeTakenInMillis?></td>
+					</tr><?php
+				}
+			}
+			?></tbody>
+		</table></div>
+		<script language="javascript">
+			$( function(){ $("#SLOW<?=$oNode->name?>").tablesorter();} );
+		</script>
+		<?php
 	}
 
 // ################################################################################
