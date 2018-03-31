@@ -262,7 +262,7 @@ if (count($aSnapshots) == 0){
 						<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
 						<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
-						<td><a href="snapdetails.php?<?=$sSnapQS?>"><div style="max-width:200px;overflow-wrap:break-word;"><?=$oSnapshot->URL?></div></a></td>
+						<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$oSnapshot->URL?></div></a></td>
 						<td><div style="max-width:400px;"><?=$oSnapshot->summary?></div></td>
 						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
 					</tr>

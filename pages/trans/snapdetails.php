@@ -37,8 +37,9 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 require_once("$root/inc/inc-filter.php");
 
-const COLUMNS=6;
-const FLOW_ID = "trflw";
+CONST MIN_TOTAL_TIME=200;
+CONST MIN_EXT_TIME=100;
+CONST MIN_EXT_COUNT=10;
 
 //####################################################################
 cRender::html_header("Snapshot");
@@ -69,8 +70,6 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 $oCred = cRenderObjs::get_appd_credentials();
-cRenderMenus::show_tier_functions();
-cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
 cDebug::flush();
 
 $oTime = cAppdynUtil::make_time_obj($sSnapTime);
@@ -128,14 +127,16 @@ cRender::appdButton($sAppdUrl);
 	else{
 		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 cellpadding="3" id="problems">
 			<thead><tr>
-				<th>Type</th>
+				<th colspan="2">Type</th>
 				<th>Time</th>
 				<th width="700">Detail</th>
 			</tr></thead>
 			<tbody><?php
 				foreach ($aProblems as $oProblem){
+					if ($oProblem->executionTimeMs < MIN_EXT_TIME) continue;
 					?><tr>
-						<td><?=$oProblem->subType?> <?=$oProblem->problemType?></td>
+						<td><?=$oProblem->subType?></td>
+						<td><?=$oProblem->problemType?></td>
 						<td><?=$oProblem->executionTimeMs?> ms</td>
 						<td><?=$oProblem->message?></td>
 					</tr><?php
@@ -166,29 +167,31 @@ cRender::appdButton($sAppdUrl);
 		
 		?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>">
 			<thead><tr>
+				<th>total time</th>
 				<th>Type</th>
 				<th>Called By</th>
 				<th>Detail</th>
 				<th>Count</th>
-				<th>Max</th>
 				<th>Avg</th>
 			</tr></thead>
 			<tbody><?php
 			foreach ($aSegments as $oSegment){
 				$aExitCalls = $oSegment->exitCalls;
 				foreach ($aExitCalls as $oExitCall){
-					/*
-					cDebug::on(true);
+					if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME && $oExitCall->count < MIN_EXT_COUNT) continue;
+					
+					/*cDebug::on(true);
 					cDebug::vardump($oExitCall);
 					cDebug::off();
 					*/
+					$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,2);
 					?><tr>
+						<td><?=$oExitCall->timeTakenInMillis?> ms</td>
 						<td><?=$oExitCall->exitPointName?></td>
 						<td><?=$oExitCall->callingMethod?></td>
 						<td><?=$oExitCall->detailString?></td>
 						<td><?=$oExitCall->count?></td>
-						<td><?=$oExitCall->maxTimeTakenInMs?></td>
-						<td><?=$oExitCall->timeTakenInMillis?></td>
+						<td><?=$avg?> ms</td>
 					</tr><?php
 				}
 			}
