@@ -470,7 +470,7 @@ class cRender{
 		if ($pbNewWindow) $sTarget = " target='new'";
 		
 		if ($paParams !== null){
-			if (gettype($paParams) !== "array") cDebug::error("expecting an array as the 4th parameter");
+			if (getF($paParams) !== "array") cDebug::error("expecting an array as the 4th parameter");
 			if (array_key_exists("id", $paParams )) $sID=" id='".$paParams["id"]."'";
 			if (array_key_exists("class", $paParams )) $sClass.=" ".$paParams["class"];
 		}
@@ -489,7 +489,7 @@ class cRender{
 	public static function html_header ($psTitle){
 		global $jsinc, $home;
 		?>
-		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+		<!DOCTYPE html>
 		<html>
 		<head>
 			<title><?=$psTitle?></title>
@@ -530,6 +530,7 @@ class cRender{
 		<!-- End Google Tag Manager -->
 		<?php
 		cDebug::flush();
+		error_reporting(E_ALL & ~E_WARNING);
 	}
 	
 	//**************************************************************************
@@ -544,7 +545,7 @@ class cRender{
 			);
 		</script>
 		<table border=0 width="100%" class="footer"><tr><td>
-				<div class="licenseBox">
+			<div class="licenseBox">
 				Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a>
 				<p>
 				This software is protected by copyright under the terms of the 
@@ -556,19 +557,18 @@ class cRender{
 				For licenses that allow for commercial use please contact cluck@chickenkatsu.co.uk.<br>
 				You may commercially evaluate this software for no more than 1 calendar month<br>
 				We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a>
-				</pre></div>
-				<div class="paidLicenseBox">
-				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>--><br>
-				<p>
-				<small>
+			</div>
+			<div class="paidLicenseBox">
+				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
+			</div>
+			<small>
 				Charts built using <a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
 				uses <a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license<br>
 				uses <a href="https://gist.github.com/umidjons/8396981">pub sub pattern</a> by Baylor Rae licensed under the GNU General Public license<br>
 				No passwords are stored by this application.<br>
 				AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
-				</small>
+			</small>				
 		</td></tr></table>
-		
 		</BODY></HTML>
 		<?php
 	}	
