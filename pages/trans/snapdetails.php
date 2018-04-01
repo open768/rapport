@@ -42,7 +42,8 @@ CONST MIN_EXT_TIME=100;
 CONST MIN_EXT_COUNT=10;
 
 //####################################################################
-cRender::html_header("Snapshot");
+$trans = cHeader::get(cRender::TRANS_QS);
+cRender::html_header("Snapshot - $trans");
 cRender::force_login();
 
 //####################################################
@@ -114,7 +115,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
-		<tr><th align="right">Server:</th><td><?=$oData->requestSegmentData->applicationComponentNodeId?></td></tr>
+		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp->id,$oData->requestSegmentData->applicationComponentNodeId)?></td></tr>
 	</table><?php
 ?>
 <!-- ************************************************************** -->
@@ -131,11 +132,11 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	if (count($aProblems) == 0)
 		cRender::messagebox("No problems found");
 	else{
-		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 cellpadding="3" id="problems">
+		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 cellpadding="3" id="problems" width="100%">
 			<thead><tr>
-				<th colspan="2">Type</th>
-				<th>Time</th>
-				<th width="700">Detail</th>
+				<th width="200" colspan="2">Type</th>
+				<th width="50">Time (ms)</th>
+				<th >Detail</th>
 			</tr></thead>
 			<tbody><?php
 				foreach ($aProblems as $oProblem){
@@ -143,14 +144,18 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 					?><tr>
 						<td><?=$oProblem->subType?></td>
 						<td><?=$oProblem->problemType?></td>
-						<td><?=$oProblem->executionTimeMs?> ms</td>
+						<td><?=$oProblem->executionTimeMs?></td>
 						<td><?=htmlspecialchars($oProblem->message)?></td>
 					</tr><?php
 				}
 			?></tbody>
 		</table></div>
 		<script language="javascript">
-			$( function(){ $("#problems").tablesorter();} );
+			$( function(){ $("#problems").tablesorter({
+				headers:{
+					3:{ sorter: 'digit' }
+				});
+			} );
 		</script>
 		
 		<?php
@@ -178,14 +183,14 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 				continue;
 			}
 			
-			?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>">
+			?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
 				<thead><tr>
-					<th>total time</th>
-					<th>Type</th>
-					<th>Called By</th>
-					<th>Detail</th>
-					<th>Count</th>
-					<th>Avg</th>
+					<th width="50">Total time (ms)</th>
+					<th width="50">Type</th>
+					<th width="300">Called By</th>
+					<th >Detail</th>
+					<th width="50">Count</th>
+					<th width="50">Avg time (ms)</th>
 				</tr></thead>
 				<tbody><?php
 				foreach ($aSegments as $oSegment){
@@ -197,21 +202,29 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 						cDebug::vardump($oExitCall);
 						cDebug::off();
 						*/
-						$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,2);
+						$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
 						?><tr>
-							<td><?=$oExitCall->timeTakenInMillis?> ms</td>
+							<td><?=$oExitCall->timeTakenInMillis?></td>
 							<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
-							<td><?=htmlspecialchars($oExitCall->callingMethod)?></td>
+							<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
 							<td><?=htmlspecialchars($oExitCall->detailString)?></td>
 							<td><?=$oExitCall->count?></td>
-							<td><?=$avg?> ms</td>
+							<td><?=$avg?></td>
 						</tr><?php
 					}
 				}
 				?></tbody>
 			</table></div>
 			<script language="javascript">
-				$( function(){ $("#SLOW<?=$oNode->name?>").tablesorter();} );
+				$( function(){ 
+					$("#SLOW<?=$oNode->name?>").tablesorter({
+						headers:{
+							1:{ sorter: 'digit' },
+							5:{ sorter: 'digit' },
+							6:{ sorter: 'digit' }
+						}
+					});
+				});
 			</script>
 			<?php
 		}
