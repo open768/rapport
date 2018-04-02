@@ -530,7 +530,7 @@ class cRender{
 		<!-- End Google Tag Manager -->
 		<?php
 		cDebug::flush();
-		error_reporting(E_ALL & ~E_WARNING);
+		//error_reporting(E_ALL & ~E_WARNING);
 	}
 	
 	//**************************************************************************
@@ -689,8 +689,8 @@ class cRender{
 	}
 
 	//******************************************************************************************
-	public static function build_tier_qs( $poApp, $poTier){
-		$sAppQs = self::build_app_qs($poApp);
+	public static function build_tier_qs( $poTier){
+		$sAppQs = self::build_app_qs($poTier->app);
 		$sTierQs = cHttp::build_qs($sAppQs, self::TIER_QS, $poTier->name);
 		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $poTier->id);
 		return $sTierQs;

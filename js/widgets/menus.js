@@ -163,6 +163,7 @@ $.widget( "ck.appdmenu",{
 	//****************************************************************
 	pr__showAppAgentsMenu: function(){
 		var oElement = this.element;
+		var oOptions = this.options;
 		
 		//check for required options
 		var sAppname = oElement.attr("appname");

@@ -83,7 +83,7 @@ function render_tier_transactions($poApp, $poTier){
 	cDebug::enter();
 	$oTimes = cRender::get_times();
 
-	$sTierQS = cRender::build_tier_qs($poApp, $poTier);
+	$sTierQS = cRender::build_tier_qs($poTier);
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 

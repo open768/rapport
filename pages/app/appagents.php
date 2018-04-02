@@ -71,7 +71,7 @@ if (cAppdyn::is_demo()){
 		}  
 	);
 	</script>
-<?php
+	<?php
 $oCred = cRenderObjs::get_appd_credentials();
 $sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
 
@@ -93,6 +93,7 @@ if ($oCred->restricted_login == null){
 		}  
 	);
 	</script>
+	<p>
 <?php
 }
 cRender::appdButton(cAppDynControllerUI::nodes($oApp), "All nodes");
@@ -120,9 +121,9 @@ function group_by_tier($paNodes){
 	
 	foreach ($paNodes as $aNodes)
 		foreach ($aNodes as $oNode){
-			$TierID = $oNode->tierId;
-			if (!array_key_exists((string)$TierID, $aTiers)) $aTiers[(string)$TierID] = [];
-			$aTiers[(string)$TierID][] = $oNode;
+			$sTier = $oNode->tierName;
+			if (!array_key_exists($sTier, $aTiers)) $aTiers[$sTier] = [];
+			$aTiers[$sTier][] = $oNode;
 		}
 		
 	return $aTiers;
@@ -136,57 +137,80 @@ function count_nodes($paData){
 	return $iCount;
 }
 
-//####################################################################
-$aResponse = cAppDyn::GET_AppNodes($oApp->id);
-cdebug::vardump($aResponse);
-$iNodes = count_nodes($aResponse);
-	
-if ($iNodes==0){
-	?>
-		<div class="maintable"><h2>No agents found</h2></div>
+//***********************************************************************
+function render_tier_agents($paNodes){
+	global $oApp;
+	$aTierNodes = group_by_tier($paNodes);
+	foreach ($aTierNodes as $sTier=>$aNodes){
+		$oTier = cRenderObjs::make_tier_obj($oApp, $sTier, $aNodes[0]->tierId);
+		/*
+		cDebug::on(true);
+		cDebug::vardump($oTier);
+		cDebug::off();
+		*/
+		?><p><?php
+		cRenderMenus::show_tier_functions($oTier);
+		$sTierQS = cRender::build_tier_qs($oTier);
+		?><div class="<?=cRender::getRowClass()?>"><table class="maintable">
+			<tr class="tableheader">
+				<th width="250">Machine</th>
+				<th width="120">Agent Type</th>
+				<th width="180">Node</th>
+				<th width="120">IP Address</th>
+				<th width="120">Machine Agent Version</th>
+				<th width="120">App Agent Version</th>
+			</tr>
+			<?php
+				sort ($aNodes);
+				foreach ($aNodes as $oNode){
+					$sMachine = $oNode->machineName;
+					$iMachineID = $oNode->machineId;
+					$sTier = $oNode->tierName;
+					
+					?><tr class="<?=$sClass?>">
+						<td><?php
+							cRender::appdButton(cAppDynControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
+						?><td><?=$oNode->agentType?></td>
+						<td align="right"><nobr><?php
+							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
+							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
+							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp, $oNode->id),"Go");
+						?></nobr></td>
+						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
+						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
+						<td><?=($oNode->appAgentPresent?cAppdynUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
+					</tr><?php
+				}
+			?>
+		</table></div>
 	<?php
-}else{
-	if ($psAggType == cRender::GROUP_TYPE_TIER) 
-		$aResponse= group_by_tier($aResponse);
-	uasort($aResponse, "pr__sort_nodes");
-?>
-	<p>
-	<h2>There are <?=$iNodes;?> agents in total in (<?=$oApp->name?>)</h2>
-	<p>
+	}
+}
+
+//***********************************************************************
+function render_node_agents($paData){
+	global $sAppQS, $oApp;
+	?>
 	<table class="maintable">
 		<tr class="tableheader">
-			<th>Machine</th>
-			<th>Tier</th>
-			<th>Agent Type</th>
-			<th width="200">Node</th>
-			<th>IP Address</th>
-			<th width="200">Machine Agent Version</th>
-			<th width="200">App Agent Version</th>
+			<th width="250">Machine</th>
+			<th width="150">Tier</th>
+			<th width="120">Agent Type</th>
+			<th width="180">Node</th>
+			<th width="120">IP Address</th>
+			<th width="120">Machine Agent Version</th>
+			<th width="120">App Agent Version</th>
 		</tr>
 		<?php
-			foreach ($aResponse as $aNodes){
+			foreach ($paData as $aNodes){
 				$iRowSpan = count($aNodes) +1;
 				$sClass=cRender::getRowClass();
 				?><tr class='$sClass'><?php
-					if ($psAggType== cRender::GROUP_TYPE_NODE){
-						$sMachine = $aNodes[0]->machineName;
-						$iMachineID = $aNodes[0]->machineId;
-						?><td rowspan="<?=$iRowSpan?>"><nobr>
-							<?=cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine)?> (<?=$iMachineID?>)
-						</nobr></td><?php
-					}else{
-						?><td>&nbsp;</td><?php
-					}
-					
-					if ($psAggType== cRender::GROUP_TYPE_TIER){
-						$sTid = $aNodes[0]->tierId;
-						$sTier = $aNodes[0]->tierName;
-						$sQuery = cHttp::build_qs($sAppQS,cRender::TIER_QS,$sTier);
-						$sQuery = cHttp::build_qs($sQuery,cRender::TIER_ID_QS,$sTid);
-						?><td rowspan="<?=$iRowSpan?>"><nobr>
-							<?=cRender::button($sTier, cHttp::build_url("../tier/tierinfrstats.php",$sQuery))?>
-						</nobr></td><?php
-					}
+					$sMachine = $aNodes[0]->machineName;
+					$iMachineID = $aNodes[0]->machineId;
+					?><td rowspan="<?=$iRowSpan?>"><nobr>
+						<?=cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine)?>
+					</nobr></td><?php
 				?></tr><?php
 				
 				sort ($aNodes);
@@ -199,17 +223,13 @@ if ($iNodes==0){
 					
 					?><tr class="<?=$sClass?>">
 						<td><nobr><?php
-							if ($psAggType !== cRender::GROUP_TYPE_NODE){
-								cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine);
-								echo " ($iMachineID)";
-							}
-							if ($psAggType !== cRender::GROUP_TYPE_TIER) cRender::button($sTier, cHttp::build_url("../tier/tierinfrstats.php",$sTierQS));
+							cRender::button($sTier, cHttp::build_url("../tier/tierinfrstats.php",$sTierQS));
 						?></nobr></td>
 						<td><?=$oNode->agentType?></td>
 						<td><?php
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp, $oNode->id), $oNode->id);
+							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp, $oNode->id),"Go");
 						?></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
 						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
@@ -218,8 +238,29 @@ if ($iNodes==0){
 				}
 			}
 		?>
-	</table>
-<?php
+	</table>	
+	<?php
 }
+
+//***********************************************************************
+$aData = cAppDyn::GET_AppNodes($oApp->id);
+$iNodes = count_nodes($aData);	
+?>
+	<h2>There are <?=$iNodes;?> agents in total in (<?=$oApp->name?>)</h2>
+<?php
+if ($iNodes==0)
+	cRender::messagebox("no Agents found");
+else
+	switch($psAggType){
+		case cRender::GROUP_TYPE_TIER:
+			render_tier_agents($aData);
+			break;
+		case cRender::GROUP_TYPE_NODE:
+			uasort($aData, "pr__sort_nodes");
+			render_node_agents($aData);
+			break;
+		default:
+			cRender::errorbox("unknown groupp mode");
+	}
 cRender::html_footer();
 ?>

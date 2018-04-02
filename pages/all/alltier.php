@@ -72,7 +72,7 @@ foreach ( $aApps as $oApp){
 		$aMetrics = [];
 		foreach ($aTiers as $oTier){ 
 			if (cFilter::isTierFilteredOut($oTier->name)) continue;
-			$sTierQs = cRender::build_tier_qs($oApp, $oTier );
+			$sTierQs = cRender::build_tier_qs( $oTier );
 			$sUrl = "tier.php?$sTierQs";
 			
 			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oTier->name];
