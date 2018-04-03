@@ -497,6 +497,16 @@ class cRender{
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
 			
+			<!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-51550338-2"></script>
+			<script>
+			  window.dataLayer = window.dataLayer || [];
+			  function gtag(){dataLayer.push(arguments);}
+			  gtag('js', new Date());
+
+			  gtag('config', 'UA-51550338-2');
+			</script>			
+			<!-- End Google Tag Manager -->
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 			
 			<script src="<?=$jsinc?>/ck-inc/debug.js"></script>
@@ -517,17 +527,9 @@ class cRender{
 			<script src="<?=$home?>/js/widgets/chart.js"></script>
 			<script src="<?=$home?>/js/widgets/menus.js"></script>
 			<script src="<?=$home?>/js/common.js"></script>
+		
 		</head>
 		<BODY>
-		<!-- Google Tag Manager -->
-		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=<?=cSecret::GOOGLE_TAG_ID?>"
-		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-PFLM8J');</script>
-		<!-- End Google Tag Manager -->
 		<?php
 		cDebug::flush();
 		//error_reporting(E_ALL & ~E_WARNING);

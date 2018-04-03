@@ -37,7 +37,8 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 require_once("$root/inc/inc-filter.php");
 
-CONST MIN_TOTAL_TIME=150;
+CONST MIN_TOTAL_TIME_REMOTE=150;
+CONST MIN_TOTAL_TIME_METHOD=40;
 CONST MIN_EXT_TIME=100;
 CONST MIN_EXT_COUNT=10;
 
@@ -120,14 +121,10 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 ?>
 <!-- ************************************************************** -->
 <H2>Potential Problems</h2>
+<H3>DB calls and Remote Service Calls</h3>
 <?php
 	cDebug::flush();
 	$aProblems = cAppDynRestUI::GET_snapshot_problems($oApp, $sSnapGUID, $sSnapTime);
-	/*
-	cDebug::on(true);
-	cDebug::vardump($aProblems,true);
-	cDebug::off();
-	*/
 
 	if (count($aProblems) == 0)
 		cRender::messagebox("No problems found");
@@ -162,7 +159,57 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	}
 ?>
 <!-- ************************************************************** -->
-<H2>Slow DB and Remote Service Calls - (minimum <?=MIN_TOTAL_TIME?>ms)</h2>
+<H3>Slow methods - (minimum <?=MIN_TOTAL_TIME_METHOD?>ms)</h3>
+<?php
+	cDebug::flush();
+	$aData = cAppDynRestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
+
+	if (count($aData) == 0){
+		cRender::messagebox("no data found");
+	}else{
+		/*
+		cDebug::on(true);
+		cDebug::vardump($aData);
+		cDebug::off();
+		*/
+		?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW__METHODS" >
+			<thead><tr>
+				<th width="50">Total time (ms)</th>
+				<th width="400">Class</th>
+				<th width="400">Method</th>
+				<th width="50">Count</th>
+				<th width="50">Avg time (ms)</th>
+			</tr></thead>
+			<tbody><?php
+				foreach ($aData as $oDetail){
+					if ($oDetail->timeSpentInMilliSec < MIN_TOTAL_TIME_METHOD  && $oDetail->callCount < MIN_EXT_COUNT) continue;
+					$avg = round($oDetail->timeSpentInMilliSec/$oDetail->callCount,0);
+					
+					?><tr>
+						<td><?=$oDetail->timeSpentInMilliSec?></td>
+						<td><?=$oDetail->className?></td>
+						<td><?=$oDetail->methodName?></td>
+						<td><?=$oDetail->callCount?></td>
+						<td><?=$avg?></td>
+					</tr><?php				
+				}
+			?></tbody>
+		</table></div>
+		<script language="javascript">
+			$( function(){ 
+				$("#SLOW__METHODS").tablesorter({
+					headers:{
+						1:{ sorter: 'digit' },
+						4:{ sorter: 'digit' },
+						5:{ sorter: 'digit' }
+					}
+				});
+			});
+		</script><?php
+	}
+?>
+<!-- ************************************************************** -->
+<H2>Slow DB and Remote Service Calls - (minimum <?=MIN_TOTAL_TIME_REMOTE?>ms)</h2>
 <?php
 	cDebug::flush();
 	$bError = false;
@@ -177,6 +224,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 
 		foreach ($aNodes as $oNode){
 			?><h3><?=$oNode->name?></h3><?php
+						
 			$aSegments = $oNode->requestSegmentDataItems;
 			if (count($aSegments)==0) {
 				cRender::messagebox("No data found");
@@ -196,7 +244,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 				foreach ($aSegments as $oSegment){
 					$aExitCalls = $oSegment->exitCalls;
 					foreach ($aExitCalls as $oExitCall){
-						if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME && $oExitCall->count < MIN_EXT_COUNT) continue;
+						if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME_REMOTE && $oExitCall->count < MIN_EXT_COUNT) continue;
 						
 						/*cDebug::on(true);
 						cDebug::vardump($oExitCall);
@@ -229,7 +277,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 			<?php
 		}
 	}
-
+	
 // ################################################################################
 cRender::html_footer();
 ?>
