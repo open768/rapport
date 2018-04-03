@@ -99,7 +99,7 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 		$sUrl = cHttp::build_url($linkUrl, cRender::BACKEND_QS, $sTierTo);
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo, cChart::WIDTH=>300];
 		$sMetric=cAppDynMetric::tierExtCallsPerMin($oTier->name, $sTierTo);
-		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric, cChart::GO_URL=>$sUrl];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"Drill down"];
 		$sMetric=cAppDynMetric::tierExtResponseTimes($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
 	}

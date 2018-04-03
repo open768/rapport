@@ -39,6 +39,7 @@ require_once("$root/inc/inc-filter.php");
 
 const COLUMNS=6;
 const FLOW_ID = "trflw";
+const MIN_TRANS_TIME=150;
 
 //####################################################################
 cRender::html_header("Transactions");
@@ -226,6 +227,7 @@ if ($node){ ?>
 <!-- #############################################################################-->
 <!-- #############################################################################-->
 <h2><a name="5">Transaction Snapshots</a></h2>
+Showing snapshots taking over <?=MIN_TRANS_TIME?>ms
 <?php
 cDebug::flush();
 $oTimes = cRender::get_times();
@@ -238,16 +240,17 @@ if (count($aSnapshots) == 0){
 	?>
 		<table class="maintable" id="trans">
 			<thead><tr class="tableheader">
-				<th width="150">start time</th>
+				<th width="140">start time</th>
 				<th width="10"></th>
 				<th width="80">Duration</th>
 				<th>Server</th>
 				<th>URL</th>
 				<th>Summary</th>
-				<th width="100"></th>
+				<th width="80"></th>
 			</tr></thead>
 			<tbody><?php
 				foreach ($aSnapshots as $oSnapshot){
+					if ($oSnapshot->timeTakenInMilliSecs < MIN_TRANS_TIME) continue;
 					$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
 					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
 					$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $oSnapshot->requestGUID, $oTimes);
@@ -263,14 +266,21 @@ if (count($aSnapshots) == 0){
 						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
 						<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
 						<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$oSnapshot->URL?></div></a></td>
-						<td><div style="max-width:400px;"><?=$oSnapshot->summary?></div></td>
+						<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
 						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
 					</tr>
 				<?php }
 			?></tbody>
 		</table>
 		<script language="javascript">
-			$( function(){ $("#trans").tablesorter();} );
+			$( function(){ 
+				$("#trans").tablesorter({
+					headers:{
+						3:{ sorter: 'digit' }
+					}
+				});
+			});
+
 		</script>
 	<?php
 	cRender::appdButton($sAppdUrl, "Goto Transaction Snapshots");
