@@ -36,7 +36,7 @@ class cChartItem{
 			home="<?=$home?>"
 			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
-			style="width:<?=$this->width?>px;height=<?=$this->height?>px;"
+			style="max-width:<?=$this->width?>px;width:<?=$this->width?>px;height=<?=$this->height?>px;overflow-wrap:break-all"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			hideIfNoData="<?=$this->hideIfNoData?>"

@@ -230,6 +230,7 @@ if ($node){ ?>
 Showing snapshots taking over <?=MIN_TRANS_TIME?>ms
 <?php
 cDebug::flush();
+
 $oTimes = cRender::get_times();
 $sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp,$trid, $oTimes);
 
@@ -237,6 +238,7 @@ $aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
 }else{
+	cRender::button("Analyse top ten slowest transactions", "transanalysis.php?$sTransQS");
 	?>
 		<table class="maintable" id="trans">
 			<thead><tr class="tableheader">

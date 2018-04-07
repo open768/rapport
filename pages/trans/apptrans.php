@@ -39,7 +39,7 @@ require_once("$root/inc/inc-render.php");
 //####################################################################
 // common functions
 $giTotalTrans = 0;
-function render_tier_transactions($poApp, $poTier){	
+function render_tier_transactions($poTier){	
 	global $giTotalTrans, $home;
 	
 	$oTimes = cRender::get_times();
@@ -58,7 +58,7 @@ function render_tier_transactions($poApp, $poTier){
 		$iCount = 0;
 
 		$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
-		$aStats = cAppdynCore::GET_MetricData($poApp->name, $sMetricpath, $oTimes,"true",false,true);
+		$aStats = cAppdynCore::GET_MetricData($poTier->app->name, $sMetricpath, $oTimes,"true",false,true);
 		$giTotalTrans += count($aStats);
 		cDebug::vardump($aStats, true);
 		foreach ($aStats as $oTrans){
@@ -154,6 +154,8 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 <div class="maintable"><?php
 	$giTotalTrans = 0;
 	foreach ( $aTiers as $oTier){
+		$oTier->app = $oApp;
+		
 		//get the transaction names for the Tier
 		if (cFilter::isTierFilteredOut($oTier->name)) continue;
 		if ($tid && ($oTier->id != $tid)) continue;
@@ -172,7 +174,7 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 		?><h2>Transactions for <?=$oTier->name?></h2><?php
 		cRenderMenus::show_tier_functions($oTier);
 		cRender::button("show transaction graphs", $sUrl);
-		render_tier_transactions($oApp, $oTier);
+		render_tier_transactions($oTier);
 	}
 	?><div class="<?=cRender::getRowClass()?>">
 			Total Transactions = <?=$giTotalTrans?>

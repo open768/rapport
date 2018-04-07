@@ -84,21 +84,21 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 <!-- ************************************************************** -->
 <H2>Snapshot Details for <span class="transaction"><?=$sSnapURL?></a></h2>
 <?php
-	$oData = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
+	$oSnapshot = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
 	/*
 		cDebug::on(true);
-		cDebug::vardump($oData,true);
+		cDebug::vardump($oSnapshot,true);
 		cDebug::off();
 	*/
 	$sDate = cAppdynUtil::timestamp_to_date($sSnapTime);
-	$trid=$oData->requestSegmentData->businessTransactionId;
+	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
 
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
-		<tr><th align="right">Business Transaction:</th><td><?=$oData->btName?></td></tr>
+		<tr><th align="right">Business Transaction:</th><td><?=$oSnapshot->btName?></td></tr>
 		<tr><th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
 		<tr><th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
-		<tr><th align="right">Number of Segments:</th><td><?=$oData->segmentCount?></td></tr>
+		<tr><th align="right">Number of Segments:</th><td><?=$oSnapshot->segmentCount?></td></tr>
 	</table>
 	<?php
 		$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
@@ -110,56 +110,17 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 <!-- ************************************************************** -->
 <H2>Segment Details</h2>
 <?php
-	$oSegment = $oData->requestSegmentData;
+	$oSegment = $oSnapshot->requestSegmentData;
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
-		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp->id,$oData->requestSegmentData->applicationComponentNodeId)?></td></tr>
+		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
 	</table><?php
 ?>
 <!-- ************************************************************** -->
-<H2>Potential Problems</h2>
-<H3>DB calls and Remote Service Calls</h3>
-<?php
-	cDebug::flush();
-	$aProblems = cAppDynRestUI::GET_snapshot_problems($oApp, $sSnapGUID, $sSnapTime);
-
-	if (count($aProblems) == 0)
-		cRender::messagebox("No problems found");
-	else{
-		?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 cellpadding="3" id="problems" width="100%">
-			<thead><tr>
-				<th width="200" colspan="2">Type</th>
-				<th width="50">Time (ms)</th>
-				<th >Detail</th>
-			</tr></thead>
-			<tbody><?php
-				foreach ($aProblems as $oProblem){
-					if ($oProblem->executionTimeMs < MIN_EXT_TIME) continue;
-					?><tr>
-						<td><?=$oProblem->subType?></td>
-						<td><?=$oProblem->problemType?></td>
-						<td><?=$oProblem->executionTimeMs?></td>
-						<td><?=htmlspecialchars($oProblem->message)?></td>
-					</tr><?php
-				}
-			?></tbody>
-		</table></div>
-		<script language="javascript">
-			$( function(){ $("#problems").tablesorter({
-				headers:{
-					3:{ sorter: 'digit' }
-				});
-			} );
-		</script>
-		
-		<?php
-	}
-?>
-<!-- ************************************************************** -->
-<H3>Slow methods - (minimum <?=MIN_TOTAL_TIME_METHOD?>ms)</h3>
+<H2>Slow methods - (minimum <?=MIN_TOTAL_TIME_METHOD?>ms)</h2>
 <?php
 	cDebug::flush();
 	$aData = cAppDynRestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
@@ -214,13 +175,13 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	cDebug::flush();
 	$bError = false;
 	try{
-		$oData = cAppDynRestUI::GET_snapshot_flow($oApp, $trid, $sSnapGUID, $sSnapTime);
+		$oSnapshot = cAppDynRestUI::GET_snapshot_flow($oSegment);
 	}catch (Exception $e){
 		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bError = true;
 	}
 	if (!$bError){		
-		$aNodes = $oData->nodes;
+		$aNodes = $oSnapshot->nodes;
 
 		foreach ($aNodes as $oNode){
 			?><h3><?=$oNode->name?></h3><?php
