@@ -238,7 +238,7 @@ $aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
 }else{
-	cRender::button("Analyse top ten slowest transactions", "transanalysis.php?$sTransQS");
+	cRender::button("Analyse top ten slowest transactions", "transanalysis.php?$sTransQS", true);
 	?>
 		<table class="maintable" id="trans">
 			<thead><tr class="tableheader">

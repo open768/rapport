@@ -29,7 +29,7 @@ require_once("$phpinc/ckinc/array.php");
 cSession::set_folder();
 session_start();
 cDebug::check_GET_or_POST();
-const HOWMANY=2;
+const HOWMANY=10;
 
 //####################################################################
 require_once("$phpinc/appdynamics/appdynamics.php");
@@ -87,33 +87,28 @@ function sort_time($a, $b){
 
 //*********************************************************************
 function analyse_snapshot($poSnapshot){
-	global $oApp, $trid, $oTable;
+	global $oTable;
 	
-	/*
-	cDebug::on(true);
-	cDebug::vardump($poSnapshot);
-	cDebug::off();
-	*/
-	
-	$oData = cAppDynRestUI::GET_snapshot_flow($poSnapshot);
 	$aExtCalls = cAppDynUtil::count_snapshot_ext_calls($poSnapshot);
+	if ($aExtCalls == null) return null;
 	
-	// to be done
+	$oTable->add_col_data($poSnapshot->requestGUID, $aExtCalls);
+	$oTable->set_col_info($poSnapshot->requestGUID, $poSnapshot);
 }
 
 //#####################################################################
 ?>
-
 <h2><a name="5">Top <?=HOWMANY?> slowest Transaction Snapshots</a></h2>
 <?php
-
-
-//#####################################################################
+$bProceed = true;
 $aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
-
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
-}else{
+	$bProceed = false;
+}
+
+//#####################################################################
+if ($bProceed){
 	//get the top ten slowest
 	uasort($aSnapshots , "sort_time");	
 	$aTopTen = [];
@@ -148,7 +143,9 @@ if (count($aSnapshots) == 0){
 					<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 					<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
 					<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
-					<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$oSnapshot->URL?></div></a></td>
+					<td><div style="max-width:200px;overflow-wrap:break-word;">
+						<a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=$oSnapshot->URL?></a>
+					</div></td>
 					<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
 					<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
 				</tr>
@@ -165,9 +162,11 @@ if (count($aSnapshots) == 0){
 		});
 
 	</script>
-	
 	<?php
-	//*****************************************************************	
+}
+
+//#####################################################################
+if ($bProceed){
 	?>
 	<h2>Analysis of Transactions External Calls</h2>
 	<div ID="progress"><?php
@@ -182,10 +181,46 @@ if (count($aSnapshots) == 0){
 			cDebug::flush();
 		}
 		echo "Analysis Complete";
+		//cDebug::on(true);
 	?></div>
-	<!-- <script language="javascript">$(function(){ $("#progress").hide()});</script> -->
+	<script language="javascript">$(function(){ $("#progress").hide()});</script>
 	
-	<?php
+	<table border="1" cellpadding="2" cellspacing="0">
+		<tr>
+			<td></td><?php
+			$aCols = $oTable->colNames();
+			foreach ($aCols as $sCol){
+				$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
+				$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
+				$oSnapshot = $oTable->get_col_info($sCol);
+				$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
+				$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $oSnapshot->URL);
+				$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
+				?><td>
+					<div style="max-width:150px;overflow-wrap:break-word;"><b>
+						<a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=$oSnapshot->URL?></a>
+					</b></div>
+					<?=$sDate?><br>
+					<b><?=$oSnapshot->timeTakenInMilliSecs?>ms</b>
+				</td><?php
+			}
+		?></tr><?php
+			
+		$aRows = $oTable->rowNames();
+		foreach ($aRows as $sRow){
+			?><tr>
+				<th><?=$sRow?></th><?php
+					foreach ($aCols as $sCol){
+						$oData = $oTable->get($sRow, $sCol);
+						?><td><?php
+							if ($oData !== null) echo $oData->count;
+						?></td><?php
+					}
+				?>
+			</tr><?php
+		}
+	?></table><?php
+		
 }
 
 

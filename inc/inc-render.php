@@ -463,19 +463,20 @@ class cRender{
 	}
 	
 	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
-		$sTarget = "";
-		$sID = "";
 		$sClass = "blue_button";
 		
-		if ($pbNewWindow) $sTarget = " target='new'";
+		if ($pbNewWindow) 
+			$sOnClick = "window.open(\"$psUrl\");";
+		else
+			$sOnClick = "document.location.href=\"$psUrl\"";
 		
 		if ($paParams !== null){
-			if (getF($paParams) !== "array") cDebug::error("expecting an array as the 4th parameter");
+			if (gettype($paParams) !== "array") cDebug::error("expecting an array as the 4th parameter");
 			if (array_key_exists("id", $paParams )) $sID=" id='".$paParams["id"]."'";
 			if (array_key_exists("class", $paParams )) $sClass.=" ".$paParams["class"];
 		}
 		
-		return "<button  $sTarget $sID class='$sClass' onclick='document.location.href=\"$psUrl\";return false;'>$psCaption</button>";
+		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
 	}
 	
 	//**************************************************************************
