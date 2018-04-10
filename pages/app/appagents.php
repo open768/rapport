@@ -143,11 +143,6 @@ function render_tier_agents($paNodes){
 	$aTierNodes = group_by_tier($paNodes);
 	foreach ($aTierNodes as $sTier=>$aNodes){
 		$oTier = cRenderObjs::make_tier_obj($oApp, $sTier, $aNodes[0]->tierId);
-		/*
-		cDebug::on(true);
-		cDebug::vardump($oTier);
-		cDebug::off();
-		*/
 		?><p><?php
 		cRenderMenus::show_tier_functions($oTier);
 		$sTierQS = cRender::build_tier_qs($oTier);

@@ -43,6 +43,13 @@ function render_tier_transactions($poTier){
 	global $giTotalTrans, $home;
 	
 	$oTimes = cRender::get_times();
+	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
+	try{
+	$aStats = cAppdynCore::GET_MetricData($poTier->app->name, $sMetricpath, $oTimes,"true",false,true);
+	}catch (Exception $e){
+		cRender::errorbox("Oops unable to retrieve Transaction names: ".$e);
+		return;
+	}
 
 	?><div class="<?=cRender::getRowClass()?>"><table border=1 cellspacing=0 id="<?=$poTier->id?>">
 		<thead><tr>
@@ -56,9 +63,7 @@ function render_tier_transactions($poTier){
 		$sTierQS = cRender::build_tier_qs($poTier);
 		$sBaseUrl = cHttp::build_url("../trans/transdetails.php", $sTierQS);
 		$iCount = 0;
-
-		$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
-		$aStats = cAppdynCore::GET_MetricData($poTier->app->name, $sMetricpath, $oTimes,"true",false,true);
+		
 		$giTotalTrans += count($aStats);
 		cDebug::vardump($aStats, true);
 		foreach ($aStats as $oTrans){

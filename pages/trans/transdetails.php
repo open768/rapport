@@ -253,12 +253,16 @@ if (count($aSnapshots) == 0){
 			<tbody><?php
 				foreach ($aSnapshots as $oSnapshot){
 					if ($oSnapshot->timeTakenInMilliSecs < MIN_TRANS_TIME) continue;
+
+					$sOriginalUrl = $oSnapshot->URL;
+					if ($sOriginalUrl === "") $sOriginalUrl = $trans;
+					
 					$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
 					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
 					$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $oSnapshot->requestGUID, $oTimes);
 					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
 					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $oSnapshot->URL);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
 					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
 					
 					?>
@@ -267,7 +271,7 @@ if (count($aSnapshots) == 0){
 						<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
 						<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
-						<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$oSnapshot->URL?></div></a></td>
+						<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$sOriginalUrl?></div></a></td>
 						<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
 						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
 					</tr>

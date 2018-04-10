@@ -150,6 +150,7 @@ function render_app_agents(){
 			<th>Application</th>
 			<th>Tier</th>
 			<th>Hostname</th>
+			<th>Node</th>
 			<th>Version</th>
 			<th>Installed</th>
 			<th>Runtime</th>			
@@ -160,6 +161,7 @@ function render_app_agents(){
 				<td><?=$oAgent->applicationName?></td>
 				<td><?=$oAgent->applicationComponentName?></td>
 				<td><?=$oAgent->hostName?></td>
+				<td><?=$oAgent->applicationComponentNodeName?></td>
 				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
 				<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
 				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>

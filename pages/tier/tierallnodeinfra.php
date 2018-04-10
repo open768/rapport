@@ -51,22 +51,18 @@ cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE;
 
-//####################################################################
-// huge time limit as this takes a long time//display the results
-set_time_limit(200); 
-
 //get passed in values
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
+
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 $oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 
-$title = "$oApp->name&gt;$tier&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
+$title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 
 //stuff for later
 $sAppQS = cRender::get_base_app_QS();
 $sTierQS = cRender::get_base_tier_QS();
-$oApp = cRenderObjs::get_current_app();
 
 // show time options
 cRender::show_time_options($title); 
@@ -99,7 +95,7 @@ if (cAppdyn::is_demo()){
 	<?php
 		$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQS);
 		foreach ( $aMetrics as $sType){
-			$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier,null,$sType);
+			$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,null,$sType);
 			?>
 				<option <?=($sType==$sMetricType?"disabled":"")?> value="<?=cHttp::build_url($sAllInfraUrl, cRender::METRIC_TYPE_QS, $sType)?>"><?=$oMetric->short?></option>
 			<?php
@@ -122,13 +118,13 @@ $(
 <?php
 
 //data for the page
-$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
+$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$oTier->name);	
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 	
 //####################################################################
 ?>
-<h2><?=$oMetricDetails->caption?> for all Servers in (<?=$tier?>) Tier</h2>
+<h2><?=$oMetricDetails->caption?> for all Servers in (<?=$oTier->name?>) Tier</h2>
 <p>
 <?php
 	$sDiskUrl = cHttp::build_url("nodedisks.php", $sTierQS);
@@ -141,7 +137,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 		$sNode = $oNode->name;
 		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
-		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier,$sNode, $sMetricType);
+		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
 		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier", cChart::HIDEIFNODATA=>1];
 	}

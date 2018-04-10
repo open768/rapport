@@ -40,7 +40,7 @@ require_once("$root/inc/inc-filter.php");
 CONST MIN_TOTAL_TIME_REMOTE=150;
 CONST MIN_TOTAL_TIME_METHOD=40;
 CONST MIN_EXT_TIME=100;
-CONST MIN_EXT_COUNT=10;
+CONST MIN_EXT_COUNT=20;
 
 //####################################################################
 $trans = cHeader::get(cRender::TRANS_QS);
@@ -77,19 +77,15 @@ $oTime = cAppdynUtil::make_time_obj($sSnapTime);
 cAppDynRestUI::$oTimes = cRender::get_times();
 $sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $sSnapGUID, $oTime);
 
-cDebug::flush();cRender::appdButton($sAppdUrl);
+cRender::appdButton($sAppdUrl);
 if ($trid=="")	cRender::messagebox("trid is missing");
 
 ?>
 <!-- ************************************************************** -->
-<H2>Snapshot Details for <span class="transaction"><?=$sSnapURL?></a></h2>
+<H2>Snapshot Details for <span class="transaction"><?=$sSnapURL?></span></h2>
 <?php
+	cDebug::flush();
 	$oSnapshot = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
-	/*
-		cDebug::on(true);
-		cDebug::vardump($oSnapshot,true);
-		cDebug::off();
-	*/
 	$sDate = cAppdynUtil::timestamp_to_date($sSnapTime);
 	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
 
@@ -105,34 +101,95 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 		$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 		cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
 	?>
-
-	
 <!-- ************************************************************** -->
 <H2>Segment Details</h2>
 <?php
+	cDebug::flush();
 	$oSegment = $oSnapshot->requestSegmentData;
-	$sClass = cRender::getRowClass();
-	?><table class="<?=$sClass?>">
+	?><table class="<?=cRender::getRowClass();?>">
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
 		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
-	</table><?php
+	</table>
+	
+<!-- ************************************************************** -->
+<h2>Http Parameters</h2>
+<?php
+	cDebug::flush();
+	$bProceed = true;
+	if (count($oSegment->httpParameters)==0){
+		cRender::messagebox("no http parameters captured");
+		$bProceed = false;
+	}
+	if ($bProceed){
+		?><table border="1" cellpadding="3" cellspacing="0" class="<?=cRender::getRowClass();?>">
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr><?php
+			foreach ($oSegment->httpParameters as $oParam){
+				?><tr>
+					<td align="right"><?=$oParam->name?></td>
+					<td><?=$oParam->value?></td>
+				</tr><?php
+			}
+		?></table><?php
+	}
+?>
+
+<!-- ************************************************************** -->
+<H2>All External Calls Made</h2>
+<?php
+	cDebug::flush();
+	$oFlow = null;
+	$bProceed = true;
+	try{
+		$oFlow = cAppDynRestUI::GET_snapshot_flow($oSegment);
+	}catch (Exception $e){
+		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
+		$bProceed = false;
+	}
+	
+	if ($bProceed){
+		$oExtCalls = cAppDynUtil::count_flow_ext_calls($oFlow);
+		if ($oExtCalls == null) 
+			cDebug::error("Unable to count external calls");
+		else{
+			?><table border="1" cellpadding="3" cellspacing="0" class="<?=cRender::getRowClass();?>">
+				<tr>
+					<th>External Call</th>
+					<th>Count</th>
+					<th>total elapsed time</th>
+				</tr><?php
+				$aKeys = $oExtCalls->keys();
+				foreach ($aKeys as $sKey){
+					$oCounter = $oExtCalls->get($sKey);
+					?><tr>
+						<td><?=$sKey?></td>
+						<td><?=$oCounter->count?></td>
+						<td><?=$oCounter->totalTime?> ms</td>
+					</tr><?php
+				}
+			?></table><?php
+		}
+	}
 ?>
 <!-- ************************************************************** -->
 <H2>Slow methods - (minimum <?=MIN_TOTAL_TIME_METHOD?>ms)</h2>
 <?php
 	cDebug::flush();
-	$aData = cAppDynRestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
+	$bProceed = true;
+	try{
+		$aData = cAppDynRestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
+	}catch (Exception $e){
+		cRender::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
+		$bProceed = false;
+	}
 
-	if (count($aData) == 0){
+	if (!$bProceed || (count($aData) == 0)){
 		cRender::messagebox("no data found");
 	}else{
-		/*
-		cDebug::on(true);
-		cDebug::vardump($aData);
-		cDebug::off();
-		*/
 		?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW__METHODS" >
 			<thead><tr>
 				<th width="50">Total time (ms)</th>
@@ -170,75 +227,149 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	}
 ?>
 <!-- ************************************************************** -->
-<H2>Slow DB and Remote Service Calls - (minimum <?=MIN_TOTAL_TIME_REMOTE?>ms)</h2>
 <?php
 	cDebug::flush();
 	$bError = false;
 	try{
-		$oSnapshot = cAppDynRestUI::GET_snapshot_flow($oSegment);
+		$oFlow = cAppDynRestUI::GET_snapshot_flow($oSegment);
 	}catch (Exception $e){
 		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bError = true;
 	}
 	if (!$bError){		
-		$aNodes = $oSnapshot->nodes;
+		$aNodes = $oFlow->nodes;
 
 		foreach ($aNodes as $oNode){
-			?><h3><?=$oNode->name?></h3><?php
-						
+			?><h2><?=$oNode->name?></h2><?php
 			$aSegments = $oNode->requestSegmentDataItems;
 			if (count($aSegments)==0) {
 				cRender::messagebox("No data found");
 				continue;
 			}
-			
-			?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
-				<thead><tr>
-					<th width="50">Total time (ms)</th>
-					<th width="50">Type</th>
-					<th width="300">Called By</th>
-					<th >Detail</th>
-					<th width="50">Count</th>
-					<th width="50">Avg time (ms)</th>
-				</tr></thead>
-				<tbody><?php
-				foreach ($aSegments as $oSegment){
-					$aExitCalls = $oSegment->exitCalls;
-					foreach ($aExitCalls as $oExitCall){
-						if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME_REMOTE && $oExitCall->count < MIN_EXT_COUNT) continue;
-						
-						/*cDebug::on(true);
-						cDebug::vardump($oExitCall);
-						cDebug::off();
-						*/
-						$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
-						?><tr>
-							<td><?=$oExitCall->timeTakenInMillis?></td>
-							<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
-							<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
-							<td><?=htmlspecialchars($oExitCall->detailString)?></td>
-							<td><?=$oExitCall->count?></td>
-							<td><?=$avg?></td>
-						</tr><?php
-					}
+			?><h3>Slow DB and Remote Service Calls - (minimum <?=MIN_TOTAL_TIME_REMOTE?>ms)</h3><?php
+				//extract the slow calls
+				$iElapsed = 0;
+				$iElapsedAll = 0;
+				
+				function sort_by_time($a,$b){
+					return strnatcmp($b->timeTakenInMillis, $a->timeTakenInMillis);
 				}
-				?></tbody>
-			</table></div>
-			<script language="javascript">
-				$( function(){ 
-					$("#SLOW<?=$oNode->name?>").tablesorter({
-						headers:{
-							1:{ sorter: 'digit' },
-							5:{ sorter: 'digit' },
-							6:{ sorter: 'digit' }
-						}
+				$aExitCalls = [];
+				foreach ($aSegments as $oSegment)
+					foreach ($oSegment->exitCalls as $oExitCall){
+						$iElapsedAll += $oExitCall->timeTakenInMillis;
+						if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME_REMOTE) continue;
+						$aExitCalls[] = $oExitCall;
+					}
+				uasort($aExitCalls, "sort_by_time");
+				
+				//render
+				?><div class="<?=cRender::getRowClass()?>">
+					<table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
+						<thead><tr>
+							<th width="50">Total time (ms)</th>
+							<th width="50">Type</th>
+							<th width="300">Called By</th>
+							<th >Detail</th>
+							<th width="50">Count</th>
+							<th width="50">Avg time (ms)</th>
+						</tr></thead>
+						<tbody><?php
+							foreach ($aExitCalls as $oExitCall){
+								$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
+								$iElapsed += $oExitCall->timeTakenInMillis;
+								?><tr>
+									<td><?=$oExitCall->timeTakenInMillis?></td>
+									<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
+									<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
+									<td><?=htmlspecialchars($oExitCall->detailString)?></td>
+									<td><?=$oExitCall->count?></td>
+									<td><?=$avg?></td>
+								</tr><?php
+							}
+						?></tbody>
+					</table>
+					<h3>Total time taken for all remote calls: <?=$iElapsedAll?> ms, 
+					of which slow calls account for: <?=$iElapsed?> ms</h3>
+				</div>
+				<script language="javascript">
+					$( function(){ 
+						$("#SLOW<?=$oNode->name?>").tablesorter({
+							headers:{
+								1:{ sorter: 'digit' },
+								5:{ sorter: 'digit' },
+								6:{ sorter: 'digit' }
+							}
+						});
 					});
-				});
-			</script>
-			<?php
+				</script>
+			<!-- ************************************************************** -->	
+			<h3>High Frequency Calls  (minimum <?=MIN_EXT_COUNT?> calls)</h3><?php
+				$iElapsed = 0;
+				$iElapsedAll = 0;
+				
+				//extract the exit calls we're interested in
+				$aExitCalls = [];
+				foreach ($aSegments as $oSegment)
+					foreach ($oSegment->exitCalls as $oExitCall){
+						$iElapsedAll += $oExitCall->timeTakenInMillis;
+						if ($oExitCall->count < MIN_EXT_COUNT) continue;
+						$aExitCalls[] = $oExitCall;
+					}
+				function sort_by_count($a,$b){
+					return strnatcmp($b->count, $a->count);
+				}
+				uasort($aExitCalls, "sort_by_count")
+				
+				//render
+				?><div class="<?=cRender::getRowClass()?>">
+					<table border="1" cellspacing="0" id="REPT<?=$oNode->name?>" width="100%">
+						<thead><tr>
+							<th width="50">Total time (ms)</th>
+							<th width="50">Type</th>
+							<th width="300">Called By</th>
+							<th >Detail</th>
+							<th width="50">Count</th>
+							<th width="50">Avg time (ms)</th>
+						</tr></thead>
+						<tbody><?php
+						foreach ($aExitCalls as $oExitCall){
+							$iElapsed += $oExitCall->timeTakenInMillis;
+							
+							$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
+							?><tr>
+								<td><?=$oExitCall->timeTakenInMillis?></td>
+								<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
+								<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
+								<td><?=htmlspecialchars($oExitCall->detailString)?></td>
+								<td><?=$oExitCall->count?></td>
+								<td><?=$avg?></td>
+							</tr><?php
+						}
+						?></tbody>
+					</table>
+					<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
+					of which high frequency calls account for: <?=$iElapsed?> ms</h3>
+				</div>
+				<script language="javascript">
+					$( function(){ 
+						$("#REPT<?=$oNode->name?>").tablesorter({
+							headers:{
+								1:{ sorter: 'digit' },
+								5:{ sorter: 'digit' },
+								6:{ sorter: 'digit' }
+							}
+						});
+					});
+				</script><?php
 		}
 	}
-	
+?>
+<!-- ************************************************************** -->
+<H2>High Frequency Calls - (minimum <?=MIN_EXT_COUNT?> repetitions)</h2>
+<?php
+
+		
 // ################################################################################
 cRender::html_footer();
 ?>

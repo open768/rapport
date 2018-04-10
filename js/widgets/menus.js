@@ -213,7 +213,7 @@ $.widget( "ck.appdmenu",{
 			oParams = {};
 			oParams[cMenus.IGNORE_REF_QS] = 1;
 			this.pr__addToGroup( oSelect, "About...", oOptions.home +"/pages/about.php");
-			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl(oOptions.home +"/pages/index.php", oParams));
+			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl(oOptions.home +"/index.php", oParams));
 			this.pr__addToGroup( oSelect, "Login Token", oOptions.home +"/pages/authtoken.php");
 			this.pr__addToGroup( oSelect, "Link to this page", oOptions.home +"/pages/link.php");
 			
