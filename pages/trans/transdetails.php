@@ -86,17 +86,10 @@ uasort($aNodes , "sort_nodes");
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){?>
 	<select id="showMenu">
-		<optgroup label="General">
-			<option selected disabled>Show...</option>
+		<optgroup label="Nodes">
 			<?php
 				if ($node){
 					?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
-				}
-			?>
-			<option value="apptrans.php?<?=$sAppQS?>"><?=($oApp->name)?> <i>app</i></option>
-			<option value="apptrans.php?<?=$sFilterTierQS?>"><?=($tier)?> <i>tier</i></option>
-			<?php
-				if ($node){ 
 					$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $node);
 					?><option value="tiertransgraph.php?<?=$sNodeQs?>">
 						(<?=($node)?>) server
@@ -104,7 +97,7 @@ if ($oCred->restricted_login == null){?>
 				}
 			?>
 		</optgroup>
-		<optgroup label="Servers for this transaction">
+		<optgroup label="Nodes">
 		<?php
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
@@ -235,6 +228,8 @@ $oTimes = cRender::get_times();
 $sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp,$trid, $oTimes);
 
 $aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
+cDebug::vardump($aSnapshots);
+
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
 }else{

@@ -42,6 +42,13 @@ CONST MIN_TOTAL_TIME_METHOD=40;
 CONST MIN_EXT_TIME=100;
 CONST MIN_EXT_COUNT=20;
 
+function sort_by_count($a,$b){
+	return strnatcmp($b->count, $a->count);
+}
+function sort_by_time($a,$b){
+	return strnatcmp($b->timeTakenInMillis, $a->timeTakenInMillis);
+}
+
 //####################################################################
 $trans = cHeader::get(cRender::TRANS_QS);
 cRender::html_header("Snapshot - $trans");
@@ -86,6 +93,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 <?php
 	cDebug::flush();
 	$oSnapshot = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
+	cDebug::vardump($oSnapshot);
 	$sDate = cAppdynUtil::timestamp_to_date($sSnapTime);
 	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
 
@@ -246,14 +254,12 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 				cRender::messagebox("No data found");
 				continue;
 			}
+			
 			?><h3>Slow DB and Remote Service Calls - (minimum <?=MIN_TOTAL_TIME_REMOTE?>ms)</h3><?php
 				//extract the slow calls
 				$iElapsed = 0;
 				$iElapsedAll = 0;
 				
-				function sort_by_time($a,$b){
-					return strnatcmp($b->timeTakenInMillis, $a->timeTakenInMillis);
-				}
 				$aExitCalls = [];
 				foreach ($aSegments as $oSegment)
 					foreach ($oSegment->exitCalls as $oExitCall){
@@ -261,50 +267,55 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 						if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME_REMOTE) continue;
 						$aExitCalls[] = $oExitCall;
 					}
-				uasort($aExitCalls, "sort_by_time");
-				
-				//render
-				?><div class="<?=cRender::getRowClass()?>">
-					<table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
-						<thead><tr>
-							<th width="50">Total time (ms)</th>
-							<th width="50">Type</th>
-							<th width="300">Called By</th>
-							<th >Detail</th>
-							<th width="50">Count</th>
-							<th width="50">Avg time (ms)</th>
-						</tr></thead>
-						<tbody><?php
-							foreach ($aExitCalls as $oExitCall){
-								$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
-								$iElapsed += $oExitCall->timeTakenInMillis;
-								?><tr>
-									<td><?=$oExitCall->timeTakenInMillis?></td>
-									<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
-									<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
-									<td><?=htmlspecialchars($oExitCall->detailString)?></td>
-									<td><?=$oExitCall->count?></td>
-									<td><?=$avg?></td>
-								</tr><?php
-							}
-						?></tbody>
-					</table>
-					<h3>Total time taken for all remote calls: <?=$iElapsedAll?> ms, 
-					of which slow calls account for: <?=$iElapsed?> ms</h3>
-				</div>
-				<script language="javascript">
-					$( function(){ 
-						$("#SLOW<?=$oNode->name?>").tablesorter({
-							headers:{
-								1:{ sorter: 'digit' },
-								5:{ sorter: 'digit' },
-								6:{ sorter: 'digit' }
-							}
+				if (count($aExitCalls) == 0)
+					cRender::messagebox("no Slow remote calls found");
+				else{
+					uasort($aExitCalls, "sort_by_time");
+					
+					//render
+					?><div class="<?=cRender::getRowClass()?>">
+						<table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
+							<thead><tr>
+								<th width="50">Total time (ms)</th>
+								<th width="50">Type</th>
+								<th width="300">Called By</th>
+								<th >Detail</th>
+								<th width="50">Count</th>
+								<th width="50">Avg time (ms)</th>
+							</tr></thead>
+							<tbody><?php
+								foreach ($aExitCalls as $oExitCall){
+									$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
+									$iElapsed += $oExitCall->timeTakenInMillis;
+									?><tr>
+										<td><?=$oExitCall->timeTakenInMillis?></td>
+										<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
+										<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
+										<td><?=htmlspecialchars($oExitCall->detailString)?></td>
+										<td><?=$oExitCall->count?></td>
+										<td><?=$avg?></td>
+									</tr><?php
+								}
+							?></tbody>
+						</table>
+						<b>Total time taken for all remote calls: <?=$iElapsedAll?> ms, 
+						of which slow calls account for: <?=$iElapsed?> ms</b>
+					</div>
+					<script language="javascript">
+						$( function(){ 
+							$("#SLOW<?=$oNode->name?>").tablesorter({
+								headers:{
+									1:{ sorter: 'digit' },
+									5:{ sorter: 'digit' },
+									6:{ sorter: 'digit' }
+								}
+							});
 						});
-					});
-				</script>
-			<!-- ************************************************************** -->	
-			<h3>High Frequency Calls  (minimum <?=MIN_EXT_COUNT?> calls)</h3><?php
+					</script><?php
+				}
+				
+			//***********************************************************************
+			?><h3>High Frequency Calls  (minimum <?=MIN_EXT_COUNT?> calls)</h3><?php
 				$iElapsed = 0;
 				$iElapsedAll = 0;
 				
@@ -316,57 +327,56 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 						if ($oExitCall->count < MIN_EXT_COUNT) continue;
 						$aExitCalls[] = $oExitCall;
 					}
-				function sort_by_count($a,$b){
-					return strnatcmp($b->count, $a->count);
-				}
-				uasort($aExitCalls, "sort_by_count")
-				
-				//render
-				?><div class="<?=cRender::getRowClass()?>">
-					<table border="1" cellspacing="0" id="REPT<?=$oNode->name?>" width="100%">
-						<thead><tr>
-							<th width="50">Total time (ms)</th>
-							<th width="50">Type</th>
-							<th width="300">Called By</th>
-							<th >Detail</th>
-							<th width="50">Count</th>
-							<th width="50">Avg time (ms)</th>
-						</tr></thead>
-						<tbody><?php
-						foreach ($aExitCalls as $oExitCall){
-							$iElapsed += $oExitCall->timeTakenInMillis;
-							
-							$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
-							?><tr>
-								<td><?=$oExitCall->timeTakenInMillis?></td>
-								<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
-								<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
-								<td><?=htmlspecialchars($oExitCall->detailString)?></td>
-								<td><?=$oExitCall->count?></td>
-								<td><?=$avg?></td>
-							</tr><?php
-						}
-						?></tbody>
-					</table>
-					<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
-					of which high frequency calls account for: <?=$iElapsed?> ms</h3>
-				</div>
-				<script language="javascript">
-					$( function(){ 
-						$("#REPT<?=$oNode->name?>").tablesorter({
-							headers:{
-								1:{ sorter: 'digit' },
-								5:{ sorter: 'digit' },
-								6:{ sorter: 'digit' }
+				if (count($aExitCalls) == 0)
+					cRender::messagebox("No High Frequency Calls found");
+				else{
+					uasort($aExitCalls, "sort_by_count")
+					
+					//render
+					?><div class="<?=cRender::getRowClass()?>">
+						<table border="1" cellspacing="0" id="REPT<?=$oNode->name?>" width="100%">
+							<thead><tr>
+								<th width="50">Type</th>
+								<th width="50">Count</th>
+								<th width="50">Total time (ms)</th>
+								<th width="50">Avg time (ms)</th>
+								<th width="300">Called By</th>
+								<th >Detail</th>
+							</tr></thead>
+							<tbody><?php
+							foreach ($aExitCalls as $oExitCall){
+								$iElapsed += $oExitCall->timeTakenInMillis;
+								
+								$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
+								?><tr>
+									<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
+									<td><?=$oExitCall->count?></td>
+									<td><?=$oExitCall->timeTakenInMillis?></td>
+									<td><?=$avg?></td>
+									<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
+									<td><?=htmlspecialchars($oExitCall->detailString)?></td>
+								</tr><?php
 							}
+							?></tbody>
+						</table>
+						<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
+						of which high frequency calls account for: <?=$iElapsed?> ms</h3>
+					</div>
+					<script language="javascript">
+						$( function(){ 
+							$("#REPT<?=$oNode->name?>").tablesorter({
+								headers:{
+									1:{ sorter: 'digit' },
+									5:{ sorter: 'digit' },
+									6:{ sorter: 'digit' }
+								}
+							});
 						});
-					});
-				</script><?php
+					</script><?php
+				}
 		}
 	}
 ?>
-<!-- ************************************************************** -->
-<H2>High Frequency Calls - (minimum <?=MIN_EXT_COUNT?> repetitions)</h2>
 <?php
 
 		

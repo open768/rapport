@@ -39,8 +39,10 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
+$sBaseQs = cRender::build_tier_qs($oTier);
+
 $SHOW_PROGRESS=true;
 
 //####################################################################
@@ -75,13 +77,23 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_transactions($oApp, $oTier),"
 	$sClass = cRender::getRowClass();			
 	$aMetrics = [];
 	$sMetricUrl=cAppDynMetric::appCallsPerMin();
-	$aMetrics[]= [cChart::LABEL=>"Overall Calls per min ($oApp->name) application", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass()];
+	$aMetrics[]= [	cChart::LABEL=>"Overall Calls per min ($oApp->name) application", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),	];
 	$sMetricUrl=cAppDynMetric::appResponseTimes();
 	$aMetrics[]= [cChart::LABEL=>"Overall response time in ms ($oApp->name) application", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
-	$aMetrics[]= [cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass()];
+	
+	$sQs = cHttp::build_qs($sBaseQs, cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_ACTIVITY);
+	$aMetrics[]= [
+		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
+		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
+	];
+	
+	$sQs = cHttp::build_qs($sBaseQs, cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_RESPONSE_TIMES);
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
-	$aMetrics[]= [cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	$aMetrics[]= [
+		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
+		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
+	];
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
 ?>
 <h2>(<?=$oTier->name?>) Dashboard</h2>

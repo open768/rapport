@@ -635,7 +635,7 @@ class cRender{
 					?></select></td>
 					<td width=80 align="middle"><?php
 						$sUrl = urlencode($sUrl);
-						self::button("<i>Custom</i>", "customtime.php?url=$sUrl", false);
+						self::button("<i>Custom</i>", "$home/pages/customtime.php?url=$sUrl", false);
 					?></td>
 					<td align="right" class="logoimage"></td>
 				</tr></table>
