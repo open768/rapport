@@ -69,11 +69,13 @@ if ($oCred->restricted_login == null){
 }
 cRender::appdButton(cAppDynControllerUI::tier($oApp, $oTier));
 cRender::appdButton(cAppDynControllerUI::tier_slow_transactions($oApp, $oTier),"Slow Transactions");
+cDebug::flush();
 
 //####################################################################
-?>
-<h2>Activity</h2>
-<?php
+?><br><?php
+cRender::button("Show Transactions", "../trans/apptrans.php?$sBaseQs");
+
+?><h2>Activity</h2><?php
 	$sClass = cRender::getRowClass();			
 	$aMetrics = [];
 	$sMetricUrl=cAppDynMetric::appCallsPerMin();
@@ -95,8 +97,9 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_transactions($oApp, $oTier),"
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	cChart::metrics_table($oApp, $aMetrics, 2, $sClass);
+	cDebug::flush();
 ?>
-<h2>(<?=$oTier->name?>) Dashboard</h2>
+<h2>(<?=cRender::show_tier_name($oTier)?>) Dashboard</h2>
 <?php
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cAppDynMetric::tierSlowCalls($oTier->name),cChart::STYLE=>cRender::getRowClass()];

@@ -213,12 +213,15 @@ class cRenderObjs{
 	
 	//**************************************************************************
 	public static function get_appd_credentials(){
+		cDebug::enter();
 		$oCred = self::$oAppDCredentials;
 		if (!$oCred){
+			cDebug::extra_debug("got credentials");
 			$oCred = new cAppDynCredentials;
 			$oCred->check();
 			self::$oAppDCredentials = $oCred;
 		}
+		cDebug::leave();
 		return $oCred;
 	}
 	
@@ -359,8 +362,11 @@ class cRender{
 
 	//**************************************************************************
 	public static function force_login(){
+		global $home;
+		cDebug::enter();
 		try{
 			$oCred = cRenderObjs::get_appd_credentials();
+			cDebug::leave();
 			return $oCred->logged_in();
 		}
 		catch (Exception $e)
@@ -368,9 +374,10 @@ class cRender{
 			$sMsg = $e->getMessage();
 			self::show_top_banner("not logged in "); 
 			self::errorbox("there was a problem logging in - $sMsg");
-			self::button("Back to login", "index.php", false);
+			self::button("Back to login", "$home/index.php", false);
 			die;
 		}
+		cDebug::leave();
 	}
 	
 	//**************************************************************************
@@ -453,17 +460,41 @@ class cRender{
 
 	//**************************************************************************
 	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login &&  !strpos($psUrl,"index.php")){
-			?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
-			return;
+		global $home;
+		$bShow = false;
+		$oCred = null;
+		cDebug::enter();
+		
+		if ($psUrl === "$home/index.php")	{
+			cDebug::write("showing login page");
+			$bShow = true;
 		}
 		
-		echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams);
+		if (! $bShow){
+			try{
+				$oCred = cRenderObjs::get_appd_credentials();
+				$bShow = true;
+			}
+			catch (Exception $e){
+			}
+		}
+
+		if ($oCred !== null)
+			if ($oCred->restricted_login){
+					?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
+					cDebug::leave();
+					return;
+			}
+		
+		if ($bShow)
+			echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams);
+		
+		cDebug::leave();
 	}
 	
 	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
 		$sClass = "blue_button";
+		cDebug::enter();
 		
 		if ($pbNewWindow) 
 			$sOnClick = "window.open(\"$psUrl\");";
@@ -476,6 +507,7 @@ class cRender{
 			if (array_key_exists("class", $paParams )) $sClass.=" ".$paParams["class"];
 		}
 		
+		cDebug::leave();
 		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
 	}
 	
@@ -599,7 +631,21 @@ class cRender{
 		<?php
 	}
 	
-
+	//**************************************************************************
+	public static function show_extcall_name($psExt){
+		?><span class="external_name"><?=$psExt?></span><?php
+	}
+	
+	//**************************************************************************
+	public static function show_tier_name($poTier){
+		?><span class="tier_name"><?=$poTier->name?></span><?php
+	}
+	
+	//**************************************************************************
+	public static function show_app_name($poApp){
+		?><span class="app_name"><?=$poApp->name?></span><?php
+	}
+	
 	//**************************************************************************
 	public static function show_time_options( $psTitle){
 		global $_SERVER,$home;

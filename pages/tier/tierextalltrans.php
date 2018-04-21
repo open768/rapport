@@ -65,7 +65,7 @@ $sUrl = cHttp::build_url("appexttiers.php", $sExtQS);
 //####################################################################
 ?>
 <!-- ************************************************** -->
-<h2>All Calls to <?=$sExt?></h2>
+<h2>All Calls from <?=cRender::show_tier_name($oTier)?> to <?=cRender::show_extcall_name($sExt)?></h2>
 <?php
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"$oTier->name - Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($oTier->name,$sExt)];
@@ -75,7 +75,7 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 //####################################################################
 ?>
 <p>
-<h2>All Transactions calling External Service</h2>
+<h2>All Transactions in <?=cRender::show_tier_name($oTier)?> calling <?=cRender::show_extcall_name($sExt)?></h2>
 <?php
 //-----------------------------------------------
 
@@ -89,7 +89,7 @@ foreach ( $aTrans as $oTrans){
 	$sUrl = cHttp::build_url("$home/pages/trans/transdetails.php", $sUrl);
 	
 	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name - Calls per min", 
+		cChart::LABEL=>"$oTrans->name - Calls per min from Tier", 
 		cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name,$oTrans->name),
 		cChart::GO_URL => $sUrl,
 		cChart::GO_HINT => "Transaction",

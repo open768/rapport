@@ -62,8 +62,27 @@ h2
 	font-weight:bold;
 }
 
-.appd_button
-{
+.tier_name{
+	/*border:1px solid LightSlateGray;*/
+	background-image: url("tier.png");
+    background-repeat: no-repeat;
+    background-position: left top;
+	padding-left:7px;
+	color:Indigo ;
+}
+
+.external_name{
+	/*border:1px solid LightSlateGray;*/
+	background-image: url("external.png");
+    background-repeat: no-repeat;
+    background-position: left top;
+	padding-left:7px;
+	color:#2d004d ;
+}
+
+
+
+.appd_button{
 	/* This button was generated using CSSButtonGenerator.com */
 	-moz-box-shadow:inset 0px 1px 0px 0px #97c4fe;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
