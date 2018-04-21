@@ -40,8 +40,8 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); // huge time limit as this takes a long time
 
 //display the results
-$oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 
 $gsTierQs = cRender::get_base_tier_QS();
 
@@ -75,7 +75,7 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 
 //************* basic information about the tier *********************
 ?>
-<h2>External calls made from (<?=$oTier->name?>) tier</h2>
+<h2>External calls made from <?=cRender::show_tier_name($oTier)?> tier</h2>
 <h3>Overall Stats for tier</h3>
 <?php
 	

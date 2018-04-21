@@ -37,8 +37,8 @@ require_once("$root/inc/inc-render.php");
 
 
 //-----------------------------------------------
-$oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 $gsTierQS = cRender::get_base_tier_QS();
 
 //####################################################################
@@ -122,7 +122,7 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Errors</h2>
+<h2>Errors for <?=cRender::show_tier_name($oTier)?></h2>
 <?php
 	cDebug::flush();
 	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");

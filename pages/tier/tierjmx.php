@@ -56,16 +56,16 @@ cChart::$width=cChart::CHART_WIDTH_LARGE;
 set_time_limit(200); 
 
 //get passed in values
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 $node = cHeader::get(cRender::NODE_QS);
 $gsMetric = cHeader::get(cRender::METRIC_TYPE_QS);
 
 // show time options
-$title = "$oApp->name&gt;$tier&gt;Infrastructure&gt;JMX";
+$title = "$oApp->name&gt;$oTier->name&gt;Infrastructure&gt;JMX";
 cRender::show_time_options($title); 
 $showlink = cCommon::get_session($LINK_SESS_KEY);
-if (!$tier){
+if (!$oTier->name){
 	cRender::errorbox("no Tier parameter found");
 	exit;
 }
@@ -82,7 +82,7 @@ $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 
 //####################################################################
 //other buttons
-$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
+$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$oTier->name);	
 
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
@@ -100,9 +100,9 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 			$sTierUrl = cHttp::build_url($sTierUrl, cRender::TIER_QS, $oTier->name);
 			$sTierUrl = cHttp::build_url($sTierUrl, cRender::TIER_ID_QS, $oTier->id);
 			
-			$bDisabled = (($oTier->name == $tier) && ($node==null));
+			$bDisabled = (($oTier->name == $oTier->name) && ($node==null));
 			$sDisabled = ($bDisabled?"disabled":"");
-			?><option <?=$sDisabled?> value="<?=$sTierUrl?>">(<?=$oTier->name?>) tier</option><?php
+			?><option <?=$sDisabled?> value="<?=$sTierUrl?>"><?=cRender::show_tier_name($oTier)?> tier</option><?php
 		}
 	?></optgroup>
 	<optgroup label="Individual Servers"><?php
@@ -123,10 +123,10 @@ $(
 
 
 //####################################################################
-$aPools = cAppdyn::GET_JDBC_Pools($oApp->name,$tier,$node);
+$aPools = cAppdyn::GET_JDBC_Pools($oApp->name,$oTier->name,$node);
 cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 ?>
-<h2>JDBC Pools for (<?=$tier?>) Tier</h2>
+<h2>JDBC Pools for <?=cRender::show_tier_name($oTier)?></h2>
 <?php
 if ($node){
 	?><h3>(<?=$node?>) Node</h3><?php
@@ -145,11 +145,11 @@ if ($node){
 		?><tr class="<?=cRender::getRowClass()?>">
 			<td><?=$sPool?></td>
 			<td><?php
-				$sMetric = cAppDynMetric::InfrastructureJDBCPoolActive($tier,$node, $sPool);
+				$sMetric = cAppDynMetric::InfrastructureJDBCPoolActive($oTier->name,$node, $sPool);
 				cChart::add("active connections" , $sMetric, $oApp->name, 100);
 			?></td>
 			<td><?php
-				$sMetric = cAppDynMetric::InfrastructureJDBCPoolMax($tier,$node, $sPool);
+				$sMetric = cAppDynMetric::InfrastructureJDBCPoolMax($oTier->name,$node, $sPool);
 				cChart::add("Max connections" , $sMetric, $oApp->name, 100);
 			?></td>
 		</tr><?php

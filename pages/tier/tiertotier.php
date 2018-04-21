@@ -57,8 +57,7 @@ cRender::show_time_options($title);
 cRenderMenus::show_tier_functions($oTier);
 cRender::button("back to ($oTier->name) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
 ?>
-<h2>Tier activity details<h2>
-<h3>from (<?=$oTier->name?>) to (<?=$totier?>)</h3>
+<h2>Activity details <?=cRender::show_tier_name($oTier)?> to (<?=$totier?>)</h2>
 <p>
 <?php
 //********************************************************************

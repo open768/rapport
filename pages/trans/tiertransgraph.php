@@ -50,7 +50,6 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 //display the results
 $oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
-$tier = $oTier->name;
 
 $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRender::get_base_app_QS();
@@ -63,7 +62,7 @@ if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
 
 $sExtraCaption = ($node?"($node) node":"");
 
-$title= "$oApp->name&gt;$tier $sExtraCaption&gt;Transactions";
+$title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transactions";
 cRender::show_time_options( $title); 
 
 //********************************************************************
@@ -138,21 +137,21 @@ $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
 	cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");
-	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($tier));
+	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($oTier->name));
 
 
 	?>
 	<select id="nodesMenu">
 		<option selected disabled>Show...</option>
-		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for (<?=$oApp->name?>) application</option>
-		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$tier?></option>
+		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for <?=cRender::show_app_name($oApp)?> application</option>
+		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$oTier->name?></option>
 		
 		<optgroup label="Servers">
 		<?php
 			if ($node){
 				?><option value="tiertrans.php?<?=$gsTierQs?>">All servers in tier</option><?php
 			}
-			$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$tier);
+			$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$oTier->name);
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
 				$sUrl = cHttp::build_url("tiertransgraph.php",$gsTierQs);
@@ -177,24 +176,24 @@ cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 
 //###############################################
 ?>
-<h2>Transactions for (<?=$tier?>) tier <?=$sExtraCaption?></h2>
+<h2>Transactions for <?=cRender::show_tier_name($oTier)?> <?=$sExtraCaption?></h2>
 
-<h3>Overall Stats for (<?=$tier?>) tier</h3>
+<h3>Overall Stats for <?=cRender::show_tier_name($oTier)?></h3>
 <?php
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierCallsPerMin($tier);
-	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min ($tier) tier", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierResponseTimes($tier);
-	$aMetrics[] = [cChart::LABEL=>"Overall response times (ms) ($tier) tier", cChart::METRIC=>$sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
+	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
+	$aMetrics[] = [cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 
 
 if ($node){ 
 	?><h3>Stats for (<?=$node?>) Server</h3><?php
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierNodeCallsPerMin($tier, $node);
+	$sMetricUrl=cAppDynMetric::tierNodeCallsPerMin($oTier->name, $node);
 	$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($tier, $node);
+	$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($oTier->name, $node);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 }

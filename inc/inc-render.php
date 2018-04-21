@@ -526,7 +526,7 @@ class cRender{
 		<html>
 		<head>
 			<title><?=$psTitle?></title>
-			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/app.css" >
+			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/reporter.css" >
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
 			

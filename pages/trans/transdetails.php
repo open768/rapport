@@ -52,9 +52,10 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
-$tid = cHeader::get(cRender::TIER_ID_QS);
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
+
+$oTier->name = cHeader::get(cRender::TIER_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $node= cHeader::get(cRender::NODE_QS);
@@ -65,11 +66,11 @@ $sTierQS = cRender::get_base_tier_QS();
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 
-$sFilterTierQS = cFilter::makeTierFilter($tier);
+$sFilterTierQS = cFilter::makeTierFilter($oTier->name);
 $sFilterTierQS = cHttp::build_QS($sAppQS, $sFilterTierQS);
 
 
-cRender::show_time_options("$oApp->name&gt;$oApp->name&gt;$tier&gt;$trans"); 
+cRender::show_time_options("$oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans"); 
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
@@ -77,7 +78,7 @@ if (cAppdyn::is_demo()){
 	exit;
 }
 //********************************************************************
-$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$tier);
+$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$oTier->name);
 function sort_nodes($a, $b){
 	return strcmp($a->name, $b->name);
 }
@@ -126,7 +127,7 @@ cDebug::flush();
 ?>
 <H2>Contents</h2>
 <ul>
-	<li><a href="#1">Data for (<?=$trans?>) in (<?=$tier?>) tier</a>
+	<li><a href="#1">Data for (<?=$trans?>) in (<?=cRender::show_tier_name($oTier)?>) tier</a>
 	<li><a href="#2">Transaction Map</a>
 	<li><a href="#4">Remote Services</a>
 	<li><a href="#5">Transaction Snapshots</a>
@@ -134,13 +135,13 @@ cDebug::flush();
 <p>
 <!-- #############################################################################-->
 <!-- #############################################################################-->
-<h2><a name="1">Data for (<?=$trans?>) in (<?=$tier?>) tier </a></h2>
+<h2><a name="1">Data for (<?=$trans?>) in <?=cRender::show_tier_name($oTier)?></a></h2>
 <?php
 	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cAppDynMetric::transCallsPerMin($tier, $trans)];
-	$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cAppDynMetric::transResponseTimes($tier, $trans)];
-	$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cAppDynMetric::transErrors($tier, $trans)];
-	$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($tier, $trans)];
+	$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name, $trans)];
+	$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cAppDynMetric::transResponseTimes($oTier->name, $trans)];
+	$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cAppDynMetric::transErrors($oTier->name, $trans)];
+	$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($oTier->name, $trans)];
 	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	cDebug::flush();
 ?>
@@ -159,7 +160,7 @@ cDebug::flush();
 		oLoader.APP_QS="<?=cRender::APP_QS?>";
 		oLoader.TIER_QS="<?=cRender::TIER_QS?>";
 		oLoader.TRANS_QS="<?=cRender::TRANS_QS?>";
-		oLoader.load("<?=$oApp->name?>", "<?=$tier?>", "<?=$trans?>");
+		oLoader.load("<?=$oApp->name?>", "<?=$oTier->name?>", "<?=$trans?>");
 	}
 	$(load_trans_flow);	
 </script>
@@ -173,20 +174,20 @@ if ($node){ ?>
 	<h2><a name="3">Data</a> for Transaction: (<?=$trans?>) for node (<?=$node?>)</h2>
 	<?php
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cAppDynMetric::transCallsPerMin($tier, $trans, $node)];
-		$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cAppDynMetric::transResponseTimes($tier, $trans, $node)];
-		$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cAppDynMetric::transErrors($tier, $trans, $node)];
-		$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($tier, $trans, $node)];
+		$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name, $trans, $node)];
+		$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cAppDynMetric::transResponseTimes($oTier->name, $trans, $node)];
+		$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cAppDynMetric::transErrors($oTier->name, $trans, $node)];
+		$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cAppDynMetric::transCpuUsed($oTier->name, $trans, $node)];
 		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	?>
 	<h2>Server Data</h2>
 	<?php
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cAppDynMetric::InfrastructureCpuBusy($tier, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cAppDynMetric::InfrastructureJavaHeapUsed($tier, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cAppDynMetric::InfrastructureJavaGCTime($tier, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($tier, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetGCTime($tier, $node)];
+		$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cAppDynMetric::InfrastructureCpuBusy($oTier->name, $node)];
+		$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cAppDynMetric::InfrastructureJavaHeapUsed($oTier->name, $node)];
+		$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cAppDynMetric::InfrastructureJavaGCTime($oTier->name, $node)];
+		$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetHeapUsed($oTier->name, $node)];
+		$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cAppDynMetric::InfrastructureDotnetGCTime($oTier->name, $node)];
 		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 }
 ?>
@@ -194,11 +195,11 @@ if ($node){ ?>
 <p>
 <!-- #############################################################################-->
 <!-- #############################################################################-->
-<h2><a name="4">Remote</a>Services for - <?=$tier?> - <?=$trans?></h2>
+<h2><a name="4">Remote</a>Services used by [<?=$trans?>] <?=cRender::show_tier_name($oTier)?></h2>
 	<?php
 		cDebug::flush();
 		//******get the external tiers used by this transaction
-		$oData = cAppdyn::GET_TransExtTiers($oApp->name, $tier, $trans);
+		$oData = cAppdyn::GET_TransExtTiers($oApp->name, $oTier->name, $trans);
 		if ($oData){
 			$aMetrics = [];
 			foreach ( $oData as $oItem){
@@ -206,9 +207,9 @@ if ($node){ ?>
 				$sClass = cRender::getRowClass();
 				
 					$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>"<DIV style='max-width:200px;overflow-wrap:break-word'>$other</div>"];
-					$sMetricUrl=cAppDynMetric::transExtCalls($tier, $trans, $other);
+					$sMetricUrl=cAppDynMetric::transExtCalls($oTier->name, $trans, $other);
 					$aMetrics[] = [cChart::LABEL=>"Calls per min to: $other", cChart::METRIC=>$sMetricUrl];
-					$sMetricUrl=cAppDynMetric::transExtResponseTimes($tier, $trans, $other);
+					$sMetricUrl=cAppDynMetric::transExtResponseTimes($oTier->name, $trans, $other);
 					$aMetrics[] = [cChart::LABEL=>"response times: $other", cChart::METRIC=>$sMetricUrl];
 			}
 			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);

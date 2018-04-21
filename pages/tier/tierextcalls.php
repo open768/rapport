@@ -117,7 +117,7 @@ cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();
 $oResponse =cAppdyn::GET_Tier_ext_details($oApp->name, $oTier->name, $oTimes);
 cRender::button("show as graphs", "tierextgraph.php?$gsTierQs");
-
+?><h2>External calls in <?=cRender::show_tier_name($oTier)?></h2><?php
 render_tier_ext($oApp, $oTier, $oResponse);
 
 cRender::html_footer();

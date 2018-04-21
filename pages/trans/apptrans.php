@@ -141,7 +141,7 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
-?><h2>Transaction statistics (<?=$oApp->name?>)</h2><?php
+?><h2>Transaction statistics <?=cRender::show_app_name($oApp)?></h2><?php
 
 //header
 cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
@@ -176,7 +176,7 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
 
 		//display the transaction data
-		?><h2>Transactions for <?=$oTier->name?></h2><?php
+		?><h2>Transactions for <?=cRender::show_tier_name($oTier)?></h2><?php
 		cRenderMenus::show_tier_functions($oTier);
 		cRender::button("show transaction graphs", $sUrl);
 		render_tier_transactions($oTier);

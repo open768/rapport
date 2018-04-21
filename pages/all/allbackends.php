@@ -61,7 +61,7 @@ cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 <h2><?=$title?></h2>
 <ul><?php
 	foreach ($oApps as $oApp){
-		?><li><a href="#<?=$oApp->id?>"><?=$oApp->name?></a><?php
+		?><li><a href="#<?=$oApp->id?>"><?=cRender::show_app_name($oApp)?></a><?php
 	}
 ?></ul><?php
 
@@ -72,7 +72,7 @@ foreach ($oApps as $oApp){
 	$sUrl = cHttp::build_url("../app/appext.php", cRender::APP_QS, $sApp);
 	$sUrl = cHttp::build_url($sUrl, cRender::APP_ID_QS, $sID);
 	
-	?><hr><h2><a name="<?=$sID?>"><?=$oApp->name?></a></h2>
+	?><hr><h2><a name="<?=$sID?>"><?=cRender::show_app_name($oApp)?></a></h2>
 		<?php cRenderMenus::show_app_functions($oApp); ?>
 		<?=cRender::button("See Details...", $sUrl);?>
 		<?php
