@@ -288,7 +288,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 									$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
 									$iElapsed += $oExitCall->timeTakenInMillis;
 									?><tr>
-										<td><?=$oExitCall->timeTakenInMillis?></td>
+										<td><b><?=$oExitCall->timeTakenInMillis?></b></td>
 										<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
 										<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
 										<td><?=htmlspecialchars($oExitCall->detailString)?></td>
@@ -330,8 +330,8 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 				if (count($aExitCalls) == 0)
 					cRender::messagebox("No High Frequency Calls found");
 				else{
-					uasort($aExitCalls, "sort_by_count")
-					
+					uasort($aExitCalls, "sort_by_count");
+					$iCount = 0;
 					//render
 					?><div class="<?=cRender::getRowClass()?>">
 						<table border="1" cellspacing="0" id="REPT<?=$oNode->name?>" width="100%">
@@ -346,11 +346,13 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 							<tbody><?php
 							foreach ($aExitCalls as $oExitCall){
 								$iElapsed += $oExitCall->timeTakenInMillis;
+								if (stripos($oExitCall->detailString,"pooled")) continue;
+								$iCount+=$oExitCall->count;
 								
 								$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
 								?><tr>
 									<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
-									<td><?=$oExitCall->count?></td>
+									<td><b><?=$oExitCall->count?></b></td>
 									<td><?=$oExitCall->timeTakenInMillis?></td>
 									<td><?=$avg?></td>
 									<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
@@ -360,7 +362,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 							?></tbody>
 						</table>
 						<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
-						of which high frequency calls account for: <?=$iElapsed?> ms</h3>
+						of which <?=$iCount?> high frequency calls account for: <?=$iElapsed?> ms</h3>
 					</div>
 					<script language="javascript">
 						$( function(){ 

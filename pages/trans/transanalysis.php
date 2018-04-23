@@ -93,7 +93,7 @@ $oTable = new c2DArray;
 
 //#####################################################################
 ?>
-<h1><?=$trans?></h1>
+<h1><?=cRender::show_name(cRender::NAME_TRANS,$trans)?></h1>
 <h2><a name="5">Top <?=HOWMANY?> slowest Transaction Snapshots</a></h2>
 <?php
 $bProceed = true;
