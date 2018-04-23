@@ -67,7 +67,7 @@ $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMet
 $aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
-?><h2>Browser Stats for <?=cRender::show_app_name($oApp)?></h2><?php
+?><h2>Browser Stats for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 cRender::button("Show Page Statistics", "../rum/rumstats.php?$sAppQS");
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cAppDynMetric::webrumCallsPerMin()];

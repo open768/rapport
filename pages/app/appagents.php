@@ -241,7 +241,7 @@ function render_node_agents($paData){
 $aData = cAppDyn::GET_AppNodes($oApp->id);
 $iNodes = count_nodes($aData);	
 ?>
-	<h2>There are <?=$iNodes;?> agents in total in <?=cRender::show_app_name($oApp)?></h2>
+	<h2>There are <?=$iNodes;?> agents in total in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <?php
 if ($iNodes==0)
 	cRender::messagebox("no Agents found");

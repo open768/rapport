@@ -131,7 +131,7 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h1>Application Errors <?=cRender::show_app_name($oApp)?></h1>
+<h1>Application Errors <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h1>
 <?php
 $aResponse =cAppdyn::GET_Tiers($oApp);
 if ( count($aResponse) == 0)

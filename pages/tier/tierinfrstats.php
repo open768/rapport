@@ -97,8 +97,8 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
 ?><select id="menuNodes">
 	<option selected disabled>Show Infrastructure Details for</option>
-	<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=cRender::show_tier_name($oTier)?>) tier</option>
-	<option value="<?=$sAppInfraUrl?>"><?=cRender::show_app_name($oApp)?> Application</option>
+	<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=cRender::show_name(cRender::NAME_TIER,$oTier)?>) tier</option>
+	<option value="<?=$sAppInfraUrl?>"><?=cRender::show_name(cRender::NAME_APP,$oApp)?> Application</option>
 	<optgroup label="Individual Servers"><?php
 		foreach ($aNodes as $oNode){
 			$sNode = $oNode->name;
@@ -127,7 +127,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 //####################################################################
 ?>
 <p>
-<h2>Overall Statistics for <?=cRender::show_tier_name($oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
+<h2>Overall Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
 
 	$aMetrics = [];
@@ -150,7 +150,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 //####################################################################
 ?>
 <p>
-<h2>Agent Statistics for <?=cRender::show_tier_name($oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
+<h2>Agent Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
 //####################################################################
 	$aMetricTypes = cAppDynInfraMetric::getInfrastructureAgentMetricTypes();
@@ -168,7 +168,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	cDebug::flush();
 ?>
 <p>
-<h2>Memory Statistics for <?=cRender::show_tier_name($oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
+<h2>Memory Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
 	$aMetricTypes = cAppDynInfraMetric::getInfrastructureMemoryMetricTypes();
 	
@@ -182,7 +182,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	cDebug::flush();
 ?>
 <p>
-<h2>Infrastructure Statistics for <?=cRender::show_tier_name($oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
+<h2>Infrastructure Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
 	$aMetricTypes = cAppDynInfraMetric::getInfrastructureMiscMetricTypes();
 	

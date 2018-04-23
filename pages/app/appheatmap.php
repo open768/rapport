@@ -66,7 +66,7 @@ else
 	$metric = cAppDynMetric::tierCallsPerMin($tier);
 
 ?>
-<h2>Heatmap for <?=cRender::show_app_name($oApp)?></h2>
+<h2>Heatmap for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <?php
 //********************************************************************
 if (cAppdyn::is_demo()){

@@ -63,7 +63,7 @@ cRenderMenus::show_apps_menu("Availability", "appavail.php");
 $oResponse =cAppdyn::GET_Tiers($oApp);
 
 // work through each tier
-?><h2>Availability for <?=cRender::show_app_name($oApp)?></h2><?php
+?><h2>Availability for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 
 
 $aMetrics = [];

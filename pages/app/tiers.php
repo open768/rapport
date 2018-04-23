@@ -55,7 +55,7 @@ cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Tra
 
 //####################################################################
 ?>
-<h2>Overall Activity in <?=cRender::show_app_name($oApp)?></h2>
+<h2>Overall Activity in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <?php
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
@@ -64,7 +64,7 @@ cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
 ?>
 <p>
 <!-- ************************************************** -->
-<h2>Tier Activity <?=cRender::show_app_name($oApp)?></h2>
+<h2>Tier Activity <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <?php
 //-----------------------------------------------
 $oResponse =cAppdyn::GET_Tiers($oApp);

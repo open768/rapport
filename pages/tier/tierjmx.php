@@ -102,7 +102,7 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 			
 			$bDisabled = (($oTier->name == $oTier->name) && ($node==null));
 			$sDisabled = ($bDisabled?"disabled":"");
-			?><option <?=$sDisabled?> value="<?=$sTierUrl?>"><?=cRender::show_tier_name($oTier)?> tier</option><?php
+			?><option <?=$sDisabled?> value="<?=$sTierUrl?>"><?=cRender::show_name(cRender::NAME_TIER,$oTier)?> tier</option><?php
 		}
 	?></optgroup>
 	<optgroup label="Individual Servers"><?php
@@ -126,7 +126,7 @@ $(
 $aPools = cAppdyn::GET_JDBC_Pools($oApp->name,$oTier->name,$node);
 cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 ?>
-<h2>JDBC Pools for <?=cRender::show_tier_name($oTier)?></h2>
+<h2>JDBC Pools for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 if ($node){
 	?><h3>(<?=$node?>) Node</h3><?php

@@ -86,7 +86,7 @@ $oApps = cAppDyn::GET_Applications();
 		
 		?><h3><a name="<?=$iBackID?>"><?=$sBackend?></a></h3><?php
 			foreach ($aApps as $oApp){
-				?><h4><?=cRender::show_app_name($oApp)?></h4><?php
+				?><h4><?=cRender::show_name(cRender::NAME_APP,$oApp)?></h4><?php
 				
 				$aMetrics = [];
 				$sMetricUrl = cAppDynMetric::backendCallsPerMin($sBackend);

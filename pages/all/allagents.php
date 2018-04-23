@@ -133,7 +133,7 @@ if (cAppdyn::is_demo()){
 			}
 			?><tr class="<?=$sClass?>">
 				<td width="<?=BLANK_WIDTH?>"></td>
-				<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Total for <?=cRender::show_app_name($oApp)?></b></td>
+				<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Total for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></b></td>
 				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->total?></font></b></td>
 				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->machine?></font></b></td>
 				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->appserver?></font></b></td>

@@ -72,7 +72,7 @@ if (cAppdyn::is_demo()){
 $oResponse =cAppdyn::GET_transExtCalls($oApp->name, $tier, $trans);
 ?>
 
-<h3>external calls from <?=$trans?> in tier <a href="<?=$sTierUrl?>"><?=$tier?></a> in <?=cRender::show_app_name($oApp)?></h3>
+<h3>external calls from <?=$trans?> in tier <a href="<?=$sTierUrl?>"><?=$tier?></a> in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h3>
 <table class="maintable">
 	<tr>
 		<th>other trans</th>

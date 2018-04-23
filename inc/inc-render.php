@@ -328,6 +328,11 @@ class cRender{
 	const CHART_COUNT_FIELD = "ccf";
 	const CHART_APP_FIELD = "caf";
 	
+	//**************************************************************************
+	const NAME_APP = 1;
+	const NAME_TIER = 2;
+	const NAME_EXT = 3;
+	const NAME_OTHER = 99;
 	
 	//**************************************************************************
 	public static function get_times(){
@@ -632,19 +637,24 @@ class cRender{
 	}
 	
 	//**************************************************************************
-	public static function show_extcall_name($psExt){
-		?><span class="external_name"><?=$psExt?></span><?php
+	public static function show_name($piNameType, $pvWhat){
+		$sClass = "other_name";
+		$sOutput = $pvWhat;
+		switch( $piNameType){
+			case self::NAME_APP: 
+				$sClass = "app_name"; 
+				$sOutput = $pvWhat->name;
+				break;
+			case self::NAME_TIER: 
+				$sClass = "tier_name"; 
+				$sOutput = $pvWhat->name;
+				break;
+			case self::NAME_EXT: 
+				$sClass = "external_name"; break;
+		}
+		?><span class="<?=$sClass?>"><?=$sOutput?></span><?php
 	}
 	
-	//**************************************************************************
-	public static function show_tier_name($poTier){
-		?><span class="tier_name"><?=$poTier->name?></span><?php
-	}
-	
-	//**************************************************************************
-	public static function show_app_name($poApp){
-		?><span class="app_name"><?=$poApp->name?></span><?php
-	}
 	
 	//**************************************************************************
 	public static function show_time_options( $psTitle){

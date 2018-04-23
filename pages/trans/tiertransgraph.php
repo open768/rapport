@@ -143,7 +143,7 @@ if ($oCred->restricted_login == null){
 	?>
 	<select id="nodesMenu">
 		<option selected disabled>Show...</option>
-		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for <?=cRender::show_app_name($oApp)?> application</option>
+		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for <?=cRender::show_name(cRender::NAME_APP,$oApp)?> application</option>
 		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$oTier->name?></option>
 		
 		<optgroup label="Servers">
@@ -176,9 +176,9 @@ cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 
 //###############################################
 ?>
-<h2>Transactions for <?=cRender::show_tier_name($oTier)?> <?=$sExtraCaption?></h2>
+<h2>Transactions for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> <?=$sExtraCaption?></h2>
 
-<h3>Overall Stats for <?=cRender::show_tier_name($oTier)?></h3>
+<h3>Overall Stats for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3>
 <?php
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);

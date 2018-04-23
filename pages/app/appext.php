@@ -61,7 +61,7 @@ if ($oCred->restricted_login == null){
 			foreach ($aTiers as $oTier){
 				$sUrl = cHttp::build_qs($gsAppQS, cRender::TIER_QS, $oTier->name);
 				$sUrl = cHttp::build_qs($sUrl, cRender::TIER_ID_QS, $oTier->id);
-				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=cRender::show_tier_name($oTier)?></option><?php
+				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></option><?php
 			}
 		?>
 	</select>
@@ -77,14 +77,14 @@ if ($oCred->restricted_login == null){
 
 //####################################################################
 
-?><h2>Overall statistics for <?=cRender::show_app_name($oApp)?></h2><?php
+?><h2>Overall statistics for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
 $aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cAppDynMetric::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 //##################################################################
-?><h2>External calls from <?=cRender::show_app_name($oApp)?></h2><?php
+?><h2>External calls from <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 $aMetrics = [];
 
 $oResponse =cAppdyn::GET_AppExtTiers($oApp->name);

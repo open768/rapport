@@ -75,7 +75,7 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 
 //************* basic information about the tier *********************
 ?>
-<h2>External calls made from <?=cRender::show_tier_name($oTier)?> tier</h2>
+<h2>External calls made from <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> tier</h2>
 <h3>Overall Stats for tier</h3>
 <?php
 	

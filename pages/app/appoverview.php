@@ -57,7 +57,7 @@ cRender::appdButton(cAppDynControllerUI::application($oApp));
 
 //####################################################################
 ?>
-<h2>Overview for <?=cRender::show_app_name($oApp)?></h2>
+<h2>Overview for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <ul>
 	<li><a href="#app">Application Overview</a>
 	<li><a href="#backend">Backends</a>
@@ -141,7 +141,7 @@ foreach ($aTiers as $oTier){
 	$sTierQS = cHttp::build_QS($gsAppQs, cRender::TIER_QS, $sTier);
 	$sTierQS = cHttp::build_QS($sTierQS, cRender::TIER_ID_QS, $oTier->id);
 	
-	?><h3><?=cRender::show_tier_name($oTier)?></h3><?php
+	?><h3><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3><?php
 	$aTransactions = cAppDyn::GET_tier_transaction_names($oApp->name, $sTier);
 	if ($aTransactions==null) {
 		cRender::errorbox("unable to get transaction names");

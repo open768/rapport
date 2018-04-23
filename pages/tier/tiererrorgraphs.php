@@ -99,7 +99,7 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Errors for <?=cRender::show_tier_name($oTier)?></h2>
+<h2>Errors for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
