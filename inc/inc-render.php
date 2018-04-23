@@ -332,6 +332,7 @@ class cRender{
 	const NAME_APP = 1;
 	const NAME_TIER = 2;
 	const NAME_EXT = 3;
+	const NAME_TRANS = 4;
 	const NAME_OTHER = 99;
 	
 	//**************************************************************************
@@ -641,6 +642,10 @@ class cRender{
 		$sClass = "other_name";
 		$sOutput = $pvWhat;
 		switch( $piNameType){
+
+			case self::NAME_TRANS: 
+				$sClass = "trans_name"; 
+				break;
 			case self::NAME_APP: 
 				$sClass = "app_name"; 
 				$sOutput = $pvWhat->name;

@@ -89,7 +89,7 @@ function render_tier_transactions($poTier){
 			?><tr>
 				<td><?php
 					if ($sLink){
-						?><a href="<?=$sLink?>"><?=$sName?></a><?php
+						?><a href="<?=$sLink?>"><?=cRender::show_name(cRender::NAME_TRANS,$sName)?></a><?php
 					}else
 						echo $sName;
 				?></td>

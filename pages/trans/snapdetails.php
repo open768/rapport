@@ -99,7 +99,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 
 	$sClass = cRender::getRowClass();
 	?><table class="<?=$sClass?>">
-		<tr><th align="right">Business Transaction:</th><td><?=$oSnapshot->btName?></td></tr>
+		<tr><th align="right">Business Transaction:</th><td><?=cRender::show_name(cRender::NAME_TRANS,$oSnapshot->btName)?></td></tr>
 		<tr><th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
 		<tr><th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
 		<tr><th align="right">Number of Segments:</th><td><?=$oSnapshot->segmentCount?></td></tr>

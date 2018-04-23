@@ -127,7 +127,7 @@ cDebug::flush();
 ?>
 <H2>Contents</h2>
 <ul>
-	<li><a href="#1">Data for (<?=$trans?>) in (<?=cRender::show_name(cRender::NAME_TIER,$oTier)?>) tier</a>
+	<li><a href="#1">Data for <?=cRender::show_name(cRender::NAME_TRANS,$trans)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a>
 	<li><a href="#2">Transaction Map</a>
 	<li><a href="#4">Remote Services</a>
 	<li><a href="#5">Transaction Snapshots</a>
@@ -135,7 +135,7 @@ cDebug::flush();
 <p>
 <!-- #############################################################################-->
 <!-- #############################################################################-->
-<h2><a name="1">Data for (<?=$trans?>) in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a></h2>
+<h2><a name="1">Data for <?=cRender::show_name(cRender::NAME_TRANS,$trans)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a></h2>
 <?php
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name, $trans)];
@@ -171,7 +171,7 @@ cDebug::flush();
 // ################################################################################
 cDebug::flush();
 if ($node){ ?>
-	<h2><a name="3">Data</a> for Transaction: (<?=$trans?>) for node (<?=$node?>)</h2>
+	<h2><a name="3">Data</a> for Transaction: <?=cRender::show_name(cRender::NAME_TRANS,$trans)?> for node (<?=$node?>)</h2>
 	<?php
 		$aMetrics = [];
 		$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name, $trans, $node)];
@@ -195,7 +195,7 @@ if ($node){ ?>
 <p>
 <!-- #############################################################################-->
 <!-- #############################################################################-->
-<h2><a name="4">Remote</a>Services used by [<?=$trans?>] <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
+<h2><a name="4">Remote</a>Services used by <?=cRender::show_name(cRender::NAME_TRANS,$trans)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 	<?php
 		cDebug::flush();
 		//******get the external tiers used by this transaction
