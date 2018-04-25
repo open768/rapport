@@ -44,6 +44,9 @@ switch($sMetricType){
 		$sMetric1 = cAppDynMetric::webrumCallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
 		$sMetric2 = cAppDynMetric::webrumResponseTimes();
+		$sTitle3 = "Pages With Javascript Errors";
+		$sMetric3 = cAppDynMetric::webrumJavaScriptErrors();
+		
 		$sBaseUrl = "apprum.php";
 		break;
 	case cRender::METRIC_TYPE_RESPONSE_TIMES:
@@ -53,6 +56,8 @@ switch($sMetricType){
 		$sMetric1 = cAppDynMetric::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
 		$sMetric2 = cAppDynMetric::appResponseTimes();
+		$sTitle3 = "Application Errors";
+		$sMetric3 = cAppDynMetric::appErrorsPerMin();
 		$sBaseUrl = "$home/pages/app/tiers.php";
 		break;
 }
@@ -80,10 +85,11 @@ else{
 		$sUrl = cHttp::build_url($sBaseUrl, cRender::build_app_qs($oApp));
 		$aMetrics = [
 			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],
-			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2]
+			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],
+			[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
 		];
 		cRenderMenus::show_app_functions($oApp);
-		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		?><br><?php
 	}
 }

@@ -115,7 +115,7 @@ cRender::button("Show Transactions", "../trans/apptrans.php?$sBaseQs");
 	$aMetrics[] = [cChart::LABEL=>"Machine Availability", cChart::METRIC=>cAppDynMetric::InfrastructureMachineAvailability($oTier->name)];
 	$aMetrics[] = [cChart::LABEL=>"Agent Availability", cChart::METRIC=>cAppDynMetric::InfrastructureAgentAvailability($oTier->name)];
 	$sClass=cRender::getRowClass();
-	cChart::metrics_table($oApp, $aMetrics, 3, $sClass);
+	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 
 //####################################################################
 cChart::do_footer();

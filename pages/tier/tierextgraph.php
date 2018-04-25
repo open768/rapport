@@ -84,7 +84,9 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
+	$sMetricUrl=cAppDynMetric::tierErrorsPerMin($oTier->name);
+	$aMetrics[] = [cChart::LABEL=>"Error rates for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass());
 
 
 ?><h3>External calls</h3><?php
@@ -102,8 +104,10 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"Drill down"];
 		$sMetric=cAppDynMetric::tierExtResponseTimes($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
+		$sMetric=cAppDynMetric::tierExtErrorsPerMin($oTier->name, $sTierTo);
+		$aMetrics[] = [cChart::LABEL=>"Errors Per minuts", cChart::METRIC=>$sMetric];
 	}
-	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass());
+	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass());
 
 //################ CHART
 cChart::do_footer();
