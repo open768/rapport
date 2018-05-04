@@ -80,7 +80,7 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 //-----------------------------------------------
 
 
-$aTrans = cAppdyn::GET_tier_transaction_names($oApp->name, $oTier->name);
+$aTrans = cAppdyn::GET_tier_transaction_names($oTier);
 
 $aMetrics = [];
 foreach ( $aTrans as $oTrans){
@@ -91,13 +91,13 @@ foreach ( $aTrans as $oTrans){
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name - Calls per min from Tier", 
 		cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name,$oTrans->name),
-		cChart::GO_URL => $sUrl,
-		cChart::GO_HINT => "Transaction",
 		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name to External - Calls per min ",
 		cChart::METRIC=>cAppDynMetric::transExtCalls($oTier->name,$oTrans->name, $sExt),
+		cChart::GO_URL => $sUrl,
+		cChart::GO_HINT => "Transaction",
 		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [

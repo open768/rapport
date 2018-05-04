@@ -71,7 +71,7 @@ cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 $oResponse =cAppdyn::GET_Tiers($oApp);
 foreach ( $oResponse as $oTier){
 	$sTier=$oTier->name;
-	if (cFilter::isTierFilteredOut($sTier)) continue;
+	if (cFilter::isTierFilteredOut($oTier)) continue;
 	
 	$sTierQs=cRender::build_tier_qs($oTier);
 	

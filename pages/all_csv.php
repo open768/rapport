@@ -52,12 +52,13 @@ cDebug::write("Generating CSV - please wait");
 $oMerged = new cMergedMetrics();
 for ($i = 1; $i<=$iCount; $i++){
 	$sApp = cHeader::get(cRender::CHART_APP_FIELD."_$i");
+	$oApp = new cAppDApp($sApp,$sApp);
 	$sMetric = cHeader::get(cRender::CHART_METRIC_FIELD."_$i");
 	$sTitle  = cHeader::get(cRender::CHART_TITLE_FIELD."_$i");
 	
 	//get the data
 	cDebug::write("app:$sApp");
-	$oMetric = cMetric::get_metric($sApp, $sMetric);
+	$oMetric = cMetric::get_metric($oApp, $sMetric);
 	
 	//add data from metric to data structure
 	$oMerged->add($oMetric);

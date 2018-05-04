@@ -41,13 +41,13 @@ $aResult = array( "id"=>$index);
 
 $oTimes = cRender::get_times();
 $sMetricpath = cAppdynMetric::transResponseTimes($tier, $trans);
-$aStats = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+$aStats = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 
 
 if ($aStats){
 	$aResult["max"] = $aStats[0];
 	$sMetricpath = cAppdynMetric::transErrors($tier, $trans);
-	$aErrors = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+	$aErrors = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	
 	if ($aErrors)		$aResult["transErrors"] = $aErrors[0];
 }else{

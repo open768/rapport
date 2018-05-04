@@ -46,7 +46,7 @@ $psPrevious = cHeader::get(cRender::PREVIOUS_QS);
 
 //*************************************************************************
 cDebug::write("getting metric - $psMetric");
-$oResult = cMetric::get_metric($oApp->name, $psMetric, ($psPrevious != null));
+$oResult = cMetric::get_metric($oApp, $psMetric, ($psPrevious != null));
 cDebug::write("got metric - $psMetric");
 if ($oResult) $oResult->div = $psDiv;
 

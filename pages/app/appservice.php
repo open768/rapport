@@ -66,7 +66,7 @@ function pr__sort_endpoints($a,$b){
 }
 
 foreach ($aTiers as $oTier){
-	if (cFilter::isTierFilteredOut($oTier->name)) continue;
+	if (cFilter::isTierFilteredOut($oTier)) continue;
 
 	//****************************************************************************************
 	$aEndPoints = cAppdyn::GET_TierServiceEndPoints($oApp->name, $oTier->name);

@@ -161,6 +161,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
+			cChart::HIDEIFNODATA=>true,
 			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$oTier->name"
 		];
 	}
@@ -176,7 +177,11 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$oTier->name"];
+		$aMetrics[]= [
+			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
+			cChart::HIDEIFNODATA=>true,
+			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$oTier->name"
+		];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 	cDebug::flush();
@@ -190,7 +195,11 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$oTier->name"];
+		$aMetrics[]= [
+			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
+			cChart::HIDEIFNODATA=>true,
+			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all nodes in Tier:$oTier->name"
+		];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 	cDebug::flush();

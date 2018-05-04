@@ -128,12 +128,13 @@ if ($iNodes==0){
 	<p>
 		<?php
 			foreach ($aResponse as $aTierNodes){
-				if (cFilter::isTierFilteredOut($aTierNodes[0]->tierName)) continue;
 				
-				?><hr><?php
 				$tid = $aTierNodes[0]->tierId;
 				$tier = $aTierNodes[0]->tierName;
 				$oTier = cRenderObjs::make_tier_obj($oApp, $tier, $tid);
+				
+				if (cFilter::isTierFilteredOut($oTier)) continue;
+				?><hr><?php
 
 				cRenderMenus::show_tier_functions($oTier);
 				$sTierQS = cHttp::build_qs($sAppQS, cRender::TIER_QS, $tier);

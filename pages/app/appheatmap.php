@@ -77,7 +77,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 $oTime= cRender::get_times();
-$oResponse = cAppdynCore::GET_MetricData($oApp->id,$metric, $oTime);
+$oResponse = cAppdynCore::GET_MetricData($oApp,$metric, $oTime);
 $aHeatData = cAppdynUtil::Analyse_heatmap( $oResponse);
 cRender::render_Heatmap($aHeatData["days"], "HeatMap for Days of Week", "hour", "day");
 cRender::render_Heatmap($aHeatData["hours"], "HeatMap for Hours", "hour", "min");

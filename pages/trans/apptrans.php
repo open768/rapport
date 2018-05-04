@@ -45,7 +45,7 @@ function render_tier_transactions($poTier){
 	$oTimes = cRender::get_times();
 	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
 	try{
-	$aStats = cAppdynCore::GET_MetricData($poTier->app->name, $sMetricpath, $oTimes,"true",false,true);
+	$aStats = cAppdynCore::GET_MetricData($poTier->app, $sMetricpath, $oTimes,"true",false,true);
 	}catch (Exception $e){
 		cRender::errorbox("Oops unable to retrieve Transaction names: ".$e);
 		return;
@@ -158,28 +158,26 @@ $aTiers =cAppdyn::GET_Tiers($oApp);
 ?>
 <div class="maintable"><?php
 	$giTotalTrans = 0;
-	foreach ( $aTiers as $oTier){
-		$oTier->app = $oApp;
+	foreach ( $aTiers as $oAppTier){
+		$oAppTier->app = $oApp;
+		if ($oTier->id	&& ($oAppTier->id != $oTier->id)) continue; //tier not same as selected
+		if (cFilter::isTierFilteredOut($oAppTier)) continue;
 		
 		//get the transaction names for the Tier
-		if (cFilter::isTierFilteredOut($oTier->name)) continue;
-		if ($tid && ($oTier->id != $tid)) continue;
-		
-		
-		$aTrans = cAppdyn::GET_tier_transaction_names($oApp->name, $oTier->name);	
+		$aTrans = cAppdyn::GET_tier_transaction_names($oAppTier);	
 		if (!$aTrans) continue;
 		if (count($aTrans) == 0) continue;
 
 		//set up urls
 		$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
-		$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oTier->name);
-		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
+		$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oAppTier->name);
+		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oAppTier->id);
 
 		//display the transaction data
-		?><h2>Transactions for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
-		cRenderMenus::show_tier_functions($oTier);
+		?><h2>Transactions for <?=cRender::show_name(cRender::NAME_TIER,$oAppTier)?></h2><?php
+		cRenderMenus::show_tier_functions($oAppTier);
 		cRender::button("show transaction graphs", $sUrl);
-		render_tier_transactions($oTier);
+		render_tier_transactions($oAppTier);
 	}
 	?><div class="<?=cRender::getRowClass()?>">
 			Total Transactions = <?=$giTotalTrans?>

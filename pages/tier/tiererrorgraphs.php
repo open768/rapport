@@ -102,7 +102,7 @@ if (cAppdyn::is_demo()){
 <h2>Errors for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_table($aData);
 	cChart::do_footer();
 	cRender::html_footer();

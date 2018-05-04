@@ -42,8 +42,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 
 	
 //display the results
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
+$oTier = cRenderObjs::get_current_tier();
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $trans = cHeader::get(cRender::TRANS_QS);
 
@@ -69,10 +68,10 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
-$oResponse =cAppdyn::GET_transExtCalls($oApp->name, $tier, $trans);
+$oResponse =cAppdyn::GET_transExtCalls($oTier, $trans);
 ?>
 
-<h3>external calls from <?=$trans?> in tier <a href="<?=$sTierUrl?>"><?=$tier?></a> in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h3>
+<h3>external calls from <?=$trans?> in tier <a href="<?=$sTierUrl?>"><?=$tier?></a> in <?=cRender::show_name(cRender::NAME_APP,$oTier->app)?></h3>
 <table class="maintable">
 	<tr>
 		<th>other trans</th>

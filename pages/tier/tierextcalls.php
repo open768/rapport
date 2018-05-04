@@ -115,7 +115,7 @@ if (cAppdyn::is_demo()){
 //####################################################################
 cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();
-$oResponse =cAppdyn::GET_Tier_ext_details($oApp->name, $oTier->name, $oTimes);
+$oResponse =cAppdyn::GET_Tier_ext_details($oTier, $oTimes);
 cRender::button("show as graphs", "tierextgraph.php?$gsTierQs");
 ?><h2>External calls in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
 render_tier_ext($oApp, $oTier, $oResponse);

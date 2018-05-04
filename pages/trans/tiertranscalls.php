@@ -73,7 +73,7 @@ foreach ($oResponse as $oDetail){
 	cCommon::flushprint ("<h2><a href='$link'>$trans</a></h2>");   
 	
 	$sMetricpath = cAppdynMetric::transCallsPerMin($tier, $trans);
-	$oResponse = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes, "false");
+	$oResponse = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes, "false");
 	
 	$iTotalRows = count($oResponse);
     $charturl = generate_chart("ttc", "call per min $trans",  $oResponse);

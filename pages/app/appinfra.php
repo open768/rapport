@@ -59,7 +59,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 $aTiers =cAppdyn::GET_Tiers($oApp);
 foreach ($aTiers as $oTier){
-	if (cFilter::isTierFilteredOut($oTier->name)) continue;
+	if (cFilter::isTierFilteredOut($oTier)) continue;
 	
 	cRenderMenus::show_tier_functions($oTier);
 	$sTierQs = cRender::build_tier_qs($oTier );

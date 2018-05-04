@@ -39,10 +39,6 @@ require_once("$root/inc/inc-filter.php");
 //####################################################################
 cRender::html_header("Tier Transactions");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 	
@@ -87,7 +83,7 @@ function render_tier_transactions($poApp, $poTier){
 	$iCount = 0;
 
 	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
-	$aStats = cAppdynCore::GET_MetricData($poApp->name, $sMetricpath, $oTimes,"true",false,true);
+	$aStats = cAppdynCore::GET_MetricData($poApp, $sMetricpath, $oTimes,"true",false,true);
 	uasort($aStats,"sort_by_metricpath" );
 
 	$aMetrics=[];

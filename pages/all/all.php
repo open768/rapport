@@ -81,7 +81,7 @@ if ( count($aResponse) == 0)
 else{
 	//display the results
 	foreach ( $aResponse as $oApp){
-		if (cFilter::isAppFilteredOut($oApp->name)) continue;
+		if (cFilter::isAppFilteredOut($oApp)) continue;
 		$sUrl = cHttp::build_url($sBaseUrl, cRender::build_app_qs($oApp));
 		$aMetrics = [
 			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],

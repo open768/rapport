@@ -63,7 +63,7 @@ function render_tier($poTier){
 	
 	?><h2><?=$poTier->name?></h2><?php
 	$sMetricpath = cAppdynMetric::Errors($poTier->name, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	if (count($aData) == 0){
 		cRender::messagebox("Nothing found");
 		return;

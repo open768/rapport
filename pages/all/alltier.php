@@ -63,7 +63,7 @@ if (count($aApps) == 0) cRender::errorbox("No Applications found");
 
 //####################################################################
 foreach ( $aApps as $oApp){
-	if (cFilter::isAppFilteredOut($oApp->name)) continue;
+	if (cFilter::isAppFilteredOut($oApp)) continue;
 	$sAppQS = cRender::build_app_qs($oApp);
 	$sClass = cRender::getRowClass();
 	?><DIV><?php
@@ -71,7 +71,7 @@ foreach ( $aApps as $oApp){
 		$aTiers =cAppdyn::GET_Tiers($oApp);
 		$aMetrics = [];
 		foreach ($aTiers as $oTier){ 
-			if (cFilter::isTierFilteredOut($oTier->name)) continue;
+			if (cFilter::isTierFilteredOut($oTier)) continue;
 			$sTierQs = cRender::build_tier_qs( $oTier );
 			$sUrl = "tier.php?$sTierQs";
 			

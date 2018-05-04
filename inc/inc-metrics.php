@@ -98,10 +98,10 @@ function pr__sort_dates($a,$b){
 
 //######################################################################
 class cMetric{
-	public static function get_metric($psApp, $psMetric, $pbPreviousPeriod = false){
+	public static function get_metric($poApp, $psMetric, $pbPreviousPeriod = false){
 		$oOutput = new cMetricOutput;
 		$oOutput->metric = $psMetric;
-		$oOutput->app = $psApp;
+		$oOutput->app = $poApp->name;
 		$aData = null;
 		
 		if (strstr($psMetric, cAppDynMetric::USAGE_METRIC)){
@@ -143,9 +143,9 @@ class cMetric{
 			
 			try{
 				if (cAppDyn::is_demo()){
-					$aData = cAppDynDemo::GET_MetricData($psApp, $psMetric, $oTime, false);
+					$aData = cAppDynDemo::GET_MetricData($poApp, $psMetric, $oTime, false);
 				}else{
-					$aData = cAppDynCore::GET_MetricData($psApp, $psMetric, $oTime, false);
+					$aData = cAppDynCore::GET_MetricData($poApp, $psMetric, $oTime, false);
 				}
 			}
 			catch (Exception $e){}

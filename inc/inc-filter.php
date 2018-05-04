@@ -92,8 +92,8 @@ class cFilter{
 		return false;
 	}
 	
-	public static function isAppFilteredOut($psThing){ return self::pr__isFilteredOut(self::FILTER_APP_QS, $psThing);	}
-	public static function isTierFilteredOut($psThing){ return self::pr__isFilteredOut(self::FILTER_TIER_QS, $psThing);	}
+	public static function isAppFilteredOut($poApp){ return self::pr__isFilteredOut(self::FILTER_APP_QS, $poApp->name);	}
+	public static function isTierFilteredOut($poTier){ return self::pr__isFilteredOut(self::FILTER_TIER_QS, $poTier->name);	}
 	public static function isNodeFilteredOut($psThing){ return self::pr__isFilteredOut(self::FILTER_NODE_QS, $psThing);	}
 	
 	//************************************************************

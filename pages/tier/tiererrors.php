@@ -126,7 +126,7 @@ if (cAppdyn::is_demo()){
 <?php
 	cDebug::flush();
 	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp->name, $sMetricpath, $oTimes,"true",false,true);
+	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_table($aData);
 	cRender::html_footer();
 ?>
