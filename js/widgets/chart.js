@@ -5,7 +5,9 @@ var cCharts={
 	COUNT_FIELD: "ccf",
 	TITLE_FIELD: "ctf.",
 	APP_FIELD: "caf.",
+	CHART_ALL_CSV:"/pages/all_csv.php",
 	show_export_all : true,
+	home:"",
 	
 	
 	//*********************************************************
@@ -20,7 +22,7 @@ var cCharts={
 		var oThis = this;
 		
 		iCount = 0;
-		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:"all_csv.php",target:"_blank"});
+		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cCharts.CHART_ALL_CSV,target:"_blank"});
 		
 		$("SPAN[type='appdchart']").each( //all SPAN elements which have their type set to appdchart
 			function(pIndex, pElement){
@@ -78,8 +80,9 @@ var cCharts={
 		}
 	},
 	
-	init:function(){
+	init:function(psHome){
 		var oThis = this;
+		this.home=psHome;
 		//load google charts
 		try{
 			google.charts.load('current', {'packages':['corechart']});
