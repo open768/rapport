@@ -68,7 +68,7 @@ cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 <h2>Tier Activity <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <?php
 //-----------------------------------------------
-$oResponse =cAppdyn::GET_Tiers($oApp);
+$oResponse =$oApp->GET_Tiers();
 foreach ( $oResponse as $oTier){
 	$sTier=$oTier->name;
 	if (cFilter::isTierFilteredOut($oTier)) continue;

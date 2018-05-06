@@ -68,7 +68,7 @@ foreach ( $aApps as $oApp){
 	$sClass = cRender::getRowClass();
 	?><DIV><?php
 		cRenderMenus::show_app_functions($oApp);
-		$aTiers =cAppdyn::GET_Tiers($oApp);
+		$aTiers =$oApp->GET_Tiers();
 		$aMetrics = [];
 		foreach ($aTiers as $oTier){ 
 			if (cFilter::isTierFilteredOut($oTier)) continue;

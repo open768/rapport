@@ -57,7 +57,7 @@ cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 $aActivityMetrics = [cRender::METRIC_TYPE_ACTIVITY, cRender::METRIC_TYPE_RESPONSE_TIMES];
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
-$aTiers =cAppdyn::GET_Tiers($oApp);
+$aTiers =$oApp->GET_Tiers();
 foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier)) continue;
 	

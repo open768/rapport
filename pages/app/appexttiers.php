@@ -64,7 +64,7 @@ cRenderMenus::show_app_functions();
 <h2><?=$sExt?></h2>
 <?php
 //-----------------------------------------------
-$oResponse =cAppdyn::GET_Tiers($oApp);
+$oResponse =$oApp->GET_Tiers();
 $sMatched = cAppdynUtil::get_matching_extcall($oApp, $sExt);
 if ($sMatched == null){
 	cRender::errorbox("unable to find a matching external call: $sExt");

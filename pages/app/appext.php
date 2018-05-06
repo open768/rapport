@@ -53,7 +53,7 @@ cRenderMenus::show_apps_menu("External Calls", "appext.php");
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){ 
 	//********************************************************************
-	$aTiers = cAppdyn::GET_Tiers($oApp);
+	$aTiers = $oApp->GET_Tiers();
 
 	?><select id="TierMenu">
 		<option selected disabled>Show external calls for Tiers...</option>
@@ -74,6 +74,7 @@ if ($oCred->restricted_login == null){
 	</script><?php
 
 }
+cDebug::flush();
 
 //####################################################################
 
@@ -87,7 +88,7 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 ?><h2>External calls from <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 $aMetrics = [];
 
-$oResponse =cAppdyn::GET_AppExtTiers($oApp->name);
+$oResponse = $oApp->GET_ExtTiers();
 foreach ( $oResponse as $oExtTier){
 	$class=cRender::getRowClass();
 	$sName = $oExtTier->name;

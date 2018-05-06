@@ -90,7 +90,7 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 ?><select id="menuNodes">
 	<option selected disabled>Show Details for</option>
 	<optgroup label="tiers"><?php
-		$aTiers = cAppdyn::GET_Tiers($oApp);
+		$aTiers = $oApp->GET_Tiers();
 		$sBaseTierQS = cRender::get_base_app_QS();
 		$sBaseTierQS = cHttp::build_qs($sBaseTierQS, cRender::METRIC_TYPE_QS, $gsMetric);
 		$sBaseTierUrl = cHttp::build_url("tierjmx.php", $sBaseTierQS);

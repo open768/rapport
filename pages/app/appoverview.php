@@ -39,7 +39,7 @@ require_once("$root/inc/inc-render.php");
 //-----------------------------------------------
 $gsAppQs = cRender::get_base_app_QS();
 $oApp = cRenderObjs::get_current_app();
-$aTiers =cAppdyn::GET_Tiers($oApp);
+$aTiers =$oApp->GET_Tiers();
 
 //####################################################################
 cRender::html_header("$oApp->name Overview");

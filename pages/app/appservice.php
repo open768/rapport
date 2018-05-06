@@ -59,7 +59,7 @@ if (cFilter::isFiltered()){
 //####################################################################
 //retrieve tiers
 //********************************************************************
-$aTiers = cAppdyn::GET_Tiers($oApp);
+$aTiers = $oApp->GET_Tiers();
 
 function pr__sort_endpoints($a,$b){
 	return strcmp($a->name, $b->name);

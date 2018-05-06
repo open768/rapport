@@ -89,7 +89,7 @@ class cRenderMenus{
 		$oApp = cRenderObjs::get_current_app();
 		
 		try{
-			$oTiers = cAppDyn::GET_Tiers($oApp);
+			$oTiers = $oApp->GET_Tiers();
 		}
 		catch (Exception $e)
 		{
