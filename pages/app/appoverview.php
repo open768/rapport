@@ -104,7 +104,7 @@ cDebug::flush();
 	
 //####################################################################
 ?><h2><a name="backend">Backends</a></h2><?php
-	$oBackends =cAppdyn::GET_Backends($oApp->name);
+	$oBackends =$oApp->GET_Backends();
 	$sBackendURL = cHttp::build_url("backcalls.php",$gsAppQs );
 	
 	foreach ( $oBackends as $oBackend){

@@ -238,7 +238,7 @@ function render_node_agents($paData){
 }
 
 //***********************************************************************
-$aData = cAppDyn::GET_AppNodes($oApp->id);
+$aData = $oApp->GET_Nodes();
 $iNodes = count_nodes($aData);	
 ?>
 	<h2>There are <?=$iNodes;?> agents in total in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>

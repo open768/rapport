@@ -76,7 +76,7 @@ foreach ($oApps as $oApp){
 		<?php cRenderMenus::show_app_functions($oApp); ?>
 		<?=cRender::button("See Details...", $sUrl);?>
 		<?php
-			$aBackends = cAppdyn::GET_Backends($sApp);
+			$aBackends = $oApp->GET_Backends();
 			$aMetrics = [];
 			foreach ($aBackends as $oItem){
 				$sMetric = cAppDynMetric::backendResponseTimes($oItem->name);

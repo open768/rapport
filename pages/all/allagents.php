@@ -47,7 +47,7 @@ $moApps = cAppDyn::GET_Applications();
 class cAgentTotals {
 	public $total=0;
 	public $machine=0;
-	public $oApp->nameserver=0;
+	public $appserver=0;
 	
 	public function add($poAgentTotals){
 		$this->total += $poAgentTotals->total;
@@ -60,7 +60,7 @@ function get_app_node_data($poApp){
 	$aTierData = [];
 	
 	cDebug::write($poApp->name . ":" . $poApp->id);
-	$aResponse = cAppDyn::GET_AppNodes($poApp->id);
+	$aResponse = $poApp->GET_Nodes();
 	foreach ($aResponse as $aNodes)
 		foreach ($aNodes as $oNode){
 			$sTier = $oNode ->tierName;

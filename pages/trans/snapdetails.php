@@ -118,7 +118,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
-		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
+		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
 	</table>
 	
 <!-- ************************************************************** -->

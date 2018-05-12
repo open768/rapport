@@ -114,7 +114,7 @@ if (cAppdyn::is_demo()){
 
 <?php
 //####################################################################
-$aResponse = cAppDyn::GET_AppNodes($oApp->id);
+$aResponse = $oApp->GET_Nodes();
 $aResponse= group_by_tier($aResponse);
 uasort($aResponse, "pr__sort_nodes");
 $iNodes = count_nodes($aResponse);

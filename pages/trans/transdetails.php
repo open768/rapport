@@ -228,7 +228,7 @@ cDebug::flush();
 $oTimes = cRender::get_times();
 $sAppdUrl = cAppDynControllerUI::transaction_snapshots($oApp,$trid, $oTimes);
 
-$aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
+$aSnapshots = $oApp->GET_snaphot_info($trid, $oTimes);
 cDebug::vardump($aSnapshots);
 
 if (count($aSnapshots) == 0){
@@ -266,7 +266,7 @@ if (count($aSnapshots) == 0){
 						<td><?=$sDate?></td>
 						<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
-						<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
+						<td><?=cAppdynUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
 						<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$sOriginalUrl?></div></a></td>
 						<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
 						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>

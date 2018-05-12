@@ -115,7 +115,7 @@ $(
 );
 </script><?php
 if ($node) {
-	$sNodeID = cAppdynUtil::get_node_id($oApp->id, $node);
+	$sNodeID = cAppdynUtil::get_node_id($oApp, $node);
 	if ($sNodeID){
 		$sUrl = cAppDynControllerUI::nodeDashboard($oApp, $sNodeID);
 		cRender::appdButton($sUrl);

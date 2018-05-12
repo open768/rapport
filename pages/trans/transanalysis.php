@@ -97,7 +97,7 @@ $oTable = new c2DArray;
 <h2><a name="5">Top <?=HOWMANY?> slowest Transaction Snapshots</a></h2>
 <?php
 $bProceed = true;
-$aSnapshots = cAppdyn::GET_snaphot_info($oApp->name, $trid, $oTimes);
+$aSnapshots = $oApp->GET_snaphot_info($trid, $oTimes);
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php
 	$bProceed = false;
@@ -142,7 +142,7 @@ if ($bProceed){
 					<td><?=$sDate?></td>
 					<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 					<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
-					<td><?=cAppdynUtil::get_node_name($oApp->id,$oSnapshot->applicationComponentNodeId)?></td>
+					<td><?=cAppdynUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
 					<td><div style="max-width:200px;overflow-wrap:break-word;">
 						<a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=$sOriginalUrl?></a>
 					</div></td>

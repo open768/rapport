@@ -54,9 +54,9 @@ cRenderMenus::show_apps_menu("Information Points for", "appinfo.php");
 
 
 //####################################################################
-//retrieve tiers
+//retrieve info points
 $oTimes = cRender::get_times();
-$aInfoPoints = cAppdyn::GET_AppInfoPoints($oApp->name, $oTimes);
+$aInfoPoints = $oApp->GET_InfoPoints($oTimes);
 cDebug::vardump($aInfoPoints, true);
 if (count($aInfoPoints) == 0)
 	cRender::messagebox("No information points found");

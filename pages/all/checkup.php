@@ -66,7 +66,7 @@ foreach ( $aResponse as $oApp){
 		cCommon::flushprint("");
 		
 		//************************************************************************************
-		$aTrans = cAppdyn::GET_Transactions($oApp->name);
+		$aTrans = $oApp->GET_Transactions();
 		cDebug::vardump($aTrans);
 		
 		$iCount = count($aTrans);
@@ -110,7 +110,7 @@ foreach ( $aResponse as $oApp){
 		}
 
 		//************************************************************************************
-		$aBackends = cAppdyn::GET_Backends($oApp->name);
+		$aBackends = $oApp->GET_Backends();
 		$iCount = count($aBackends);
 		$bBad = true;
 		$sCaption = "There are $iCount remote services.";

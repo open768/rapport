@@ -74,7 +74,7 @@ function get_BT_from_event($poEvent){
 	return $sBT;
 }
 
-$aEvents = cAppDyn::GET_AppEvents($oApp->name, $oTimes);
+$aEvents = $oApp->GET_Events($oTimes);
 uasort($aEvents,"sort_events");
 //cDebug::vardump($aEvents,true);
 
