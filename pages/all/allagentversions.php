@@ -56,7 +56,7 @@ if (cAppdyn::is_demo()){
 
 //####################################################################
 function get_application_ids(){
-	$aApps = cAppdyn::GET_applications();
+	$aApps = cAppDynController::GET_Applications();
 	$aOutput = [];
 	foreach ($aApps as $oApp){
 		$aOutput[ $oApp->id] = $oApp->name;
@@ -221,7 +221,7 @@ cRender::appdButton(cAppDynControllerUI::agents(), "Agent Settings");
 
 <p>
 <h2><a name="c">Controller Version</a></h2>
-<?=cAppdyn::GET_Controller_version();?>
+<?=cAppDynController::GET_Controller_version();?>
 <p>
 <?php
 ?>

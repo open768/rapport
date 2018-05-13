@@ -164,7 +164,7 @@ $aTiers =$oApp->GET_Tiers();
 		if (cFilter::isTierFilteredOut($oAppTier)) continue;
 		
 		//get the transaction names for the Tier
-		$aTrans = cAppdyn::GET_tier_transaction_names($oAppTier);	
+		$aTrans = $oAppTier->GET_transaction_names();	
 		if (!$aTrans) continue;
 		if (count($aTrans) == 0) continue;
 

@@ -42,7 +42,7 @@ cRender::force_login();
 //####################################################################
 cRender::show_top_banner("All Agents"); 
 
-$moApps = cAppDyn::GET_Applications();
+$moApps = cAppDynController::GET_Applications();
 
 class cAgentTotals {
 	public $total=0;

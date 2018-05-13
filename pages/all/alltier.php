@@ -58,7 +58,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 	
 
-$aApps = cAppDyn::GET_Applications();
+$aApps = cAppDynController::GET_Applications();
 if (count($aApps) == 0) cRender::errorbox("No Applications found");
 
 //####################################################################

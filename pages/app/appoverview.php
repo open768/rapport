@@ -142,7 +142,7 @@ foreach ($aTiers as $oTier){
 	$sTierQS = cHttp::build_QS($sTierQS, cRender::TIER_ID_QS, $oTier->id);
 	
 	?><h3><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3><?php
-	$aTransactions = cAppDyn::GET_tier_transaction_names($oTier);
+	$aTransactions = oTier->GET_transaction_names();
 	if ($aTransactions==null) {
 		cRender::errorbox("unable to get transaction names");
 		continue;

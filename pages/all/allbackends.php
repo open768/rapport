@@ -46,7 +46,7 @@ $title ="All Remote Services";
 cRender::show_time_options( $title); 
 
 //####################################################################
-$oApps = cAppDyn::GET_Applications();
+$oApps = cAppDynController::GET_Applications();
 cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 	//********************************************************************
 	if (cAppdyn::is_demo()){
@@ -80,7 +80,11 @@ foreach ($oApps as $oApp){
 			$aMetrics = [];
 			foreach ($aBackends as $oItem){
 				$sMetric = cAppDynMetric::backendResponseTimes($oItem->name);
-				$aMetrics[] = [cChart::LABEL=>"Backend Response Times: $oItem->name", cChart::METRIC=>$sMetric];
+				$aMetrics[] = [
+					cChart::LABEL=>"Backend Response Times: $oItem->name", 
+					cChart::METRIC=>$sMetric, 
+					cChart::HIDEIFNODATA=>1
+				];
 			}
 			cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 		?>

@@ -59,7 +59,7 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
-$aConfig=cAppDyn::GET_configuration();
+$aConfig=cAppDynController::GET_configuration();
 uasort($aConfig,"sort_config");
 $sStyle = cRender::getRowClass();			
 

@@ -75,7 +75,7 @@ cRender::appdButton(cAppDynControllerUI::apps_home());
 <?php
 
 //####################################################################
-$aResponse = cAppDyn::GET_Applications();
+$aResponse = cAppDynController::GET_Applications();
 if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else{

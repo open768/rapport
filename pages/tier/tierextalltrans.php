@@ -80,7 +80,7 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 //-----------------------------------------------
 
 
-$aTrans = cAppdyn::GET_tier_transaction_names($oTier);
+$aTrans = $oTier->GET_transaction_names();
 
 $aMetrics = [];
 foreach ( $aTrans as $oTrans){

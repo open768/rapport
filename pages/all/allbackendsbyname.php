@@ -62,13 +62,13 @@ if (cAppdyn::is_demo()){
 
 
 //####################################################################
-$oApps = cAppDyn::GET_Applications();
+$oApps = cAppDynController::GET_Applications();
 ?>
 
 
 <h2><?=$title?></h2>
 <div class="maintable"><ul><?php
-	$aBackends = cAppDyn::GET_allBackends();
+	$aBackends = cAppDynController::GET_allBackends();
 	$iBackID = 0;
 	foreach ($aBackends as $sBackend=>$aApps){
 		$iBackID++;

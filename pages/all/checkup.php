@@ -59,7 +59,7 @@ function output_row($pbBad, $psCaption, $psContent){
 }
 
 //####################################################################
-$aResponse = cAppDyn::GET_Applications();
+$aResponse = cAppDynController::GET_Applications();
 foreach ( $aResponse as $oApp){
 	?><div><table width="100%"><?php
 		cRenderMenus::show_app_functions($oApp);

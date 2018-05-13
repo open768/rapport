@@ -182,7 +182,7 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function get_apps_fragment(){
 		try{
-			$aApps = cAppDyn::GET_Applications();
+			$aApps = cAppDynController::GET_Applications();
 		}
 		catch (Exception $e)
 		{

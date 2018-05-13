@@ -13,9 +13,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-$root=realpath(".");
+$home = "../..";
+$root=realpath($home);
 $phpinc = realpath("$root/../phpinc");
-$jsinc = "../jsinc";
+$jsinc = "$home/../jsinc";
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
@@ -38,10 +39,6 @@ require_once("$root/inc/inc-render.php");
 //####################################################################
 cRender::html_header("All Applications - Databases");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE -200;
 
@@ -59,7 +56,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 //####################################################################
-$oResponse = cAppDyn::GET_Databases();
+$oResponse = cAppDynController::GET_Databases();
 if (count($oResponse) == 0){
 	cRender::messagebox("No Monitored Databases found");
 }else{
