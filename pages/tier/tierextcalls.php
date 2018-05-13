@@ -43,8 +43,6 @@ $oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
 $gsTierQs = cRender::get_base_tier_QS();
 
-$SHOW_PROGRESS=true;
-
 
 //**************************************************************************
 function render_tier_ext($poApp, $poTier, $poData){
@@ -115,7 +113,7 @@ if (cAppdyn::is_demo()){
 //####################################################################
 cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();
-$oResponse =cAppdyn::GET_Tier_ext_details($oTier, $oTimes);
+$oResponse =$oTier->GET_ext_details($oTimes);
 cRender::button("show as graphs", "tierextgraph.php?$gsTierQs");
 ?><h2>External calls in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
 render_tier_ext($oApp, $oTier, $oResponse);

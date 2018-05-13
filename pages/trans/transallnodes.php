@@ -45,16 +45,13 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
-$tid = cHeader::get(cRender::TIER_ID_QS);
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 $trans = cHeader::get(cRender::TRANS_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 $node= cHeader::get(cRender::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
-$oApp = cRenderObjs::get_current_app();
 
-$sAppQS = cRender::get_base_app_QS();
 $sTierQS = cRender::get_base_tier_QS();
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
@@ -74,7 +71,7 @@ cDebug::flush();
 
 // ################################################################################
 // ################################################################################
-$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$tier);
+$aNodes = $oTier->GET_Nodes();
 function sort_nodes($a, $b){
 	return strcmp($a->name, $b->name);
 }
@@ -91,11 +88,11 @@ foreach ($aNodes as $oNode){
 	$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
 	$sUrl = "transdetails.php?$sNodeQs";
 					
-	$sMetricUrl=cAppDynMetric::transCallsPerMin($tier, $trans, $sNodeName);
+	$sMetricUrl=cAppDynMetric::transCallsPerMin($oTier->name, $trans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Calls  ($sNodeName)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>$oNode->name];
-	$sMetricUrl=cAppDynMetric::transResponseTimes($tier, $trans, $sNodeName);
+	$sMetricUrl=cAppDynMetric::transResponseTimes($oTier->name, $trans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"response ($sNodeName)", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::transErrors($tier, $trans, $sNodeName);
+	$sMetricUrl=cAppDynMetric::transErrors($oTier->name, $trans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
 }
 $sClass = cRender::getRowClass();

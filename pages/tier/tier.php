@@ -43,8 +43,6 @@ $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sBaseQs = cRender::build_tier_qs($oTier);
 
-$SHOW_PROGRESS=true;
-
 //####################################################################
 cRender::html_header("tier $oTier->name");
 cRender::force_login();

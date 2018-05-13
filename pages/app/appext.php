@@ -36,7 +36,6 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 set_time_limit(200); // huge time limit as this takes a long time
-$SHOW_PROGRESS=true;
 $oApp = cRenderObjs::get_current_app();
 $gsAppQS = cRender::get_base_app_QS();
 $oApp = cRenderObjs::get_current_app();

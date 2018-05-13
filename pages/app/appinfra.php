@@ -42,9 +42,9 @@ cChart::do_header();
 
 //####################################################################
 //####################################################################
+$oApp = cRenderObjs::get_current_app();
 $sTitle ="Infrastructure Overview for $oApp->name";
 cRender::show_time_options( $sTitle); 
-$oApp = cRenderObjs::get_current_app();
 
 ?>
 <h2><?=$sTitle?></h2>
@@ -69,7 +69,11 @@ foreach ($aTiers as $oTier){
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers"];
+		$aMetrics[] = [
+			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
+			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers",
+			cChart::HIDEIFNODATA=>1
+		];
 	}
 	
 	$sClass = cRender::getRowClass();

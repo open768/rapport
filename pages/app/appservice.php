@@ -36,7 +36,6 @@ require_once("$root/inc/inc-charts.php");
 require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
-$SHOW_PROGRESS=false;
 set_time_limit(200); 
 
 //####################################################################
@@ -69,7 +68,7 @@ foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier)) continue;
 
 	//****************************************************************************************
-	$aEndPoints = cAppdyn::GET_TierServiceEndPoints($oApp->name, $oTier->name);
+	$aEndPoints = $oTier->GET_ServiceEndPoints();
 	if (count($aEndPoints) == 0){
 		cRender::messagebox("no Service endpoints found for $oTier->name");
 		continue;

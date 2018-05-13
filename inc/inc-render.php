@@ -14,6 +14,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
+require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/core.php");
 require_once("$root/inc/inc-filter.php");
 
@@ -113,30 +114,6 @@ class cRenderMenus{
 			</span>
 		<?php
 	}
-
-	//******************************************************************************************
-	public static function 	show_tiernodes_menu($psCaption, $psUrl){
-		global $home;
-		$oApp = cRenderObjs::get_current_app();
-		$tier = cHeader::get(cRender::TIER_QS);
-		$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$tier);	
-		$sFragment = "";
-		
-		$iCount = 1;
-		foreach ($aNodes as $oNode){
-			$sFragment .= " node.$iCount=\"$oNode->name\"";
-			$iCount++;
-		}
-		
-		?>
-			<span 
-				type="appdmenus" menu="tiernodesmenu"  
-				home="<?=$home?>"
-				caption="<?=$psCaption?>" url="<?=$psUrl?>" 
-				<?=$sFragment?>>
-			</span>
-		<?php
-	}
 	
 	//******************************************************************************************
 	public static function top_menu(){
@@ -225,25 +202,38 @@ class cRenderObjs{
 		return $oCred;
 	}
 	
+	//***************************************************************************
 	public static function make_app_obj($psApp, $psAID){
 		return new cAppDApp($psApp, $psAID);		
 	}
 	
+	public static function make_tier_obj($poApp, $psTier, $psTID){
+		return new cAppDTier($poApp, $psTier, $psTID);
+	}
+	
+	public static function make_trans_obj($poTier, $psTrans, $psTrID){
+		return new cAppDTrans($poTier, $psTrans, $psTrID);
+	}
+	
+	//***************************************************************************
 	public static function get_current_app(){
 		$sApp = cHeader::get(cRender::APP_QS);
 		$sAID = cHeader::get(cRender::APP_ID_QS);
 		return self::make_app_obj($sApp, $sAID);
 	}
 
-	public static function make_tier_obj($poApp, $psTier, $psTID){
-		return new cAppDTier($poApp, $psTier, $psTID);
-	}
-	
 	public static function get_current_tier(){
 		$oApp = self::get_current_app();
 		$sTier = cHeader::get(cRender::TIER_QS);
 		$sTID = cHeader::get(cRender::TIER_ID_QS);
 		return self::make_tier_obj($oApp, $sTier, $sTID);
+	}
+	
+	public static function get_current_trans(){
+		$oTier = self::get_current_tier();
+		$trans = cHeader::get(cRender::TRANS_QS);
+		$trid = cHeader::get(cRender::TRANS_ID_QS);
+		return self::make_trans_obj($oTier, $trans, $trid);
 	}
 }
 

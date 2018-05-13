@@ -36,7 +36,6 @@ require_once("$root/inc/inc-charts.php");
 require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
-$SHOW_PROGRESS=false;
 set_time_limit(200); 
 
 //####################################################################

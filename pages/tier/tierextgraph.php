@@ -91,7 +91,7 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 
 ?><h3>External calls</h3><?php
 	$linkUrl = cHttp::build_url("tierextalltrans.php", $gsTierQs);
-	$oResponse = cAppdyn::GET_tier_ExtCalls_Metric_heirarchy($oApp->name, $oTier->name);
+	$oResponse = $oTier->GET_ext_calls();
 	
 	$aMetrics=[];
 	

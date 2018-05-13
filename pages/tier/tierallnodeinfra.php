@@ -114,8 +114,13 @@ $(
 <?php
 
 //data for the page
-$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$oTier->name);	
+$aNodes = $oTier->GET_Nodes();	
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
+
+if ($sMetricType == cAppDynInfraMetric::METRIC_TYPE_INFR_DISK_FREE){
+	$sDiskUrl = cHttp::build_url("tierdisks.php", $sTierQS);
+	cRender::button("Show disks", $sDiskUrl);
+}
 
 	
 //####################################################################
@@ -123,7 +128,6 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 <h2><?=$oMetricDetails->caption?> for all Servers in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> Tier</h2>
 <p>
 <?php
-	$sDiskUrl = cHttp::build_url("nodedisks.php", $sTierQS);
 	$sNodeUrl = cHttp::build_url("tierinfrstats.php",$sTierQS);
 	
 	$aMetrics = [];

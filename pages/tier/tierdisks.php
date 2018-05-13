@@ -12,8 +12,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-
-//####################################################################
 //####################################################################
 $home = "../..";
 $root=realpath($home);
@@ -32,34 +30,32 @@ cDebug::check_GET_or_POST();
 
 //####################################################################
 require_once("$phpinc/appdynamics/appdynamics.php");
+require_once("$phpinc/appdynamics/metrics.php");
 require_once("$phpinc/appdynamics/common.php");
 require_once("$root/inc/inc-charts.php");
 require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
-
-set_time_limit(200); // huge time limit as this takes a long time
-
-	
-//display the results
-$oTier = cRenderObjs::get_current_tier();
-$trid = cHeader::get(cRender::TRANS_ID_QS);
-$trans = cHeader::get(cRender::TRANS_QS);
-
-$gsTier = cRender::get_base_tier_qs();
-
 //####################################################################
-cRender::html_header("Transaction external calls");
+cRender::html_header("tier disks");
+cChart::do_header();
 cRender::force_login();
 
+//get passed in values
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
+$sAppQS = cRender::get_base_app_QS();
+$sTierQS = cRender::get_base_tier_QS();
 
-cRender::show_time_options("transaction external calls"); 
+// show time options
+$title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;disks";
+cRender::show_time_options($title); 
+$showlink = cCommon::get_session($LINK_SESS_KEY);
 
-$sBaseUrl = cHttp::build_url("tiertrans.php",$gsTier );
-$sBaseUrl = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $trans );
-$sBaseUrl = cHttp::build_url($sBaseUrl,cRender::TRANS_ID_QS , $trid);
+//other buttons
+$oCred = cRenderObjs::get_appd_credentials();
+if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 
-$sTierUrl="tiertrans.php?$baseQuery";
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
@@ -68,40 +64,36 @@ if (cAppdyn::is_demo()){
 }
 //********************************************************************
 
-$oResponse =cAppdyn::GET_transExtCalls($oTier, $trans);
+
+//data for the page
+	
+//####################################################################
+?>
+<h2>Disks for all Servers in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> Tier</h2>
+<p>
+<?php
+	$aNodes = $oTier->GET_Nodes();	
+	
+	foreach ($aNodes as $oNode){
+		?><H3>disks for <?=cRender::show_name(cRender::NAME_OTHER,$oNode->name)?></h3><?php
+		$aDisks = $oTier->GET_NodeDisks($oNode->name);
+		$aMetrics = [];
+		foreach ($aDisks as $oDisk){
+			$sMetric = cAppDynMetric::InfrastructureNodeDiskFree($oTier->name, $oNode->name, $oDisk->name);
+			$aMetrics[]= [
+				cChart::LABEL=>$oDisk->name, cChart::METRIC=>$sMetric, cChart::HIDEIFNODATA=>1
+			];
+			$sMetric = cAppDynMetric::InfrastructureNodeDiskUsed($oTier->name, $oNode->name, $oDisk->name);
+			$aMetrics[]= [
+				cChart::LABEL=>$oDisk->name, cChart::METRIC=>$sMetric, cChart::HIDEIFNODATA=>1
+			];
+		}		
+		cChart::metrics_table($oTier->app, $aMetrics, 2, cRender::getRowClass());
+		cDebug::flush();
+	}
 ?>
 
-<h3>external calls from <?=$trans?> in tier <a href="<?=$sTierUrl?>"><?=$tier?></a> in <?=cRender::show_name(cRender::NAME_APP,$oTier->app)?></h3>
-<table class="maintable">
-	<tr>
-		<th>other trans</th>
-		<th>Metric Path</th>
-		<th>Calls Per Min</th>
-	</tr>
-	<?php
-	foreach ( $oResponse as $oItem){
-		if (sizeof($oItem->calls) >0){
-			$oData = array_pop($oItem->calls);
-			$sMetricPath = $oData->metricPath;
-			$url = 	cAppDynCore::GET_controller();
-
-			$oValue = array_pop($oData->metricValues);
-			if ($oValue)
-				$iValue = $oValue->value ;
-			else
-				$iValue = "";
-			
-			?>
-				<tr>
-					<td align="top"><?=$oItem->trans2?></td>
-					<td align="top"><?=$sMetricPath?></td>
-					<td><?=$iValue?></td>
-				</tr>
-			<?php
-		}
-	}
-	?>
-</table>
 <?php
+cChart::do_footer();
 cRender::html_footer();
 ?>

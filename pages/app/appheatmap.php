@@ -45,7 +45,6 @@ cRender::force_login();
 <?php
 //choose a default duration
 
-$SHOW_PROGRESS=false;
 set_time_limit(200); 
 
 //get passed in values

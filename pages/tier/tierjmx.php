@@ -43,17 +43,13 @@ $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
 cRender::html_header("tier JMX Database Pools");
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //####################################################################
 // huge time limit as this takes a long time//display the results
-set_time_limit(200); 
+
 
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
@@ -82,11 +78,11 @@ $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 
 //####################################################################
 //other buttons
-$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$oTier->name);	
 
 $oCred = cRenderObjs::get_appd_credentials();
-if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
+cDebug::flush();
+$aNodes = $oTier->GET_Nodes();	
 ?><select id="menuNodes">
 	<option selected disabled>Show Details for</option>
 	<optgroup label="tiers"><?php
@@ -120,43 +116,38 @@ $(
 	}  
 );
 </script><?php
+if ($oCred->restricted_login == null) cRenderMenus::show_tier_functions();
+
 
 
 //####################################################################
-$aPools = cAppdyn::GET_JDBC_Pools($oApp->name,$oTier->name,$node);
-cChart::$width=cChart::CHART_WIDTH_LARGE/2;
-?>
-<h2>JDBC Pools for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
-<?php
-if ($node){
-	?><h3>(<?=$node?>) Node</h3><?php
+$aPools = $oTier->GET_JDBC_Pools($node);
+if (count($aPools) == 0)
+	cRender::messagebox("No JDBC Pools Found");
+else{
+	?><h2>JDBC Pools for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
+	if ($node){
+		?><h3>(<?=$node?>) Node</h3><?php
+	}
+	?>
+	<p>
+	<table class="maintable"><?php
+		foreach ($aPools as $oPool){
+			$sPool = $oPool->name;
+			?><tr class="<?=cRender::getRowClass()?>">
+				<td><?=$sPool?></td>
+				<td><?php
+					$sMetric = cAppDynMetric::InfrastructureJDBCPoolActive($oTier->name,$node, $sPool);
+					cChart::add("active connections" , $sMetric, $oApp->name, 100);
+				?></td>
+				<td><?php
+					$sMetric = cAppDynMetric::InfrastructureJDBCPoolMax($oTier->name,$node, $sPool);
+					cChart::add("Max connections" , $sMetric, $oApp->name, 100);
+				?></td>
+			</tr><?php
+		}
+	?></table><?php
 }
-?>
-<p>
-<table class="maintable"><?php
-	if (count($aPools) == 0){
-		?><tr><td>No Pools Found</td></tr><?php
-		return;
-	}
-		
-		
-	foreach ($aPools as $oPool){
-		$sPool = $oPool->name;
-		?><tr class="<?=cRender::getRowClass()?>">
-			<td><?=$sPool?></td>
-			<td><?php
-				$sMetric = cAppDynMetric::InfrastructureJDBCPoolActive($oTier->name,$node, $sPool);
-				cChart::add("active connections" , $sMetric, $oApp->name, 100);
-			?></td>
-			<td><?php
-				$sMetric = cAppDynMetric::InfrastructureJDBCPoolMax($oTier->name,$node, $sPool);
-				cChart::add("Max connections" , $sMetric, $oApp->name, 100);
-			?></td>
-		</tr><?php
-	}
-?></table>
-
-<?php
 cChart::do_footer();
 
 cRender::html_footer();

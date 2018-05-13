@@ -151,7 +151,7 @@ if ($oCred->restricted_login == null){
 			if ($node){
 				?><option value="tiertrans.php?<?=$gsTierQs?>">All servers in tier</option><?php
 			}
-			$aNodes = cAppdyn::GET_TierAppNodes($oApp->name,$oTier->name);
+			$aNodes = $oTier->GET_nodes();
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
 				$sUrl = cHttp::build_url("tiertransgraph.php",$gsTierQs);

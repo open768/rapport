@@ -90,7 +90,7 @@ if (cAppdyn::is_demo()){
 
 //####################################################################
 //other buttons
-$aNodes = cAppDyn::GET_TierInfraNodes($oApp->name,$oTier->name);	
+$aNodes = $oTier->GET_Nodes();	
 
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
