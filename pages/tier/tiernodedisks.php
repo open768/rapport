@@ -45,6 +45,7 @@ cRender::force_login();
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sTierQS = cRender::get_base_tier_QS();
+$sNode = cHeader::get(cRender::NODE_QS);
 
 // show time options
 $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;disks";
@@ -78,17 +79,22 @@ if (cAppdyn::is_demo()){
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 
 ?>
-<p>
-<h2>Show disks for Node..</h2>
+<h2>disks for Node..<?=cRender::show_name(cRender::NAME_OTHER,$sNode)?></h2>
 <?php
-$aNodes = $oTier->GET_Nodes();
-$sBaseUrl = cHttp::build_url("tiernodedisks.php",$sTierQS);
-foreach ($aNodes as $oNode){
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::NODE_QS, $oNode->name);
-	cRender::button($oNode->name, $sUrl);
-	echo " ";
-}
+	$sBaseMetric = cAppDynMetric::InfrastructureNodeDisks($oTier->name, $sNode);
+	$aData = $oTier->GET_NodeDisks($sNode);
+	$aMetrics = [];
+	foreach ($aData as $oDisk){
+		$aMetrics[]= [cChart::LABEL=>$oDisk->name, cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>250];
 
+		$sMetric = cAppdynMetric::InfrastructureNodeDiskFree($oTier->name, $sNode, $oDisk->name);
+		$aMetrics[]= [cChart::LABEL=>$oDisk->name." free", cChart::METRIC=>$oMetric->name];
+		$sMetric = cAppdynMetric::InfrastructureNodeDiskUsed($oTier->name, $sNode, $oDisk->name);
+		$aMetrics[]= [cChart::LABEL=>$oDisk->name." used", cChart::METRIC=>$oMetric->name];
+	}
+	cChart::metrics_table($oApp, $aMetrics, 3, cRender::getRowClass());
+?>
+<?php
 cChart::do_footer();
 cRender::html_footer();
 ?>

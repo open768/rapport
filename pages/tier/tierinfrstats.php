@@ -43,10 +43,6 @@ $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
 cRender::html_header("tier infrastructure");
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE;
@@ -121,6 +117,9 @@ if ($node) {
 		cRender::appdButton($sUrl);
 	}
 }
+$sDiskUrl = cHttp::build_url("tierdisks.php", $sTierQs);
+cRender::button("disk statistics", $sDiskUrl);
+
 cDebug::flush();
 $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
@@ -203,9 +202,8 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 	cDebug::flush();
-?>
 
-<?php
+	
 cChart::do_footer();
 cRender::html_footer();
 ?>

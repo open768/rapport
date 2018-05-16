@@ -45,7 +45,6 @@ $CHART_IGNORE_ZEROS = false;
 cRender::html_header("tier infrastructure");
 cRender::force_login();
 cChart::do_header();
-cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
@@ -117,10 +116,6 @@ $(
 $aNodes = $oTier->GET_Nodes();	
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
-if ($sMetricType == cAppDynInfraMetric::METRIC_TYPE_INFR_DISK_FREE){
-	$sDiskUrl = cHttp::build_url("tierdisks.php", $sTierQS);
-	cRender::button("Show disks", $sDiskUrl);
-}
 
 	
 //####################################################################

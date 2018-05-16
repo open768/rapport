@@ -121,10 +121,15 @@ function render_tier_transactions($poApp, $poTier){
 		$aMetrics[] = [
 			cChart::LABEL=>"Errors ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
+
+		$sMetricUrl=cAppDynMetric::transCpuUsed($poTier->name, $sTrName,$node);
+		$aMetrics[] = [
+			cChart::LABEL=>"CPU ($sTrName)", cChart::METRIC=>$sMetricUrl, 
+		];
 	}
 	
 	if ($iCount >0)
-		cChart::metrics_table($poApp,$aMetrics,3,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)", "Errors per minute"]);
+		cChart::metrics_table($poApp,$aMetrics,4,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)", "Errors per minute"]);
 	else{
 		cRender::messagebox("No transactions found");
 	}
@@ -187,7 +192,10 @@ cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 	$aMetrics[] = [cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierErrorsPerMin($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass());
+	$sMetricUrl = cAppDynMetric::InfrastructureCpuBusy($oTier->name);
+	$aMetrics[] = [cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl];
+	
+	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass());
 
 
 if ($node){ 
