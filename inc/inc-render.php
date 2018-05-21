@@ -25,9 +25,11 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function show_app_functions($poApp=null){
 		global $home;
+		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($poApp->name,null);
+			cDebug::leave();
 			return;
 		}
 		
@@ -39,14 +41,18 @@ class cRenderMenus{
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
 			</span>
 		<?php
+		cDebug::leave();
 	}
 	//******************************************************************************************
 	public static function show_app_agent_menu($poApp = null){
 		global $home;
 
+		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login) 
+		if ($oCred->restricted_login) {
+			cDebug::leave();
 			return;
+		}
 		
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
@@ -56,15 +62,18 @@ class cRenderMenus{
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
 			</span>
 		<?php
+		cDebug::leave();
 	}
 
 	//******************************************************************************************
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
 		global $home;
 	
+		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psCaption,null);
+			cDebug::leave();
 			return;
 		}
 		
@@ -79,13 +88,19 @@ class cRenderMenus{
 			</span>
 		<?php
 		self::show_app_functions();
+		cDebug::leave();
 	}
 	
 	//******************************************************************************************
 	public static function show_tier_menu($psTier, $psURLFragment, $psExtraQS=""){
 		global $home;
+		
+		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login)	return;
+		if ($oCred->restricted_login){
+			cDebug::leave();
+			return;
+		}
 
 		$oApp = cRenderObjs::get_current_app();
 		
@@ -95,6 +110,7 @@ class cRenderMenus{
 		catch (Exception $e)
 		{
 			cRender::errorbox("Oops unable to get tier data from controller");
+			cDebug::leave();
 			exit;
 		}
 		
@@ -113,35 +129,45 @@ class cRenderMenus{
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>
 			</span>
 		<?php
+		cDebug::leave();
 	}
 	
 	//******************************************************************************************
 	public static function top_menu(){
 		global $home;
+
+		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
 		if ($oCred->restricted_login){
 			cRender::button("Back to Login", "$home/index.php");
+			cDebug::leave();
 			return;
 		}
 		
+		$oCred = cRenderObjs::get_appd_credentials();
 		$sApps_fragment = self::get_apps_fragment();
 
 		?>
 			<span 
 				type="appdmenus" menu="topmenu" 
 				home="<?=$home?>"
+				controller="<?=$oCred->host?>"
 				<?=$sApps_fragment?>>
 			</span>
 		<?php
+		cDebug::leave();
 	}
 	
 	//******************************************************************************************
 	public static function show_tier_functions($poTier = null, $psNode=null){
 		global $home;
+
+		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
 	
 		if ($oCred->restricted_login) {
 			cRender::button($psTier,null);
+			cDebug::leave();
 			return;
 		}
 		if ($poTier == null){
@@ -154,16 +180,20 @@ class cRenderMenus{
 				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
 			</span>
 		<?php
+		cDebug::leave();
 	}
 	
 	//******************************************************************************************
 	public static function get_apps_fragment(){
+
+		cDebug::enter();
 		try{
 			$aApps = cAppDynController::GET_Applications();
 		}
 		catch (Exception $e)
 		{
 			cRender::errorbox("Oops unable to get application data from controller");
+			cDebug::leave();
 			exit;
 		}
 		uasort($aApps,"sort_by_app_name" );
@@ -174,6 +204,7 @@ class cRenderMenus{
 			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
 		}
 		
+		cDebug::leave();
 		return $sApps_fragment;
 	}
 
@@ -188,6 +219,7 @@ class cRenderObjs{
 	//**************************************************************************
 	private static $oAppDCredentials = null;
 	
+	
 	//**************************************************************************
 	public static function get_appd_credentials(){
 		cDebug::enter();
@@ -198,7 +230,7 @@ class cRenderObjs{
 			$oCred->check();
 			self::$oAppDCredentials = $oCred;
 		}
-		cDebug::leave();
+		cDebug::leave();;
 		return $oCred;
 	}
 	
@@ -362,7 +394,7 @@ class cRender{
 		cDebug::enter();
 		try{
 			$oCred = cRenderObjs::get_appd_credentials();
-			cDebug::leave();
+			cDebug::leave();;
 			return $oCred->logged_in();
 		}
 		catch (Exception $e)
@@ -373,7 +405,7 @@ class cRender{
 			self::button("Back to login", "$home/index.php", false);
 			die;
 		}
-		cDebug::leave();
+		cDebug::leave();;
 	}
 	
 	//**************************************************************************
@@ -478,14 +510,14 @@ class cRender{
 		if ($oCred !== null)
 			if ($oCred->restricted_login){
 					?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
-					cDebug::leave();
+					cDebug::leave();;
 					return;
 			}
 		
 		if ($bShow)
 			echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams);
 		
-		cDebug::leave();
+		cDebug::leave();;
 	}
 	
 	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
@@ -503,7 +535,7 @@ class cRender{
 			if (array_key_exists("class", $paParams )) $sClass.=" ".$paParams["class"];
 		}
 		
-		cDebug::leave();
+		cDebug::leave();;
 		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
 	}
 	

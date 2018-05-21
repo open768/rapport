@@ -13,9 +13,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-$root=realpath(".");
-$phpinc = realpath("$root/../phpinc");
-$jsinc = "../jsinc";
+require_once("../../inc/root.php");
+cRoot::set_root("../..");
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
@@ -60,6 +59,7 @@ $gsTABLE_ID = 0;
 //*****************************************************************************
 function render_table($psType, $paData){
 	global $gsTABLE_ID, $gsAppQS;
+	global $home;
 	
 	$gsTABLE_ID++;
 	uasort ($paData, "sort_metric_names");
@@ -83,7 +83,7 @@ function render_table($psType, $paData){
 				$oValues = $oItem->metricValues[0];
 				if ($oValues->count == 0 ) continue;
 				$iRows++;
-				$sImgMax = cRender::get_trans_speed_colour($oValues->max);
+				$sImgMax = "$home/".cRender::get_trans_speed_colour($oValues->max);
 				$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
 				$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
 

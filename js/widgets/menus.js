@@ -199,9 +199,13 @@ $.widget( "ck.appdmenu",{
 	
 	//****************************************************************
 	pr__showTopMenu: function(){
-		var oOptions, oElement, oParams, oGroup;
+		var oOptions, oElement, oParams, oGroup, sController;
 		oOptions = this.options;
 		oElement = this.element;
+		
+		//check for required options
+		sController = oElement.attr("controller");
+		if (!sController) {	$.error("controller attr missing!");	}
 		
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sAllPrefixUrl = oOptions.home+"/pages/all";
@@ -216,6 +220,7 @@ $.widget( "ck.appdmenu",{
 			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl(oOptions.home +"/index.php", oParams));
 			this.pr__addToGroup( oSelect, "Login Token", oOptions.home +"/pages/authtoken.php");
 			this.pr__addToGroup( oSelect, "Link to this page", oOptions.home +"/pages/link.php");
+			this.pr__addToGroup( oSelect, "Appdynamics", "https://"+sController + "/controller/");
 			
 			//- - - - -Check group
 			oGroup = $("<optgroup>",{label:"Check"});

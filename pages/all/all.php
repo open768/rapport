@@ -13,10 +13,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-$home = "../..";
-$root=realpath($home);
-$phpinc = realpath("$root/../phpinc");
-$jsinc = "$home/../jsinc";
+require_once("../../inc/root.php");
+cRoot::set_root("../..");
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
@@ -47,7 +45,7 @@ switch($sMetricType){
 		$sTitle3 = "Pages With Javascript Errors";
 		$sMetric3 = cAppDynMetric::webrumJavaScriptErrors();
 		
-		$sBaseUrl = "apprum.php";
+		$sBaseUrl = "$home/pages/rum/apprum.php";
 		break;
 	case cRender::METRIC_TYPE_RESPONSE_TIMES:
 	case cRender::METRIC_TYPE_ACTIVITY:

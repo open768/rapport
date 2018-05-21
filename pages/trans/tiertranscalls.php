@@ -13,10 +13,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-$home = "../..";
-$root=realpath($home);
-$phpinc = realpath("$root/../phpinc");
-$jsinc = "$home/../jsinc";
+require_once("../../inc/root.php");
+cRoot::set_root("../..");
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");

@@ -13,9 +13,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-$root=realpath(".");
-$phpinc = realpath("$root/../phpinc");
-$jsinc = "../jsinc";
+require_once("../../inc/root.php");
+cRoot::set_root("../..");
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
@@ -46,13 +45,9 @@ $title ="$oApp->name&gtWeb Real User Monitoring Details&gt;$rum_page";
 cRender::html_header("Web browser - Real user monitoring - $rum_page");
 cRender::show_time_options( $title); 
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
-cRenderMenus::show_app_functions($oApp->name, $oApp->id);
+cRenderMenus::show_app_functions($oApp);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
 cRender::appdButton(cAppDynControllerUI::webrum($oApp));
 

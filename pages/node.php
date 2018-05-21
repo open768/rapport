@@ -12,9 +12,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 //####################################################################
-$root=realpath(".");
-$phpinc = realpath("$root/../phpinc");
-$jsinc = "../jsinc";
+require_once("../inc/root.php");
+cRoot::set_root("..");
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
