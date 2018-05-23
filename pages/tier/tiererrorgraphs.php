@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 //-----------------------------------------------
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$gsTierQS = cRender::get_base_tier_QS();
+$gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 $title ="$oApp->name&gt;$oTier->name&gt;Errors and Exceptions";

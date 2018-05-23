@@ -63,7 +63,7 @@ $sSnapGUID = cHeader::get(cRender::SNAP_GUID_QS);
 $sSnapURL = cHeader::get(cRender::SNAP_URL_QS);
 $sSnapTime = cHeader::get(cRender::SNAP_TIME_QS);
 
-$sTierQS = cRender::get_base_tier_QS();
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 cRender::show_top_banner("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans&gt;$sSnapURL"); 
 

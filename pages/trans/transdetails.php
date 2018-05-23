@@ -57,8 +57,8 @@ $oApp = $oTier->app;
 $node= cHeader::get(cRender::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
 
-$sAppQS = cRender::get_base_app_QS();
-$sTierQS = cRender::get_base_tier_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);

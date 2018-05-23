@@ -44,7 +44,7 @@ cRender::force_login();
 //display the results
 $oApp = cRenderObjs::get_current_app();
 $tier = cHeader::get(cRender::TIER_QS);
-$gsTierQS = cRender::get_base_tier_qs();
+$gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 $title =  "Graphs for transaction calls per minute for transactions for $tier in $oApp->name";
 cRender::show_time_options($title); 

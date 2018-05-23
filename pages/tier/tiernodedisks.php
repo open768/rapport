@@ -42,7 +42,7 @@ cRender::force_login();
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$sTierQS = cRender::get_base_tier_QS();
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 $sNode = cHeader::get(cRender::NODE_QS);
 
 // show time options

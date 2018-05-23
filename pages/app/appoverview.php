@@ -35,7 +35,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //-----------------------------------------------
-$gsAppQs = cRender::get_base_app_QS();
+$gsAppQs = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
 $aTiers =$oApp->GET_Tiers();
 

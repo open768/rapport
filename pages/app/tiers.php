@@ -46,7 +46,7 @@ cRender::show_time_options( $oApp->name);
 
 //####################################################################
 cRenderMenus::show_apps_menu("Application Tier Activity for:","tiers.php");
-$sAppQS = cRender::get_base_app_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 cRender::appdButton(cAppDynControllerUI::application($oApp));
 cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Transactions");
@@ -71,7 +71,7 @@ foreach ( $oResponse as $oTier){
 	$sTier=$oTier->name;
 	if (cFilter::isTierFilteredOut($oTier)) continue;
 	
-	$sTierQs=cRender::build_tier_qs($oTier);
+	$sTierQs=cRenderQS::get_base_tier_QS($oTier);
 	
 	cRenderMenus::show_tier_functions($oTier);
 	$aMetrics = [];

@@ -46,8 +46,8 @@ $oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
 
 $node= cHeader::get(cRender::NODE_QS);
-$gsAppQs=cRender::get_base_app_QS();
-$gsTierQs=cRender::get_base_tier_QS();
+$gsAppQs=cRenderQS::get_base_app_QS($oApp);
+$gsTierQs=cRenderQS::get_base_tier_QS($oTier);
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 if ($gsMetricType==null) $gsMetricType = cRender::METRIC_TYPE_ACTIVITY;
 
@@ -76,7 +76,7 @@ function render_tier_transactions($poApp, $poTier){
 	cDebug::enter();
 	$oTimes = cRender::get_times();
 
-	$sTierQS = cRender::build_tier_qs($poTier);
+	$sTierQS = cRenderQS::get_base_tier_QS($poTier);
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 

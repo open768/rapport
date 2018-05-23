@@ -60,7 +60,7 @@ foreach ($aTiers as $oTier){
 	if (cFilter::isTierFilteredOut($oTier)) continue;
 	
 	cRenderMenus::show_tier_functions($oTier);
-	$sTierQs = cRender::build_tier_qs($oTier );
+	$sTierQs = cRenderQS::get_base_tier_QS($oTier );
 	$sAllUrl = cHttp::build_url("../tier/tierallnodeinfra.php", $sTierQs);
 
 	$aMetrics = [];

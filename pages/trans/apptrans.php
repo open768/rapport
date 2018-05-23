@@ -58,7 +58,7 @@ function render_tier_transactions($poTier){
 			<th width=90>calls</th>
 		</tr></thead>
 		<tbody><?php
-		$sTierQS = cRender::build_tier_qs($poTier);
+		$sTierQS = cRenderQS::get_base_tier_QS($poTier);
 		$sBaseUrl = cHttp::build_url("../trans/transdetails.php", $sTierQS);
 		$iCount = 0;
 		
@@ -127,7 +127,7 @@ $tid = cHeader::get(cRender::TIER_ID_QS);
 $oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
 
-$gsAppQS = cRender::get_base_app_qs();
+$gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //header
 cRender::show_time_options("Business Transactions - $oApp->name"); 
@@ -144,7 +144,7 @@ if (cAppdyn::is_demo()){
 //header
 cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
 if (cFilter::isFiltered()){
-	$sCleanAppQS = cRender::get_clean_base_app_QS();
+	$sCleanAppQS = cRenderQS::get_base_app_QS($oApp);
 	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
 }
 cRender::appdButton(cAppDynControllerUI::businessTransactions($oApp));

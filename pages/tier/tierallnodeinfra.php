@@ -54,8 +54,8 @@ $oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$
 $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 
 //stuff for later
-$sAppQS = cRender::get_base_app_QS();
-$sTierQS = cRender::get_base_tier_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 // show time options
 cRender::show_time_options($title); 
@@ -132,7 +132,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 		
 		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
-		$aMetrics[]= [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all metrics for Tier", cChart::HIDEIFNODATA=>1];
+		$aMetrics[]= [cChart::LABEL=>$sNode." - ".$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"all metrics ($sNode)", cChart::HIDEIFNODATA=>1];
 	}
 	$sClass = cRender::getRowClass();			
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);

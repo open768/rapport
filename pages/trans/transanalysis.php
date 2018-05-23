@@ -50,7 +50,7 @@ $oApp = $oTier->app;
 $trans = cHeader::get(cRender::TRANS_QS);
 $trid = cHeader::get(cRender::TRANS_ID_QS);
 
-$sTierQS = cRender::get_base_tier_QS();
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 

@@ -43,7 +43,7 @@ if (cAppdyn::is_demo()){
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
 $sExt = cHeader::get(cRender::BACKEND_QS);
-$sAppQS = cRender::get_base_app_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 $sTitle = "External Calls in $oApp->name for $sExt";

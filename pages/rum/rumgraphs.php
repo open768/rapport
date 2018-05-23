@@ -36,7 +36,7 @@ require_once("$root/inc/inc-render.php");
 
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
-$gsAppQS = cRender::get_base_app_QS();
+$gsAppQS = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
 $sGraphUrl = cHttp::build_url("rumstats.php", $gsAppQS);
 

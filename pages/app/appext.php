@@ -35,7 +35,7 @@ require_once("$root/inc/inc-render.php");
 
 set_time_limit(200); // huge time limit as this takes a long time
 $oApp = cRenderObjs::get_current_app();
-$gsAppQS = cRender::get_base_app_QS();
+$gsAppQS = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
 
 //####################################################################

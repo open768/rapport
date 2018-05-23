@@ -39,7 +39,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 //display the results
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$sBaseQs = cRender::build_tier_qs($oTier);
+$sBaseQs = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 cRender::html_header("tier $oTier->name");

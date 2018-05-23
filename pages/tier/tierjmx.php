@@ -69,7 +69,7 @@ if (!$gsMetric){
 }
 
 //stuff for later
-$sBaseQS = cRender::get_base_tier_QS();
+$sBaseQS = cRenderQS::get_base_tier_QS($oTier);
 $sBaseQS = cHttp::build_qs($sBaseQS, cRender::METRIC_TYPE_QS, $gsMetric);
 $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 
@@ -85,7 +85,7 @@ $aNodes = $oTier->GET_Nodes();
 	<option selected disabled>Show Details for</option>
 	<optgroup label="tiers"><?php
 		$aTiers = $oApp->GET_Tiers();
-		$sBaseTierQS = cRender::get_base_app_QS();
+		$sBaseTierQS = cRenderQS::get_base_app_QS($oApp);
 		$sBaseTierQS = cHttp::build_qs($sBaseTierQS, cRender::METRIC_TYPE_QS, $gsMetric);
 		$sBaseTierUrl = cHttp::build_url("tierjmx.php", $sBaseTierQS);
 		

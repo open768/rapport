@@ -50,7 +50,7 @@ $title= "$oApp->name&gt;Service EndPoints";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("Show Service EndPoints for", "appservice.php");
 if (cFilter::isFiltered()){
-	$sCleanAppQS = cRender::get_clean_base_app_QS();
+	$sCleanAppQS = cRenderQS::get_base_app_QS($oApp);
 	cRender::button("Clear Filter", "appservice.php?$sCleanAppQS");
 }
 //####################################################################

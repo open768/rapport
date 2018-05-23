@@ -41,7 +41,7 @@ error_reporting(E_ALL);
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $totier = cHeader::get(cRender::TO_TIER_QS);
-$gsTierQS = cRender::get_base_tier_QS();
+$gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 $sTransQs = cHttp::build_qs($gsTierQS, cRender::BACKEND_QS, $totier);
 
 //####################################################################

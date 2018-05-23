@@ -38,7 +38,7 @@ require_once("$root/inc/inc-render.php");
 $oApp = cRenderObjs::get_current_app();
 $rum_page = cHeader::get(cRender::RUM_PAGE_QS);
 $rum_type = cHeader::get(cRender::RUM_TYPE_QS);
-$gsAppQS = cRender::get_base_app_QS();
+$gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 $title ="$oApp->name&gtWeb Real User Monitoring Details&gt;$rum_page";

@@ -37,7 +37,7 @@ cRender::html_header("Application node detail ");
 cRender::force_login();
 $oApp = cRenderObjs::get_current_app();
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-$sAppQS = cRender::get_base_app_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 ?>
@@ -85,7 +85,7 @@ $oMetric = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetri
 $sTitle  = $oMetric->caption;
 
 //####################################################################
-$sAppQS = cRender::get_base_app_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 $sDetailRootQS = cHttp::build_url("appagentdetail.php", $sAppQS);
 

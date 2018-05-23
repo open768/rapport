@@ -38,7 +38,7 @@ cRender::force_login();
 $oApp = cRenderObjs::get_current_app();
 $node = cHeader::get(cRender::NODE_QS);
 $nodeID = cHeader::get(cRender::NODE_ID_QS);
-$sAppQS = cRender::get_base_app_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 cRender::show_top_banner("Node details: $node"); 
 cRender::button("Back to all nodes", "appagents.php?$sAppQS");

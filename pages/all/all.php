@@ -80,7 +80,7 @@ else{
 	//display the results
 	foreach ( $aResponse as $oApp){
 		if (cFilter::isAppFilteredOut($oApp)) continue;
-		$sUrl = cHttp::build_url($sBaseUrl, cRender::build_app_qs($oApp));
+		$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
 		$aMetrics = [
 			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],
 			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],

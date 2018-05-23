@@ -42,7 +42,7 @@ cRender::force_login();
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$sTierQS = cRender::get_base_tier_QS();
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 // show time options
 $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;disks";

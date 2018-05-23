@@ -41,7 +41,7 @@ cRender::force_login();
 $oApp = cRenderObjs::get_current_app();
 $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
-$sAppQS = cRender::get_base_app_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
 $aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
@@ -143,7 +143,7 @@ function render_tier_agents($paNodes){
 		$oTier = cRenderObjs::make_tier_obj($oApp, $sTier, $aNodes[0]->tierId);
 		?><p><?php
 		cRenderMenus::show_tier_functions($oTier);
-		$sTierQS = cRender::build_tier_qs($oTier);
+		$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 		?><div class="<?=cRender::getRowClass()?>"><table class="maintable">
 			<tr class="tableheader">
 				<th width="250">Machine</th>

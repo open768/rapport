@@ -39,7 +39,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 //display the results
 $oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
-$gsTierQs = cRender::get_base_tier_QS();
+$gsTierQs = cRenderQS::get_base_tier_QS($oTier);
 
 
 //**************************************************************************
@@ -64,7 +64,7 @@ function render_tier_ext($poApp, $poTier, $poData){
 				<th width=80>total</th>
 			</tr><?php
 
-			$sBaseQs = cRender::get_base_tier_QS();
+			$sBaseQs = cRenderQS::get_base_tier_QS($oTier);
 			foreach ( $poData as $oDetail){
 				cDebug::write("DEBUG: ".$oDetail->name);
 				$other_tier = $oDetail->name;

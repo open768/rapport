@@ -44,8 +44,8 @@ if (cAppdyn::is_demo()){
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sExt = cHeader::get(cRender::BACKEND_QS);
-$sAppQS = cRender::get_base_app_QS();
-$sTierQS = cRender::get_base_tier_QS();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 $sTitle = "All transactions calling External Service: $sExt";

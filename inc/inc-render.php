@@ -117,7 +117,7 @@ class cRenderMenus{
 		$sFragment = "";
 		$iCount = 1;
 		foreach ($oTiers as $oTier){
-			$sFragment .= " tname.$iCount=\"$oTier->name\" tid.$iCount=\"$oTier->id\" ";
+			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";
 			$iCount++;
 		}
 		
@@ -201,7 +201,7 @@ class cRenderMenus{
 		$sApps_fragment = "";
 		foreach ($aApps as $oApp){
 			$iCount++;
-			$sApps_fragment.= "appname.$iCount =\"$oApp->name\" appid.$iCount=\"$oApp->id\" ";
+			$sApps_fragment.= "appname.$iCount =\"".$oApp->name."\" appid.$iCount=\"$oApp->id\" ";
 		}
 		
 		cDebug::leave();
@@ -271,6 +271,33 @@ class cRenderObjs{
 
 //#######################################################################
 //#######################################################################
+class cRenderQS{
+	public static function get_base_app_QS( $poApp){
+		$appQS = cHttp::build_qs(null, cRender::APP_QS, $poApp->name);
+		$appQS = cHttp::build_qs($appQS, cRender::APP_ID_QS, $poApp->id);
+		return $appQS;
+	}
+
+	//******************************************************************************************
+	public static function get_base_tier_QS( $poTier){
+		$sAppQs = self::get_base_app_QS($poTier->app);
+		$sTierQs = cHttp::build_qs($sAppQs, cRender::TIER_QS, $poTier->name);
+		$sTierQs = cHttp::build_qs($sTierQs, cRender::TIER_ID_QS, $poTier->id);
+		return $sTierQs;
+	}
+	
+	//******************************************************************************************
+	public static function get_base_node_QS( $poTier, $piNode, $psNode){
+		$sTierQS = self::get_base_tier_QS($poTier);
+		$sNodeQs = cHttp::build_qs($sTierQS, cRender::NODE_QS, $psNode);
+		$sNodeQs = cHttp::build_qs($sNodeQs, cRender::NODE_ID_QS, $piNode);
+		return $sNodeQs;
+	}
+
+}
+
+//#######################################################################
+//#######################################################################
 class cRender{
 	//************************************************************
 	const APP_QS = "app";
@@ -334,16 +361,7 @@ class cRender{
 	const RUM_TYPE_QS = "rty";
 	const RUM_DETAILS_ACTIVITY ="rmda";
 	const RUM_DETAILS_RESPONSE ="rmdr";
-	
-	//**************************************************************************
-	const CLEAN_BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS];
-	const CLEAN_BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS];
-	const CLEAN_BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS];
-	
-	const BASE_APP_PARAMS = [self::APP_QS, self::APP_ID_QS, cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS];
-	const BASE_TIER_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS,  cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS , cFilter::FILTER_NODE_QS];
-	const BASE_NODE_PARAMS = [self::APP_QS, self::APP_ID_QS, self::TIER_QS, self::TIER_ID_QS, self::NODE_QS, self::NODE_ID_QS , cFilter::FILTER_APP_QS, cFilter::FILTER_TIER_QS ,cFilter::FILTER_NODE_QS ];
-	
+		
 	//**************************************************************************
 	const CHART_METRIC_FIELD = "cmf";
 	const CHART_TITLE_FIELD = "ctf";
@@ -766,38 +784,6 @@ class cRender{
 	}
 	
 
-	//#####################################################################################
-	//#####################################################################################
-	public static function build_app_qs( $poApp){
-		$appQS = cHttp::build_qs(null, self::APP_QS, $poApp->name);
-		$appQS = cHttp::build_qs($appQS, self::APP_ID_QS, $poApp->id);
-		return $appQS;
-	}
-
-	//******************************************************************************************
-	public static function build_tier_qs( $poTier){
-		$sAppQs = self::build_app_qs($poTier->app);
-		$sTierQs = cHttp::build_qs($sAppQs, self::TIER_QS, $poTier->name);
-		$sTierQs = cHttp::build_qs($sTierQs, self::TIER_ID_QS, $poTier->id);
-		return $sTierQs;
-	}
-	//#####################################################################################
-	//#####################################################################################
-	public static function get_clean_base_app_QS(){ return self::get_base_QS(self::CLEAN_BASE_APP_PARAMS);}
-	public static function get_base_app_QS(){ return self::get_base_QS(self::BASE_APP_PARAMS);}
-	public static function get_base_tier_QS(){return self::get_base_QS(self::BASE_TIER_PARAMS);}
-	public static function get_base_node_QS(){return self::get_base_QS(self::BASE_NODE_PARAMS);}
-	
-	public static function get_base_QS($paParams){
-		$sBaseUrl = "";
-		
-		foreach ($paParams as $sParam){
-			$sValue = cHeader::get($sParam);
-			if ($sValue) $sBaseUrl = cHttp::build_qs($sBaseUrl, $sParam, $sValue );
-		}
-		return $sBaseUrl;
-	}
-	
 	//#####################################################################################
 	//#####################################################################################
 	private static function pr__get_rows($paArray){

@@ -41,7 +41,7 @@ set_time_limit(200); // huge time limit as this takes a long time
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
-$gsTierQs = cRender::get_base_tier_QS();
+$gsTierQs = cRenderQS::get_base_tier_QS($oTier);
 
 //################### CHART HEADER ########################################
 cRender::html_header("External tier calls");
