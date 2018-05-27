@@ -38,7 +38,7 @@ class cLinkPage{
 		$oCred = new cAppDynCredentials();
 		$oTimes = cRender::get_times();
 
-		$sKey = $sReferrer."#H".$oCred->host."#U".$oCred->username."#S".$oTimes->start."#E".$oTimes->end;
+		$sKey = $sReferrer."#H".$oCred->host."#U".$oCred->get_username()."#S".$oTimes->start."#E".$oTimes->end;
 		
 		return $sKey;
 	}
@@ -61,7 +61,8 @@ class cLinkPage{
 	
 	//***************************************************************************************
 	//by the way because its a reversible hash - the site admin will find it hard to find 
-	// hashes with passwords within them as there are going to be a large number of hashes to wade through
+	//hashes with passwords within them as there are going to be a large number of hashes to wade through
+	// passwords are also encrypted so no worries here.
 	public static function get_referrer_link(){
 		$sKey = self::pr__get_referrer_key();
 		cDebug::extra_debug("key is $sKey");
