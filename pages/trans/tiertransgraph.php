@@ -42,14 +42,14 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 	
 //###################### DATA #############################################################
 //display the results
-$oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 
 $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRenderQS::get_base_app_QS($oApp);
 $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-if ($gsMetricType==null) $gsMetricType = cRender::METRIC_TYPE_ACTIVITY;
+if ($gsMetricType==null) $gsMetricType = cAppDynMetric::METRIC_TYPE_ACTIVITY;
 
 $gsBaseUrl = cHttp::build_url("tiertransgraph.php", $gsTierQs );
 if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
@@ -183,15 +183,34 @@ cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 
 <h3>Overall Stats for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3>
 <?php
+	$sBaseUrl = cHttp::build_url("alltiertrans.php",$gsTierQs);
+	
 	$aMetrics=[];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
-	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cAppDynMetric::CALLS_PER_MIN );
+	$aMetrics[] = [
+		cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
+		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
+	];
+	
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
-	$aMetrics[] = [cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cAppDynMetric::RESPONSE_TIME );
+	$aMetrics[] = [
+		cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
+		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
+	];
+	
 	$sMetricUrl=cAppDynMetric::tierErrorsPerMin($oTier->name);
-	$aMetrics[] = [cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cAppDynMetric::ERRS_PER_MIN );
+	$aMetrics[] = [
+		cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
+		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
+	];
+	
 	$sMetricUrl = cAppDynMetric::InfrastructureCpuBusy($oTier->name);
-	$aMetrics[] = [cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl];
+	$aMetrics[] = [
+		cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl
+	];
 	
 	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass());
 

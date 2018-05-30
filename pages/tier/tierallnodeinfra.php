@@ -96,7 +96,7 @@ if (cAppdyn::is_demo()){
 	?>
 	</optgroup>
 	<optgroup label="Other Statistics">
-		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
+		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cAppDynMetric::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
 
 	</optgroup>
 </select>

@@ -83,13 +83,13 @@ cDebug::flush();
 	$aMetrics[]= [cChart::LABEL=>"Overall response time in ms ($oApp->name) application", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
 	
-	$sQs = cHttp::build_qs($sBaseQs, cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_ACTIVITY);
+	$sQs = cHttp::build_qs($sBaseQs, cRender::METRIC_TYPE_QS, cAppDynMetric::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	
-	$sQs = cHttp::build_qs($sBaseQs, cRender::METRIC_TYPE_QS, cRender::METRIC_TYPE_RESPONSE_TIMES);
+	$sQs = cHttp::build_qs($sBaseQs, cRender::METRIC_TYPE_QS, cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES);
 	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,

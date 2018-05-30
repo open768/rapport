@@ -52,7 +52,7 @@ cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 ?>
 <h2>Tiers</h2>
 <?php
-$aActivityMetrics = [cRender::METRIC_TYPE_ACTIVITY, cRender::METRIC_TYPE_RESPONSE_TIMES];
+$aActivityMetrics = [cAppDynMetric::METRIC_TYPE_ACTIVITY, cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES];
 $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 
 $aTiers =$oApp->GET_Tiers();

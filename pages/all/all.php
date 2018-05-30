@@ -36,8 +36,8 @@ require_once("$root/inc/inc-render.php");
 
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
-	case cRender::METRIC_TYPE_RUMCALLS:
-	case cRender::METRIC_TYPE_RUMRESPONSE:
+	case cAppDynMetric::METRIC_TYPE_RUMCALLS:
+	case cAppDynMetric::METRIC_TYPE_RUMRESPONSE:
 		$sTitle1 = "Web Browser Page Requests";
 		$sMetric1 = cAppDynMetric::webrumCallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
@@ -47,8 +47,8 @@ switch($sMetricType){
 		
 		$sBaseUrl = "$home/pages/rum/apprum.php";
 		break;
-	case cRender::METRIC_TYPE_RESPONSE_TIMES:
-	case cRender::METRIC_TYPE_ACTIVITY:
+	case cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES:
+	case cAppDynMetric::METRIC_TYPE_ACTIVITY:
 	default:
 		$sTitle1 = "Application Activity";
 		$sMetric1 = cAppDynMetric::appCallsPerMin();

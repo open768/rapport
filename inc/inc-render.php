@@ -329,7 +329,8 @@ class cRender{
 	const USAGE_QS = "us";
 	const CSV_QS = "csv";
 	const DIV_QS = "div";
-	
+	const METRIC_TYPE_QS ="mt";
+
 	const PREVIOUS_QS="prv";
 	const LOGIN_TOKEN_QS="lt";
 
@@ -338,22 +339,6 @@ class cRender{
 	const GROUP_TYPE_NODE ="n";
 	const GROUP_TYPE_TIER ="t";
 	const GROUP_TYPE_IP ="i";
-	
-	//************************************************************
-	const METRIC_TYPE_QS ="mt";
-	
-	const METRIC_TYPE_RUMCALLS = "mrc";
-	const METRIC_TYPE_RUMRESPONSE = "mrr";
-	const METRIC_TYPE_TRANSRESPONSE = "mtr";
-	const METRIC_TYPE_DATABASE_TIME = "mdt";
-	const METRIC_TYPE_ACTIVITY = "mac";
-	const METRIC_TYPE_RESPONSE_TIMES = "mrt";
-	const METRIC_TYPE_BACKEND_RESPONSE = "mbr";
-	const METRIC_TYPE_BACKEND_ACTIVITY = "mba";
-	
-	
-	const METRIC_TYPE_JMX_DBPOOLS = "mtjdbp";
-	
 	
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";
