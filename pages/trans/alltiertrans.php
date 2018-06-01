@@ -111,13 +111,24 @@ $sMetricpath = cAppdynMetric::transResponseTimes($oTier->name, "*");
 $oTimes = cRender::get_times();
 $aStats = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 uasort($aStats,"sort_by_metricpath" );
+$sBaseUrl = cHttp::build_url("transdetails.php", $gsTierQS);
 
 $aMetrics = [];
 foreach ($aStats as $oTrans){
 	$sTrName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $oTier->name);
+	try{
+		$sTrID = cAppdynUtil::extract_bt_id($oTrans->metricName);
+	}
+	catch (Exception $e){
+		$sTrID = null;
+	}
+	$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $sTrName);
+	$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
+		
 	$sMetric = cAppDynMetric::transMetric($oTier->name, $sTrName)."|$gsMetric";
 	$aMetrics[] = [
-		cChart::LABEL=>"$sTrName - $gsMetric", cChart::METRIC=>$sMetric, cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"$sTrName - $gsMetric", cChart::METRIC=>$sMetric, cChart::HIDEIFNODATA=>1,
+		cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
 	];
 }
 cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
