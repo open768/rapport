@@ -150,12 +150,12 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				please ensure that a local user with limited access rights is created in your controller to provide access using this application.
 				<p>
 				<form action='index.php' method='POST'>
-					<input type='hidden' name='a' value='demo'>
-					<input type='hidden' name='u' value='demo'>
-					<input type='hidden' name='p' value='d3m0'>
-					<input type='hidden' name='h' value='<?=cAppDynCore::DEMO_HOST?>'>
-					<input type='hidden' name='ss' value='no'>
-					<input type='submit' name='s' value='See this application in Demo Mode' class="blue_button">
+					<input type='hidden' name='<?=cLogin::KEY_ACCOUNT?>' value='<?=cAppDynCredentials::DEMO_ACCOUNT?>'>
+					<input type='hidden' name='<?=cLogin::KEY_USERNAME?>' value='<?=cAppDynCredentials::DEMO_USER?>'>
+					<input type='hidden' name='<?=cLogin::KEY_PASSWORD?>' value='<?=cAppDynCredentials::DEMO_PASS?>'>
+					<input type='hidden' name='<?=cLogin::KEY_HOST?>' value='<?=cAppDynCore::DEMO_HOST?>'>
+					<input type='hidden' name='<?=cLogin::KEY_HTTPS?>' value='no'>
+					<input type='submit' name='<?=cLogin::KEY_SUBMIT?>' value='See this application in Demo Mode' class="blue_button">
 				<?php
 					if (cDebug::is_debugging()){
 						?><input type="hidden" name="<?=cDebug::DEBUG_STR?>" value="1"><?php
