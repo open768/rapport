@@ -64,7 +64,7 @@ function render_tier_ext($poApp, $poTier, $poData){
 				<th width=80>total</th>
 			</tr><?php
 
-			$sBaseQs = cRenderQS::get_base_tier_QS($oTier);
+			$sBaseQs = cRenderQS::get_base_tier_QS($poTier);
 			foreach ( $poData as $oDetail){
 				cDebug::write("DEBUG: ".$oDetail->name);
 				$other_tier = $oDetail->name;

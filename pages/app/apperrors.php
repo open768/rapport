@@ -59,17 +59,38 @@ $gsTABLE_ID = 0;
 function render_tier($poTier){
 	global $oApp, $oTimes, $home, $gsTABLE_ID;
 	
-	?><h2><?=$poTier->name?></h2><?php
+	?><hr><?php
+	cRenderMenus::show_tier_functions($poTier);
+	
 	$sMetricpath = cAppdynMetric::Errors($poTier->name, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
+	
+	//check there is something to display
 	if (count($aData) == 0){
 		cRender::messagebox("Nothing found");
 		return;
 	}
 		
+	$iRows = 0;
+	foreach ($aData as $oItem){
+			if ($oItem == null ) continue;
+			if ($oItem->metricValues == null ) continue;
+		
+			$oValues = $oItem->metricValues[0];
+			if ($oValues->count == 0 ) continue;
+		
+		$iRows++;
+	}
+	
+	if ($iRows == 0){
+		cRender::messagebox("Nothing found");
+		return;
+	}
+	
+	//----------ok go ahead and render---------------------------
 	uasort ($aData, "sort_metric_names");
 
-	cRenderMenus::show_tier_functions($poTier);
+
 	$tierQS = cRenderQS::get_base_tier_QS( $poTier);
 	$sGraphUrl = cHttp::build_url("../tier/tiererrorgraphs.php", $tierQS);
 	cRender::button("Show Error Graphs", $sGraphUrl);	

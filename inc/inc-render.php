@@ -92,7 +92,7 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_tier_menu($psTier, $psURLFragment, $psExtraQS=""){
+	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
 		global $home;
 		
 		cDebug::enter();
@@ -125,7 +125,7 @@ class cRenderMenus{
 			<span 
 				type="appdmenus" menu="tiermenu" 
 				home="<?=$home?>"
-				caption="<?=$psTier?>" url="<?=$psURLFragment?>" 
+				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>
 			</span>
 		<?php

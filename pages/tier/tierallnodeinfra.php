@@ -62,7 +62,7 @@ cRender::show_time_options($title);
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 
 //other buttons
-$aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
+$aMetrics = cAppDynInfraMetric::getInfrastructureMetricDetails($oTier);
 $oCred = cRenderObjs::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
@@ -87,11 +87,10 @@ if (cAppdyn::is_demo()){
 	<optgroup label="Show details of ..">
 	<?php
 		$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQS);
-		foreach ( $aMetrics as $sType){
-			$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,null,$sType);
-			?>
-				<option <?=($sType==$sMetricType?"disabled":"")?> value="<?=cHttp::build_url($sAllInfraUrl, cRender::METRIC_TYPE_QS, $sType)?>"><?=$oMetric->short?></option>
-			<?php
+		foreach ( $aMetrics as $oType){
+			$sType = $oType->type;
+			$sUrl = cHttp::build_url($sAllInfraUrl, cRender::METRIC_TYPE_QS, $sType);
+			?><option <?=($sType==$sMetricType?"disabled":"")?> value="<?=$sUrl?>"><?=$oType->metric->short?></option><?php
 		}
 	?>
 	</optgroup>

@@ -504,7 +504,10 @@ $.widget( "ck.appdchart",{
 		var oChartOptions = {
 			title: oOptions.title,
 			legend: "right",
-			tooltip: {isHtml: true},
+			tooltip: {
+				isHtml: true,
+				style:{pointerEvents:'none'}
+			},
 			pointSize: 3,
 			dataOpacity: 0.8,
 			theme: 'maximized' ,
