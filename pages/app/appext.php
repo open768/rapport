@@ -93,11 +93,12 @@ foreach ( $oResponse as $oExtTier){
 	$sUrl=cHttp::build_qs($gsAppQS,cRender::BACKEND_QS,$oExtTier->name);
 	$sUrl=cHttp::build_url("appexttiers.php", $sUrl);
 
-	$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>cChart::CHART_WIDTH_LETTERBOX/3];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers"];
-	$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cAppDynMetric::backendResponseTimes($sName)];
+	$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>200];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cAppDynMetric::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers", cChart::HIDEIFNODATA=>1];
+	$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cAppDynMetric::backendResponseTimes($sName), cChart::HIDEIFNODATA=>1];
+	$aMetrics[] = [cChart::LABEL=>"Errors ($sName)",cChart::METRIC=>cAppDynMetric::backendErrorsPerMin($sName), cChart::HIDEIFNODATA=>1];
 }
-cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
+cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 
 //##################################################################
 cChart::do_footer();

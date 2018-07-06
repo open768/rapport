@@ -103,8 +103,13 @@ foreach ( $aTrans as $oTrans){
 		cChart::METRIC=>cAppDynMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
 		cChart::HIDEIFNODATA=>1
 	];
+	$aMetrics[] = [
+		cChart::LABEL=>"$oTrans->name to External - errors", 
+		cChart::METRIC=>cAppDynMetric::transExtErrors($oTier->name,$oTrans->name,$sExt),
+		cChart::HIDEIFNODATA=>1
+	];
 }
-cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
+cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 cChart::do_footer();
 
 cRender::html_footer();

@@ -43,27 +43,27 @@ cChart::do_header();
 
 //####################################################################
 //get passed in values
-$oApp = cRenderObjs::get_current_app();
+$oTier = cRenderObjs::get_current_tier();
+$oApp = $oTier->app;
 $oTimes = cRender::get_times();
 
 $title= "$oApp->name&gt;Service EndPoints";
 cRender::show_time_options($title); 
-cRenderMenus::show_apps_menu("Show Service EndPoints for", "appservice.php");
-if (cFilter::isFiltered()){
-	$sCleanAppQS = cRenderQS::get_base_app_QS($oApp);
-	cRender::button("Clear Filter", "appservice.php?$sCleanAppQS");
-}
+cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
+
 //####################################################################
 //retrieve tiers
 //********************************************************************
-$aTiers = $oApp->GET_Tiers();
+if ($oTier->name)
+	$aTiers = [ $oTier];
+else
+	$aTiers = $oApp->GET_Tiers();
 
 function pr__sort_endpoints($a,$b){
 	return strcmp($a->name, $b->name);
 }
 
 foreach ($aTiers as $oTier){
-	if (cFilter::isTierFilteredOut($oTier)) continue;
 
 	//****************************************************************************************
 	$aEndPoints = $oTier->GET_ServiceEndPoints();
@@ -72,6 +72,7 @@ foreach ($aTiers as $oTier){
 		continue;
 	}
 	uasort($aEndPoints, "pr__sort_endpoints");
+	$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 	//****************************************************************************************
 	?><p><?php
@@ -79,13 +80,16 @@ foreach ($aTiers as $oTier){
 	$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
 	$aMetrics = [];
 	foreach ($aEndPoints as $oEndPoint){
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name];
-		$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name)];
+		$sUrl = cHttp::build_qs($sTierQS, cRender::SERVICE_QS, $oEndPoint->name);
+		$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
+
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];
+		$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name), cChart::GO_URL=>$sUrl];
 		$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
 		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
 	}
 	$sClass = cRender::getRowClass();
-	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3, $aHeaders);
+	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,(cChart::CHART_WIDTH_LETTERBOX-150)/3, $aHeaders);
 	cDebug::flush();
 }
 

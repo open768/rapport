@@ -310,6 +310,7 @@ class cRender{
 	const FROM_TIER_QS = "from";
 	const TO_TIER_QS = "to";
 	const TIER_ID_QS = "tid";
+	const SERVICE_QS = "srv";
 	
 	const TRANS_QS = "trans";
 	const TRANS_ID_QS = "trid";
