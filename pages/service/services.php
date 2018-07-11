@@ -50,6 +50,7 @@ $oTimes = cRender::get_times();
 $title= "$oApp->name&gt;Service EndPoints";
 cRender::show_time_options($title); 
 cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
+cRender::appdButton(cAppDynControllerUI::serviceEndPoints($oApp,$oTimes));
 
 //####################################################################
 //retrieve tiers
@@ -66,7 +67,8 @@ function pr__sort_endpoints($a,$b){
 foreach ($aTiers as $oTier){
 
 	//****************************************************************************************
-	$aEndPoints = $oTier->GET_ServiceEndPoints();
+	$aEndPoints = cAppDynRestUI::GET_service_end_points($oTier);
+	//$aEndPoints = $oTier->GET_ServiceEndPoints();
 	if (count($aEndPoints) == 0){
 		cRender::messagebox("no Service endpoints found for $oTier->name");
 		continue;
@@ -81,6 +83,7 @@ foreach ($aTiers as $oTier){
 	$aMetrics = [];
 	foreach ($aEndPoints as $oEndPoint){
 		$sUrl = cHttp::build_qs($sTierQS, cRender::SERVICE_QS, $oEndPoint->name);
+		$sUrl = cHttp::build_qs($sUrl, cRender::SERVICE_ID_QS, $oEndPoint->id);
 		$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
 
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];

@@ -44,6 +44,7 @@ cChart::do_header();
 //####################################################
 //display the results
 $sService = cHeader::get( cRender::SERVICE_QS);
+$sServiceID = cHeader::get( cRender::SERVICE_ID_QS);
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
@@ -61,6 +62,7 @@ if (cAppdyn::is_demo()){
 $oCred = cRenderObjs::get_appd_credentials();
 cRenderMenus::show_tier_functions();
 //cRender::appdButton(cAppDynControllerUI::transaction($oApp,$oTrans->id));
+cRender::appdButton(cAppDynControllerUI::serviceEndPoint($oTier,$sServiceID));
 cDebug::flush();
 
 ?>
@@ -75,6 +77,12 @@ cDebug::flush();
 	
 // ################################################################################
 ?><h2>Snapshots</h2><?php
+$oTimes = cRender::get_times();
+$oData = cAppDynRestUI::GET_Service_end_point_snapshots($oTier, $sServiceID, $oTimes);
+cDebug::on(true);
+cDebug::vardump($oData);
+cDebug::off();
+
 
 // ################################################################################
 ?><?php
