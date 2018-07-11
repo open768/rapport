@@ -79,9 +79,63 @@ cDebug::flush();
 ?><h2>Snapshots</h2><?php
 $oTimes = cRender::get_times();
 $oData = cAppDynRestUI::GET_Service_end_point_snapshots($oTier, $sServiceID, $oTimes);
-cDebug::on(true);
-cDebug::vardump($oData);
-cDebug::off();
+$aSnapshots = $oData->requestSegmentDataListItems;
+if (count($aSnapshots) == 0){
+	?><div class="maintable">No Snapshots found</div><?php
+}else{
+	?>
+		<table class="maintable" id="trans">
+			<thead><tr class="tableheader">
+				<th width="140">start time</th>
+				<th width="10"></th>
+				<th width="50">Experience</th>
+				<th width="80">Duration</th>
+				<th>Server</th>
+				<th>URL</th>
+				<th>Summary</th>
+				<th width="80"></th>
+			</tr></thead>
+			<tbody><?php
+				foreach ($aSnapshots as $oSnapshot){
+					$sOriginalUrl = $oSnapshot->url;
+					if ($sOriginalUrl === "") $sOriginalUrl = $sService;
+					
+					$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
+					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
+					$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $oSnapshot->businessTransactionId, $oSnapshot->requestGUID, $oTimes);
+					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
+					$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS, $oSnapshot->businessTransactionName);
+					$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS, $oSnapshot->businessTransactionId);
+					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
+					
+					?>
+					<tr class="<?=cRender::getRowClass()?>">
+						<td><?=$sDate?></td>
+						<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
+						<td><?=$oSnapshot->userExperience?></td>
+						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
+						<td><?=cAppdynUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
+						<td><a href="<?=$home?>/pages/trans/snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$sOriginalUrl?></div></a></td>
+						<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
+						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
+					</tr>
+				<?php }
+			?></tbody>
+		</table>
+		<script language="javascript">
+			$( function(){ 
+				$("#trans").tablesorter({
+					headers:{
+						3:{ sorter: 'digit' }
+					}
+				});
+			});
+
+		</script>
+	<?php
+}
 
 
 // ################################################################################
