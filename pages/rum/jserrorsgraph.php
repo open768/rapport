@@ -38,19 +38,19 @@ require_once("$root/inc/inc-render.php");
 $oApp = cRenderObjs::get_current_app();
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
-$sGraphUrl = cHttp::build_url("rumstats.php", $gsAppQS);
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring - graphs");
+cRender::html_header("Web browser - Real user monitoring - javascript errors graphs");
 cChart::do_header();
 
 cRender::force_login();
-$title ="$oApp->name&gtWeb Real User Monitoring Stats";
+$title ="$oApp->name&gtWeb Real User Monitoring &gt; javascript errors";
 cRender::show_time_options( $title); 
-cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
+cRenderMenus::show_apps_menu("Show JS Errors for:", "jserrorsgraph.php");
 $oTimes = cRender::get_times();
+
+$sGraphUrl = cHttp::build_url("rumerrors.php", $gsAppQS);
 cRender::button("Statistics", $sGraphUrl);	
-cRender::appdButton(cAppDynControllerUI::webrum_pages($oApp));
 
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -76,13 +76,11 @@ function render_graphs($psType, $paData){
 		if ($oValues->count == 0 ) continue;
 
 		$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
-		$sRumId = cAppDynUtil::extract_RUM_id($psType, $oItem->metricName);
 		$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
-		$sDetailQS = cHttp::build_QS($sDetailQS, cRender::RUM_PAGE_ID_QS,$sRumId);
 		$sUrl = "rumpage.php?$sDetailQS";
 
 		$aMetrics[] = [
-			cChart::LABEL=>$sName ." Response times (ms)", cChart::METRIC=>$oItem->metricPath,
+			cChart::LABEL=>$sName, cChart::METRIC=>$oItem->metricPath,
 			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See details" 
 		];
 
@@ -102,20 +100,12 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Page Requests</h2>
+<h2>Requests with Javascript Errors</h2>
 <?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
+	$sMetricpath = cAppdynMetric::webrumPageJavaScriptErrors(cAppdynMetric::BASE_PAGES, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_graphs(cAppdynMetric::BASE_PAGES, $aData);
 	
-// ############################################################
-?>
-<h2>Ajax Requests</h2>
-<?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
-	render_graphs(cAppdynMetric::AJAX_REQ, $aData);
-
 	// ############################################################
 cChart::do_footer();
 cRender::html_footer();

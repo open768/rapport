@@ -37,6 +37,7 @@ require_once("$root/inc/inc-render.php");
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
 $rum_page = cHeader::get(cRender::RUM_PAGE_QS);
+$rum_page_id = cHeader::get(cRender::RUM_PAGE_ID_QS);
 $rum_type = cHeader::get(cRender::RUM_TYPE_QS);
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
@@ -49,7 +50,7 @@ cChart::do_header();
 
 cRenderMenus::show_app_functions($oApp);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
-cRender::appdButton(cAppDynControllerUI::webrum($oApp));
+cRender::appdButton(cAppDynControllerUI::webrum_detail($oApp, $rum_page_id));
 
 //********************************************************************
 if (cAppdyn::is_demo()){
@@ -73,6 +74,8 @@ $sMetricUrl=cAppDynMetric::webrumPageServerTime($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Server time", cChart::METRIC=>$sMetricUrl];
 $sMetricUrl=cAppDynMetric::webrumPageFirstByte($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page first byte time", cChart::METRIC=>$sMetricUrl];
+$sMetricUrl=cAppDynMetric::webrumPageJavaScriptErrors($rum_type, $rum_page);
+$aMetrics[] = [cChart::LABEL=>"Page Views with Javascript errors", cChart::METRIC=>$sMetricUrl];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
 cChart::do_footer();

@@ -345,6 +345,7 @@ class cRender{
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";
 	const RUM_PAGE_QS = "rpg";
+	const RUM_PAGE_ID_QS = "rpid";
 	const RUM_TYPE_QS = "rty";
 	const RUM_DETAILS_ACTIVITY ="rmda";
 	const RUM_DETAILS_RESPONSE ="rmdr";

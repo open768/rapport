@@ -39,16 +39,15 @@ $oApp = cRenderObjs::get_current_app();
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring - Stats");
+cRender::html_header("Web browser - Real user monitoring - Errors");
 cRender::force_login();
-$title ="$oApp->name&gtWeb Real User Monitoring Stats";
+$title ="$oApp->name&gtWeb Real User Monitoring - Errors";
 cRender::show_time_options( $title); 
-cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
+cRenderMenus::show_apps_menu("Show Stats for:", "rumerrors.php");
 $oTimes = cRender::get_times();
 
-$sGraphUrl = cHttp::build_url("rumgraphs.php", $gsAppQS);
+$sGraphUrl = cHttp::build_url("jserrorsgraph.php", $gsAppQS);
 cRender::button("Graphs", $sGraphUrl);	
-cRender::appdButton(cAppDynControllerUI::webrum_pages($oApp));
 
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -68,7 +67,6 @@ function render_table($psType, $paData){
 		<thead><tr class="tableheader">
 			<th>Name</th>
 			<th>Count</th>
-			<th></th>
 			<th>Max</th>
 			<th>Average</th>
 		</tr></thead>
@@ -84,16 +82,12 @@ function render_table($psType, $paData){
 				$oValues = $oItem->metricValues[0];
 				if ($oValues->count == 0 ) continue;
 				$iRows++;
-				$sImgMax = "$home/".cRender::get_trans_speed_colour($oValues->max);
 				$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
-				$sRumId = cAppDynUtil::extract_RUM_id($psType, $oItem->metricName);
 				$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
-				$sDetailQS = cHttp::build_QS($sDetailQS, cRender::RUM_PAGE_ID_QS,$sRumId);
 
 				?><tr class="<?=$sClass?>">
 					<td align="right"><a href="rumpage.php?<?=$sDetailQS?>"><?=$sName?></a></td>
 					<td align="middle"><?=$oValues->count?></td>
-					<td><img src="<?=$sImgMax?>"></td>
 					<td align="middle"><?=$oValues->max?></td>
 					<td align="middle"><?=$oValues->value?></td>
 				</tr><?php
@@ -124,23 +118,12 @@ if (cAppdyn::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Page Requests</h2>
+<h2>Pages With Javascript Errors</h2>
 <?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
+	$sMetricpath = cAppdynMetric::webrumPageJavaScriptErrors(cAppdynMetric::BASE_PAGES, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
-	//cDebug::on(true);
-	//cDebug::vardump($aData);
-	//cDebug::off();
 	render_table(cAppdynMetric::BASE_PAGES, $aData);
 	
-// ############################################################
-?>
-<h2>Ajax Requests</h2>
-<?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
-	render_table(cAppdynMetric::AJAX_REQ, $aData);
-
 	// ############################################################
 	cRender::html_footer();
 ?>

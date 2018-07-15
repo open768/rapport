@@ -151,6 +151,7 @@ $.widget( "ck.appdmenu",{
 				oGroup2 = $("<optgroup>",{label:"Web Real User Monitoring"});
 					this.pr__addToGroup(oGroup2, "Overall stats", cBrowser.buildUrl(sRumPrefixUrl+"/apprum.php", oParams));
 					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams));
+					this.pr__addToGroup(oGroup2, "Errors", cBrowser.buildUrl(sRumPrefixUrl+"/rumerrors.php", oParams));
 				oGroup.append(oGroup2);
 			oSelect.append(oGroup);
 		
