@@ -73,6 +73,11 @@ $aMetrics[] = [cChart::LABEL=>"Page response time",cChart::METRIC=>cAppDynMetric
 $aMetrics[] = [cChart::LABEL=>"Page connection time",cChart::METRIC=>cAppDynMetric::webrumTCPTime()];
 $aMetrics[] = [cChart::LABEL=>"Page Server time",cChart::METRIC=>cAppDynMetric::webrumServerTime()];
 $aMetrics[] = [cChart::LABEL=>"Page first byte time",cChart::METRIC=>cAppDynMetric::webrumFirstByte()];
+$sUrl="rumerrors.php?$sAppQS";
+$aMetrics[] = [
+	cChart::LABEL=>"JavaScript Errors",cChart::METRIC=>cAppDynMetric::webrumJavaScriptErrors(), 
+	cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"javascript Errors"];
+
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
 
