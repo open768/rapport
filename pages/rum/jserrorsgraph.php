@@ -76,7 +76,9 @@ function render_graphs($psType, $paData){
 		if ($oValues->count == 0 ) continue;
 
 		$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
+		$sRumId = cAppDynUtil::extract_RUM_id($psType, $oItem->metricName);
 		$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
+		$sDetailQS = cHttp::build_QS($sDetailQS, cRender::RUM_PAGE_ID_QS,$sRumId);
 		$sUrl = "rumpage.php?$sDetailQS";
 
 		$aMetrics[] = [
