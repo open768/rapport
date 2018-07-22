@@ -438,6 +438,7 @@ $.widget( "ck.appdchart",{
 			dDate = new Date(oItem.date);
 			iValue = oItem.value;
 			iItemMax = oItem.max;
+			if (iItemMax == iValue) iItemMax = null;
 			
 			sMax= (iMax?"<br>Max: "+iItemMax:"");
 			iMax = Math.max(iMax,iItemMax);
@@ -488,7 +489,10 @@ $.widget( "ck.appdchart",{
 		
 		// draw the chart ----------------------------------------------------------------
 		var sChartID=oElement.attr("id")+"chart";
-		var oChartDiv= $("<SPAN>",{id:sChartID,class:"chartgraph",width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5});
+		var oChartDiv= $("<SPAN>",{
+			id:sChartID, 	class:"chartgraph",
+			width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5
+		});
 		oElement.append(oChartDiv);
 		
 		var oDiv = oChartDiv[0];
@@ -518,10 +522,15 @@ $.widget( "ck.appdchart",{
 					max:dEnd,
 				}			
 			},
-			vAxis: {
-				textStyle:{color: 'DarkCyan'},
-				viewWindow:{min:0}			
+			series: {
+				0: {targetAxisIndex: 0, color:"blue", visibleInLegend:false},
+				1: {targetAxisIndex: 1, color:"red", visibleInLegend:false}
 			},
+			vAxis: {
+				0: {title: 'avg', textStyle: {color: 'blue'}},
+				1: {title: 'max', textStyle: {color: 'red'}}
+			},
+			
 			interpolateNulls: false
 		};
 		oChart.draw(oData, oChartOptions);
