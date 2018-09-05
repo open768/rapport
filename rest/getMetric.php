@@ -71,17 +71,17 @@ if (!$psCSV){
 $sFilename = str_replace("/","_",$psMetric);
 cHeader::set_download_filename("$sFilename.csv");
 
-cCommon::echo("controller,". cAppdynCore::GET_controller());
-cCommon::echo("Application,$oApp->name");
-cCommon::echo("Date now,".date(DateTime::W3C,time()));
-cCommon::echo("metric,$psMetric");
-cCommon::echo("");
+cCommon::do_echo("controller,". cAppdynCore::GET_controller());
+cCommon::do_echo("Application,$oApp->name");
+cCommon::do_echo("Date now,".date(DateTime::W3C,time()));
+cCommon::do_echo("metric,$psMetric");
+cCommon::do_echo("");
 
-cCommon::echo("Date,Average Value, Max");
+cCommon::do_echo("Date,Average Value, Max");
 foreach ($oResult->data as $oItem){
 	//reformat the date
 	$oDate = DateTime::createFromFormat(DateTime::W3C, $oItem->date);
 	$sDate = $oDate->format(cCommon::EXCEL_DATE_FORMAT);
-	cCommon::echo("$sDate,$oItem->value,$oItem->max");
+	cCommon::do_echo("$sDate,$oItem->value,$oItem->max");
 }
 ?>

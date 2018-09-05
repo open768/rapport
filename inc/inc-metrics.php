@@ -55,8 +55,8 @@ class cMergedMetrics{
 	//**********************************************************************
 	public function write_csv(){
 		//--write CSV header to file
-		cCommon::echo("Merged_metrics:, ".date(cCommon::EXCEL_DATE_FORMAT,time()));
-		cCommon::echo("");
+		cCommon::do_echo("Merged_metrics:, ".date(cCommon::EXCEL_DATE_FORMAT,time()));
+		cCommon::do_echo("");
 		
 		$sAppLine = "application";
 		$sMetricLine = "metric";
@@ -66,9 +66,9 @@ class cMergedMetrics{
 			$sMetricLine .= ",$oMetricOutput->metric,";
 			$sColumnLine .= ",value,max";
 		}
-		cCommon::echo($sAppLine);
-		cCommon::echo($sMetricLine);
-		cCommon::echo($sColumnLine);
+		cCommon::do_echo($sAppLine);
+		cCommon::do_echo($sMetricLine);
+		cCommon::do_echo($sColumnLine);
 		
 		//--sort the dates
 		$aKeys = array_keys($this->dates);
@@ -87,7 +87,7 @@ class cMergedMetrics{
 				}else
 					$sLine.=",,";
 			}
-			cCommon::echo($sLine);
+			cCommon::do_echo($sLine);
 		}
 	}
 }

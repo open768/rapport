@@ -564,6 +564,11 @@ class cRender{
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
 			
+			<!-- Material Design Lite https://getmdl.io/components/index.html -->
+			<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+			<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+			
 			<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-51550338-2"></script>
 			<script>
@@ -597,6 +602,7 @@ class cRender{
 		
 		</head>
 		<BODY>
+			<div class="mdl-layout mdl-js-layout mdl-color--grey-100"><div class="mdl-layout__content">
 		<?php
 		cDebug::flush();
 		//error_reporting(E_ALL & ~E_WARNING);
@@ -605,6 +611,36 @@ class cRender{
 	//**************************************************************************
 	public static function html_footer (){
 		?>
+				<p>
+				<div class="mdl-mega-footer">
+					<div class="mdl-mega-footer__middle-section"><div class="mdl-grid">
+						<div class="mdl-cell mdl-cell-6-col">
+							<b>Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a></b>
+							<p>
+							This software is protected by copyright under the terms of the 
+							<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
+							For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
+						</div>
+						<div class="mdl-cell mdl-cell--2-col">
+							We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a><br>
+							No passwords are stored by this application.<br>
+							AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col">
+							Uses
+							<ul>
+								<li><a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
+								<li><a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license<br>
+								<li><a href="https://gist.github.com/umidjons/8396981">pub sub pattern</a> by Baylor Rae licensed under the GNU General Public license
+							</ul>
+						</div>
+					</div></div>
+					<div class="mdl-mega-footer__bottom-section">
+						Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
+						USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
+					</div>
+				</div>
+			</div></div>
 		<script language="javascript">
 			$(
 				function(){
@@ -613,32 +649,8 @@ class cRender{
 				}
 			);
 		</script>
-		<table border=0 width="100%" class="footer"><tr><td>
-			<div class="licenseBox">
-				Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a>
-				<p>
-				This software is protected by copyright under the terms of the 
-				Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
-				http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
-				<p>
-				USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
-				<p>
-				For licenses that allow for commercial use please contact cluck@chickenkatsu.co.uk.<br>
-				You may commercially evaluate this software for no more than 1 calendar month<br>
-				We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a>
-			</div>
-			<div class="paidLicenseBox">
-				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
-			</div>
-			<small>
-				Charts built using <a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
-				uses <a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license<br>
-				uses <a href="https://gist.github.com/umidjons/8396981">pub sub pattern</a> by Baylor Rae licensed under the GNU General Public license<br>
-				No passwords are stored by this application.<br>
-				AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
-			</small>				
-		</td></tr></table>
-		</BODY></HTML>
+</BODY>
+		</HTML>
 		<?php
 	}	
 	
