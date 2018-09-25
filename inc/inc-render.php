@@ -17,283 +17,13 @@ require_once("$phpinc/ckinc/http.php");
 require_once("$phpinc/appdynamics/appdynamics.php");
 require_once("$phpinc/appdynamics/core.php");
 require_once("$root/inc/inc-filter.php");
+require_once("$root/inc/rendermenus.php");
+require_once("$root/inc/renderobjs.php");
+require_once("$root/inc/renderqs.php");
 
-
-//#######################################################################
-//#######################################################################
-class cRenderMenus{
-	//******************************************************************************************
-	public static function show_app_functions($poApp=null){
-		global $home;
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			cRender::button($poApp->name,null);
-			cDebug::leave();
-			return;
-		}
-		
-		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
-		?>
-			<span 
-				type="appdmenus" menu="appfunctions" 
-				home="<?=$home?>"
-				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</span>
-		<?php
-		cDebug::leave();
-	}
-	//******************************************************************************************
-	public static function show_app_agent_menu($poApp = null){
-		global $home;
-
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			cDebug::leave();
-			return;
-		}
-		
-		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
-		?>
-			<span 
-				type="appdmenus" menu="appagents" 				
-				home="<?=$home?>"
-				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</span>
-		<?php
-		cDebug::leave();
-	}
-
-	//******************************************************************************************
-	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
-		global $home;
-	
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			cRender::button($psCaption,null);
-			cDebug::leave();
-			return;
-		}
-		
-		$sApps_fragment = self::get_apps_fragment();
-
-		?>
-			<span 
-				type="appdmenus" menu="appsmenu" 
-				home="<?=$home?>"
-				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
-				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>>
-			</span>
-		<?php
-		self::show_app_functions();
-		cDebug::leave();
-	}
-	
-	//******************************************************************************************
-	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
-		global $home;
-		
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login){
-			cDebug::leave();
-			return;
-		}
-
-		$oApp = cRenderObjs::get_current_app();
-		
-		try{
-			$oTiers = $oApp->GET_Tiers();
-		}
-		catch (Exception $e)
-		{
-			cRender::errorbox("Oops unable to get tier data from controller");
-			cDebug::leave();
-			exit;
-		}
-		
-		$sFragment = "";
-		$iCount = 1;
-		foreach ($oTiers as $oTier){
-			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";
-			$iCount++;
-		}
-		
-		?>
-			<span 
-				type="appdmenus" menu="tiermenu" 
-				home="<?=$home?>"
-				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
-				extra="<?=$psExtraQS?>" <?=$sFragment?>>
-			</span>
-		<?php
-		cDebug::leave();
-	}
-	
-	//******************************************************************************************
-	public static function top_menu(){
-		global $home;
-
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login){
-			cRender::button("Back to Login", "$home/index.php");
-			cDebug::leave();
-			return;
-		}
-		
-		$oCred = cRenderObjs::get_appd_credentials();
-		$sApps_fragment = self::get_apps_fragment();
-
-		?>
-			<span 
-				type="appdmenus" menu="topmenu" 
-				home="<?=$home?>"
-				controller="<?=$oCred->host?>"
-				<?=$sApps_fragment?>>
-			</span>
-		<?php
-		cDebug::leave();
-	}
-	
-	//******************************************************************************************
-	public static function show_tier_functions($poTier = null, $psNode=null){
-		global $home;
-
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-	
-		if ($oCred->restricted_login) {
-			cRender::button($psTier,null);
-			cDebug::leave();
-			return;
-		}
-		if ($poTier == null){
-			$poTier = cRenderObjs::get_current_tier();
-		}
-		?>
-			<span 
-				type="appdmenus" menu="tierfunctions"  
-				home="<?=$home?>"
-				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
-			</span>
-		<?php
-		cDebug::leave();
-	}
-	
-	//******************************************************************************************
-	public static function get_apps_fragment(){
-
-		cDebug::enter();
-		try{
-			$aApps = cAppDynController::GET_Applications();
-		}
-		catch (Exception $e)
-		{
-			cRender::errorbox("Oops unable to get application data from controller");
-			cDebug::leave();
-			exit;
-		}
-		uasort($aApps,"sort_by_app_name" );
-		$iCount=0;
-		$sApps_fragment = "";
-		foreach ($aApps as $oApp){
-			$iCount++;
-			$sApps_fragment.= "appname.$iCount =\"".$oApp->name."\" appid.$iCount=\"$oApp->id\" ";
-		}
-		
-		cDebug::leave();
-		return $sApps_fragment;
-	}
-
-}
 
 function sort_by_app_name($a,$b){
 	return strcasecmp($a->name, $b->name);
-}
-//#######################################################################
-//#######################################################################
-class cRenderObjs{
-	//**************************************************************************
-	private static $oAppDCredentials = null;
-	
-	
-	//**************************************************************************
-	public static function get_appd_credentials(){
-		cDebug::enter();
-		$oCred = self::$oAppDCredentials;
-		if (!$oCred){
-			cDebug::extra_debug("got credentials");
-			$oCred = new cAppDynCredentials;
-			$oCred->check();
-			self::$oAppDCredentials = $oCred;
-		}
-		cDebug::leave();;
-		return $oCred;
-	}
-	
-	//***************************************************************************
-	public static function make_app_obj($psApp, $psAID){
-		return new cAppDApp($psApp, $psAID);		
-	}
-	
-	public static function make_tier_obj($poApp, $psTier, $psTID){
-		return new cAppDTier($poApp, $psTier, $psTID);
-	}
-	
-	public static function make_trans_obj($poTier, $psTrans, $psTrID){
-		return new cAppDTrans($poTier, $psTrans, $psTrID);
-	}
-	
-	//***************************************************************************
-	public static function get_current_app(){
-		$sApp = cHeader::get(cRender::APP_QS);
-		$sAID = cHeader::get(cRender::APP_ID_QS);
-		return self::make_app_obj($sApp, $sAID);
-	}
-
-	public static function get_current_tier(){
-		$oApp = self::get_current_app();
-		$sTier = cHeader::get(cRender::TIER_QS);
-		$sTID = cHeader::get(cRender::TIER_ID_QS);
-		return self::make_tier_obj($oApp, $sTier, $sTID);
-	}
-	
-	public static function get_current_trans(){
-		$oTier = self::get_current_tier();
-		$trans = cHeader::get(cRender::TRANS_QS);
-		$trid = cHeader::get(cRender::TRANS_ID_QS);
-		return self::make_trans_obj($oTier, $trans, $trid);
-	}
-}
-
-//#######################################################################
-//#######################################################################
-class cRenderQS{
-	public static function get_base_app_QS( $poApp){
-		$appQS = cHttp::build_qs(null, cRender::APP_QS, $poApp->name);
-		$appQS = cHttp::build_qs($appQS, cRender::APP_ID_QS, $poApp->id);
-		return $appQS;
-	}
-
-	//******************************************************************************************
-	public static function get_base_tier_QS( $poTier){
-		$sAppQs = self::get_base_app_QS($poTier->app);
-		$sTierQs = cHttp::build_qs($sAppQs, cRender::TIER_QS, $poTier->name);
-		$sTierQs = cHttp::build_qs($sTierQs, cRender::TIER_ID_QS, $poTier->id);
-		return $sTierQs;
-	}
-	
-	//******************************************************************************************
-	public static function get_base_node_QS( $poTier, $piNode, $psNode){
-		$sTierQS = self::get_base_tier_QS($poTier);
-		$sNodeQs = cHttp::build_qs($sTierQS, cRender::NODE_QS, $psNode);
-		$sNodeQs = cHttp::build_qs($sNodeQs, cRender::NODE_ID_QS, $piNode);
-		return $sNodeQs;
-	}
-
 }
 
 //#######################################################################
@@ -567,8 +297,9 @@ class cRender{
 			<!-- Material Design Lite https://getmdl.io/components/index.html -->
 			<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 			<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+			<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
 			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-			
+
 			<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-51550338-2"></script>
 			<script>
@@ -627,12 +358,23 @@ class cRender{
 							AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
 						</div>
 						<div class="mdl-cell mdl-cell--4-col">
-							Uses
-							<ul>
-								<li><a target="new" href="https://developers.google.com/chart/">Google Charts</a> licensed under the Creative Commons Attribution license.<br>
-								<li><a href="http://tablesorter.com/">tablesorter</a> by Christian Bach licensed under the MIT license<br>
-								<li><a href="https://gist.github.com/umidjons/8396981">pub sub pattern</a> by Baylor Rae licensed under the GNU General Public license
-							</ul>
+							Uses:
+							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses1">Google Charts</button>
+							<div class="mdl-tooltip" for="uses1">
+								<a target="new" href="https://developers.google.com/chart/">licensed under the Creative Commons Attribution license.</a>
+							</div>
+							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses2">tablesorter</button>
+							<div class="mdl-tooltip" for="uses2">
+								<a target="new" href="http://tablesorter.com/">by Christian Bach licensed under the MIT license.</a>
+							</div>
+							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses3">pub sub pattern</button>
+							<div class="mdl-tooltip" for="uses3">
+								<a target="new" href="https://gist.github.com/umidjons/8396981">by Baylor Rae licensed under the GNU General Public license</a>
+							</div>
+							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses4">google material-design-lite</button>
+							<div class="mdl-tooltip" for="uses4">
+								<a target="new" href="https://getmdl.io/">licensed under the Apache License 2.0</a>
+							</div>
 						</div>
 					</div></div>
 					<div class="mdl-mega-footer__bottom-section">
