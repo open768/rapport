@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); 
 
 //####################################################################
-cRender::html_header("Information Points");
+cRenderHtml::header("Information Points");
 cRender::force_login();
 cChart::do_header();
 
@@ -78,5 +78,5 @@ else{
 //####################################################################
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

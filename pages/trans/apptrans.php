@@ -118,7 +118,7 @@ function render_tier_transactions($poTier){
 	<?php
 }
 //####################################################################
-cRender::html_header("Transactions");
+cRenderHtml::header("Transactions");
 cRender::force_login();
 
 //get passed in values
@@ -134,7 +134,7 @@ cRender::show_time_options("Business Transactions - $oApp->name");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -183,5 +183,5 @@ $aTiers =$oApp->GET_Tiers();
 </div>
 
 <?php
-cRender::html_footer();
+cRenderHtml::footer();
 

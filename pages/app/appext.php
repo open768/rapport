@@ -39,7 +39,7 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
-cRender::html_header("External Calls");
+cRenderHtml::header("External Calls");
 cRender::force_login();
 cChart::do_header();
 
@@ -102,5 +102,5 @@ cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 
 //##################################################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

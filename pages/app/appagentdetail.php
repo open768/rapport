@@ -33,7 +33,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-cRender::html_header("Application node detail ");
+cRenderHtml::header("Application node detail ");
 cRender::force_login();
 $oApp = cRenderObjs::get_current_app();
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
@@ -101,7 +101,7 @@ cRender::appdButton(cAppDynControllerUI::nodes($oApp), "All nodes");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -156,5 +156,5 @@ if ($iNodes==0){
 <?php
 }
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

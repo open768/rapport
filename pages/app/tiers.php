@@ -38,7 +38,7 @@ require_once("$root/inc/inc-render.php");
 $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
-cRender::html_header("Tiers in Application $oApp->name");
+cRenderHtml::header("Tiers in Application $oApp->name");
 cRender::force_login();
 cChart::do_header();
 cRender::show_time_options( $oApp->name); 
@@ -82,5 +82,5 @@ foreach ( $oResponse as $oTier){
 }
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

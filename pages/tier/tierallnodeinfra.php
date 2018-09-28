@@ -40,7 +40,7 @@ require_once("$root/inc/inc-render.php");
 $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
-cRender::html_header("tier infrastructure");
+cRenderHtml::header("tier infrastructure");
 cRender::force_login();
 cChart::do_header();
 
@@ -71,7 +71,7 @@ $sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricT
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -140,5 +140,5 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 <?php
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

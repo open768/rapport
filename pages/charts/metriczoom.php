@@ -42,7 +42,7 @@ if (!$oApp->name) $oApp->name = "No Application Specified";
 $sTitle = cHeader::get(cRender::TITLE_QS);
 
 //####################################################################
-cRender::html_header($sTitle);
+cRenderHtml::header($sTitle);
 cRender::force_login();
 cRender::show_time_options("App: $oApp->name&gt; $sTitle"); 
 
@@ -70,5 +70,5 @@ $oChart->height = 700;
 	</td></tr></table><?php
 
 cChart::do_footer(false);
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

@@ -40,7 +40,7 @@ const FLOW_ID = "trflw";
 const MIN_TRANS_TIME=150;
 
 //####################################################################
-cRender::html_header("Transactions");
+cRenderHtml::header("Transactions");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="<?=$home?>/js/remote.js"></script>	
@@ -71,7 +71,7 @@ cRender::show_time_options("$oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$oTran
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -290,5 +290,5 @@ if (count($aSnapshots) == 0){
 // ################################################################################
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

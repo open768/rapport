@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 //-----------------------------------------------
 
 //####################################################################
-cRender::html_header("All Remote Services");
+cRenderHtml::header("All Remote Services");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
@@ -53,7 +53,7 @@ cRender::show_time_options( $title);
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -101,5 +101,5 @@ $oApps = cAppDynController::GET_Applications();
 	}
 
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

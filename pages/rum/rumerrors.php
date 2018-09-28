@@ -39,7 +39,7 @@ $oApp = cRenderObjs::get_current_app();
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring - Errors");
+cRenderHtml::header("Web browser - Real user monitoring - Errors");
 cRender::force_login();
 $title ="$oApp->name&gtWeb Real User Monitoring - Errors";
 cRender::show_time_options( $title); 
@@ -111,7 +111,7 @@ function render_table($psType, $paData){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -127,5 +127,5 @@ if (cAppdyn::is_demo()){
 	render_table(cAppdynMetric::BASE_PAGES, $aData);
 	
 	// ############################################################
-	cRender::html_footer();
+	cRenderHtml::footer();
 ?>

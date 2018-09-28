@@ -33,7 +33,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-cRender::html_header("Applications");
+cRenderHtml::header("Applications");
 cRender::force_login();
 $oApp = cRenderObjs::get_current_app();
 $node = cHeader::get(cRender::NODE_QS);
@@ -47,7 +47,7 @@ cRender::appdButton(cAppDynControllerUI::nodeDashboard($oApp,$nodeID));
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -60,5 +60,5 @@ if (cAppdyn::is_demo()){
 $oResult = cAppDynRestUI::GET_Node_details($oApp->id, $nodeID);
 
 //####################################################################
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

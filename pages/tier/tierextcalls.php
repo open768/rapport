@@ -88,7 +88,7 @@ function render_tier_ext($poApp, $poTier, $poData){
 	}
 }
 //####################################################################
-cRender::html_header("External tier calls");
+cRenderHtml::header("External tier calls");
 cRender::force_login();
 
 cRender::show_time_options("External calls from $oTier->name in $oApp->name"); 
@@ -103,7 +103,7 @@ if ($oCred->restricted_login == null){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -116,5 +116,5 @@ cRender::button("show as graphs", "tierextgraph.php?$gsTierQs");
 ?><h2>External calls in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
 render_tier_ext($oApp, $oTier, $oResponse);
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

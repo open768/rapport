@@ -34,7 +34,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-cRender::html_header("Application Nodes");
+cRenderHtml::header("Application Nodes");
 cRender::force_login();
 
 
@@ -52,7 +52,7 @@ cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 	//********************************************************************
@@ -255,5 +255,5 @@ else
 		default:
 			cRender::errorbox("unknown groupp mode");
 	}
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

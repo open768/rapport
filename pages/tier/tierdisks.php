@@ -35,7 +35,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 //####################################################################
-cRender::html_header("tier disks");
+cRenderHtml::header("tier disks");
 cChart::do_header();
 cRender::force_login();
 
@@ -56,7 +56,7 @@ if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -88,5 +88,5 @@ foreach ($aNodes as $oNode){
 }
 
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

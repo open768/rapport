@@ -36,7 +36,7 @@ require_once("$root/inc/inc-render.php");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -47,7 +47,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 $sTitle = "External Calls in $oApp->name for $sExt";
-cRender::html_header($sTitle);
+cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();
 cRender::show_time_options( $sTitle); 
@@ -87,5 +87,5 @@ foreach ( $oResponse as $oTier){
 cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

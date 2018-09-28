@@ -32,7 +32,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-cRender::html_header("All Agent Versions");
+cRenderHtml::header("All Agent Versions");
 
 //####################################################################
 cRender::show_top_banner("Appdynamics Versions"); 
@@ -68,6 +68,6 @@ if (count($aDownloads) == 0){
 
 
 //####################################################################
-cRender::html_footer();
+cRenderHtml::footer();
 ?>
  

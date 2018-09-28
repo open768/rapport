@@ -35,7 +35,7 @@ require_once("$phpinc/appdynamics/account.php");
 
 
 //####################################################################
-cRender::html_header("configuration");
+cRenderHtml::header("configuration");
 cRender::force_login();
 
 //####################################################################
@@ -52,7 +52,7 @@ function sort_config($a,$b){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -84,5 +84,5 @@ $sStyle = cRender::getRowClass();
 		?>
 	</table><?php
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

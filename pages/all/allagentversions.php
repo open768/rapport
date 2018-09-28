@@ -33,7 +33,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-cRender::html_header("All Agent Versions");
+cRenderHtml::header("All Agent Versions");
 cRender::force_login();
 const TIER_WIDTH=150;
 const ID_WIDTH=30;
@@ -47,7 +47,7 @@ cRender::show_top_banner("All AgentVersions");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -248,6 +248,6 @@ Work in Progress
 
 <?php
 //####################################################################
-cRender::html_footer();
+cRenderHtml::footer();
 ?>
  

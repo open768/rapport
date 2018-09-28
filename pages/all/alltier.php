@@ -36,7 +36,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //####################################################################
-cRender::html_header("All Tiers");
+cRenderHtml::header("All Tiers");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
@@ -50,7 +50,7 @@ cRender::show_time_options( "All Tiers");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -82,5 +82,5 @@ foreach ( $aApps as $oApp){
 }
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

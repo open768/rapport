@@ -39,7 +39,7 @@ $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
 $title ="$oApp->name Application Errors and Exceptions";
-cRender::html_header("$title");
+cRenderHtml::header("$title");
 cRender::force_login();
 cRender::show_time_options( $title); 
 $oTimes = cRender::get_times();
@@ -141,7 +141,7 @@ function render_tier($poTier){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -159,5 +159,5 @@ else
 	foreach ( $aResponse as $oTier)
 		render_tier($oTier);
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

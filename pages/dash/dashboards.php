@@ -36,7 +36,7 @@ require_once("$phpinc/appdynamics/account.php");
 
 
 //####################################################################
-cRender::html_header("Dashboards");
+cRenderHtml::header("Dashboards");
 cRender::force_login();
 cChart::do_header();
 
@@ -62,5 +62,5 @@ not implemented
 	<li>copy dashboards
 </ul>
 <?php
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

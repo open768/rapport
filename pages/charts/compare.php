@@ -43,7 +43,7 @@ $oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "No Application Specified";
 
 //####################################################################
-cRender::html_header("compare: $sChartTitle");
+cRenderHtml::header("compare: $sChartTitle");
 if (!$sMetric ) cDebug::error("Metric missing");
 cRender::force_login();
 
@@ -81,5 +81,5 @@ $oChart->height = cChart::CHART_HEIGHT_LETTERBOX;
 	</table><?php
 
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

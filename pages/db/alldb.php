@@ -35,7 +35,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //####################################################################
-cRender::html_header("All Applications - Databases");
+cRenderHtml::header("All Applications - Databases");
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE -200;
@@ -48,7 +48,7 @@ cRender::appdButton(cAppDynControllerUI::databases());
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -76,5 +76,5 @@ if (count($oResponse) == 0){
 }
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

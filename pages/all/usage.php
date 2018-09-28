@@ -36,7 +36,7 @@ require_once("$phpinc/appdynamics/account.php");
 
 
 //####################################################################
-cRender::html_header("License Usage");
+cRenderHtml::header("License Usage");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
@@ -52,7 +52,7 @@ cRender::show_top_banner("License Usage for $sUsage month(s)");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -92,5 +92,5 @@ foreach ($aMods as $oModule)
 cChart::render_metrics(null, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

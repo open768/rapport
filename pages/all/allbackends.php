@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 //-----------------------------------------------
 
 //####################################################################
-cRender::html_header("All Remote Services");
+cRenderHtml::header("All Remote Services");
 cRender::force_login();
 cChart::do_header();
 $title ="All Remote Services";
@@ -49,7 +49,7 @@ cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 	//********************************************************************
 	if (cAppdyn::is_demo()){
 		cRender::errorbox("function not support ed for Demo");
-		cRender::html_footer();
+		cRenderHtml::footer();
 		exit;
 	}
 	//********************************************************************
@@ -89,5 +89,5 @@ foreach ($oApps as $oApp){
 	<?php
 }
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

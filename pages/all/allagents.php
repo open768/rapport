@@ -33,7 +33,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-cRender::html_header("All agents");
+cRenderHtml::header("All agents");
 cRender::force_login();
 
 
@@ -81,7 +81,7 @@ const TOTALCOL_WIDTH=150;
 
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -149,5 +149,5 @@ if (cAppdyn::is_demo()){
 </table><?php
 
 cRender::button("Show All Agent Versions", "allagentversions.php");	
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

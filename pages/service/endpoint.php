@@ -37,7 +37,7 @@ require_once("$root/inc/inc-filter.php");
 
 
 //####################################################################
-cRender::html_header("Service End Point");
+cRenderHtml::header("Service End Point");
 cRender::force_login();
 cChart::do_header();
 
@@ -55,7 +55,7 @@ cRender::show_time_options("$oApp->name&gt;$oTier->name&gt;$sService");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -144,5 +144,5 @@ if (count($aSnapshots) == 0){
 // ################################################################################
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

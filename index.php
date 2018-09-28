@@ -48,7 +48,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	}	
 	catch (Exception $e)
 	{
-		cRender::html_header("unable to login");
+		cRenderHtml::header("unable to login");
 		$sError = $e->getMessage();
 		cRender::show_top_banner("Unable to Login !"); 
 		cRender::errorbox($sError);
@@ -83,7 +83,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	}	
 	catch (Exception $e)
 	{
-		cRender::html_header("unable to login");
+		cRenderHtml::header("unable to login");
 		$sError = $e->getMessage();
 		cRender::show_top_banner("Unable to Login !"); 
 		cRender::errorbox($sError);
@@ -94,13 +94,13 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	exit();
 	
 }else{
-	cRender::html_header("login");
+	cRenderHtml::header("login");
 	?>
 		<!-- Login Box -->
 
 		<div class="mdl-card mdl-shadow--6dp" style="margin:auto">
-			<div class="mdl-card__title-text">
-				<div class="mdl-card__title-text">Welcome to the Reporter for Appdynamics&trade;</div>
+			<div class="mdl-card__title-text mdl-color--blue-900">
+				<div class="mdl-card__title-text mdl-color-text--grey-50" style="font-family: 'Courgette', cursive;">Welcome to the Reporter for Appdynamics&trade;</div>
 			</div>
 			<div class="mdl-card__supporting-text">
 				<form method="POST" action="index.php">
@@ -172,6 +172,6 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		</div>
 
 	<?php
-	cRender::html_footer();
+	cRenderHtml::footer();
 }
 ?>

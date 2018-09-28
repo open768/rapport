@@ -40,7 +40,7 @@ require_once("$root/inc/inc-render.php");
 $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
-cRender::html_header("tier JMX Database Pools");
+cRenderHtml::header("tier JMX Database Pools");
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE;
@@ -148,5 +148,5 @@ else{
 }
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

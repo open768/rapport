@@ -37,7 +37,7 @@ require_once("$root/inc/inc-render.php");
 set_time_limit(200); 
 
 //####################################################################
-cRender::html_header("App Activity");
+cRenderHtml::header("App Activity");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
@@ -74,5 +74,5 @@ cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERB
 	
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

@@ -34,7 +34,7 @@ require_once("$root/inc/inc-render.php");
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
 
-cRender::html_header("Events $oApp->name");
+cRenderHtml::header("Events $oApp->name");
 cRender::force_login();
 
 //####################################################################
@@ -45,7 +45,7 @@ cRender::appdButton(cAppDynControllerUI::events($oApp));
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -117,5 +117,5 @@ uasort($aEvents,"sort_events");
 		}
 	?></table>
 <?php
-	cRender::html_footer();
+	cRenderHtml::footer();
 ?>

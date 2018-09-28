@@ -40,7 +40,7 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring - javascript errors graphs");
+cRenderHtml::header("Web browser - Real user monitoring - javascript errors graphs");
 cChart::do_header();
 
 cRender::force_login();
@@ -93,7 +93,7 @@ function render_graphs($psType, $paData){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -110,5 +110,5 @@ if (cAppdyn::is_demo()){
 	
 	// ############################################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

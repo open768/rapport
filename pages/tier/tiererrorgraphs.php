@@ -41,7 +41,7 @@ $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 $title ="$oApp->name&gt;$oTier->name&gt;Errors and Exceptions";
-cRender::html_header("$title");
+cRenderHtml::header("$title");
 cChart::do_header();
 
 cRender::force_login();
@@ -88,7 +88,7 @@ function render_table($paData){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -103,5 +103,5 @@ if (cAppdyn::is_demo()){
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_table($aData);
 	cChart::do_footer();
-	cRender::html_footer();
+	cRenderHtml::footer();
 ?>

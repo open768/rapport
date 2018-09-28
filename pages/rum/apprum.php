@@ -40,7 +40,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring");
+cRenderHtml::header("Web browser - Real user monitoring");
 cRender::force_login();
 cChart::do_header();
 
@@ -53,7 +53,7 @@ cRender::appdButton(cAppDynControllerUI::webrum($oApp));
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -83,5 +83,5 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

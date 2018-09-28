@@ -38,7 +38,7 @@ require_once("$root/inc/inc-render.php");
 
 set_time_limit(200); // huge time limit as this takes a long time
 //####################################################################
-cRender::html_header("External tier calls");
+cRenderHtml::header("External tier calls");
 cRender::force_login();
 
 //display the results
@@ -53,7 +53,7 @@ cRender::show_time_options($title);
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -85,5 +85,5 @@ cRender::button("see External Calls", cHttp::build_url("tierextcalls.php", $gsTi
 cRender::button("just trans stats", cHttp::build_url("tiertrans.php", $gsTierQS));
 cRender::button("trans graph", cHttp::build_url("tiertransgraph.php", $gsTierQS));
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

@@ -41,7 +41,7 @@ $oApp = cRenderObjs::get_current_app();
 $sGraphUrl = cHttp::build_url("rumstats.php", $gsAppQS);
 
 //####################################################################
-cRender::html_header("Web browser - Real user monitoring - graphs");
+cRenderHtml::header("Web browser - Real user monitoring - graphs");
 cChart::do_header();
 
 cRender::force_login();
@@ -93,7 +93,7 @@ function render_graphs($psType, $paData){
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -118,5 +118,5 @@ if (cAppdyn::is_demo()){
 
 	// ############################################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

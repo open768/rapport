@@ -54,7 +54,7 @@ switch($sMetricType){
 }
 
 //####################################################################
-cRender::html_header("About");
+cRenderHtml::header("About");
 
 //####################################################################
 cRender::show_time_options( "About"); 
@@ -62,5 +62,5 @@ cRender::show_time_options( "About");
 		<h2>About the Reporter for Appdynamics&trade;</h2>
 
 <?php
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

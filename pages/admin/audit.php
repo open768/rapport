@@ -33,7 +33,7 @@ require_once("$root/inc/inc-render.php");
 
 
 //####################################################################
-cRender::html_header("Admin Auditing");
+cRenderHtml::header("Admin Auditing");
 cRender::force_login();
 
 cRender::show_top_banner("Admin Auditing");
@@ -93,5 +93,5 @@ if ($sAccount){
 	}
 }
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

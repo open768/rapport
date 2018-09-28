@@ -49,7 +49,7 @@ function sort_by_time($a,$b){
 
 //####################################################################
 $trans = cHeader::get(cRender::TRANS_QS);
-cRender::html_header("Snapshot - $trans");
+cRenderHtml::header("Snapshot - $trans");
 cRender::force_login();
 
 //####################################################
@@ -70,7 +70,7 @@ cRender::show_top_banner("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier-
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -381,5 +381,5 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 
 		
 // ################################################################################
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

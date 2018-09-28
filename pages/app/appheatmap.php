@@ -35,7 +35,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 //####################################################################
-cRender::html_header("Activity Heat Map");
+cRenderHtml::header("Activity Heat Map");
 cRender::force_login();
 ?>
 	<script type="text/javascript" src="js/remote.js"></script>
@@ -68,7 +68,7 @@ else
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -81,6 +81,6 @@ cRender::render_Heatmap($aHeatData["hours"], "HeatMap for Hours", "hour", "min")
 ?>
 
 <?php
-cRender::html_footer();
+cRenderHtml::footer();
 ?>
 

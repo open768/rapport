@@ -40,7 +40,7 @@ $oApp = cRenderObjs::get_current_app();
 $aTiers =$oApp->GET_Tiers();
 
 //####################################################################
-cRender::html_header("$oApp->name Overview");
+cRenderHtml::header("$oApp->name Overview");
 cRender::force_login();
 cChart::$show_export_all = "0";
 cChart::do_header();
@@ -129,7 +129,7 @@ cDebug::flush();
 if (cAppdyn::is_demo()){
 	cRender::errorbox("Transactions not support ed for Demo");
 	cChart::do_footer();
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -175,5 +175,5 @@ foreach ($aTiers as $oTier){
 
 //####################################################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

@@ -36,7 +36,7 @@ require_once("$phpinc/appdynamics/account.php");
 
 
 //####################################################################
-cRender::html_header("One Click Checkup");
+cRenderHtml::header("One Click Checkup");
 cRender::force_login();
 cChart::do_header();
 
@@ -127,5 +127,5 @@ foreach ( $aResponse as $oApp){
 	cCommon::flushprint("");
 }
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

@@ -56,7 +56,7 @@ if ($sGoKey){
 }
 
 //####################################################################
-cRender::html_header("link");
+cRenderHtml::header("link");
 cRender::force_login();
 
 cRender::show_top_banner("link"); 
@@ -76,5 +76,5 @@ $sPage = $oLinkData->page;
 	<?=cRender::button("Go back to page", $sPage)?>
 </TD></TR></TABLE>
 <?php
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

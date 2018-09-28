@@ -36,7 +36,7 @@ require_once("$root/inc/inc-render.php");
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -49,7 +49,7 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 $sTitle = "All transactions calling External Service: $sExt";
-cRender::html_header($sTitle);
+cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();
 cRender::show_time_options( $sTitle); 
@@ -112,5 +112,5 @@ foreach ( $aTrans as $oTrans){
 cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

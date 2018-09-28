@@ -42,7 +42,7 @@ $oApp = $oTier->app;
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
-cRender::html_header("tier $oTier->name");
+cRenderHtml::header("tier $oTier->name");
 cRender::force_login();
 cRender::show_time_options("$oApp->name&gt;$oTier->name"); 
 
@@ -51,7 +51,7 @@ cChart::do_header();
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -151,5 +151,5 @@ cDebug::flush();
 
 //####################################################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

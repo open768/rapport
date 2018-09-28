@@ -34,7 +34,7 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 //####################################################################
-cRender::html_header("Infrastructure");
+cRenderHtml::header("Infrastructure");
 cRender::force_login();
 cChart::do_header();
 
@@ -81,5 +81,5 @@ foreach ($aTiers as $oTier){
 //####################################################################
 //####################################################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

@@ -44,7 +44,7 @@ $oApp = $oTier->app;
 $gsTierQs = cRenderQS::get_base_tier_QS($oTier);
 
 //################### CHART HEADER ########################################
-cRender::html_header("External tier calls");
+cRenderHtml::header("External tier calls");
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE/2;
@@ -56,7 +56,7 @@ cRender::show_time_options($title);
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -110,5 +110,5 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 //################ CHART
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

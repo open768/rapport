@@ -35,7 +35,7 @@ require_once("$root/inc/inc-render.php");
 require_once("$root/inc/inc-filter.php");
 
 //####################################################################
-cRender::html_header("All Tier Transactions");
+cRenderHtml::header("All Tier Transactions");
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE/2;
@@ -56,7 +56,7 @@ cRender::show_time_options( $title);
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 
@@ -138,5 +138,5 @@ cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 
 //###############################################
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

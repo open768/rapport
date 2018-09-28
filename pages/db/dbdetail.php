@@ -37,7 +37,7 @@ $sDB = cHeader::get(cRender::DB_QS);
 
 
 //####################################################################
-cRender::html_header("Database - $sDB");
+cRenderHtml::header("Database - $sDB");
 cRender::force_login();
 cChart::do_header();
 
@@ -49,7 +49,7 @@ cRender::button("Back to Summary", "db.php?".cRender::DB_QS."=$sDB",false);
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -74,5 +74,5 @@ cChart::metrics_table(cAppDApp::$db_app,$aMetrics,2,cRender::getRowClass());
 
 //***************************************************************************
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

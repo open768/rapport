@@ -33,7 +33,7 @@ require_once("$root/inc/inc-link.php");
 
 
 //####################################################################
-cRender::html_header("AuthToken");
+cRenderHtml::header("AuthToken");
 cRender::force_login();
 
 cRender::show_top_banner("AuthToken"); 
@@ -52,5 +52,5 @@ $sURL = cHttp::build_URL($sURL,cRender::LOGIN_TOKEN_QS, $sToken);
 	<?=cRender::button("Go back to page", cHeader::get_referer())?>
 </TD></TR></TABLE>
 <?php
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

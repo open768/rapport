@@ -37,7 +37,7 @@ $sDB = cHeader::get(cRender::DB_QS);
 
 
 //####################################################################
-cRender::html_header("Database - $sDB");
+cRenderHtml::header("Database - $sDB");
 cRender::force_login();
 cChart::do_header();
 
@@ -61,5 +61,5 @@ cChart::metrics_table(cAppDApp::$db_app,$aMetrics,1,cRender::getRowClass());
 
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

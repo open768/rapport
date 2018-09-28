@@ -45,7 +45,7 @@ $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 $sTransQs = cHttp::build_qs($gsTierQS, cRender::BACKEND_QS, $totier);
 
 //####################################################################
-cRender::html_header("External tier calls");
+cRenderHtml::header("External tier calls");
 cRender::force_login();
 cChart::do_header();
 
@@ -61,7 +61,7 @@ cRender::button("back to ($oTier->name) external tiers", cHttp::build_url("tiere
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
@@ -77,5 +77,5 @@ if (cAppdyn::is_demo()){
 //################ CHART
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

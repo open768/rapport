@@ -61,7 +61,7 @@ switch($sMetricType){
 }
 
 //####################################################################
-cRender::html_header("All Applications - $sTitle1");
+cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
 cChart::do_header();
 
@@ -92,5 +92,5 @@ else{
 	}
 }
 cChart::do_footer();
-cRender::html_footer();
+cRenderHtml::footer();
 ?>

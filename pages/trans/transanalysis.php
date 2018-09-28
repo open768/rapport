@@ -39,7 +39,7 @@ require_once("$root/inc/inc-filter.php");
 const HOWMANY=10;
 
 //####################################################################
-cRender::html_header("top ".HOWMANY." slowest Transactions analysis");
+cRenderHtml::header("top ".HOWMANY." slowest Transactions analysis");
 cRender::force_login();
 cChart::do_header();
 
@@ -61,7 +61,7 @@ cRender::show_time_options("$oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
-	cRender::html_footer();
+	cRenderHtml::footer();
 	exit;
 }
 //#####################################################################
@@ -228,5 +228,5 @@ if ($bProceed){
 // ################################################################################
 cChart::do_footer();
 
-cRender::html_footer();
+cRenderHtml::footer();
 ?>
