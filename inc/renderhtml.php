@@ -66,8 +66,8 @@ class cRenderHtml{
 			<script src="<?=$home?>/js/common.js"></script>
 		
 		</head>
-		<BODY style="background:DarkSlateBlue;">
-			<div id="page_layout" class="mdl-layout mdl-js-layout mdl-color--blue-900">
+		<BODY>
+			<div id="page_layout" class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
 				<div id= "page_content" class="mdl-layout__content">
 		<?php
 		cDebug::flush();
