@@ -26,6 +26,8 @@ class cRenderHtml{
 			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/reporter.css" >
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
+			<link rel="stylesheet" href="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.css">			
+			<link rel="stylesheet" href="<?=$jsinc?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
 			
 			<!-- Material Design Lite https://getmdl.io/components/index.html -->
 			<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -53,6 +55,8 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$jsinc?>/jquery-inview/jquery.inview.min.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/jquery-visible/jquery.visible.min.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/jquery-spinner/g-spinner.min.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
 
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
@@ -64,6 +68,7 @@ class cRenderHtml{
 			<script src="<?=$home?>/js/widgets/chart.js"></script>
 			<script src="<?=$home?>/js/widgets/menus.js"></script>
 			<script src="<?=$home?>/js/common.js"></script>
+			<script src="<?=$home?>/js/qtip-init.js"></script>
 		
 		</head>
 		<BODY>
@@ -93,25 +98,69 @@ class cRenderHtml{
 							AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
 						</div>
 						<div class="mdl-cell mdl-cell--4-col">
-							Uses:
-							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses1">Google Charts</button>
-							<div class="mdl-tooltip" for="uses1">
-								<a target="new" href="https://developers.google.com/chart/">licensed under the Creative Commons Attribution license.</a>
-							</div>
-							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses2">tablesorter</button>
-							<div class="mdl-tooltip" for="uses2">
-								<a target="new" href="http://tablesorter.com/">by Christian Bach licensed under the MIT license.</a>
-							</div>
-							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses3">pub sub pattern</button>
-							<div class="mdl-tooltip" for="uses3">
-								<a target="new" href="https://gist.github.com/umidjons/8396981">by Baylor Rae licensed under the GNU General Public license</a>
-							</div>
-							<button class="mdl-button" mdl-js-button mdl-button--raised" id="uses4">google material-design-lite</button>
-							<div class="mdl-tooltip" for="uses4">
-								<a target="new" href="https://getmdl.io/">licensed under the Apache License 2.0</a>
-							</div>
+							<button class="mdl-button mdl-js-button mdl-button--raised" id="foot_libs">Libraries Used</button>
+							<div style="display:none" id="foot_libs_text">
+								<ul class="mdl-list">
+									<li class="mdl-list__item mdl-list__item--three-line">
+										<span class="mdl-list__item-primary-content">
+											<a target="new" href="https://developers.google.com/chart/"
+												><span class="material-icons mdl-list__item-icon">launch</span>
+											</a>
+											<span>Google charts</span>
+											<span class="mdl-list__item-sub-title">
+												licensed under the Creative Commons Attribution license.
+											</span>
+										</span>
+									</li>
+									<li class="mdl-list__item mdl-list__item--three-line">
+										<span class="mdl-list__item-primary-content">
+											<a target="new" href="http://tablesorter.com/"
+												><span class="material-icons mdl-list__item-icon">launch</span>
+											</a>
+											<span>tablesorter</span>
+											<span class="mdl-list__item-sub-title">
+												by Christian Bach licensed under the MIT license.
+											</span>
+										</span>
+									</li>
+									<li class="mdl-list__item mdl-list__item--three-line">
+										<span class="mdl-list__item-primary-content">
+											<a target="new" href="https://gist.github.com/umidjons/8396981"
+												><span class="material-icons mdl-list__item-icon">launch</span>
+											</a>
+											<span>pub sub pattern</span>
+											<span class="mdl-list__item-sub-title">
+												by Baylor Rae licensed under the GNU General Public license
+											</span>
+										</span>
+									</li>
+									<li class="mdl-list__item mdl-list__item--three-line">
+										<span class="mdl-list__item-primary-content">
+											<a target="new" href="https://getmdl.io/"
+												><span class="material-icons mdl-list__item-icon">launch</span>
+											</a>
+											<span>Google material-design-lite</span>
+											<span class="mdl-list__item-sub-title">
+												licensed under the Apache License 2.0
+											</span>
+										</span>
+									</li>
+									<li class="mdl-list__item mdl-list__item--three-line">
+										<span class="mdl-list__item-primary-content">
+											<a target="new" href="https://github.com/oRRs/mdl-jquery-modal-dialog/"
+												><span class="material-icons mdl-list__item-icon">launch</span>
+											</a>
+											<span>jquery modal dialog</span>
+											<span class="mdl-list__item-sub-title">
+												By Oliver Rennies: The MIT License (MIT)
+											</span>
+										</span>
+									</li>
+								</ul>
+							</div idref="foot_libs_text">
 						</div>
-					</div></div>
+					</div>
+				</div>
 					<div class="mdl-mega-footer__bottom-section">
 						Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
 						USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
@@ -120,10 +169,19 @@ class cRenderHtml{
 			</div><!-- page content -->
 		</div> <!-- page layout -->
 		<script language="javascript">
+
+			function onclick_footlibs(){
+				showDialog({
+					title: 'Libraries Used',
+					text: $('#foot_libs_text').html()
+				})
+			}
+			
 			$(
 				function(){
-				$("button.blue_button").removeAttr("class").button();
-				cMenus.renderMenus();
+					$("button.blue_button").removeAttr("class").button();
+					cMenus.renderMenus();
+					$('#foot_libs').click(	onclick_footlibs		);
 				}
 			);
 		</script>

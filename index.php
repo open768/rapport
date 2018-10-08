@@ -100,7 +100,9 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 
 		<div class="mdl-card mdl-shadow--6dp" style="margin:auto">
 			<div class="mdl-card__title-text mdl-color--blue-900">
-				<div class="mdl-card__title-text mdl-color-text--grey-50" style="font-family: 'Courgette', cursive;">Welcome to the Reporter for Appdynamics&trade;</div>
+				<div class="mdl-card__title-text mdl-color-text--grey-50" style="font-family: 'Courgette', cursive;padding:10px">
+						Welcome to the Reporter for Appdynamics&trade;
+				</div>
 			</div>
 			<div class="mdl-card__supporting-text">
 				<form method="POST" action="index.php">
@@ -149,7 +151,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				</form>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-				<form action="index.php" method="POST">
+				<form action="index.php" method="POST" style="margin:auto">
 					<input type="hidden" name="<?=cLogin::KEY_ACCOUNT?>" value="<?=cAppDynCredentials::DEMO_ACCOUNT?>">
 					<input type="hidden" name="<?=cLogin::KEY_USERNAME?>" value="<?=cAppDynCredentials::DEMO_USER?>">
 					<input type="hidden" name="<?=cLogin::KEY_PASSWORD?>" value="<?=cAppDynCredentials::DEMO_PASS?>">
