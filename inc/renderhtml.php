@@ -69,6 +69,7 @@ class cRenderHtml{
 			<script src="<?=$home?>/js/widgets/menus.js"></script>
 			<script src="<?=$home?>/js/common.js"></script>
 			<script src="<?=$home?>/js/qtip-init.js"></script>
+			<script src="<?=$home?>/js/dialog-init.js"></script>
 		
 		</head>
 		<BODY>
@@ -83,23 +84,32 @@ class cRenderHtml{
 	public static function footer (){
 		?>
 				<p>
-				<div id="page_footer" class="mdl-mega-footer">
-					<div class="mdl-mega-footer__middle-section"><div class="mdl-grid">
-						<div class="mdl-cell mdl-cell-6-col">
-							<b>Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a></b>
-							<p>
-							This software is protected by copyright under the terms of the 
-							<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
-							For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
-						</div>
-						<div class="mdl-cell mdl-cell--2-col">
-							We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a><br>
-							No passwords are stored by this application.<br>
-							AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
-						</div>
-						<div class="mdl-cell mdl-cell--4-col">
-							<button class="mdl-button mdl-js-button mdl-button--raised" id="foot_libs">Libraries Used</button>
-							<div style="display:none" id="foot_libs_text">
+				<footer class="mdl-mini-footer">
+					<div class="mdl-mini-footer__left-section">
+						<span>
+							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
+							<div style="display:none" class="dialog" for="ftrcopy" title="Copyright">
+								<b>Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a></b>
+								<p/>
+								This software is protected by copyright under the terms of the 
+								<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
+								For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
+								<p/>
+								Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
+								USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
+							</div>
+						</span>
+						<span>
+							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrinfo">Information</button>
+							<div style="display:none" class="dialog" for="ftrinfo" title="Information">
+								We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a><br>
+								No passwords are stored by this application.<br>
+								AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
+							</div>
+						</span>
+						<span>
+							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrLibraries">Libraries Used</button>
+							<div style="display:none" class="dialog" for="ftrLibraries" title="Libraries Used">
 								<ul class="mdl-list">
 									<li class="mdl-list__item mdl-list__item--three-line">
 										<span class="mdl-list__item-primary-content">
@@ -158,30 +168,16 @@ class cRenderHtml{
 									</li>
 								</ul>
 							</div idref="foot_libs_text">
-						</div>
+						</span>
 					</div>
-				</div>
-					<div class="mdl-mega-footer__bottom-section">
-						Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
-						USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
-					</div>
-				</div><!-- page footer -->
+				</footer>
 			</div><!-- page content -->
 		</div> <!-- page layout -->
 		<script language="javascript">
-
-			function onclick_footlibs(){
-				showDialog({
-					title: 'Libraries Used',
-					text: $('#foot_libs_text').html()
-				})
-			}
-			
 			$(
 				function(){
 					$("button.blue_button").removeAttr("class").button();
 					cMenus.renderMenus();
-					$('#foot_libs').click(	onclick_footlibs		);
 				}
 			);
 		</script>
