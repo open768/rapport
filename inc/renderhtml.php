@@ -35,6 +35,7 @@ class cRenderHtml{
 			<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
 			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 			<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 			<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-51550338-2"></script>
@@ -57,6 +58,7 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$jsinc?>/jquery-spinner/g-spinner.min.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/jquery-flowtype/flowtype.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
 
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
@@ -70,7 +72,6 @@ class cRenderHtml{
 			<script src="<?=$home?>/js/common.js"></script>
 			<script src="<?=$home?>/js/qtip-init.js"></script>
 			<script src="<?=$home?>/js/dialog-init.js"></script>
-		
 		</head>
 		<BODY>
 			<div id="page_layout" class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
@@ -82,10 +83,17 @@ class cRenderHtml{
 	
 	//**************************************************************************
 	public static function footer (){
+		global $home;
 		?>
 				<p>
 				<footer class="mdl-mini-footer">
 					<div class="mdl-mini-footer__left-section">
+						<div class="mdl-logo">
+							<img id="cklogo" class="cklogo" src="<?=$home?>/images/chicken_icon.png">
+							<div class="mdl-tooltip" for="cklogo">
+								We are Chicken Katsu.
+							</div>						
+						</div>
 						<span>
 							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
 							<div style="display:none" class="dialog" for="ftrcopy" title="Copyright">
@@ -166,6 +174,18 @@ class cRenderHtml{
 											</span>
 										</span>
 									</li>
+									<li class="mdl-list__item mdl-list__item--three-line">
+										<span class="mdl-list__item-primary-content">
+											<a target="new" href="http://simplefocus.com/flowtype/"
+												><span class="material-icons mdl-list__item-icon">launch</span>
+											</a>
+											<span>flowtype</span>
+											<span class="mdl-list__item-sub-title">
+												licensed under the MIT License
+											</span>
+										</span>
+									</li>
+									
 								</ul>
 							</div idref="foot_libs_text">
 						</span>
@@ -178,6 +198,8 @@ class cRenderHtml{
 				function(){
 					$("button.blue_button").removeAttr("class").button();
 					cMenus.renderMenus();
+					//$('body').flowtype();
+					$('#cklogo').click( function(){window.open("https://www.chickenkatsu.co.uk");});
 				}
 			);
 		</script>

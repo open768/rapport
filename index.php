@@ -98,9 +98,9 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	?>
 		<!-- Login Box -->
 
-		<div class="mdl-card mdl-shadow--6dp" style="margin:auto">
+		<div class="mdl-card mdl-shadow--6dp login_box" >
 			<div class="mdl-card__title-text mdl-color--blue-900">
-				<div class="mdl-card__title-text mdl-color-text--grey-50" style="font-family: 'Courgette', cursive;padding:10px">
+				<div class="mdl-card__title-text mdl-color-text--grey-50 login_title">
 						Welcome to the Reporter for Appdynamics&trade;
 				</div>
 			</div>
@@ -144,20 +144,20 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 							?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
 						}
 					?>
-					<button id="btnlogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white" type="submit" value="1" name="<?=cLogin::KEY_SUBMIT?>" style="width:100%;">Login</button>
+					<button id="btnlogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white login_submit" type="submit" value="1" name="<?=cLogin::KEY_SUBMIT?>">Login</button>
 					<div class="mdl-tooltip" for="btnlogin">
 						No login credentials are stored by this application, we really mean it
 					</div>
 				</form>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-				<form action="index.php" method="POST" style="margin:auto">
+				<form action="index.php" method="POST" >
 					<input type="hidden" name="<?=cLogin::KEY_ACCOUNT?>" value="<?=cAppDynCredentials::DEMO_ACCOUNT?>">
 					<input type="hidden" name="<?=cLogin::KEY_USERNAME?>" value="<?=cAppDynCredentials::DEMO_USER?>">
 					<input type="hidden" name="<?=cLogin::KEY_PASSWORD?>" value="<?=cAppDynCredentials::DEMO_PASS?>">
 					<input type="hidden" name="<?=cLogin::KEY_HOST?>" value="<?=cAppDynCore::DEMO_HOST?>">
 					<input type="hidden" name="<?=cLogin::KEY_HTTPS?>" value="no">
-					<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="demologin" name="<?=cLogin::KEY_SUBMIT?>" value="1" type="submit">See this application in Demo Mode</button>
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect login_submit" id="demologin" name="<?=cLogin::KEY_SUBMIT?>" value="1" type="submit">Demo Mode</button>
 					<div class="mdl-tooltip" for="demologin">
 						look at our lovely features.
 					</div>
