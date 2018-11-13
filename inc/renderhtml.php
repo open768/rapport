@@ -105,6 +105,8 @@ class cRenderHtml{
 								<p/>
 								Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
 								USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
+								<p>
+								AppDynamics&trade; is a registered trademark of <a target="appd" href="https://www.appdynamics.com/">AppDynamics, Inc</a>
 							</div>
 						</span>
 						<span>

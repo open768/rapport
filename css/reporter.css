@@ -1,26 +1,49 @@
+/*************************************************************
+*************************************************************/
 body
 {
 	background-color:#eeeeee;
 	font-family:ubuntu,arial,sans-serif;
 	font-style:normal;
 }
+/* On screens that are 992px wide or less, the background color is blue */
 
 h2
 {
 	color:#2D95BF;
 }
 
+/*************************************************************
+* login styles
+*************************************************************/
 .login_box{
 	margin:auto;
-	width:80%;
+	padding:5px;
+	min-width:450px;
 }
 .login_submit{
 	width:100%;
 }
 .login_title{
 	font-family: 'Courgette', cursive;
-	padding:10px;
+	padding:15px;
 }
+@media screen and (max-width: 992px) {
+    .login_title {
+        font-size:25px
+    }
+}
+@media screen and (max-width: 600px) {
+    .login_title {
+        font-size:40px
+    }
+}
+
+
+
+
+/*************************************************************
+*************************************************************/
 .cklogo{
 	height:45px;
 	border-radius: 5px;

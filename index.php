@@ -99,10 +99,10 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		<!-- Login Box -->
 
 		<div class="mdl-card mdl-shadow--6dp login_box" >
-			<div class="mdl-card__title-text mdl-color--blue-900">
-				<div class="mdl-card__title-text mdl-color-text--grey-50 login_title">
+			<div class="mdl-card__title-text mdl-color--blue-900 ">
+				<span class="mdl-color-text--grey-50 login_title">
 						Welcome to the Reporter for Appdynamics&trade;
-				</div>
+				</span>
 			</div>
 			<div class="mdl-card__supporting-text">
 				<form method="POST" action="index.php">
