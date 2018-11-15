@@ -160,7 +160,7 @@ class cRenderMenus{
 		$oCred = cRenderObjs::get_appd_credentials();
 	
 		if ($oCred->restricted_login) {
-			cRender::button($psTier,null);
+			cRender::button($poTier->name,null);
 			cDebug::leave();
 			return;
 		}

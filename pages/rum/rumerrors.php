@@ -122,7 +122,7 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Pages With Javascript Errors</h2>
 <?php
-	$sMetricpath = cAppdynMetric::webrumPageJavaScriptErrors(cAppdynMetric::BASE_PAGES, "*");
+	$sMetricpath = cAppDynWebRumMetric::PageJavaScriptErrors(cAppdynMetric::BASE_PAGES, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_table(cAppdynMetric::BASE_PAGES, $aData);
 	

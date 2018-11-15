@@ -104,11 +104,14 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 						Welcome to the Reporter for Appdynamics&trade;
 				</span>
 			</div>
-			<div class="mdl-card__supporting-text">
+			<div class="mdl-card__supporting-text" id="divCard">
 				<form method="POST" action="index.php">
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" name="<?=cLogin::KEY_ACCOUNT?>">
+						<input class="mdl-textfield__input" id="txtAccount" type="text" name="<?=cLogin::KEY_ACCOUNT?>">
 						<label class="mdl-textfield__label" for="<?=cLogin::KEY_ACCOUNT?>">Account...</label>
+						<div class="mdl-tooltip" for="txtAccount">
+							use the same account details as you would when logging into your controller.
+						</div>
 					</div>
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 						<input class="mdl-textfield__input" id="txtUsername" type="text" name="<?=cLogin::KEY_USERNAME?>">
@@ -125,8 +128,11 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 						</div>
 					</div>
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" name="<?=cLogin::KEY_HOST?>">
+						<input class="mdl-textfield__input" id="txtHost" type="text" name="<?=cLogin::KEY_HOST?>">
 						<label class="mdl-textfield__label" for="<?=cLogin::KEY_HOST?>">Controller Hostname...</label>
+						<div class="mdl-tooltip" for="txtHost">
+							usually &lt;account&gt;.saas.appdynamics.com
+						</div>
 					</div>
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 						<select name="<?=cLogin::KEY_HTTPS?>" class="mdl-textfield__input">
@@ -149,6 +155,10 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 						No login credentials are stored by this application, we really mean it
 					</div>
 				</form>
+			</div>
+			<div class="mdl-card__actions mdl-card--border">
+			Absolutely no credentials are stored by this application, 
+			however for auditing and security reasons we recommend creating a limited access local user in your controller for use with this application.
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<form action="index.php" method="POST" >

@@ -56,6 +56,7 @@ class cRender{
 	
 	const TITLE_QS = "tit";
 	const METRIC_QS = "met";
+	const METRIC_HEIRARCHY_QS = "meh";
 	const BACKEND_QS = "back";
 	const LICENSE_QS = "lc";
 	

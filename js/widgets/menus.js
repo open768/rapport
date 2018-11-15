@@ -153,6 +153,9 @@ $.widget( "ck.appdmenu",{
 					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams));
 					this.pr__addToGroup(oGroup2, "Errors", cBrowser.buildUrl(sRumPrefixUrl+"/rumerrors.php", oParams));
 				oGroup.append(oGroup2);
+				oGroup3 = $("<optgroup>",{label:"Synthetics"});
+					this.pr__addToGroup(oGroup3, "Overview", cBrowser.buildUrl(sRumPrefixUrl+"/synthetic.php", oParams));
+				oGroup.append(oGroup3);
 			oSelect.append(oGroup);
 		
 		//add and make the menu a selectmenu
@@ -211,6 +214,7 @@ $.widget( "ck.appdmenu",{
 		
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sAllPrefixUrl = oOptions.home+"/pages/all";
+		var sRumPrefixUrl = oOptions.home+"/pages/rum";
 		
 		var oSelect = $("<select>");
 			var oOption = $("<option>",{selected:1,disabled:1}).append("Go...");
@@ -236,7 +240,7 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup( oGroup, "Launch", oOptions.home +"/pages/dash/index.php");
 			oSelect.append(oGroup);
 				
-			//- - - - -All group
+			//- - - - -Agents group
 			oGroup = $("<optgroup>",{label:"Agents"});
 				this.pr__addToGroup( oGroup, "Installed", sAllPrefixUrl+"/allagentversions.php");
 				this.pr__addToGroup( oGroup, "Downloads", sAllPrefixUrl+"/appdversions.php");
@@ -251,6 +255,7 @@ $.widget( "ck.appdmenu",{
 				oParams = {};
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
 				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
+				this.pr__addToGroup(oGroup, "Synthetics", sAllPrefixUrl+"/allsynth.php");
 				
 				this.pr__addToGroup( oGroup, "Databases", oOptions.home +"/pages/db/alldb.php");
 				this.pr__addToGroup( oGroup, "Remote Services", sAllPrefixUrl+"/allbackends.php");

@@ -64,17 +64,17 @@ if (cAppdyn::is_demo()){
 
 ?><H2>Real User Monitoring Details for (<?=$rum_page?>)</h2><?php
 $aMetrics = [];
-$sMetricUrl=cAppDynMetric::webrumPageCallsPerMin($rum_type, $rum_page);
+$sMetricUrl=cAppDynWebRumMetric::PageCallsPerMin($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page requests: $rum_page", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynMetric::webrumPageResponseTimes($rum_type, $rum_page);
+$sMetricUrl=cAppDynWebRumMetric::PageResponseTimes($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Response times: $rum_page", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynMetric::webrumPageTCPTime($rum_type, $rum_page);
+$sMetricUrl=cAppDynWebRumMetric::PageTCPTime($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page connection time", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynMetric::webrumPageServerTime($rum_type, $rum_page);
+$sMetricUrl=cAppDynWebRumMetric::PageServerTime($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Server time", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynMetric::webrumPageFirstByte($rum_type, $rum_page);
+$sMetricUrl=cAppDynWebRumMetric::PageFirstByte($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page first byte time", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynMetric::webrumPageJavaScriptErrors($rum_type, $rum_page);
+$sMetricUrl=cAppDynWebRumMetric::PageJavaScriptErrors($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Views with Javascript errors", cChart::METRIC=>$sMetricUrl];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 

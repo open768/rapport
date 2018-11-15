@@ -39,11 +39,11 @@ switch($sMetricType){
 	case cAppDynMetric::METRIC_TYPE_RUMCALLS:
 	case cAppDynMetric::METRIC_TYPE_RUMRESPONSE:
 		$sTitle1 = "Web Browser Page Requests";
-		$sMetric1 = cAppDynMetric::webrumCallsPerMin();
+		$sMetric1 = cAppDynWebRumMetric::CallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
-		$sMetric2 = cAppDynMetric::webrumResponseTimes();
+		$sMetric2 = cAppDynWebRumMetric::ResponseTimes();
 		$sTitle3 = "Pages With Javascript Errors";
-		$sMetric3 = cAppDynMetric::webrumJavaScriptErrors();
+		$sMetric3 = cAppDynWebRumMetric::JavaScriptErrors();
 		
 		$sBaseUrl = "$home/pages/rum/apprum.php";
 		break;

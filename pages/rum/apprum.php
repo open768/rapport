@@ -68,14 +68,14 @@ cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 ?><h2>Browser Stats for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 cRender::button("Show Page Statistics", "../rum/rumstats.php?$sAppQS");
 $aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cAppDynMetric::webrumCallsPerMin()];
-$aMetrics[] = [cChart::LABEL=>"Page response time",cChart::METRIC=>cAppDynMetric::webrumResponseTimes()];
-$aMetrics[] = [cChart::LABEL=>"Page connection time",cChart::METRIC=>cAppDynMetric::webrumTCPTime()];
-$aMetrics[] = [cChart::LABEL=>"Page Server time",cChart::METRIC=>cAppDynMetric::webrumServerTime()];
-$aMetrics[] = [cChart::LABEL=>"Page first byte time",cChart::METRIC=>cAppDynMetric::webrumFirstByte()];
+$aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cAppDynWebRumMetric::CallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Page response time",cChart::METRIC=>cAppDynWebRumMetric::ResponseTimes()];
+$aMetrics[] = [cChart::LABEL=>"Page connection time",cChart::METRIC=>cAppDynWebRumMetric::TCPTime()];
+$aMetrics[] = [cChart::LABEL=>"Page Server time",cChart::METRIC=>cAppDynWebRumMetric::ServerTime()];
+$aMetrics[] = [cChart::LABEL=>"Page first byte time",cChart::METRIC=>cAppDynWebRumMetric::FirstByte()];
 $sUrl="rumerrors.php?$sAppQS";
 $aMetrics[] = [
-	cChart::LABEL=>"JavaScript Errors",cChart::METRIC=>cAppDynMetric::webrumJavaScriptErrors(), 
+	cChart::LABEL=>"JavaScript Errors",cChart::METRIC=>cAppDynWebRumMetric::JavaScriptErrors(), 
 	cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"javascript Errors"];
 
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			

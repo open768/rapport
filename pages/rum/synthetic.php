@@ -13,14 +13,14 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-require_once("../inc/root.php");
-cRoot::set_root("..");
+require_once("../../inc/root.php");
+cRoot::set_root("../..");
 
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/http.php");
 require_once("$phpinc/ckinc/header.php");
+require_once("$phpinc/ckinc/http.php");
 	
 cSession::set_folder();
 session_start();
@@ -34,32 +34,46 @@ require_once("$root/inc/inc-secret.php");
 require_once("$root/inc/inc-render.php");
 
 
-$sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-switch($sMetricType){
-	case cAppDynMetric::METRIC_TYPE_RUMCALLS:
-	case cAppDynMetric::METRIC_TYPE_RUMRESPONSE:
-		$sTitle1 = "Web Browser Page Requests";
-		$sMetric1 = cAppDynWebRumMetric::CallsPerMin();
-		$sTitle2 = "Web Browser Page Response";
-		$sMetric2 = cAppDynWebRumMetric::ResponseTimes();
-		break;
-	case cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES:
-	case cAppDynMetric::METRIC_TYPE_ACTIVITY:
-	default:
-		$sTitle1 = "Application Activity";
-		$sMetric1 = cAppDynMetric::appCallsPerMin();
-		$sTitle2 = "Application Response Times";
-		$sMetric2 = cAppDynMetric::appResponseTimes();
-		break;
+//-----------------------------------------------
+$oApp = cRenderObjs::get_current_app();
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+
+
+//####################################################################
+cRenderHtml::header("Web browser - Synthetics");
+cRender::force_login();
+
+$title ="$oApp->name&gt;Web Real User Monitoring&gt;Synthetic Jobs";
+cRender::show_time_options( $title); 
+$oTimes = cRender::get_times();
+
+cRenderMenus::show_apps_menu("Show Synthetics for:", "synthetic.php");
+cRender::button("All Synthetics", "$home/pages/all/allsynth.php");
+cRender::appdButton(cAppDynControllerUI::webrum_synthetics($oApp, $oTimes));
+
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not supported for Demo");
+	cRenderHtml::footer();
+	exit;
 }
+//********************************************************************
 
 //####################################################################
-cRenderHtml::header("About");
+?><h2>Synthetics</h2>
 
-//####################################################################
-cRender::show_time_options( "About"); 
-?>
-		<h2>About the Reporter for Appdynamics&trade;</h2>
+<script src="<?=$jsinc?>/uri-parser/parse.js"></script>
+<script src="<?=$home?>/js/widgets/synthetics.js"></script>
+<div id="container">Loading Synthetic data...</div>
+<script>
+$( function(){
+	$("#container").appdsyntimeline({
+		home:"<?=$home?>",
+		jobs_metric:"<?=cAppDynWebRumMetric::jobs()?>"
+	});
+})
+	
+</script>
 
 <?php
 cRenderHtml::footer();

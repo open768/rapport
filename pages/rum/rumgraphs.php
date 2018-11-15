@@ -104,7 +104,7 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Page Requests</h2>
 <?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
+	$sMetricpath = cAppDynWebRumMetric::PageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_graphs(cAppdynMetric::BASE_PAGES, $aData);
 	
@@ -112,7 +112,7 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Ajax Requests</h2>
 <?php
-	$sMetricpath = cAppdynMetric::webrumPageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
+	$sMetricpath = cAppDynWebRumMetric::PageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
 	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
 	render_graphs(cAppdynMetric::AJAX_REQ, $aData);
 
