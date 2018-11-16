@@ -95,6 +95,8 @@ $.widget( "ck.appdsynlist",{
 		oElement.empty();
 		oElement.addClass("ui-state-error");
 		oElement.append("There was an error getting synthetic data for " + oOptions.app);
+		
+		setTimeout( function(){oThis.element.hide()}, 500);
 	},
 	
 	onResponse: function(poHttp){
@@ -103,8 +105,25 @@ $.widget( "ck.appdsynlist",{
 		var oOptions = this.options;
 
 		oElement.empty();
-		oElement.append("got data for " + oOptions.app);
-		cDebug.vardump(poHttp.response);
+		var oResponse =poHttp.response; 
+		if (oResponse.jobListDatas){
+			var aJobs = oResponse.jobListDatas;
+			if (aJobs.length == 0){
+				oElement.append("No Synthetic jobs found for " + oOptions.app);
+				setTimeout( function(){oThis.element.hide()}, 500);
+			}else{
+				var sUrl = oOptions.home + "/pages/rum/synthetic.php?app="+oOptions.app+ "&aid=" + oOptions.app_id;
+				var oLink = $("<a>", {href:sUrl}).append("See Synthetic jobs for: " + oOptions.app) ;
+				var oList = $("<ul>");
+				oElement.append(oLink );
+				for (var i=0; i<aJobs.length; i++){
+					var oJob =  aJobs[i];
+					var oLi = $("<li>").append(oJob.config.description);
+					oList.append(oLi);
+				}
+				oElement.append(oList );
+			}
+		}
 	},
 	
 });
@@ -194,7 +213,7 @@ $.widget( "ck.appdsyntimeline",{
 		var oElement = oThis.element;
 		oElement.empty();
 		oElement.addClass("ui-state-error");
-		oElement.append("There was an error getting synthetic data ");
+		oElement.append("unable to get synthetic data for " + oOptions.app);
 	},
 	
 	onLoadSynNames: function(poHttp){

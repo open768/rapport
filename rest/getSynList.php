@@ -39,10 +39,10 @@ cDebug::check_GET_or_POST();
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "no application set";
-
+$oTimes = cRender::get_times();
 //*************************************************************************
 cDebug::write("getting synthetics list - $oApp->name");
-$oResult = ["demo"=>"hello"];
+$oResult = cAppDynRestUI::GET_Synthetic_jobs($oApp, $oTimes);
 
 
 //*************************************************************************

@@ -254,11 +254,10 @@ $.widget( "ck.appdmenu",{
 				
 				oParams = {};
 				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
-				this.pr__addToGroup(oGroup, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
-				this.pr__addToGroup(oGroup, "Synthetics", sAllPrefixUrl+"/allsynth.php");
-				
+				this.pr__addToGroup( oGroup, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 				this.pr__addToGroup( oGroup, "Databases", oOptions.home +"/pages/db/alldb.php");
 				this.pr__addToGroup( oGroup, "Remote Services", sAllPrefixUrl+"/allbackends.php");
+				this.pr__addToGroup( oGroup, "Synthetics", sAllPrefixUrl+"/allsynth.php");
 				this.pr__addToGroup( oGroup, "Tiers", sAllPrefixUrl+"/alltier.php");
 				
 			oSelect.append(oGroup);
