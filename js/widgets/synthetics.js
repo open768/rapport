@@ -4,6 +4,7 @@ var cSynthetics = {
 	queue: new cHttpQueue,
 	APP_QS:"app",
 	APPID_QS:"aid",
+	SYNTH_DETAILS_QS:"syd",
 	METRIC_QS:"met",
 	METRIC_HEIRARCHY_QS: "meh",
 	METRIC_API:"rest/getMetric.php",
@@ -67,6 +68,7 @@ $.widget( "ck.appdsynlist",{
 		var oParams = {};
 		oParams[ cSynthetics.APP_QS ] = oOptions.app;
 		oParams[ cSynthetics.APPID_QS ] = oOptions.app_id;
+		oParams[ cSynthetics.SYNTH_DETAILS_QS] = 0;
 		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
 
 		var oItem = new cHttpQueueItem();
@@ -105,28 +107,31 @@ $.widget( "ck.appdsynlist",{
 		var oOptions = this.options;
 
 		oElement.empty();
-		var oResponse =poHttp.response; 
-		if (oResponse.jobListDatas){
-			var aJobs = oResponse.jobListDatas;
-			if (aJobs.length == 0){
-				oElement.append("No Synthetic jobs found for " + oOptions.app);
-				setTimeout( function(){oThis.element.hide()}, 500);
-			}else{
-				var sUrl = oOptions.home + "/pages/rum/synthetic.php?app="+oOptions.app+ "&aid=" + oOptions.app_id;
-				var oLink = $("<a>", {href:sUrl}).append("See Synthetic jobs for: " + oOptions.app) ;
-				var oList = $("<ul>");
-				oElement.append(oLink );
-				for (var i=0; i<aJobs.length; i++){
-					var oJob =  aJobs[i];
-					var oLi = $("<li>").append(oJob.config.description);
-					oList.append(oLi);
-				}
-				oElement.append(oList );
+		var aJobs =poHttp.response; 
+		if (aJobs.length == 0){
+			oElement.append("No Synthetic jobs found for " + oOptions.app);
+			setTimeout( function(){oThis.element.hide()}, 500);
+		}else{
+			var oParams={app:oOptions.app,aid:oOptions.app_id};
+			var sUrl = cBrowser.buildUrl(oOptions.home + "/pages/rum/synthetic.php", oParams);
+			var oLink = $("<a>", {href:sUrl}).append("See Synthetic jobs for: " + oOptions.app) ;
+			var oList = $("<ul>");
+			oElement.append(oLink );
+			for (var i=0; i<aJobs.length; i++){
+				var oJob =  aJobs[i];
+				var oLi = $("<li>").append(oJob.name);
+				oList.append(oLi);
 			}
+			oElement.append(oList );
 		}
 	},
 	
 });
+function cVisJSData(){
+	this.chart = null;
+	this.data = new vis.DataSet();
+	this.groups = new vis.DataSet();
+};
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -137,9 +142,10 @@ $.widget( "ck.appdsyntimeline",{
 	options:{
 		timeperiod:2,
 		home: null,
-		jobs_metric: null,
 		app: null,
-		app_id: null
+		app_id: null,
+		
+		visjs_data: null
 	},
 	
 
@@ -155,19 +161,21 @@ $.widget( "ck.appdsyntimeline",{
 		oElement.uniqueId();
 		
 		//check for necessary classes
-		if (!bean){						$.error("bean class is missing! check includes");	}
-		if (!cHttp2){					$.error("http2 class is missing! check includes");	}
-		if (!this.element.gSpinner){ 	$.error("gSpinner is missing! check includes");		}
-		if (!parseURL){					$.error("parseURL is missing! check includes");	}
+		if (typeof bean === 'undefined')	$.error("bean class is missing! check includes");
+		if (typeof cHttp2 === 'undefined')	$.error("http2 class is missing! check includes");
+		if (!this.element.gSpinner) 		$.error("gSpinner is missing! check includes");
+		if (typeof parseURL === 'undefined') $.error("parseURL is missing! check includes");
+		if (typeof vis === 'undefined') 	$.error("visjs is missing! check includes");
 		
 		//check for required options
 		var oOptions = this.options;
-		if (oOptions.home==null){		$.error("home is missing! check options");	}
-		if (oOptions.jobs_metric==null){		$.error("Jobs metric is missing! check options");	}
+		if (oOptions.home== null){		$.error("home is missing! check options");	}
 		
 		var oURI = parseURL(document.URL);
 		oOptions.app = oURI.params.app;
 		oOptions.app_id = oURI.params.aid;
+		
+		this.visjs_data = new cVisJSData;
 		
 		//set display style
 		oElement.removeClass();
@@ -189,15 +197,12 @@ $.widget( "ck.appdsyntimeline",{
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
 		oElement.append(oLoader).append("Loading: Synthetics");
-		
-		oElement.append( "<P>");
-		oElement.append( oOptions.jobs_metric);
-		
+				
 		var oParams = {};
-		oParams[ cSynthetics.METRIC_QS ] = oOptions.jobs_metric;
 		oParams[ cSynthetics.APP_QS ] = oOptions.app;
-		oParams[ cSynthetics.METRIC_HEIRARCHY_QS] = 1;
-		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.METRIC_API, oParams);
+		oParams[ cSynthetics.APPID_QS ] = oOptions.app_id;
+		oParams[ cSynthetics.SYNTH_DETAILS_QS] = 1;
+		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
 		
 		ohttp = new cHttp2();
 		bean.on(ohttp,"result",		function(poHttp){ oThis.onLoadSynNames(poHttp)}	);
@@ -216,6 +221,7 @@ $.widget( "ck.appdsyntimeline",{
 		oElement.append("unable to get synthetic data for " + oOptions.app);
 	},
 	
+	//*******************************************************************
 	onLoadSynNames: function(poHttp){
 		var oThis = this;
 		var oElement = oThis.element;
@@ -226,12 +232,13 @@ $.widget( "ck.appdsyntimeline",{
 		var oData = poHttp.response;
 		if (oData.error){
 			oElement.addClass("ui-state-error");
-			oElement.append("there are synthetic Jobs for " + oOptions.app);
+			oElement.append("there are no synthetic Jobs for " + oOptions.app);
 		}else{
 			for ( var i=0 ; i< oData.length; i++){
 				var oItem = oData[i];
 				oElement.append("<li>" + oItem.name)
 			}
+			
 			//create a vis.js graph 
 			//Queue fetching results for each monitor
 		}

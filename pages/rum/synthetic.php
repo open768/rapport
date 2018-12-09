@@ -42,6 +42,10 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 //####################################################################
 cRenderHtml::header("Web browser - Synthetics");
 cRender::force_login();
+?>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+<?php
 
 $title ="$oApp->name&gt;Web Real User Monitoring&gt;Synthetic Jobs";
 cRender::show_time_options( $title); 
@@ -60,7 +64,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 //####################################################################
-?><h2>Synthetics</h2>
+?><h2>Synthetics for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 
 <script src="<?=$jsinc?>/uri-parser/parse.js"></script>
 <script src="<?=$home?>/js/widgets/synthetics.js"></script>
@@ -68,8 +72,7 @@ if (cAppdyn::is_demo()){
 <script>
 $( function(){
 	$("#container").appdsyntimeline({
-		home:"<?=$home?>",
-		jobs_metric:"<?=cAppDynWebRumMetric::jobs()?>"
+		home:"<?=$home?>"
 	});
 })
 	

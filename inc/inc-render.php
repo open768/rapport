@@ -81,6 +81,7 @@ class cRender{
 	const RUM_TYPE_QS = "rty";
 	const RUM_DETAILS_ACTIVITY ="rmda";
 	const RUM_DETAILS_RESPONSE ="rmdr";
+	const SYNTH_DETAILS_QS = "syd";
 		
 	//**************************************************************************
 	const CHART_METRIC_FIELD = "cmf";
