@@ -1,11 +1,14 @@
 //###############################################################################
-var cCharts={
-	queue: new cHttpQueue,
+var cChartConsts={
 	METRIC_FIELD: "cmf.",
 	COUNT_FIELD: "ccf",
 	TITLE_FIELD: "ctf.",
 	APP_FIELD: "caf.",
-	CHART_ALL_CSV:"/pages/all_csv.php",
+	CHART_ALL_CSV:"/pages/all_csv.php"
+}
+
+var cCharts={
+	queue: new cHttpQueue,
 	show_export_all : true,
 	home:"",
 	
@@ -22,7 +25,7 @@ var cCharts={
 		var oThis = this;
 		
 		iCount = 0;
-		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cCharts.CHART_ALL_CSV,target:"_blank"});
+		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cChartConsts.CHART_ALL_CSV,target:"_blank"});
 		
 		$("SPAN[type='appdchart']").each( //all SPAN elements which have their type set to appdchart
 			function(pIndex, pElement){
@@ -60,11 +63,11 @@ var cCharts={
 				//-------------build the form
 				if(oThis.show_export_all){
 					iCount++;
-					oInput = $("<input>",{type:"hidden",name:cCharts.METRIC_FIELD+iCount,value:sMetric}	);
+					oInput = $("<input>",{type:"hidden",name:cChartConsts.METRIC_FIELD+iCount,value:sMetric}	);
 					oForm.append(oInput);
-					oInput = $("<input>",{type:"hidden",name:cCharts.TITLE_FIELD+iCount,value:sTitle}	);
+					oInput = $("<input>",{type:"hidden",name:cChartConsts.TITLE_FIELD+iCount,value:sTitle}	);
 					oForm.append(oInput);
-					oInput = $("<input>",{type:"hidden",name:cCharts.APP_FIELD+iCount,value:sAppName}	);
+					oInput = $("<input>",{type:"hidden",name:cChartConsts.APP_FIELD+iCount,value:sAppName}	);
 					oForm.append(oInput);
 				}
 			}
@@ -72,7 +75,7 @@ var cCharts={
 		
 		//complete the form
 		if (iCount >0){
-			oInput = $("<input>",{type:"hidden",name:cCharts.COUNT_FIELD,value:iCount}	);
+			oInput = $("<input>",{type:"hidden",name:cChartConsts.COUNT_FIELD,value:iCount}	);
 			oForm.append(oInput);
 			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV"}	);
 			oForm.append(oInput);
@@ -114,7 +117,9 @@ $.widget( "ck.appdchart",{
 		previous_period:false,
 		goUrl:null,
 		goCaption:"Go",
-		hideIfNoData:false
+		hideIfNoData:false,
+		pr__upper_div: null,
+		pr__lower_div: null
 	},
 	
 	consts:{
@@ -133,7 +138,9 @@ $.widget( "ck.appdchart",{
 		
 		WAIT_VISIBLE:1200,
 		INFO_WIDTH:70,
-		BUTTON_WIDTH:30
+		BUTTON_WIDTH:30,
+		UPPER_CSS_STYLE:"chart_upper",
+		LOWER_CSS_STYLE:"chart_lower"
 	},
 
 	//#################################################################
@@ -148,20 +155,22 @@ $.widget( "ck.appdchart",{
 		oElement.uniqueId();
 		
 		//check for necessary classes
-		if (!bean){						$.error("bean class is missing! check includes");	}
-		if (!cHttp2){					$.error("http2 class is missing! check includes");	}
-		if (!this.element.gSpinner){ 	$.error("gSpinner is missing! check includes");		}
-		if (!$.event.special.inview){	$.error("inview class is missing! check includes");	}
-		//if (!oElement.visible ) 		$.error("visible class is missing! check includes");	
+		if (!bean)						$.error("bean class is missing! check includes");	
+		if (!cHttp2)					$.error("http2 class is missing! check includes");	
+		if (!this.element.gSpinner) 	$.error("gSpinner is missing! check includes");		
+		if (!$.event.special.inview)	$.error("inview class is missing! check includes");	
 		if (!oElement.inViewport ) 		$.error("inViewport class is missing! check includes");	
 		
 		//check for required options
 		var oOptions = this.options;
-		if (!oOptions.title)	{		$.error("title  missing!");			}
-		//if (!oOptions.appName)	{	$.error("application  missing!");	}
-		if (!oOptions.metric)	{		$.error("metric  missing!");		}
-		if (!oOptions.width)	{		$.error("width missing!");		}
-		if (!oOptions.height)	{		$.error("height missing!");		}
+		if (!oOptions.title)			$.error("title  missing!");			
+		if (!oOptions.metric)			$.error("metric  missing!");		
+		if (!oOptions.width)			$.error("width missing!");		
+		if (!oOptions.height)			$.error("height missing!");		
+		
+		//check that styles are defined
+		if (!cBrowser.styleSheetContains(this.consts.UPPER_CSS_STYLE)) $.error("missing css class: " + this.consts.UPPER_CSS_STYLE);		
+		if (!cBrowser.styleSheetContains(this.consts.LOWER_CSS_STYLE)) $.error("missing css class: " + this.consts.LOWER_CSS_STYLE);		
 		
 		//set display style
 		oElement.removeClass();
@@ -172,12 +181,20 @@ $.widget( "ck.appdchart",{
 		oElement.outerHeight(oOptions.height );
 		oElement.css("max-width",""+oOptions.width+"px");
 		
-		//load content
-		this.pr__setInView();
+		//create overlapping divs
+		this.pr__create_overlapping_divs();
+		
+		//wait for widget to become visible
+		this.pr__setInViewListener();
+	},
+
+	//*******************************************************************
+	pr__create_overlapping_divs: function(){
+		
 	},
 	
 	//*******************************************************************
-	pr__setInView: function(){
+	pr__setInViewListener: function(){
 		var oThis = this;
 		var oElement = oThis.element;
 		
@@ -219,7 +236,7 @@ $.widget( "ck.appdchart",{
 		if (cCharts.queue.stopping) return;
 		
 		if (!oElement.inViewport()){
-			this.pr__setInView();
+			this.pr__setInViewListener();
 			return;
 		}
 
@@ -253,7 +270,7 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		
 		if (!oElement.inViewport()){
-			this.pr__setInView();
+			this.pr__setInViewListener();
 			bOK = false;
 			oElement.append("Aborting " + oOptions.title);
 		}else
@@ -286,7 +303,7 @@ $.widget( "ck.appdchart",{
 		
 		if (!oElement.inViewport()){
 			poItem.abort = true;
-			this.pr__setInView();
+			this.pr__setInViewListener();
 			return;
 		}
 		
