@@ -31,12 +31,12 @@ class cChartItem{
 	
 	public function write_html(){
 		global $home;
-		?><SPAN 
+		?><DIV
 			type="appdchart" 
 			home="<?=$home?>"
 			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$this->width?>" height="<?=$this->height?>" 
-			style="max-width:<?=$this->width?>px;width:<?=$this->width?>px;height=<?=$this->height?>px;overflow-wrap:break-all"
+			style="position:relative;max-width:<?=$this->width?>px;width:<?=$this->width?>px;height=<?=$this->height?>px;overflow-wrap:break-all"
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			hideIfNoData="<?=$this->hideIfNoData?>"
@@ -52,7 +52,7 @@ class cChartItem{
 			?>
 		>
 			Waiting for charts: <?=$this->metrics[0]->caption?>
-		</SPAN><?php
+		</DIV><?php
 	}
 }
 

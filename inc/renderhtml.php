@@ -66,6 +66,7 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/http.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jqueryui.slideout.js"></script>
 			
 			<script src="<?=$home?>/js/widgets/chart.js"></script>
 			<script src="<?=$home?>/js/widgets/menus.js"></script>

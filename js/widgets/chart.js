@@ -27,7 +27,7 @@ var cCharts={
 		iCount = 0;
 		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cChartConsts.CHART_ALL_CSV,target:"_blank"});
 		
-		$("SPAN[type='appdchart']").each( //all SPAN elements which have their type set to appdchart
+		$("DIV[type='appdchart']").each( //all  elements which have their type set to appdchart
 			function(pIndex, pElement){
 				var oElement = $(pElement);
 				
@@ -138,9 +138,7 @@ $.widget( "ck.appdchart",{
 		
 		WAIT_VISIBLE:1200,
 		INFO_WIDTH:70,
-		BUTTON_WIDTH:30,
-		UPPER_CSS_STYLE:"chart_upper",
-		LOWER_CSS_STYLE:"chart_lower"
+		BUTTON_WIDTH:30
 	},
 
 	//#################################################################
@@ -157,7 +155,8 @@ $.widget( "ck.appdchart",{
 		//check for necessary classes
 		if (!bean)						$.error("bean class is missing! check includes");	
 		if (!cHttp2)					$.error("http2 class is missing! check includes");	
-		if (!this.element.gSpinner) 	$.error("gSpinner is missing! check includes");		
+		if (!oElement.gSpinner) 		$.error("gSpinner is missing! check includes");		
+		if (!oElement.slideout) 		$.error("slideout is missing! check includes");		
 		if (!$.event.special.inview)	$.error("inview class is missing! check includes");	
 		if (!oElement.inViewport ) 		$.error("inViewport class is missing! check includes");	
 		
@@ -167,11 +166,7 @@ $.widget( "ck.appdchart",{
 		if (!oOptions.metric)			$.error("metric  missing!");		
 		if (!oOptions.width)			$.error("width missing!");		
 		if (!oOptions.height)			$.error("height missing!");		
-		
-		//check that styles are defined
-		if (!cBrowser.styleSheetContains(this.consts.UPPER_CSS_STYLE)) $.error("missing css class: " + this.consts.UPPER_CSS_STYLE);		
-		if (!cBrowser.styleSheetContains(this.consts.LOWER_CSS_STYLE)) $.error("missing css class: " + this.consts.LOWER_CSS_STYLE);		
-		
+					
 		//set display style
 		oElement.removeClass();
 		oElement.addClass("chart_widget");
@@ -184,19 +179,32 @@ $.widget( "ck.appdchart",{
 		//create overlapping divs
 		this.pr__create_overlapping_divs();
 		
+		
 		//wait for widget to become visible
 		this.pr__setInViewListener();
 	},
 
 	//*******************************************************************
 	pr__create_overlapping_divs: function(){
+		var oThis, oElement;
+		var oOptions = this.options;
+		oThis = this;
+		oElement = oThis.element;
 		
+		oOptions.pr__upper_div = oElement.attr("id") + "_U";
+		var oUpperDiv = $("<DIV>", {id:oOptions.pr__upper_div}).append("Please wait...");
+		
+		oOptions.pr__lower_div = oElement.attr("id") + "_L";
+		var oLowerDiv = $("<DIV>", {id:oOptions.pr__lower_div}).append("Please wait...");
+
+		oElement.slideout({width:oOptions.width, height:oOptions.height, uppercontent:oUpperDiv, lowercontent:oLowerDiv});
 	},
-	
+
 	//*******************************************************************
 	pr__setInViewListener: function(){
 		var oThis = this;
-		var oElement = oThis.element;
+		var oOptions = this.options;
+		var oElement = $("#"+oOptions.pr__upper_div );
 		
 		oElement.empty();
 		oElement.append("Waiting to become visible ");
@@ -212,8 +220,8 @@ $.widget( "ck.appdchart",{
 	//#################################################################`
 	onInView: function(pbIsInView){
 		var oThis = this;
-		var oElement = oThis.element;
 		var oOptions = this.options;
+		var oElement = $("#"+oOptions.pr__upper_div );
 
 		//check if element is visible
 		if (!pbIsInView) return;	
@@ -231,8 +239,9 @@ $.widget( "ck.appdchart",{
 	//*******************************************************************
 	onTimer: function(){
 		var oThis = this;
-		var oElement = oThis.element;
 		var oOptions = this.options;
+		var oElement = $("#"+oOptions.pr__upper_div );
+
 		if (cCharts.queue.stopping) return;
 		
 		if (!oElement.inViewport()){
@@ -264,7 +273,7 @@ $.widget( "ck.appdchart",{
 	checkContinue: function(){
 		var oThis = this;
 		var oOptions = this.options;
-		var oElement = oThis.element;
+		var oElement = $("#"+oOptions.pr__upper_div );
 		var bOK = true;
 		
 		oElement.empty();
@@ -283,7 +292,7 @@ $.widget( "ck.appdchart",{
 	onError: function(poHttp, psMessage){
 		var oThis = this;
 		var oOptions = this.options;
-		var oElement = oThis.element;
+		var oElement = $("#"+oOptions.pr__upper_div );
 		
 		oElement.empty();
 		oElement.addClass("ui-state-error");
@@ -296,8 +305,8 @@ $.widget( "ck.appdchart",{
 
 	//*******************************************************************
 	onStart: function(poItem){
-		var oElement = this.element;
 		var oOptions = this.options;
+		var oElement = $("#"+oOptions.pr__upper_div );
 
 		if (cCharts.queue.stopping) return;
 		
@@ -321,7 +330,7 @@ $.widget( "ck.appdchart",{
 	onResponse: function(poHttp){
 		var oThis = this;
 		var oOptions = this.options;
-		var oElement = oThis.element;
+		var oElement = $("#"+oOptions.pr__upper_div );
 
 		if (cCharts.queue.stopping) return;
 		oElement.empty();
@@ -394,7 +403,7 @@ $.widget( "ck.appdchart",{
 	pr__no_data_found: function(){
 		var oThis = this;
 		var oOptions = this.options;
-		var oElement = oThis.element;
+		var oElement = this.element;
 		var oConsts = this.consts;
 		
 		oElement.empty();
@@ -431,7 +440,7 @@ $.widget( "ck.appdchart",{
 	pr__draw_chart: function(poJson){
 		var oThis = this;
 		var oOptions = this.options;
-		var oElement = oThis.element;	
+		var oElement = $("#"+oOptions.pr__upper_div );
 		var oConsts = this.consts;
 
 		var oChart, aValues, dDate, iValue, iItemMax, iMax, iMaxObserved, iAvgObs, iSum, sMax, iMin;
@@ -508,7 +517,7 @@ $.widget( "ck.appdchart",{
 		var sChartID=oElement.attr("id")+"chart";
 		var oChartDiv= $("<SPAN>",{
 			id:sChartID, 	class:"chartgraph",
-			width:oOptions.width-this.consts.INFO_WIDTH-this.consts.BUTTON_WIDTH, height:oOptions.height -5
+			width:oOptions.width-this.consts.BUTTON_WIDTH-30, height:oOptions.height -5
 		});
 		oElement.append(oChartDiv);
 		
@@ -553,10 +562,10 @@ $.widget( "ck.appdchart",{
 		oChart.draw(oData, oChartOptions);
 		
 		//display maximumes and observed values --------------------------------------
-		var oSpan = $("<SPAN>", {class:"chartinfopanel"});
-		oSpan.append("Max: "+ iMax + "<br>");
-		oSpan.append("Avg: "+ iAvgObs + "<br>");
-		oSpan.append("Min: "+ iMin + "<br>");
-		oElement.append(oSpan);
+		var oInfoDiv = $("#"+oOptions.pr__lower_div );
+		oInfoDiv.empty();
+		oInfoDiv.append("Max: "+ iMax + "<br>");
+		oInfoDiv.append("Avg: "+ iAvgObs + "<br>");
+		oInfoDiv.append("Min: "+ iMin + "<br>");
 	}
 });
