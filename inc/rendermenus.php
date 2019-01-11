@@ -29,11 +29,11 @@ class cRenderMenus{
 		
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
-			<span 
+			<SELECT
 				type="appdmenus" menu="appfunctions" 
 				home="<?=$home?>"
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</span>
+			</SELECT>
 		<?php
 		cDebug::leave();
 	}
@@ -50,11 +50,11 @@ class cRenderMenus{
 		
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
-			<span 
+			<SELECT 
 				type="appdmenus" menu="appagents" 				
 				home="<?=$home?>"
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</span>
+			</SELECT>
 		<?php
 		cDebug::leave();
 	}
@@ -74,12 +74,12 @@ class cRenderMenus{
 		$sApps_fragment = self::get_apps_fragment();
 
 		?>
-			<span 
+			<SELECT
 				type="appdmenus" menu="appsmenu" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>>
-			</span>
+			</SELECT>
 		<?php
 		self::show_app_functions();
 		cDebug::leave();
@@ -116,12 +116,12 @@ class cRenderMenus{
 		}
 		
 		?>
-			<span 
+			<SELECT 
 				type="appdmenus" menu="tiermenu" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>
-			</span>
+			</SELECT>
 		<?php
 		cDebug::leave();
 	}
@@ -142,12 +142,12 @@ class cRenderMenus{
 		$sApps_fragment = self::get_apps_fragment();
 
 		?>
-			<span 
+			<SELECT 
 				type="appdmenus" menu="topmenu" 
 				home="<?=$home?>"
 				controller="<?=$oCred->host?>"
 				<?=$sApps_fragment?>>
-			</span>
+			</SELECT>
 		<?php
 		cDebug::leave();
 	}
@@ -168,11 +168,11 @@ class cRenderMenus{
 			$poTier = cRenderObjs::get_current_tier();
 		}
 		?>
-			<span 
+			<SELECT 
 				type="appdmenus" menu="tierfunctions"  
 				home="<?=$home?>"
 				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
-			</span>
+			</SELECT>
 		<?php
 		cDebug::leave();
 	}

@@ -20,19 +20,12 @@ var cMenus={
 	//*********************************************************
 	renderMenus: function(){	
 		
-		$("DIV[type='appdmenus']").each( 
+		$("SELECT[type='appdmenus']").each( 
 			function(pIndex, pElement){
 				var oElement = $(pElement);
-				oElement.appdmenu({	MenuType: oElement.attr("menu")	});
+				oElement.appdmenu();
 			}
 		);
-		$("SPAN[type='appdmenus']").each( 
-			function(pIndex, pElement){
-				var oElement = $(pElement);
-				oElement.appdmenu({	MenuType: oElement.attr("menu")	});
-			}
-		);
-		
 	}
 }
 
@@ -63,15 +56,21 @@ $.widget( "ck.appdmenu",{
 		oThis = this;
 		oElement = oThis.element;
 		oElement.uniqueId();
+		oElement.css({position:"relative"});
+		
+		var sElementName = oElement.get(0).tagName;
+		if (sElementName !== "SELECT")	$.error("element must be a select");		
+		//select menu doesnt automatically go to the top - dont forget to modify the CSS
 		
 		//check for necessary classes
-		if (! oElement.selectmenu ) {		$.error("select Menu type missing! check includes");			}
-		
-		//check for required options
+		if (! oElement.selectmenu ) 	$.error("select Menu type missing! check includes");		
+		if (!oElement.attr("menu")) 	$.error("select menu misssing menu attribute");				
+
+		//get attributes
 		var oOptions = this.options;
-		if (!oOptions.MenuType)	{		$.error("MenuType  missing!");			}
+		oOptions.MenuType = oElement.attr("menu");
 		oOptions.home = oElement.attr("home");
-		
+				
 		//load content
 		switch(oOptions.MenuType){
 			case "appfunctions": 
@@ -120,13 +119,14 @@ $.widget( "ck.appdmenu",{
 		oParams[cMenus.APP_QS] = sAppname;
 		oParams[cMenus.APPID_QS] = sAppid;
 		
+		
 		//build the menu
 		var sTransPrefixUrl = oOptions.home+"/pages/trans";
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sSrvPrefixUrl = oOptions.home+"/pages/service";
 		var sRumPrefixUrl = oOptions.home+"/pages/rum";
 		
-		var oSelect = $("<select>");
+		var oSelect = oElement;
 			//- - - - - - - - Application group
 			var oGroup = $("<optgroup>",{label:"Application"});
 				var oOption = $("<option>",{selected:1,disabled:1}).append(sAppname);
@@ -160,7 +160,6 @@ $.widget( "ck.appdmenu",{
 		
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 
@@ -178,9 +177,10 @@ $.widget( "ck.appdmenu",{
 
 		//build the params
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
+		cJquery.setTopZindex(oElement);
 
 		//build the select menu
-		var oSelect = $("<select>");
+		var oSelect = oElement;
 			var oOption = $("<option>",{selected:1,disabled:1}).append("Show Agent...");
 			oSelect.append(oOption);
 
@@ -198,7 +198,6 @@ $.widget( "ck.appdmenu",{
 		
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);		
 	},
 	
@@ -212,11 +211,12 @@ $.widget( "ck.appdmenu",{
 		sController = oElement.attr("controller");
 		if (!sController) {	$.error("controller attr missing!");	}
 		
+		cJquery.setTopZindex(oElement);
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sAllPrefixUrl = oOptions.home+"/pages/all";
 		var sRumPrefixUrl = oOptions.home+"/pages/rum";
 		
-		var oSelect = $("<select>");
+		var oSelect = oElement;
 			var oOption = $("<option>",{selected:1,disabled:1}).append("Go...");
 			oSelect.append(oOption);
 			
@@ -283,7 +283,6 @@ $.widget( "ck.appdmenu",{
 			
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
@@ -294,8 +293,10 @@ $.widget( "ck.appdmenu",{
 		oElement = this.element;
 		var sThisBaseUrl = this.pr__get_base_tier_QS(oElement.attr("url"));
 
+		cJquery.setTopZindex(oElement);
+
 		//
-		var oSelect = $("<select>");
+		var oSelect = oElement
 			var oOption = $("<option>",{selected:1,disabled:1}).append(oElement.attr("caption"));
 			oSelect.append(oOption);
 			
@@ -312,9 +313,7 @@ $.widget( "ck.appdmenu",{
 
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
-		
 	},
 	
 	//****************************************************************
@@ -325,8 +324,9 @@ $.widget( "ck.appdmenu",{
 		
 		var sThisID = cBrowser.data[cMenus.APPID_QS];
 		var sUrl = oElement.attr("url") + oElement.attr("extra");
+		cJquery.setTopZindex(oElement);
 		
-		var oSelect = $("<select>");
+		var oSelect = oElement;
 			var oOption = $("<option>",{selected:1,disabled:1}).append(oElement.attr("caption"));
 			oSelect.append(oOption);
 
@@ -348,7 +348,6 @@ $.widget( "ck.appdmenu",{
 			}
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
@@ -363,8 +362,9 @@ $.widget( "ck.appdmenu",{
 		var sBaseUrl = this.pr__get_base_app_QS(sUrl);
 		var sCaption = oElement.attr("caption");
 		
+		cJquery.setTopZindex(oElement);
 		//build the select
-		var oSelect = $("<select>");
+		var oSelect = oElement;
 			var oOption = $("<option>",{selected:1,disabled:1}).append(sCaption);
 			oSelect.append(oOption);
 			var iCount = 1;
@@ -386,7 +386,6 @@ $.widget( "ck.appdmenu",{
 
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
@@ -406,7 +405,9 @@ $.widget( "ck.appdmenu",{
 		var sSrvPrefixUrl = oOptions.home+"/pages/service";
 		var sTransPrefixUrl = oOptions.home+"/pages/trans";
 
-		var oSelect = $("<select>");
+		cJquery.setTopZindex(oElement);
+
+		var oSelect = oElement;
 			//--------------------------------------------------------------------
 			var oOption = $("<option>",{selected:1,disabled:1}).append(sTier);
 			oSelect.append(oOption);
@@ -425,7 +426,6 @@ $.widget( "ck.appdmenu",{
 
 		//add and make the menu a selectmenu
 		var oThis = this;		
-		oElement.append(oSelect);
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
 	},
 	
