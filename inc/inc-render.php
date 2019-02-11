@@ -339,24 +339,21 @@ class cRender{
 		
 		$sUrl = $_SERVER['REQUEST_URI'];
 		if (strpos($sUrl,"%")) $sUrl = urldecode($sUrl);
-		cDebug::write("return URL is $sUrl");
 		
 		$oCred = cRenderObjs::get_appd_credentials();
 		$sAccount = $oCred->account;
-		$sHost = $oCred->host;
 		$iDuration = cAppDynCommon::get_duration();
 		
+		//show the navigation menu - this updates the material design navigation menu
+		cRenderMenus::top_menu();
+		
+		//show time options box #### to be moved to material design header ####
 		?>
 			<form name="frmTime" id="frmTime" action="<?=$home?>/pages/settime.php" method="get">
 				<input type="hidden" name="url" value="<?=$sUrl?>">
 				<table class="timebox"><tr>
-					<td>
-						<?=cRenderMenus::top_menu()?>
-					</td>
 					<td >
 						<?=$sAccount?><br>
-						<?=$sHost?><p>
-						<b><?=$psTitle?></b>
 					</td>
 					<td ><?=cAppDynCommon::get_time_label()?></td>
 					<td width=90 ><select name="duration" onchange="document.getElementById('frmTime').submit();"><?php

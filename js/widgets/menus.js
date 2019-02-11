@@ -29,6 +29,89 @@ var cMenus={
 	}
 }
 
+var cTopMenu={
+	pr__add_expansion: function(poDiv, psTitle){
+		var oDetail = $("<details>",{class:"mdl-expansion"});
+
+			var oSummary = $("<summary>", {class:"mdl-expansion__summary"});
+				var oHeader = $("<span>", {class:"mdl-expansion__header"}).append(psTitle);
+				oSummary.append(oHeader);
+			oDetail.append(oSummary);
+			
+			var oContent = $("<div>", {class:"mdl-expansion__content"});
+			oDetail.append(oContent);
+		
+		poDiv.append(oDetail);
+		return oContent;
+	},
+		
+	pr__add_to_expansion: function(poDiv, psCaption, psUrl){
+		var $oLink = $("<a>", {class:"mdl-navigation__link",href:psUrl}).append(psCaption);
+		poDiv.append($oLink);
+	},
+	
+	render: function(poDiv){
+		//check for required options
+		var sController = poDiv.attr("controller");
+		if (!sController) {	$.error("controller attr missing!");	}
+		var sHome = poDiv.attr("home");
+		if (!sHome) {	$.error("home attr missing!");	}
+		
+		var sAppPrefixUrl = sHome+"/pages/app";
+		var sAllPrefixUrl = sHome+"/pages/all";
+		var sRumPrefixUrl = sHome+"/pages/rum";
+		
+		
+		//add the sections
+		var oContentDiv;
+		oContentDiv = this.pr__add_expansion(poDiv, "General");
+			var oParams = {};
+			oParams[cMenus.IGNORE_REF_QS] = 1;
+			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Login Token", sHome +"/pages/authtoken.php");
+			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
+			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
+
+		
+		oContentDiv = this.pr__add_expansion(poDiv, "Check");
+			this.pr__add_to_expansion(oContentDiv, "Configuration", sAllPrefixUrl+"/config.php");
+			this.pr__add_to_expansion(oContentDiv, "License Usage", sAllPrefixUrl+"/usage.php");
+			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sAllPrefixUrl+"/checkup.php");
+			
+		oContentDiv = this.pr__add_expansion(poDiv, "Dashboards");
+			this.pr__add_to_expansion(oContentDiv, "Launch", sHome +"/pages/dash/index.php");
+			
+		oContentDiv = this.pr__add_expansion(poDiv, "Agents");
+			this.pr__add_to_expansion(oContentDiv, "Installed", sAllPrefixUrl+"/allagentversions.php");
+			this.pr__add_to_expansion(oContentDiv, "Downloads", sAllPrefixUrl+"/appdversions.php");
+
+		oContentDiv = this.pr__add_expansion(poDiv, "All");
+			oParams = {};
+			oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
+			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Databases", sHome +"/pages/db/alldb.php");
+			this.pr__add_to_expansion(oContentDiv, "Remote Services", sAllPrefixUrl+"/allbackends.php");
+			this.pr__add_to_expansion(oContentDiv, "Synthetics", sAllPrefixUrl+"/allsynth.php");
+			this.pr__add_to_expansion(oContentDiv, "Tiers", sAllPrefixUrl+"/alltier.php");
+			
+		oContentDiv = this.pr__add_expansion(poDiv, "Overviews");
+			var sApp, sAppid;
+			var iCount = 1;
+			while (true){
+				sApp = poDiv.attr("appname."+iCount);
+				if (!sApp) break;
+				sAppid = poDiv.attr("appid."+iCount);
+				
+				oParams = {};
+				oParams[cMenus.APP_QS] = sApp;
+				oParams[cMenus.APPID_QS] = sAppid;
+				this.pr__add_to_expansion(oContentDiv, sApp, cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
+				iCount++;
+			}
+	}
+}
+
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,9 +164,6 @@ $.widget( "ck.appdmenu",{
 				break;
 			case "appagents":
 				this.pr__showAppAgentsMenu();
-				break;
-			case "topmenu":
-				this.pr__showTopMenu();
 				break;
 			case "tiermenu":
 				this.pr__showTierMenu();
@@ -201,90 +281,6 @@ $.widget( "ck.appdmenu",{
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);		
 	},
 	
-	//****************************************************************
-	pr__showTopMenu: function(){
-		var oOptions, oElement, oParams, oGroup, sController;
-		oOptions = this.options;
-		oElement = this.element;
-		
-		//check for required options
-		sController = oElement.attr("controller");
-		if (!sController) {	$.error("controller attr missing!");	}
-		
-		cJquery.setTopZindex(oElement);
-		var sAppPrefixUrl = oOptions.home+"/pages/app";
-		var sAllPrefixUrl = oOptions.home+"/pages/all";
-		var sRumPrefixUrl = oOptions.home+"/pages/rum";
-		
-		var oSelect = oElement;
-			var oOption = $("<option>",{selected:1,disabled:1}).append("Go...");
-			oSelect.append(oOption);
-			
-			oParams = {};
-			oParams[cMenus.IGNORE_REF_QS] = 1;
-			this.pr__addToGroup( oSelect, "About...", oOptions.home +"/pages/about.php");
-			this.pr__addToGroup( oSelect, "Logout", cBrowser.buildUrl(oOptions.home +"/index.php", oParams));
-			this.pr__addToGroup( oSelect, "Login Token", oOptions.home +"/pages/authtoken.php");
-			this.pr__addToGroup( oSelect, "Link to this page", oOptions.home +"/pages/link.php");
-			this.pr__addToGroup( oSelect, "Appdynamics", "https://"+sController + "/controller/");
-			
-			//- - - - -Check group
-			oGroup = $("<optgroup>",{label:"Check"});
-				this.pr__addToGroup( oGroup, "Configuration", sAllPrefixUrl+"/config.php");
-				this.pr__addToGroup( oGroup, "License Usage", sAllPrefixUrl+"/usage.php");
-				this.pr__addToGroup( oGroup, "One Click Checkup", sAllPrefixUrl+"/checkup.php");
-			oSelect.append(oGroup);
-			
-			//- - - - -Dashboards group
-			oGroup = $("<optgroup>",{label:"Dashboards"});
-				this.pr__addToGroup( oGroup, "Launch", oOptions.home +"/pages/dash/index.php");
-			oSelect.append(oGroup);
-				
-			//- - - - -Agents group
-			oGroup = $("<optgroup>",{label:"Agents"});
-				this.pr__addToGroup( oGroup, "Installed", sAllPrefixUrl+"/allagentversions.php");
-				this.pr__addToGroup( oGroup, "Downloads", sAllPrefixUrl+"/appdversions.php");
-			oSelect.append(oGroup);
-			
-			//- - - - -All group
-			oGroup = $("<optgroup>",{label:"General"});			
-				oParams = {};
-				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
-				this.pr__addToGroup(oGroup, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
-				
-				oParams = {};
-				oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_RUMCALLS;
-				this.pr__addToGroup( oGroup, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
-				this.pr__addToGroup( oGroup, "Databases", oOptions.home +"/pages/db/alldb.php");
-				this.pr__addToGroup( oGroup, "Remote Services", sAllPrefixUrl+"/allbackends.php");
-				this.pr__addToGroup( oGroup, "Synthetics", sAllPrefixUrl+"/allsynth.php");
-				this.pr__addToGroup( oGroup, "Tiers", sAllPrefixUrl+"/alltier.php");
-				
-			oSelect.append(oGroup);
-			
-			//- - - - -App Overview group
-			oGroup = $("<optgroup>",{label:"Overview for ..."});
-			
-			var sApp, sAppid;
-			var iCount = 1;
-			
-			while (true){
-				sApp = oElement.attr("appname."+iCount);
-				if (!sApp) break;
-				sAppid = oElement.attr("appid."+iCount);
-				
-				oParams = {};
-				oParams[cMenus.APP_QS] = sApp;
-				oParams[cMenus.APPID_QS] = sAppid;
-				this.pr__addToGroup(oGroup, sApp, cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
-				iCount++;
-			}
-			oSelect.append(oGroup);
-			
-		//add and make the menu a selectmenu
-		var oThis = this;		
-		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
-	},
 	
 	//****************************************************************
 	pr__showTierNodesMenu: function(){

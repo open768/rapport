@@ -15,6 +15,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //#######################################################################
 //#######################################################################
 class cRenderHtml{
+	const MENU_ID = "RenderMID";
+	const TITLE_ID = "RenderTID";
+	const NAVIGATION_ID = "RenderNID";
+
 	//**************************************************************************
 	public static function header ($psTitle){
 		global $jsinc, $home;
@@ -75,9 +79,23 @@ class cRenderHtml{
 			<script src="<?=$home?>/js/dialog-init.js"></script>
 		</head>
 		<BODY>
-			<div id="page_layout" class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
-				<div id= "page_content" class="mdl-layout__content">
-		<?php
+			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
+				<header class="mdl-layout__header">
+					<div class="mdl-layout-icon"></div>
+					<div class="mdl-layout__header-row">
+						<span class="mdl-layout__title" id="<?=self::TITLE_ID?>"><?=$psTitle?></span>
+						<div class="mdl-layout-spacer"></div>
+						<nav class="mdl-navigation" id="<?=self::MENU_ID?>">
+							<a class="mdl-navigation__link" href="#">tab to be styled</a>
+						</nav>
+					</div>
+				</header>
+				<div class="mdl-layout__drawer">
+					<span class="mdl-layout__title">Reporter</span>
+					<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
+				</div>
+				<main class="mdl-layout__content">
+  <?php
 		cDebug::flush();
 		//error_reporting(E_ALL & ~E_WARNING);
 	}
@@ -86,115 +104,117 @@ class cRenderHtml{
 	public static function footer (){
 		global $home;
 		?>
-				<p>
-				<footer class="mdl-mini-footer">
-					<div class="mdl-mini-footer__left-section">
-						<div class="mdl-logo">
-							<img id="cklogo" class="cklogo" src="<?=$home?>/images/chicken_icon.png">
-							<div class="mdl-tooltip" for="cklogo">
-								We are Chicken Katsu.
-							</div>						
-						</div>
-						<span>
-							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
-							<div style="display:none" class="dialog" for="ftrcopy" title="Copyright">
-								<b>Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a></b>
-								<p/>
-								This software is protected by copyright under the terms of the 
-								<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
-								For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
-								<p/>
-								Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
-								USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
-								<p>
-								AppDynamics&trade; is a registered trademark of <a target="appd" href="https://www.appdynamics.com/">AppDynamics, Inc</a>
-							</div>
-						</span>
-						<span>
-							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrinfo">Information</button>
-							<div style="display:none" class="dialog" for="ftrinfo" title="Information">
-								We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a><br>
-								No passwords are stored by this application.<br>
-								AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
-							</div>
-						</span>
-						<span>
-							<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrLibraries">Libraries Used</button>
-							<div style="display:none" class="dialog" for="ftrLibraries" title="Libraries Used">
-								<ul class="mdl-list">
-									<li class="mdl-list__item mdl-list__item--three-line">
-										<span class="mdl-list__item-primary-content">
-											<a target="new" href="https://developers.google.com/chart/"
-												><span class="material-icons mdl-list__item-icon">launch</span>
-											</a>
-											<span>Google charts</span>
-											<span class="mdl-list__item-sub-title">
-												licensed under the Creative Commons Attribution license.
-											</span>
-										</span>
-									</li>
-									<li class="mdl-list__item mdl-list__item--three-line">
-										<span class="mdl-list__item-primary-content">
-											<a target="new" href="http://tablesorter.com/"
-												><span class="material-icons mdl-list__item-icon">launch</span>
-											</a>
-											<span>tablesorter</span>
-											<span class="mdl-list__item-sub-title">
-												by Christian Bach licensed under the MIT license.
-											</span>
-										</span>
-									</li>
-									<li class="mdl-list__item mdl-list__item--three-line">
-										<span class="mdl-list__item-primary-content">
-											<a target="new" href="https://gist.github.com/umidjons/8396981"
-												><span class="material-icons mdl-list__item-icon">launch</span>
-											</a>
-											<span>pub sub pattern</span>
-											<span class="mdl-list__item-sub-title">
-												by Baylor Rae licensed under the GNU General Public license
-											</span>
-										</span>
-									</li>
-									<li class="mdl-list__item mdl-list__item--three-line">
-										<span class="mdl-list__item-primary-content">
-											<a target="new" href="https://getmdl.io/"
-												><span class="material-icons mdl-list__item-icon">launch</span>
-											</a>
-											<span>Google material-design-lite</span>
-											<span class="mdl-list__item-sub-title">
-												licensed under the Apache License 2.0
-											</span>
-										</span>
-									</li>
-									<li class="mdl-list__item mdl-list__item--three-line">
-										<span class="mdl-list__item-primary-content">
-											<a target="new" href="https://github.com/oRRs/mdl-jquery-modal-dialog/"
-												><span class="material-icons mdl-list__item-icon">launch</span>
-											</a>
-											<span>jquery modal dialog</span>
-											<span class="mdl-list__item-sub-title">
-												By Oliver Rennies: The MIT License (MIT)
-											</span>
-										</span>
-									</li>
-									<li class="mdl-list__item mdl-list__item--three-line">
-										<span class="mdl-list__item-primary-content">
-											<a target="new" href="http://simplefocus.com/flowtype/"
-												><span class="material-icons mdl-list__item-icon">launch</span>
-											</a>
-											<span>flowtype</span>
-											<span class="mdl-list__item-sub-title">
-												licensed under the MIT License
-											</span>
-										</span>
-									</li>
-									
-								</ul>
-							</div idref="foot_libs_text">
-						</span>
+			</main><!-- page content -->
+			<footer class="mdl-mini-footer">
+				<div class="mdl-mini-footer__left-section">
+					<div class="mdl-logo">
+						<img id="cklogo" class="cklogo" src="<?=$home?>/images/chicken_icon.png">
+						<div class="mdl-tooltip" for="cklogo">
+							We are Chicken Katsu.
+						</div>						
 					</div>
-				</footer>
-			</div><!-- page content -->
+					<span>
+						<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrabout" onclick="document.location.href='<?=$home?>/pages/about.php';return false">About</button>
+					</span>
+					<span>
+						<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
+						<div style="display:none" class="dialog" for="ftrcopy" title="Copyright">
+							<b>Copyright (c) 2013-2018 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a></b>
+							<p/>
+							This software is protected by copyright under the terms of the 
+							<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
+							For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
+							<p/>
+							Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
+							USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
+							<p>
+							AppDynamics&trade; is a registered trademark of <a target="appd" href="https://www.appdynamics.com/">AppDynamics, Inc</a>
+						</div>
+					</span>
+					<span>
+						<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrinfo">Information</button>
+						<div style="display:none" class="dialog" for="ftrinfo" title="Information">
+							We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a><br>
+							No passwords are stored by this application.<br>
+							AppDynamics is a registered trademark of <a href="http://www.appdynamics.com/">AppDynamics, Inc</a>
+						</div>
+					</span>
+					<span>
+						<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrLibraries">Libraries Used</button>
+						<div style="display:none" class="dialog" for="ftrLibraries" title="Libraries Used">
+							<ul class="mdl-list">
+								<li class="mdl-list__item mdl-list__item--three-line">
+									<span class="mdl-list__item-primary-content">
+										<a target="new" href="https://developers.google.com/chart/"
+											><span class="material-icons mdl-list__item-icon">launch</span>
+										</a>
+										<span>Google charts</span>
+										<span class="mdl-list__item-sub-title">
+											licensed under the Creative Commons Attribution license.
+										</span>
+									</span>
+								</li>
+								<li class="mdl-list__item mdl-list__item--three-line">
+									<span class="mdl-list__item-primary-content">
+										<a target="new" href="http://tablesorter.com/"
+											><span class="material-icons mdl-list__item-icon">launch</span>
+										</a>
+										<span>tablesorter</span>
+										<span class="mdl-list__item-sub-title">
+											by Christian Bach licensed under the MIT license.
+										</span>
+									</span>
+								</li>
+								<li class="mdl-list__item mdl-list__item--three-line">
+									<span class="mdl-list__item-primary-content">
+										<a target="new" href="https://gist.github.com/umidjons/8396981"
+											><span class="material-icons mdl-list__item-icon">launch</span>
+										</a>
+										<span>pub sub pattern</span>
+										<span class="mdl-list__item-sub-title">
+											by Baylor Rae licensed under the GNU General Public license
+										</span>
+									</span>
+								</li>
+								<li class="mdl-list__item mdl-list__item--three-line">
+									<span class="mdl-list__item-primary-content">
+										<a target="new" href="https://getmdl.io/"
+											><span class="material-icons mdl-list__item-icon">launch</span>
+										</a>
+										<span>Google material-design-lite</span>
+										<span class="mdl-list__item-sub-title">
+											licensed under the Apache License 2.0
+										</span>
+									</span>
+								</li>
+								<li class="mdl-list__item mdl-list__item--three-line">
+									<span class="mdl-list__item-primary-content">
+										<a target="new" href="https://github.com/oRRs/mdl-jquery-modal-dialog/"
+											><span class="material-icons mdl-list__item-icon">launch</span>
+										</a>
+										<span>jquery modal dialog</span>
+										<span class="mdl-list__item-sub-title">
+											By Oliver Rennies: The MIT License (MIT)
+										</span>
+									</span>
+								</li>
+								<li class="mdl-list__item mdl-list__item--three-line">
+									<span class="mdl-list__item-primary-content">
+										<a target="new" href="http://simplefocus.com/flowtype/"
+											><span class="material-icons mdl-list__item-icon">launch</span>
+										</a>
+										<span>flowtype</span>
+										<span class="mdl-list__item-sub-title">
+											licensed under the MIT License
+										</span>
+									</span>
+								</li>
+								
+							</ul>
+						</div idref="foot_libs_text">
+					</span>
+				</div>
+			</footer>
 		</div> <!-- page layout -->
 		<script language="javascript">
 			$(

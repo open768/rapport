@@ -16,6 +16,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //#######################################################################
 //#######################################################################
 class cRenderMenus{
+	
+	//******************************************************************************************
+	// menus are populated in the footer() function in renderhtml.php
 	//******************************************************************************************
 	public static function show_app_functions($poApp=null){
 		global $home;
@@ -127,27 +130,32 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
+	// this is a slightly different type of menu - so initialises differently
 	public static function top_menu(){
 		global $home;
 
 		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login){
-			cRender::button("Back to Login", "$home/index.php");
-			cDebug::leave();
-			return;
-		}
-		
 		$oCred = cRenderObjs::get_appd_credentials();
-		$sApps_fragment = self::get_apps_fragment();
+		$sApps_attr = self::get_apps_attr();
 
 		?>
-			<SELECT 
-				type="appdmenus" menu="topmenu" 
-				home="<?=$home?>"
-				controller="<?=$oCred->host?>"
-				<?=$sApps_fragment?>>
-			</SELECT>
+			<script>
+				function init_top_menu(){
+					$oDiv = $("#<?=cRenderHtml::NAVIGATION_ID?>");
+					$oDiv.attr({
+						home:"<?=$home?>",
+						controller:"<?=$oCred->host?>",
+						restricted:"<?=$oCred->restricted_login?>",
+						<?=$sApps_attr?>
+					})
+										
+					//now trigger the rendering of the top menu
+					cTopMenu.render( $oDiv);
+				}
+				
+				$(init_top_menu);
+			</script>
 		<?php
 		cDebug::leave();
 	}
@@ -177,6 +185,31 @@ class cRenderMenus{
 		cDebug::leave();
 	}
 	
+	//******************************************************************************************
+	public static function get_apps_attr(){
+
+		cDebug::enter();
+		try{
+			$aApps = cAppDynController::GET_Applications();
+		}
+		catch (Exception $e)
+		{
+			cRender::errorbox("Oops unable to get application data from controller");
+			cDebug::leave();
+			exit;
+		}
+		uasort($aApps,"sort_by_app_name" );
+		$iCount=0;
+		$sfragment = "";
+		foreach ($aApps as $oApp){
+			$iCount++;
+			if ($iCount > 1)$sfragment.=",";
+			$sfragment.= "'appname.$iCount':\"".$oApp->name."\",'appid.$iCount':\"$oApp->id\"";
+		}
+		
+		cDebug::leave();
+		return $sfragment;
+	}
 	//******************************************************************************************
 	public static function get_apps_fragment(){
 
