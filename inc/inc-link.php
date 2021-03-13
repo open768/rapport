@@ -50,7 +50,7 @@ class cLinkPage{
 	
 	//***************************************************************************************
 	public static function get_obj($psLinkID){
-		$oObj = cHash::get_obj($psLinkID);
+		$oObj = cHash::pr__get_obj($psLinkID);
 		if (get_class($oObj) !== "cLinkPageData"){
 			cDebug::vardump($oObj,true);
 			cDebug::error("not a valid link object");

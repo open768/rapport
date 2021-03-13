@@ -40,24 +40,21 @@ var cCharts={
 					var sPrevious = oElement.attr("previous");
 					iPrevious = parseInt(sPrevious);
 				} catch (e){}
-				
-				var sGoURL = oElement.attr("goUrl");
-				var sGoLabel = oElement.attr("goLabel");
-				var sHideIfNoData = oElement.attr("hideIfNoData");
-				
+								
 				oElement.appdchart({
 					appName:sAppName,
 					home:sHome,
 					title:sTitle,
 					metric:sMetric,
-					goUrl:sGoURL,
-					goCaption:sGoLabel,
+					goUrl:oElement.attr("goUrl"),
+					goCaption:oElement.attr("goLabel"),
 					previous_period:iPrevious,
 					width:oElement.attr("width"),
 					height:oElement.attr("height"),
 					showZoom:oElement.attr("showZoom"),
 					showCompare:oElement.attr("showCompare"),
-					hideIfNoData:sHideIfNoData
+					hideIfNoData:oElement.attr("hideIfNoData"),
+					hideGroupIfNoData:oElement.attr("hideGroupIfNoData")
 				});
 					
 				//-------------build the form
@@ -210,8 +207,9 @@ $.widget( "ck.appdchart",{
 		oElement.append("Waiting to become visible ");
 		var btnForce = $("<button>").append("load");
 		oElement.append(btnForce);
-		btnForce.click( 		function(){oThis.onInView(true);}		);
 		
+		//set the event listeners
+		btnForce.click( 		function(){oThis.onInView(true);}		);
 		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
 	},
 
@@ -233,18 +231,20 @@ $.widget( "ck.appdchart",{
 		oElement.addClass("chart_initialising");
 		oElement.append("Initialising: " + oOptions.title);
 
-		setTimeout(	function(){	oThis.onTimer()}, this.consts.WAIT_VISIBLE);
+		setTimeout(	function(){	oThis.onVisibleTimer()}, this.consts.WAIT_VISIBLE);
 	},
 	
 	//*******************************************************************
-	onTimer: function(){
+	// visible timer incase the element is being scrolled. 
+	//
+	onVisibleTimer: function(){
 		var oThis = this;
 		var oOptions = this.options;
 		var oElement = $("#"+oOptions.pr__upper_div );
 
 		if (cCharts.queue.stopping) return;
 		
-		if (!oElement.inViewport()){
+		if (!oElement.inViewport()){ //check it again
 			this.pr__setInViewListener();
 			return;
 		}
@@ -267,6 +267,8 @@ $.widget( "ck.appdchart",{
 		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
 		cCharts.queue.add(oItem);
+		
+		//
 	},
 	
 	//*******************************************************************
@@ -410,6 +412,8 @@ $.widget( "ck.appdchart",{
 		oElement.removeClass();
 		if (oOptions.hideIfNoData){
 			oElement.hide();
+		}else if (oOptions.hideGroupIfNoData){
+			//hide parent if number of charts with data is 0
 		}else{
 			oElement.addClass("chartnodata");
 			oElement.append("No data found for "+ oOptions.title);

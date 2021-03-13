@@ -28,6 +28,8 @@ class cChartItem{
 	public $height = 250;
 	public $width = 1000;
 	public $hideIfNoData = false;
+	public $hideGroupIfNoData = false;
+
 	
 	public function write_html(){
 		global $home;
@@ -40,6 +42,7 @@ class cChartItem{
 			showZoom="<?=cChart::$show_zoom?>"
 			showCompare="<?=cChart::$show_compare?>"
 			hideIfNoData="<?=$this->hideIfNoData?>"
+			hideGroupIfNoData="<?=cChart::$hideGroupIfNoData?>"
 			<?php if($this->go_URL){?>
 				goUrl="<?=$this->go_URL?>" 
 				goLabel="<?=$this->go_hint?>"
@@ -62,6 +65,7 @@ class cChart{
 	public static $show_compare = 1;
 	public static $show_export_all = 1;
 	public static $showPreviousPeriod = 0;
+	public static $hideGroupIfNoData = 0;
 	const METRIC="m";
 	const TYPE="t";
 	const LABEL="l";
@@ -102,6 +106,7 @@ class cChart{
 	}
 
 	//#####################################################################################
+	// this renders the placeholder on the page. The code to populate the placeholder is in the javascript.
 	//#####################################################################################
 	private static function pr_render_item($poApp, $paItem, $piHeight = null, $piWidth=null, $paHeaders=null){
 		$sType = "graph";
@@ -121,6 +126,8 @@ class cChart{
 				$oItem->app = $poApp;
 				if (array_key_exists(self::HIDEIFNODATA, $paItem))
 					$oItem->hideIfNoData = $paItem[self::HIDEIFNODATA];
+				
+				$oItem->hideGroupIfNoData = cChart::$hideGroupIfNoData;
 
 				//--------------------------------------------------
 				$oMetricItem = new cChartMetricItem();

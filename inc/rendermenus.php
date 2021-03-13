@@ -136,7 +136,6 @@ class cRenderMenus{
 
 		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
-		$oCred = cRenderObjs::get_appd_credentials();
 		$sApps_attr = self::get_apps_attr();
 
 		?>

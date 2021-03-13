@@ -15,13 +15,24 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //#######################################################################
 //#######################################################################
 class cRenderHtml{
-	const MENU_ID = "RenderMID";
+	const CONTROLLER_ID = "RenderCID";
+	const TIME_ID = "RenderTMID";
 	const TITLE_ID = "RenderTID";
 	const NAVIGATION_ID = "RenderNID";
 
 	//**************************************************************************
 	public static function header ($psTitle){
 		global $jsinc, $home;
+		$bLoggedin = true;
+
+		try{
+			$oCred = cRenderObjs::get_appd_credentials();
+		}
+		catch( Exception $e)
+		{
+			$bLoggedin = false;
+		}
+		
 		?>
 		<!DOCTYPE html>
 		<html>
@@ -80,23 +91,29 @@ class cRenderHtml{
 		</head>
 		<BODY>
 			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
+				<div class="mdl-layout__drawer">
+					<span class="mdl-layout__title">Reporter</span>
+					<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
+				</div>
 				<header class="mdl-layout__header">
 					<div class="mdl-layout-icon"></div>
 					<div class="mdl-layout__header-row">
 						<span class="mdl-layout__title" id="<?=self::TITLE_ID?>"><?=$psTitle?></span>
 						<div class="mdl-layout-spacer"></div>
-						<nav class="mdl-navigation" id="<?=self::MENU_ID?>">
-							<a class="mdl-navigation__link" href="#">tab to be styled</a>
+						<nav class="mdl-navigation" id="<?=self::CONTROLLER_ID?>">
+							<?=($bLoggedin?$oCred->account:"")?>
+						</nav>
+						<div class="mdl-layout-spacer"></div>
+						<nav class="mdl-navigation" id="<?=self::TIME_ID?>">
+							<?=($bLoggedin?"initialising..":"")?>
 						</nav>
 					</div>
 				</header>
-				<div class="mdl-layout__drawer">
-					<span class="mdl-layout__title">Reporter</span>
-					<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
-				</div>
 				<main class="mdl-layout__content">
   <?php
 		cDebug::flush();
+		
+		
 		//error_reporting(E_ALL & ~E_WARNING);
 	}
 	

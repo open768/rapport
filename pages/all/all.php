@@ -64,6 +64,7 @@ switch($sMetricType){
 cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
 cChart::do_header();
+cChart::$hideGroupIfNoData = true;
 
 //####################################################################
 cRender::show_time_options( "All Applications - $sTitle1"); 		
@@ -79,7 +80,7 @@ else{
 		if (cFilter::isAppFilteredOut($oApp)) continue;
 		$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
 		$aMetrics = [
-			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name"],
+			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name", ],
 			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],
 			[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
 		];

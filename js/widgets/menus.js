@@ -30,8 +30,9 @@ var cMenus={
 }
 
 var cTopMenu={
-	pr__add_expansion: function(poDiv, psTitle){
+	pr__add_expansion: function(poDiv, psTitle, pbIsOpen){
 		var oDetail = $("<details>",{class:"mdl-expansion"});
+			if (pbIsOpen) oDetail.attr("open",1);
 
 			var oSummary = $("<summary>", {class:"mdl-expansion__summary"});
 				var oHeader = $("<span>", {class:"mdl-expansion__header"}).append(psTitle);
@@ -64,7 +65,7 @@ var cTopMenu={
 		
 		//add the sections
 		var oContentDiv;
-		oContentDiv = this.pr__add_expansion(poDiv, "General");
+		oContentDiv = this.pr__add_expansion(poDiv, "General", true);
 			var oParams = {};
 			oParams[cMenus.IGNORE_REF_QS] = 1;
 			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
