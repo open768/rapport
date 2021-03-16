@@ -14,24 +14,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 require_once("../../inc/root.php");
 cRoot::set_root("../..");
-
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/http.php");
-require_once("$phpinc/ckinc/header.php");
-	
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
-
-//####################################################################
-
-require_once("$phpinc/appdynamics/appdynamics.php");
-require_once("$phpinc/appdynamics/metrics.php");
+require_once("$root/inc/common.php");
 require_once("$root/inc/inc-charts.php");
-require_once("$root/inc/inc-secret.php");
-require_once("$root/inc/inc-render.php");
 
 
 cRenderHtml::header("Application Nodes");
@@ -120,7 +104,7 @@ function group_by_tier($paNodes){
 	foreach ($paNodes as $aNodes)
 		foreach ($aNodes as $oNode){
 			$sTier = $oNode->tierName;
-			if (!array_key_exists($sTier, $aTiers)) $aTiers[$sTier] = [];
+			if (!isset($aTiers[$sTier])) $aTiers[$sTier] = [];
 			$aTiers[$sTier][] = $oNode;
 		}
 		

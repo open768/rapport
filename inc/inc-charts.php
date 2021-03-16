@@ -110,7 +110,7 @@ class cChart{
 	//#####################################################################################
 	private static function pr_render_item($poApp, $paItem, $piHeight = null, $piWidth=null, $paHeaders=null){
 		$sType = "graph";
-		if (array_key_exists(self::TYPE,$paItem)) $sType = $paItem[self::TYPE];
+		if (isset($paItem[self::TYPE])) $sType = $paItem[self::TYPE];
 
 		switch ($sType){
 			case self::LABEL:
@@ -120,11 +120,11 @@ class cChart{
 				cRender::button($paItem[self::LABEL],$paItem[self::URL]);
 				break;
 			default:
-				if (!array_key_exists(self::METRIC, $paItem)) throw new Exception("No Metric Provided");
+				if (!isset($paItem[self::METRIC])) throw new Exception("No Metric Provided");
 				
 				$oItem = new cChartItem();
 				$oItem->app = $poApp;
-				if (array_key_exists(self::HIDEIFNODATA, $paItem))
+				if (isset($paItem[self::HIDEIFNODATA]))
 					$oItem->hideIfNoData = $paItem[self::HIDEIFNODATA];
 				
 				$oItem->hideGroupIfNoData = cChart::$hideGroupIfNoData;
@@ -133,7 +133,7 @@ class cChart{
 				$oMetricItem = new cChartMetricItem();
 				$oMetricItem->metric = $paItem[self::METRIC];
 				
-				if (array_key_exists(self::LABEL, $paItem)){ 
+				if (isset($paItem[self::LABEL])){ 
 					$sLabel = $paItem[self::LABEL];
 					if ($sLabel == null) throw new Exception("No Label Provided");
 					$oMetricItem->caption = $sLabel;
@@ -146,9 +146,9 @@ class cChart{
 				if ($piWidth) $oItem->width = $piWidth;
 				if ($piHeight) $oItem->height = $piHeight;
 				
-				if (array_key_exists(self::APP,$paItem)) $oItem->app = $paItem[self::APP];
-				if (array_key_exists(self::GO_URL,$paItem)) $oItem->go_URL = $paItem[self::GO_URL];
-				if (array_key_exists(self::GO_HINT,$paItem)) $oItem->go_hint = $paItem[self::GO_HINT];
+				if (isset($paItem[self::APP])) $oItem->app = $paItem[self::APP];
+				if (isset($paItem[self::GO_URL])) $oItem->go_URL = $paItem[self::GO_URL];
+				if (isset($paItem[self::GO_HINT])) $oItem->go_hint = $paItem[self::GO_HINT];
 				
 				//--------------------------------------------------
 				$oItem->write_html();
@@ -187,13 +187,13 @@ class cChart{
 			}
 			foreach ($paItems as $aItem){
 				$sType = "graph";
-				if (array_key_exists(self::TYPE,$aItem)){
+				if (isset($aItem[self::TYPE])){
 					$sType = $aItem[self::TYPE];
 				}
 				
 				if ($iCol == 0) {
 					$sClass = $psRowClass;
-					if (array_key_exists(self::STYLE, $aItem)) $sClass = $aItem[self::STYLE];
+					if (isset($aItem[self::STYLE])) $sClass = $aItem[self::STYLE];
 					?><tr class="<?=$sClass?>"><?php
 				}
 				
@@ -208,7 +208,7 @@ class cChart{
 				}
 				
 				$iWidth = null;
-				if ( array_key_exists( self::WIDTH, $aItem)) {
+				if ( isset( $aItem[self::WIDTH])) {
 					$iWidth = $aItem[self::WIDTH];
 					$start_tag .= "<div style='width:${iWidth}px;max-width:${iWidth}px;word-break:break-all'>";
 					$end_tag = "</div>$end_tag";

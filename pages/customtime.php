@@ -1,5 +1,5 @@
 <?php
-
+	
 /**************************************************************************
 Copyright (C) Chicken Katsu 2013-2018 
 
@@ -16,20 +16,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 require_once("../inc/root.php");
 cRoot::set_root("..");
+require_once("$root/inc/common.php");
 
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/http.php");
-require_once("$phpinc/ckinc/header.php");
-	
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
-
-//####################################################################
-require_once("$phpinc/appdynamics/appdynamics.php");
-require_once("$phpinc/appdynamics/common.php");
 $url = cHeader::get("url");
 
 

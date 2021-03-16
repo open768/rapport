@@ -81,7 +81,7 @@ class cMergedMetrics{
 
 			$sLine = $sXLDate;
 			foreach ($this->data as $aMetrics){
-				if (array_key_exists($sDate,$aMetrics)){
+				if (isset($aMetrics[$sDate])){
 					$oItem = $aMetrics[$sDate];
 					$sLine.=",$oItem->value,$oItem->max";
 				}else

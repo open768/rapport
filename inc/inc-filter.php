@@ -111,7 +111,7 @@ class cFilter{
 	
 	//************************************************************
 	private static function pr__read_filter( $psWhat ){
-		if (!array_key_exists($psWhat, self::$praFilters)){
+		if (!isset(self::$praFilters[$psWhat])){
 			$oRules = new cFilterRules;
 			$oRules->parse_rules( cHeader::get($psWhat));
 			self::$praFilters[$psWhat] = $oRules;

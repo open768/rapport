@@ -14,26 +14,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 require_once("../inc/root.php");
 cRoot::set_root("..");
-
-require_once("$phpinc/appdynamics/appdynamics.php");
-require_once("$phpinc/appdynamics/common.php");
-require_once("$phpinc/appdynamics/metrics.php");
-require_once("$phpinc/appdynamics/account.php");
+require_once("$root/inc/common.php");
 
 
 set_time_limit(200); // huge time limit as this could takes a long time
-
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$root/inc/inc-render.php");
-require_once("$root/inc/inc-metrics.php");
-	
-//###################### DATA #############################################
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################

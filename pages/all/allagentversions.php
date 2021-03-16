@@ -14,23 +14,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 require_once("../../inc/root.php");
 cRoot::set_root("../..");
-
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/ckinc/http.php");
-	
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
-
-//####################################################################
-
-require_once("$phpinc/appdynamics/appdynamics.php");
+require_once("$root/inc/common.php");
 require_once("$root/inc/inc-charts.php");
-require_once("$root/inc/inc-secret.php");
-require_once("$root/inc/inc-render.php");
 
 
 cRenderHtml::header("All Agent Versions");
@@ -65,7 +50,7 @@ function get_application_ids(){
 //********************************************************************
 function get_application_from_id($psID){
 	global $gaAppIds;
-	if (array_key_exists($psID, $gaAppIds))
+	if (isset($gaAppIds[$psID]))
 		return $gaAppIds[$psID];
 	elseif ($psID == "")
 		return "<i>No Application</i>";

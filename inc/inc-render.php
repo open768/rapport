@@ -189,7 +189,7 @@ class cRender{
 				echo "<tr>";
 					echo "<th>$sRow</th>";
 					foreach ($aCols as $sCol){
-						if (array_key_exists($sRow, $paData[$sCol])){
+						if (isset($paData[$sCol][$sRow])){
 							$iValue = $paData[$sCol][$sRow];
 							$iColourValue = round($iValue*($iColours-1));
 							$sColour = $aColours[$iColourValue];
@@ -270,8 +270,8 @@ class cRender{
 		
 		if ($paParams !== null){
 			if (gettype($paParams) !== "array") cDebug::error("expecting an array as the 4th parameter");
-			if (array_key_exists("id", $paParams )) $sID=" id='".$paParams["id"]."'";
-			if (array_key_exists("class", $paParams )) $sClass.=" ".$paParams["class"];
+			if (isset($paParams["id"])) $sID=" id='".$paParams["id"]."'";
+			if (isset($paParams["class"])) $sClass.=" ".$paParams["class"];
 		}
 		
 		cDebug::leave();;

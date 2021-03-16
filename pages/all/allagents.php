@@ -15,22 +15,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("../../inc/root.php");
 cRoot::set_root("../..");
 
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/ckinc/http.php");
-	
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
-
-//####################################################################
-
-require_once("$phpinc/appdynamics/appdynamics.php");
+require_once("$root/inc/common.php");
 require_once("$root/inc/inc-charts.php");
-require_once("$root/inc/inc-secret.php");
-require_once("$root/inc/inc-render.php");
 
 
 cRenderHtml::header("All agents");
@@ -63,7 +49,7 @@ function get_app_node_data($poApp){
 		foreach ($aNodes as $oNode){
 			$sTier = $oNode ->tierName;
 			
-			if (!array_key_exists($sTier, $aTierData))	$aTierData[$sTier] = new cAgentTotals();
+			if (!isset($aTierData[$sTier]))	$aTierData[$sTier] = new cAgentTotals();
 			$aTierData[$sTier]->total ++;
 			if ($oNode->machineAgentPresent) $aTierData[$sTier]->machine ++;
 			if ($oNode->appAgentPresent) $aTierData[$sTier]->appserver++;
