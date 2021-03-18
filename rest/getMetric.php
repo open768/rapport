@@ -12,9 +12,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-require_once("../inc/root.php");
-cRoot::set_root("..");
-require_once("$root/inc/common.php");
+$home="..";
+require_once "$home/inc/common.php";
 
 
 set_time_limit(200); // huge time limit as this could takes a long time

@@ -13,10 +13,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-require_once("../../inc/root.php");
-cRoot::set_root("../..");
-require_once("$root/inc/common.php");
-
+$home="../..";
+require_once "$home/inc/common.php";
 //####################################################################
 cRenderHtml::header("Admin Auditing");
 cRender::force_login();

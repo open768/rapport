@@ -14,8 +14,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
-require_once("$phpinc/appdynamics/appdynamics.php");
-require_once("$phpinc/appdynamics/core.php");
+require_once("$appdlib/appdynamics.php");
+require_once("$appdlib/core.php");
 require_once("$root/inc/inc-filter.php");
 require_once("$root/inc/rendermenus.php");
 require_once("$root/inc/renderobjs.php");

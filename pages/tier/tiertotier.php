@@ -13,11 +13,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-require_once("../../inc/root.php");
-cRoot::set_root("../..");
+$home="../..";
+require_once "$home/inc/common.php";
+require_once "$root/inc/inc-charts.php";
 
-require_once("$root/inc/common.php");
-require_once("$root/inc/inc-charts.php");
 
 
 const COLUMNS=6;

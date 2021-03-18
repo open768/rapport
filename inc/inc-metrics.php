@@ -12,10 +12,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-require_once("$phpinc/appdynamics/appdynamics.php");
-require_once("$phpinc/appdynamics/common.php");
-require_once("$phpinc/appdynamics/metrics.php");
-require_once("$phpinc/appdynamics/account.php");
+require_once("$appdlib/appdynamics.php");
+require_once("$appdlib/common.php");
+require_once("$appdlib/metrics.php");
+require_once("$appdlib/account.php");
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");

@@ -15,7 +15,7 @@ require_once("$phpinc/ckinc/hash.php");
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/appdynamics/core.php");
+require_once("$appdlib/core.php");
 require_once("$root/inc/inc-secret.php");
 
 class cLinkPageData{

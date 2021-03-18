@@ -1,18 +1,18 @@
 <?php
-$home = "not set";
-$root = "not set";
 $phpinc = "not set";
+$root = "not set";
 $jsinc = "not set";
+$appdlib = "not set";
 
 class cRoot{
 	//**************************************************************************
 	public static function set_root($psRoot){
-		global $home, $root, $phpinc, $jsinc;
+		global $home, $root, $phpinc, $jsinc, $appdlib;
 		
-		$home = $psRoot;
-		$root=realpath($home);
+		$root=realpath($psRoot);
 		$phpinc = realpath("$root/../phpinc");
-		$jsinc = "$home/../jsinc";
+		$jsinc = "$psRoot/../jsinc";
+		$appdlib = realpath("$root/inc/lib");
 	}
 }
 ?>

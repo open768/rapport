@@ -13,9 +13,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-require_once("../inc/root.php");
-cRoot::set_root("..");
-require_once("$root/inc/common.php");
+$home="..";
+require_once "$home/inc/common.php";
+require_once "$root/inc/inc-charts.php";
 
 
 $link = cCommon::get_session($LINK_SESS_KEY);

@@ -15,26 +15,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 //####################################################################
 $home=".";
-$root=realpath($home);
-$phpinc = realpath("$root/../phpinc");
-$jsinc = "$home/../jsinc";
-
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/http.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/appdynamics/appdynamics.php");
-require_once("$phpinc/appdynamics/common.php");
-
-require_once("$root/inc/inc-charts.php");
-require_once("$root/inc/inc-charts.php");
-require_once("$root/inc/inc-secret.php");
-require_once("$root/inc/inc-render.php");
+require_once "$home/inc/common.php";
+require_once "$root/inc/inc-charts.php";
 	
-cSession::set_folder();
-session_start();
 cAppDynCredentials::clear_session();
 cDebug::check_GET_or_POST();
 
