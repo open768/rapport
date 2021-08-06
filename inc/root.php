@@ -12,7 +12,7 @@ class cRoot{
 		$root=realpath($psRoot);
 		$phpinc = realpath("$root/../phpinc");
 		$jsinc = "$psRoot/../jsinc";
-		$appdlib = realpath("$root/inc/lib");
+		$appdlib = realpath("$phpinc/appd");
 	}
 }
 ?>

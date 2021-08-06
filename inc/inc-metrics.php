@@ -97,7 +97,7 @@ function pr__sort_dates($a,$b){
 }
 
 //######################################################################
-class cMetric{
+class cMetricGetter{
 	public static function get_metric($poApp, $psMetric, $pbPreviousPeriod = false){
 		$oOutput = new cMetricOutput;
 		$oOutput->metric = $psMetric;

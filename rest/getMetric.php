@@ -23,7 +23,7 @@ set_time_limit(200); // huge time limit as this could takes a long time
 $oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "no application set";
 $psMetric = cHeader::get(cRender::METRIC_QS);
-$psDiv = cHeader::get(cRender::DIV_QS);
+$psDiv = cHeader::get(cRender::DIV_QS); 
 $psCSV=cHeader::get(cRender::CSV_QS);
 $psPrevious = cHeader::get(cRender::PREVIOUS_QS);
 $psHeirarchy = cHeader::get(cRender::METRIC_HEIRARCHY_QS);
@@ -33,7 +33,7 @@ cDebug::write("getting metric - $psMetric");
 if ($psHeirarchy)
 	$oResult = cAppdynCore::GET_Metric_heirarchy($oApp->name, $psMetric, false);
 else
-	$oResult = cMetric::get_metric($oApp, $psMetric, ($psPrevious != null));
+	$oResult = cMetricGetter::get_metric($oApp, $psMetric, ($psPrevious != null));
 cDebug::write("got metric - $psMetric");
 if ($oResult && $psDiv) $oResult->div = $psDiv;
 

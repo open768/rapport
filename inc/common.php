@@ -9,8 +9,6 @@ require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/http.php");
 require_once("$phpinc/ckinc/header.php");
 	
-cSession::set_folder();
-session_start();
 
 //####################################################################
 require_once("$appdlib/appdynamics.php");

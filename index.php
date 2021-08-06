@@ -84,7 +84,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 		<div class="mdl-card mdl-shadow--6dp login_box" >
 			<div class="mdl-card__title-text mdl-color--blue-900 ">
 				<span class="mdl-color-text--grey-50 login_title">
-						Welcome to the Reporter for Appdynamics&trade;
+						Welcome to RAPPORT
 				</span>
 			</div>
 			<div class="mdl-card__supporting-text" id="divCard">
@@ -140,8 +140,11 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 				</form>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-			Absolutely no credentials are stored by this application, 
-			however for auditing and security reasons we recommend creating a limited access local user in your controller for use with this application.
+			Rapport gets the stuff you need to focus on from your AppDynamics &tm; SAAS controller. 
+			Absolutely no credentials are stored by this application. For security reasons we recommend creating a limited access local user in your controller for use with this application.
+			</div>
+			<div class="mdl-card__actions mdl-card--border">
+			Appdynamics is a trademark of Appdynamics LLC which is part of Cisco. This site is not affiliated with either appdynamics or cisco.
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<form action="index.php" method="POST" >
