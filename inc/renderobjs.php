@@ -1,7 +1,7 @@
 <?php
 
 /**************************************************************************
-Copyright (C) Chicken Katsu 2013-2018 
+Copyright (C) Chicken Katsu 2013-2021 
 
 This code is protected by copyright under the terms of the 
 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
@@ -56,7 +56,8 @@ class cRenderObjs{
 	public static function get_current_app(){
 		$sApp = cHeader::get(cRender::APP_QS);
 		$sAID = cHeader::get(cRender::APP_ID_QS);
-		return self::make_app_obj($sApp, $sAID);
+		$oApp = self::make_app_obj($sApp, $sAID);
+		return $oApp;
 	}
 
 	public static function get_current_tier(){

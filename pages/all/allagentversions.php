@@ -1,7 +1,7 @@
 <?php
 
 /**************************************************************************
-Copyright (C) Chicken Katsu 2013-2018 
+Copyright (C) Chicken Katsu 2013-2021 
 
 This code is protected by copyright under the terms of the 
 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
@@ -37,14 +37,6 @@ if (cAppdyn::is_demo()){
 
 
 //####################################################################
-function get_application_ids(){
-	$aApps = cAppDynController::GET_Applications();
-	$aOutput = [];
-	foreach ($aApps as $oApp){
-		$aOutput[ $oApp->id] = $oApp->name;
-	}
-	return $aOutput;
-}
 
 //********************************************************************
 function get_application_from_id($psID){
@@ -184,7 +176,7 @@ function render_db_agents(){
 }
 
 //####################################################################
-$gaAppIds = get_application_ids();
+$gaAppIds = cAppdynUtil::get_application_ids();
 
 cRender::button("Back to Agents", "allagents.php");	
 cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
