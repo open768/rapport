@@ -311,6 +311,12 @@ div.ui-selectmenu-open {
 	font-family: Courier;
 	font-size:12px;
 }
+.charthidden
+{
+	display:inline-block;	
+	height:1px;
+	width:1px;
+}
 
 .charttooltip
 {

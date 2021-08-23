@@ -32,11 +32,12 @@ class cRenderMenus{
 		
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
-			<SELECT
+			<div
 				type="appdmenus" menu="appfunctions" 
 				home="<?=$home?>"
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</SELECT>
+				<font class="ui-selectmenu-text"><?=$poApp->name?></font>
+			</div>
 		<?php
 		cDebug::leave();
 	}
@@ -135,7 +136,12 @@ class cRenderMenus{
 		global $home;
 
 		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
+		try{
+			$oCred = cRenderObjs::get_appd_credentials();
+		}
+		catch (Exception $e){
+			return;
+		}
 		$sApps_attr = self::get_apps_attr();
 
 		?>

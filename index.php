@@ -18,13 +18,15 @@ $home=".";
 require_once "$home/inc/common.php";
 require_once "$root/inc/inc-charts.php";
 	
-cAppDynCredentials::clear_session();
+cDebug::extra_debug("Page Initialising - started");
+cSession::clear_session();
 cDebug::check_GET_or_POST();
+cDebug::extra_debug("Page Initialising - finished");
 
 //####################################################################
 if (cHeader::get(cLogin::KEY_SUBMIT))
 {
-	cDebug::write("submit seen");
+	cDebug::extra_debug("form submitted");
 	$oCred = new cAppDynCredentials();
 	try{
 		$oCred->load_from_header();
@@ -59,7 +61,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	cHeader::redirect($sLocation);
 	exit();
 }else if (cHeader::get(cRender::LOGIN_TOKEN_QS)){
-	cDebug::write("token seen");
+	cDebug::extra_debug("token found ");
 	try{
 		$sToken = cHeader::get(cRender::LOGIN_TOKEN_QS);
 		cAppDynCredentials::login_with_token($sToken);
@@ -77,6 +79,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	exit();
 	
 }else{
+	cDebug::extra_debug("showing login screen ");
 	cRenderHtml::header("login");
 	?>
 		<!-- Login Box -->

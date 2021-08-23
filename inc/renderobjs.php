@@ -27,7 +27,7 @@ class cRenderObjs{
 	
 	//**************************************************************************
 	public static function get_appd_credentials(){
-		cDebug::enter();
+		//cDebug::enter();
 		$oCred = self::$oAppDCredentials;
 		if (!$oCred){
 			cDebug::extra_debug("got credentials");
@@ -35,7 +35,7 @@ class cRenderObjs{
 			$oCred->check();
 			self::$oAppDCredentials = $oCred;
 		}
-		cDebug::leave();;
+		//cDebug::leave();;
 		return $oCred;
 	}
 	

@@ -13,38 +13,38 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-$home="..";
+$home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/inc-charts.php";
 
 
-$sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-switch($sMetricType){
-	case cAppDynMetric::METRIC_TYPE_RUMCALLS:
-	case cAppDynMetric::METRIC_TYPE_RUMRESPONSE:
-		$sTitle1 = "Web Browser Page Requests";
-		$sMetric1 = cAppDynWebRumMetric::CallsPerMin();
-		$sTitle2 = "Web Browser Page Response";
-		$sMetric2 = cAppDynWebRumMetric::ResponseTimes();
-		break;
-	case cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES:
-	case cAppDynMetric::METRIC_TYPE_ACTIVITY:
-	default:
-		$sTitle1 = "Application Activity";
-		$sMetric1 = cAppDynMetric::appCallsPerMin();
-		$sTitle2 = "Application Response Times";
-		$sMetric2 = cAppDynMetric::appResponseTimes();
-		break;
+
+//####################################################################
+cRenderHtml::header("All Servers");
+cRender::force_login(); 
+cChart::do_header();
+cChart::$hideGroupIfNoData = true;
+
+//********************************************************************
+if (cAppdyn::is_demo()){
+	cRender::errorbox("function not supported for Demo");
+	cRenderHtml::footer();
+	exit;
 }
 
 //####################################################################
-cRenderHtml::header("About");
+cRender::show_time_options( "All servers"); 		
+cRender::appdButton(cAppDynControllerUI::servers());
 
 //####################################################################
-cRender::show_top_banner( "About"); 
 ?>
-		<h2>About the Rapport - an Interactive Reporter for Appdynamics&trade;</h2>
-
+<div id="page_content">
 <?php
+	cRender::button("MQ dashboard", "mq.php");	
+?>
+<?php
+
+//####################################################################
+cChart::do_footer();
 cRenderHtml::footer();
 ?>

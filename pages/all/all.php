@@ -17,7 +17,6 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/inc-charts.php";
 
-
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
 	case cAppDynMetric::METRIC_TYPE_RUMCALLS:
@@ -55,10 +54,12 @@ cRender::show_time_options( "All Applications - $sTitle1");
 cRender::appdButton(cAppDynControllerUI::apps_home());
 
 //####################################################################
+//this should be done asynchronously
 $aResponse = cAppDynController::GET_Applications();
 if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else{
+	cDebug::write( count($aResponse). " applications found");
 	//display the results
 	foreach ( $aResponse as $oApp){
 		if (cFilter::isAppFilteredOut($oApp)) continue;
@@ -69,8 +70,15 @@ else{
 			[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
 		];
 		cRenderMenus::show_app_functions($oApp);
+		
 		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cDebug::flush();
+		if (cDebug::is_extra_debugging()) {
+			cDebug::vardump($oApp);	
+			break;	//DEBUG
+		}
 		?><br><?php
+		cCommon::flushprint("");
 	}
 }
 cChart::do_footer();

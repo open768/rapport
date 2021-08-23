@@ -295,7 +295,8 @@ $.widget( "ck.appdchart",{
 		var oThis = this;
 		var oOptions = this.options;
 		var oElement = $("#"+oOptions.pr__upper_div );
-		
+		var oConsts = this.consts;
+				
 		oElement.empty();
 		oElement.addClass("ui-state-error");
 		oElement.append("There was an error getting chart data for "+ oOptions.title);
@@ -411,15 +412,17 @@ $.widget( "ck.appdchart",{
 		oElement.empty();
 		oElement.removeClass();
 		if (oOptions.hideIfNoData){
-			oElement.hide();
-		}else if (oOptions.hideGroupIfNoData){
-			//hide parent if number of charts with data is 0
-		}else{
+			oElement.addclass("charthidden");
+			oElement.hide();	
+		}else {
 			oElement.addClass("chartnodata");
 			oElement.append("No data found for "+ oOptions.title);
 			oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
+			if (oOptions.hideGroupIfNoData){
+				//TODO hide parent if number of charts with data is 0
+			}
 		}
-	},
+},
 
 	//*******************************************************************
 	pr__get_chart_url: function (){

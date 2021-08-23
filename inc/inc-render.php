@@ -35,7 +35,6 @@ class cRender{
 	const APP_ID_QS = "aid";
 	
 	const DB_QS = "db";
-	const IGNORE_REF_QS = "igr";
 	
 	const TIER_QS = "tier";
 	const FROM_TIER_QS = "from";
@@ -69,6 +68,10 @@ class cRender{
 	const LOGIN_TOKEN_QS="lt";
 
 	//************************************************************
+	const IGNORE_REF_QS = "igr";
+	const LIST_MODE_QS = "list";
+	
+	//************************************************************
 	const GROUP_TYPE_QS ="gtq";
 	const GROUP_TYPE_NODE ="n";
 	const GROUP_TYPE_TIER ="t";
@@ -90,11 +93,15 @@ class cRender{
 	const CHART_APP_FIELD = "caf";
 	
 	//**************************************************************************
+	const SERVER_MQ_MANAGER_QS = "mqm";
+	
+	//**************************************************************************
 	const NAME_APP = 1;
 	const NAME_TIER = 2;
 	const NAME_EXT = 3;
 	const NAME_TRANS = 4;
 	const NAME_OTHER = 99;
+	public static $MAX_ITEMS_PER_PAGE = 20;
 	
 	//**************************************************************************
 	public static function get_times(){
@@ -168,9 +175,6 @@ class cRender{
 		<?php
 	}
 	
-
-
-
 	//*************************************************************
 	public static function render_heatmap($paData, $psCaption, $psColCaption, $psRowCaption){
 		$aColours = cColour::multigradient([ [0,255,0,7],[255,0,0,5],[255,255,0,7],[255,255,255,0]]);
@@ -230,7 +234,7 @@ class cRender{
 		global $home;
 		$bShow = false;
 		$oCred = null;
-		cDebug::enter();
+		//cDebug::enter();
 		
 		if ($psUrl === "$home/index.php")	{
 			cDebug::write("showing login page");
@@ -256,12 +260,13 @@ class cRender{
 		if ($bShow)
 			echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams);
 		
-		cDebug::leave();;
+		//cDebug::leave();;
 	}
 	
+	//**************************************************************************
 	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
 		$sClass = "blue_button";
-		cDebug::enter();
+		//cDebug::enter();
 		
 		if ($pbNewWindow) 
 			$sOnClick = "window.open(\"$psUrl\");";
@@ -274,7 +279,7 @@ class cRender{
 			if (isset($paParams["class"])) $sClass.=" ".$paParams["class"];
 		}
 		
-		cDebug::leave();;
+		///cDebug::leave();;
 		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
 	}
 	
@@ -284,12 +289,18 @@ class cRender{
 			<a class="appd_button" title="<?=$psCaption?>" target='appd' href="<?=$psUrl?>"><?=$psCaption?></a>
 		<?php
 	}
-
+	
+	//**************************************************************************
+	public static function is_list_mode(){
+		return (cHeader::get(self::LIST_MODE_QS) !== null);
+	}
 	
 	//**************************************************************************
 	public static function show_html_time_options(){
 		global $_SERVER,$home;
 		
+		if (cDebug::is_debugging()) return;
+
 		$sUrl = urlencode($_SERVER['REQUEST_URI']);
 		echo cAppDynCommon::get_time_label();
 		
@@ -331,7 +342,7 @@ class cRender{
 		}
 		?><span class="<?=$sClass?>"><?=$sOutput?></span><?php
 	}
-	
+
 	
 	//**************************************************************************
 	public static function show_time_options( $psTitle){
@@ -344,8 +355,7 @@ class cRender{
 		$sAccount = $oCred->account;
 		$iDuration = cAppDynCommon::get_duration();
 		
-		//show the navigation menu - this updates the material design navigation menu
-		cRenderMenus::top_menu();
+		if (cDebug::is_debugging()) return;
 		
 		//show time options box #### to be moved to material design header ####
 		?>
@@ -376,6 +386,8 @@ class cRender{
 	//**************************************************************************
 	public static function show_top_banner( $psTitle){
 		$bLoggedin = true;
+		if (cDebug::is_debugging()) return;
+		
 		try{
 			$oCred = cRenderObjs::get_appd_credentials();
 			$sAccount = $oCred->account;

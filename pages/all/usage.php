@@ -20,7 +20,7 @@ require_once "$root/inc/inc-charts.php";
 cRenderHtml::header("License Usage");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="js/remote.js"></script>
+	<script type="text/javascript" src="<?=$home?>/js/remote.js"></script>
 	
 <?php
 cChart::do_header();

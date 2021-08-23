@@ -69,6 +69,7 @@ foreach ($oApps as $oApp){
 				];
 			}
 			cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+			cDebug::flush();
 		?>
 	<?php
 }

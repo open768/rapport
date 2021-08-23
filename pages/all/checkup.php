@@ -14,12 +14,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
 
 //####################################################################
 cRenderHtml::header("One Click Checkup");
 cRender::force_login();
-cChart::do_header();
 
 //####################################################################
 $sUsage = cHeader::get(cRender::USAGE_QS);
@@ -38,16 +36,16 @@ function output_row($pbBad, $psCaption, $psContent){
 }
 
 //####################################################################
+//this needs to be asynchronous as when there are a lot of applications that page times out
 $aResponse = cAppDynController::GET_Applications();
 foreach ( $aResponse as $oApp){
-	?><div><table width="100%"><?php
-		cRenderMenus::show_app_functions($oApp);
-		cCommon::flushprint("");
-		
+	?><div><table width="100%">
+		<tr><td colspan="2"><?php 
+			cRenderMenus::show_app_functions($oApp);
+		?></td></tr>
+		<?php
 		//************************************************************************************
 		$aTrans = $oApp->GET_Transactions();
-		cDebug::vardump($aTrans);
-		
 		$iCount = count($aTrans);
 		$sCaption = "There are $iCount BTs.";
 		$bBad = true;
@@ -105,6 +103,7 @@ foreach ( $aResponse as $oApp){
 				
 		//************************************************************************************
 	?></table></div><p><?php
+	if (cDebug::is_debugging()) break;
 	cCommon::flushprint("");
 }
 

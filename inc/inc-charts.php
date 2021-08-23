@@ -79,6 +79,7 @@ class cChart{
 	const WIDTH="w";
 	
 	//************************************************************
+	const CHART_WIDTH_LARGER = 1800;
 	const CHART_WIDTH_LARGE = 1024;
 	const CHART_HEIGHT_LARGE = 700;
 	const CHART_HEIGHT_SMALL = 125;
@@ -215,7 +216,7 @@ class cChart{
 				}
 
 				?><?=$start_tag?><?php
-				self::pr_render_item($poApp, $aItem,$piHeight, $piWidth);
+					self::pr_render_item($poApp, $aItem,$piHeight, $piWidth);
 				?><?=$end_tag?><?php
 				if ($iCol==$piMaxCols){
 					?></tr><?php
