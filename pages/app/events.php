@@ -1,7 +1,7 @@
 <?php
 
 /**************************************************************************
-Copyright (C) Chicken Katsu 2013-2018 
+Copyright (C) Chicken Katsu 2013-2021 
 
 This code is protected by copyright under the terms of the 
 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
@@ -14,7 +14,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
 
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
@@ -24,12 +23,13 @@ cRender::force_login();
 
 //####################################################################
 cRender::show_time_options("Events");
-cRenderMenus::show_apps_menu("Events", "events.php", $oApp->name);
 cRender::appdButton(cAppDynControllerUI::events($oApp));
+cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
+cRenderMenus::show_apps_menu("Events", "events.php", $oApp->name);
 
 //********************************************************************
 if (cAppdyn::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
