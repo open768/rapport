@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 //********************************************************************
@@ -37,8 +37,6 @@ $sTitle = "All transactions calling External Service: $sExt";
 cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();
-cRender::show_time_options( $sTitle); 
-
 
 //####################################################################
 cRenderMenus::show_tier_functions();

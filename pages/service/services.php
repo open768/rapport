@@ -16,7 +16,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 set_time_limit(200); 
 
@@ -32,7 +32,7 @@ $oApp = $oTier->app;
 $oTimes = cRender::get_times();
 
 $title= "$oApp->name&gt;Service EndPoints";
-cRender::show_time_options($title); 
+
 cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
 cRender::appdButton(cAppDynControllerUI::serviceEndPoints($oApp,$oTimes));
 

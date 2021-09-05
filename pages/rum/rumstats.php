@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 //-----------------------------------------------
@@ -26,7 +26,7 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 cRenderHtml::header("Web browser - Real user monitoring - Stats");
 cRender::force_login();
 $title ="$oApp->name&gtWeb Real User Monitoring Stats";
-cRender::show_time_options( $title); 
+
 cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
 $oTimes = cRender::get_times();
 

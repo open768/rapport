@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 $sDB = cHeader::get(cRender::DB_QS);
@@ -27,7 +27,7 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-cRender::show_time_options( "Summary Database information  - $sDB"); 
+
 cRender::button("back to all databases", "alldb.php",false);
 cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false);
 

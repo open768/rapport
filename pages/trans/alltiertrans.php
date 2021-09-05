@@ -15,9 +15,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
-require_once("$root/inc/inc-filter.php");
+require_once("$root/inc/filter.php");
 
 //####################################################################
 cRenderHtml::header("All Tier Transactions");
@@ -36,7 +36,6 @@ $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
 $gsMetric = cHeader::get(cRender::METRIC_QS);
 
 $title= "$oApp->name&gt;$oTier->name&gt;All Transactions";
-cRender::show_time_options( $title); 
 
 //********************************************************************
 if (cAppdyn::is_demo()){

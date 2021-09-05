@@ -1,6 +1,6 @@
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+//#
 //###############################################################################
 var cMenus={
 	METRIC_FIELD: "cmf.",
@@ -23,13 +23,17 @@ var cMenus={
 		$("[type='appdmenus']").each( 
 			function(pIndex, pElement){
 				var oElement = $(pElement);
-				oElement.appdmenu();
+				oElement.appdmenu(); //see widgets
 			}
 		);
 	}
 }
 
+//####################################################################################
+//#
+//####################################################################################
 var cTopMenu={
+	//*********************************************************
 	pr__add_expansion: function(poDiv, psTitle, pbIsOpen){
 		var oDetail = $("<details>",{class:"mdl-expansion"});
 			if (pbIsOpen) oDetail.attr("open",1);
@@ -46,6 +50,7 @@ var cTopMenu={
 		return oContent;
 	},
 		
+	//*********************************************************
 	pr__add_to_expansion: function(poDiv, psCaption, psUrl){
 		var $oLink = $("<a>", {class:"mdl-navigation__link",href:psUrl}).append(psCaption);
 		poDiv.append($oLink);

@@ -16,9 +16,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
-require_once("$root/inc/inc-filter.php");
+require_once("$root/inc/filter.php");
 
 const COLUMNS=6;
 const FLOW_ID = "trflw";
@@ -51,8 +51,6 @@ $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
 $sFilterTierQS = cFilter::makeTierFilter($oTier->name);
 $sFilterTierQS = cHttp::build_QS($sAppQS, $sFilterTierQS);
 
-
-cRender::show_time_options("$oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$oTrans->name"); 
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");

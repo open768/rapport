@@ -17,7 +17,7 @@ require_once "$home/inc/common.php";
 
 
 //####################################################################
-require_once("$root/inc/inc-link.php");
+require_once("$root/inc/link.php");
 
 
 

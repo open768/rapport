@@ -16,9 +16,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
-require_once("$root/inc/inc-charts.php");
+require_once("$root/inc/charts.php");
 
 //####################################################################
 // common functions
@@ -116,7 +116,7 @@ $oTier = cRenderObjs::get_current_tier();
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //header
-cRender::show_time_options("Business Transactions - $oApp->name"); 
+
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");

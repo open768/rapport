@@ -103,6 +103,7 @@ $.widget( "ck.appdmenu",{
 				oGroup.append(oOption);		
 				
 				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams));
+				this.pr__addToGroup(oGroup, "Flow Map", cBrowser.buildUrl(sAppPrefixUrl+"/appflowmap.php", oParams));
 				
 			oSelect.append(oGroup);
 		

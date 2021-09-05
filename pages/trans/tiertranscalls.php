@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 set_time_limit(200); // huge time limit as this takes a long time
 //####################################################################
@@ -28,8 +28,6 @@ $tier = cHeader::get(cRender::TIER_QS);
 $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 $title =  "Graphs for transaction calls per minute for transactions for $tier in $oApp->name";
-cRender::show_time_options($title); 
-
 
 //********************************************************************
 if (cAppdyn::is_demo()){

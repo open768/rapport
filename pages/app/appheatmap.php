@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -38,7 +38,7 @@ $tier = cHeader::get(cRender::TIER_QS);
 
 
 $title= "$oApp->name&gt;Activity&gt;heatmap";
-cRender::show_time_options($title); 
+
 cRenderMenus::show_apps_menu("heatmap", "appheatmap.php");
 
 // get the data from 

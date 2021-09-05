@@ -11,46 +11,27 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
+
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 
-
-//####################################################################
-$sMetric = cHeader::get(cRender::METRIC_QS);
+//-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
-if (!$oApp->name) $oApp->name = "No Application Specified";
-$sTitle = cHeader::get(cRender::TITLE_QS);
 
 //####################################################################
-cRenderHtml::header($sTitle);
+cRenderHtml::header("Flowmap for Application $oApp->name");
 cRender::force_login();
+cRender::messagebox("work in progress");
 
-//####################################################################
-cChart::do_header();
-cChart::$width=cChart::CHART_WIDTH_LARGE;
-cChart::$show_zoom = false;
+cDebug::write("fetching flowmap");
+cDebug::on(true);
+$oData = cAppDynRestUI::GET_app_flowmap($oApp);
+cDebug::write("got data");
+cDebug::vardump($oData, true);
+cDebug::off();
 
-//####################################################################
-$oItem = new cChartMetricItem();
-$oItem->metric = $sMetric;
-$oItem->caption = $sTitle;
-
-$oChart = new cChartItem();
-$oChart->metrics[] = $oItem;
-$oChart->title = $sTitle;
-$oChart->app = $oApp;
-$oChart->height = 700;
-
-?>
-	<table class="maintable"><tr><td>
-	<?php
-		$oChart->write_html();
-	?>
-	</td></tr></table><?php
-
-cChart::do_footer(false);
 cRenderHtml::footer();
 ?>

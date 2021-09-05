@@ -14,7 +14,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -75,7 +75,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sDetailRootQS = cHttp::build_url("appagentdetail.php", $sAppQS);
 
 //####################################################################
-cRender::show_time_options($sTitle); 
+
 cRenderMenus::show_app_agent_menu();
 
 cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url("appagentdetail.php",cRender::METRIC_TYPE_QS,$gsMetricType));

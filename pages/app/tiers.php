@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 //-----------------------------------------------
@@ -25,44 +25,68 @@ $oApp = cRenderObjs::get_current_app();
 cRenderHtml::header("Tiers in Application $oApp->name");
 cRender::force_login();
 cChart::do_header();
-cRender::show_time_options( $oApp->name); 
 
 
+
+$sPage = "tiers.php";
+$sBaseQS = cRenderQS::get_base_app_QS($oApp);
+$sUrl = $sPage."?".$sBaseQS;
+if (cRender::is_list_mode()){
+}else{
+}
 //####################################################################
-cRenderMenus::show_apps_menu("Application Tier Activity for:","tiers.php");
-$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$aResponse =$oApp->GET_Tiers();
 
-cRender::appdButton(cAppDynControllerUI::application($oApp));
-cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Transactions");
-
-//####################################################################
-?>
-<h2>Overall Activity in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
-<?php
-$aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
-$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
-$aMetrics[] = [cChart::LABEL=>"Overall Errors per min", cChart::METRIC=>cAppDynMetric::appErrorsPerMin()];
-cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
-?>
-<p>
-<!-- ************************************************** -->
-<h2>Tier Activity <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
-<?php
-//-----------------------------------------------
-$oResponse =$oApp->GET_Tiers();
-foreach ( $oResponse as $oTier){
-	$sTier=$oTier->name;
-	if (cFilter::isTierFilteredOut($oTier)) continue;
-	
-	$sTierQs=cRenderQS::get_base_tier_QS($oTier);
-	
-	cRenderMenus::show_tier_functions($oTier);
+if (cRender::is_list_mode()){
+		?><h2>List of tiers in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
+	cRender::button("show as buttons", $sUrl);
+	echo "<br>";
+	echo "<div class='mdl-card mdl-shadow--2dp'><div class='mdl-card__supporting-text'>";
+	echo "there are ".count($aResponse)." tiers in this application";
+	echo "<ul>";
+	foreach ( $aResponse as $oTier){
+		$sTierQs=cRenderQS::get_base_tier_QS($oTier);
+		$sUrl="../tier/tier.php?$sTierQs";
+		$sTier=$oTier->name;
+		echo "<li><a href='$sUrl'>$sTier</a><br>";
+	}
+	echo "</ul>";
+	echo "</div></div>";
+}else{
+	//####################################################################
+	cRenderMenus::show_apps_menu("Application Tier Activity for:","tiers.php");
+	cRender::appdButton(cAppDynControllerUI::application($oApp));
+	cRender::appdButton(cAppDynControllerUI::app_slow_transactions($oApp), "Slow Transactions");
+	$sUrl.= "&".cRender::LIST_MODE_QS;
+	cRender::button("show as list", $sUrl);
+	?>
+		<h2>Overall Activity in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
+	<?php
 	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier), cChart::GO_HINT=>"Overview", cChart::GO_URL=>"../tier/tier.php?$sTierQs"];
-	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
-	$aMetrics[] = [cChart::LABEL=>"Errors per min", cChart::METRIC=>cAppDynMetric::tierErrorsPerMin($sTier)];
+	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cAppDynMetric::appCallsPerMin()];
+	$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cAppDynMetric::appResponseTimes()];
+	$aMetrics[] = [cChart::LABEL=>"Overall Errors per min", cChart::METRIC=>cAppDynMetric::appErrorsPerMin()];
 	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
+	?>
+		<p>	
+		<!-- ************************************************** -->
+		<h2>Tier Activity <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
+	<?php
+
+	//-----------------------------------------------
+	foreach ( $aResponse as $oTier){
+		$sTier=$oTier->name;
+		if (cFilter::isTierFilteredOut($oTier)) continue;
+		
+		$sTierQs=cRenderQS::get_base_tier_QS($oTier);
+		
+		cRenderMenus::show_tier_functions($oTier);
+		$aMetrics = [];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierCallsPerMin($sTier), cChart::GO_HINT=>"Overview", cChart::GO_URL=>"../tier/tier.php?$sTierQs"];
+		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierResponseTimes($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Errors per min", cChart::METRIC=>cAppDynMetric::tierErrorsPerMin($sTier)];
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
+	}
 }
 cChart::do_footer();
 

@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -30,7 +30,7 @@ cChart::do_header();
 
 cRender::force_login();
 $title ="$oApp->name&gtWeb Real User Monitoring &gt; javascript errors";
-cRender::show_time_options( $title); 
+
 cRenderMenus::show_apps_menu("Show JS Errors for:", "jserrorsgraph.php");
 $oTimes = cRender::get_times();
 

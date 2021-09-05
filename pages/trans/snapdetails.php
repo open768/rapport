@@ -16,9 +16,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
-require_once("$root/inc/inc-filter.php");
+require_once("$root/inc/filter.php");
 
 CONST MIN_TOTAL_TIME_REMOTE=150;
 CONST MIN_TOTAL_TIME_METHOD=40;
@@ -77,7 +77,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	cDebug::flush();
 	$oSnapshot = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
 	cDebug::vardump($oSnapshot);
-	$sDate = cAppdynUtil::timestamp_to_date($sSnapTime);
+	$sDate = cAppdynTime::timestamp_to_date($sSnapTime);
 	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
 
 	$sClass = cRender::getRowClass();

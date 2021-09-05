@@ -22,7 +22,7 @@ cRenderHtml::header("Events $oApp->name");
 cRender::force_login();
 
 //####################################################################
-cRender::show_time_options("Events");
+
 cRender::appdButton(cAppDynControllerUI::events($oApp));
 cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
 cRenderMenus::show_apps_menu("Events", "events.php", $oApp->name);

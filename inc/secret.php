@@ -1,7 +1,7 @@
 <?php
 
 /**************************************************************************
-Copyright (C) Chicken Katsu 2013-2021 
+Copyright (C) Chicken Katsu 2018
 
 This code is protected by copyright under the terms of the 
 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
@@ -12,19 +12,14 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-
-//####################################################################
-$home="..";
-require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
-
-
-//####################################################################
-$sDuration = cHeader::get("duration");
-$sUrl = cHeader::get("url");
-
-$_SESSION[ cAppDynCommon::TIME_SESS_KEY] = $sDuration;
-cDebug::write("setting duration to $sDuration");
-cDebug::write("setting Location to $sUrl");
-header( "Location: $sUrl" ) ;
+class cSecret{
+	const GOOGLE_TAG_ID = "GTM-PFLM8J";
+	
+	const LICENSED_TO = "Chicken Katsu";
+	const LICENSE_COMMENT = "** For Demonstration Purposes only **";
+	const ENCRYPTION_KEY = "woeic87u5yt oisaljrhdfmoliasvjhd";
+	
+	const LINKEDIN_CLIENTID = "78y5i1whb7s9ve";
+	const LINKEDIN_SECRET = "A3qzKko0pAIbcOHA";
+}
 ?>

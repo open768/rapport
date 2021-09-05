@@ -16,7 +16,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 set_time_limit(200); // huge time limit as this takes a long time
@@ -29,7 +29,6 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 //####################################################################
 cRenderHtml::header("tier $oTier->name");
 cRender::force_login();
-cRender::show_time_options("$oApp->name&gt;$oTier->name"); 
 
 cChart::do_header();
 

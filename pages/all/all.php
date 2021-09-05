@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
@@ -50,7 +50,7 @@ cChart::do_header();
 cChart::$hideGroupIfNoData = true;
 
 //####################################################################
-cRender::show_time_options( "All Applications - $sTitle1"); 		
+
 cRender::appdButton(cAppDynControllerUI::apps_home());
 
 //####################################################################

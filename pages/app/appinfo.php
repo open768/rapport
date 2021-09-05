@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -31,7 +31,7 @@ cChart::do_header();
 $oApp = cRenderObjs::get_current_app();
 
 $title= "$oApp->name&gt;Information Points";
-cRender::show_time_options($title); 
+
 cRenderMenus::show_apps_menu("Information Points for", "appinfo.php");
 
 

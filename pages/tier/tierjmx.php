@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 //choose a default duration
@@ -41,7 +41,7 @@ $gsMetric = cHeader::get(cRender::METRIC_TYPE_QS);
 
 // show time options
 $title = "$oApp->name&gt;$oTier->name&gt;Infrastructure&gt;JMX";
-cRender::show_time_options($title); 
+
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 if (!$oTier->name){
 	cRender::errorbox("no Tier parameter found");

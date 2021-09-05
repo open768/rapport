@@ -16,7 +16,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 set_time_limit(200); // huge time limit as this takes a long time
@@ -76,7 +76,6 @@ function render_tier_ext($poApp, $poTier, $poData){
 cRenderHtml::header("External tier calls");
 cRender::force_login();
 
-cRender::show_time_options("External calls from $oTier->name in $oApp->name"); 
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();

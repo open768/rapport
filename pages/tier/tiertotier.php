@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -36,7 +36,7 @@ cChart::do_header();
 
 //####################################################################
 $title =  "$oApp->name&gt;$oTier->name&gt; to tier $totier";		
-cRender::show_time_options($title); 
+
 cRenderMenus::show_tier_functions($oTier);
 cRender::button("back to ($oTier->name) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
 ?>

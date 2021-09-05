@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 //-----------------------------------------------
 $oTier = cRenderObjs::get_current_tier();
@@ -28,7 +28,7 @@ cRenderHtml::header("$title");
 cChart::do_header();
 
 cRender::force_login();
-cRender::show_time_options( $title); 
+
 $oTimes = cRender::get_times();
 
 $oCred = cRenderObjs::get_appd_credentials();

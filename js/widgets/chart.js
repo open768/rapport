@@ -74,7 +74,7 @@ var cCharts={
 		if (iCount >0){
 			oInput = $("<input>",{type:"hidden",name:cChartConsts.COUNT_FIELD,value:iCount}	);
 			oForm.append(oInput);
-			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV"}	);
+			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV", class:"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"}	);
 			oForm.append(oInput);
 			$("#AllMetrics").empty().append(oForm);
 		}

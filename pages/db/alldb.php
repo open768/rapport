@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -27,7 +27,7 @@ cChart::$width=cChart::CHART_WIDTH_LARGE -200;
 
 
 //####################################################################
-cRender::show_time_options( "All Applications - Time in Databases"); 
+
 cRender::appdButton(cAppDynControllerUI::databases());
 
 //********************************************************************

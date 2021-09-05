@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -31,8 +31,6 @@ cChart::$show_export_all = "0";
 cChart::do_header();
 
 $title ="$oApp->name&gt;Overview";
-cRender::show_time_options( $title); 
-
 
 //####################################################################
 cRenderMenus::show_apps_menu("Show Overview for:","appoverview.php");
@@ -125,7 +123,7 @@ foreach ($aTiers as $oTier){
 	$sTierQS = cHttp::build_QS($sTierQS, cRender::TIER_ID_QS, $oTier->id);
 	
 	?><h3><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3><?php
-	$aTransactions = oTier->GET_transaction_names();
+	$aTransactions = $oTier->GET_transaction_names();
 	if ($aTransactions==null) {
 		cRender::errorbox("unable to get transaction names");
 		continue;

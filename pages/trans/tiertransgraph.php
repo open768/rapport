@@ -15,9 +15,9 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
-require_once("$root/inc/inc-filter.php");
+require_once("$root/inc/filter.php");
 
 //####################################################################
 cRenderHtml::header("Tier Transactions");
@@ -42,7 +42,6 @@ if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
 $sExtraCaption = ($node?"($node) node":"");
 
 $title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transactions";
-cRender::show_time_options( $title); 
 
 //********************************************************************
 if (cAppdyn::is_demo()){

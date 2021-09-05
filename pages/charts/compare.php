@@ -14,7 +14,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 
@@ -29,8 +29,6 @@ if (!$oApp->name) $oApp->name = "No Application Specified";
 cRenderHtml::header("compare: $sChartTitle");
 if (!$sMetric ) cDebug::error("Metric missing");
 cRender::force_login();
-
-cRender::show_time_options("<b>comparing</b>: ($oApp->name): $sChartTitle"); 
 
 //####################################################################
 cChart::do_header();

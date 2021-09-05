@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 
 //-----------------------------------------------
@@ -25,7 +25,6 @@ cRenderHtml::header("All Remote Services");
 cRender::force_login();
 cChart::do_header();
 $title ="All Remote Services";
-cRender::show_time_options( $title); 
 
 //####################################################################
 $oApps = cAppDynController::GET_Applications();

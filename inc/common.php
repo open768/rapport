@@ -15,8 +15,8 @@ require_once("$appdlib/appdynamics.php");
 require_once("$appdlib/common.php");
 require_once("$appdlib/account.php");
 require_once("$appdlib/metrics.php");
-require_once("$root/inc/inc-secret.php");
-require_once("$root/inc/inc-render.php");
-require_once("$root/inc/inc-metrics.php");
+require_once("$root/inc/secret.php");
+require_once("$root/inc/render.php");
+require_once("$root/inc/metrics.php");
 
 ?>

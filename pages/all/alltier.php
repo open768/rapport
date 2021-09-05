@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 //####################################################################
 cRenderHtml::header("All Tiers");
@@ -27,8 +27,7 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-cRender::show_time_options( "All Tiers"); 
-	
+
 //********************************************************************
 if (cAppdyn::is_demo()){
 	cRender::errorbox("function not support ed for Demo");

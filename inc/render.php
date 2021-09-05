@@ -16,7 +16,7 @@ require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
 require_once("$appdlib/appdynamics.php");
 require_once("$appdlib/core.php");
-require_once("$root/inc/inc-filter.php");
+require_once("$root/inc/filter.php");
 require_once("$root/inc/rendermenus.php");
 require_once("$root/inc/renderobjs.php");
 require_once("$root/inc/renderqs.php");
@@ -151,6 +151,7 @@ class cRender{
 			self::button("Back to login", "$home/index.php", false);
 			die;
 		}
+		cDebug::flush();
 		cDebug::leave();;
 	}
 	
@@ -164,6 +165,7 @@ class cRender{
 				<?=$psMessage?>
 			</div>
 		<?php
+		cDebug::flush();
 	}
 	//**************************************************************************
 	public static function messagebox($psMessage){
@@ -173,6 +175,7 @@ class cRender{
 				<?=$psMessage?>
 			</div>
 		<?php
+		cDebug::flush();
 	}
 	
 	//*************************************************************
@@ -280,13 +283,19 @@ class cRender{
 		}
 		
 		///cDebug::leave();;
-		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
+		$sClass="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect";
+  		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
 	}
 	
 	//**************************************************************************
 	public static function appdButton ($psUrl, $psCaption = "Launch in AppDynamics"){
+		$sClass="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect";
 		?>
-			<a class="appd_button" title="<?=$psCaption?>" target='appd' href="<?=$psUrl?>"><?=$psCaption?></a>
+			<button class="<?=$sClass?>" onclick="window.open('<?=$psUrl?>','appdynamics');">
+				<i class="material-icons-outlined">north_east</i>
+				&nbsp;
+				<?=$psCaption?>
+			</button>
 		<?php
 	}
 	
@@ -345,7 +354,7 @@ class cRender{
 
 	
 	//**************************************************************************
-	public static function show_time_options( $psTitle){
+	public static function show_time_options(){
 		global $_SERVER,$home;
 		
 		$sUrl = $_SERVER['REQUEST_URI'];
@@ -361,11 +370,7 @@ class cRender{
 		?>
 			<form name="frmTime" id="frmTime" action="<?=$home?>/pages/settime.php" method="get">
 				<input type="hidden" name="url" value="<?=$sUrl?>">
-				<table class="timebox"><tr>
-					<td >
-						<?=$sAccount?><br>
-					</td>
-					<td ><?=cAppDynCommon::get_time_label()?></td>
+				<table><tr>
 					<td width=90 ><select name="duration" onchange="document.getElementById('frmTime').submit();"><?php
 						foreach (cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue){
 							$sSelected = "";
@@ -385,32 +390,8 @@ class cRender{
 	}
 	//**************************************************************************
 	public static function show_top_banner( $psTitle){
-		$bLoggedin = true;
-		if (cDebug::is_debugging()) return;
-		
-		try{
-			$oCred = cRenderObjs::get_appd_credentials();
-			$sAccount = $oCred->account;
-			$sHost = $oCred->host;
-		}catch (Exception $e){
-			$sAccount = "unknown";
-			$sHost = "unknown";
-			$bLoggedin = false;
-		}
-
-		?>
-			<div class="timebox"><table width="100%"><tr>
-				<td width="150">
-					<?=($bLoggedin?cRenderMenus::top_menu():"")?>
-				</td>
-				<td  width="75%">
-					<?=$sAccount?><br>
-					<?=$sHost?><p>
-					<b><?=$psTitle?></b>
-				</td>
-				<td class="logoimage"></td>
-			</tr></table></div>
-		<?php
+		//deprecated
+		cDebug::write("this function is Deprecated");
 	}
 		
 	//**************************************************************************

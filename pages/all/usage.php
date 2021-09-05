@@ -14,15 +14,11 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/inc-charts.php";
+require_once "$root/inc/charts.php";
 
 //####################################################################
 cRenderHtml::header("License Usage");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="<?=$home?>/js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 //####################################################################
@@ -40,7 +36,17 @@ if (cAppdyn::is_demo()){
 
 ?>
 <h2>License Usage</h2>
-login account needs Site Owner role for this to work
+<?php
+try{
+	$oMods=cAppDynAccount::GET_license_modules();
+}
+catch (Exception $e){
+	cRender::errorbox("unable to get license details - check whether user has Site Owner role");
+	cRenderHtml::footer();
+	exit;	
+}
+
+?>
 <p>
 <select id="menuTime">
 	<option selected disabled>Show Licenses for</option>
@@ -61,9 +67,7 @@ $(  function(){
 </script><?php
 
 //####################################################################
-?>
-<?php
-$oMods=cAppDynAccount::GET_license_modules();
+
 $aMods = $oMods->modules;
 sort ($aMods);
 $aMetrics = [];
