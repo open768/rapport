@@ -34,13 +34,13 @@ $sUser = cHeader::get(USER_ID);
 <h2>Audit</h2>
 <?php
 if ($sAccount){
-	$oAccount = new cAppDynAuditAccount;
+	$oAccount = new cADAuditAccount;
 	$oAccount->account = $sAccount;
 	$oAccount->host = $sHost;
 	if ($sUser == null){
 		$sBaseUrl = cHttp::build_url("audit.php", ACCOUNT_ID, $oAccount->account );
 		$sBaseUrl = cHttp::build_url($sBaseUrl, HOST_ID, $oAccount->host );
-		$aUsers = cAppDynAudit::get_known_users($oAccount);
+		$aUsers = cADAudit::get_known_users($oAccount);
 		?><ul><?php
 		foreach ($aUsers as $oUser){
 			$sUrl = cHttp::build_url($sBaseUrl, USER_ID, $oUser->user );
@@ -53,7 +53,7 @@ if ($sAccount){
 			<li>Account: <?=$oAccount->account?>
 			<li>User: <?=$oAccount->user?><br>
 			<ul><?php
-				$aEntries = cAppDynAudit::get_user_entries($oAccount);
+				$aEntries = cADAudit::get_user_entries($oAccount);
 				foreach ($aEntries as $oEntry){
 					?><li><?=$oEntry->timstamp?><?php
 				}
@@ -62,7 +62,7 @@ if ($sAccount){
 		<?php
 	}
 }else{
-	$aAccounts = cAppDynAudit::get_audited_accounts();
+	$aAccounts = cADAudit::get_audited_accounts();
 	if ($aAccounts == null){
 		cRender::messagebox("no Accounts found");
 	}else{

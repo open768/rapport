@@ -58,7 +58,7 @@ if (!$oTier->name){
 }
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -93,9 +93,9 @@ $(
 );
 </script><?php
 if ($node) {
-	$sNodeID = cAppdynUtil::get_node_id($oApp, $node);
+	$sNodeID = cADUtil::get_node_id($oApp, $node);
 	if ($sNodeID){
-		$sUrl = cAppDynControllerUI::nodeDashboard($oApp, $sNodeID);
+		$sUrl = cADControllerUI::nodeDashboard($oApp, $sNodeID);
 		cRender::appdButton($sUrl);
 	}
 }
@@ -112,15 +112,15 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 <?php
 
 	$aMetrics = [];
-	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cAppDynMetric::METRIC_TYPE_ACTIVITY);
+	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Activity for all nodes in Tier:$oTier->name"
 	];
 	
-	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES);
+	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
+	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_RESPONSE_TIMES);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$oTier->name"
@@ -134,11 +134,11 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 <h2>Agent Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
 //####################################################################
-	$aMetricTypes = cAppDynInfraMetric::getInfrastructureAgentMetricTypes();
+	$aMetricTypes = cADInfraMetric::getInfrastructureAgentMetricTypes();
 	
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
-		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
+		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
@@ -152,11 +152,11 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 <p>
 <h2>Memory Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
-	$aMetricTypes = cAppDynInfraMetric::getInfrastructureMemoryMetricTypes();
+	$aMetricTypes = cADInfraMetric::getInfrastructureMemoryMetricTypes();
 	
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
-		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
+		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
@@ -170,11 +170,11 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 <p>
 <h2>Infrastructure Statistics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?>, <?=($node?"($node) Server":"all Servers")?></h2>
 <?php
-	$aMetricTypes = cAppDynInfraMetric::getInfrastructureMiscMetricTypes();
+	$aMetricTypes = cADInfraMetric::getInfrastructureMiscMetricTypes();
 	
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
-		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
+		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 

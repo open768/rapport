@@ -85,7 +85,7 @@ if ($oCred->restricted_login == null){
 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;

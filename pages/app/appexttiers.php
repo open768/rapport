@@ -18,7 +18,7 @@ require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -45,7 +45,7 @@ cRenderMenus::show_app_functions();
 <?php
 //-----------------------------------------------
 $oResponse =$oApp->GET_Tiers();
-$sMatched = cAppdynUtil::get_matching_extcall($oApp, $sExt);
+$sMatched = cADUtil::get_matching_extcall($oApp, $sExt);
 if ($sMatched == null){
 	cRender::errorbox("unable to find a matching external call: $sExt");
 	exit;
@@ -63,8 +63,8 @@ foreach ( $oResponse as $oTier){
 	$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
 	
 	$aMetrics[] = [cChart::LABEL=>$sTier,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($sTier,$sMatched), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"];
-	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($sTier,$sMatched)];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetric::tierExtCallsPerMin($sTier,$sMatched), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"];
+	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADMetric::tierExtResponseTimes($sTier,$sMatched)];
 }
 cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 cChart::do_footer();

@@ -41,27 +41,6 @@ class cRenderMenus{
 		<?php
 		cDebug::leave();
 	}
-	//******************************************************************************************
-	public static function show_app_agent_menu($poApp = null){
-		global $home;
-
-		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login) {
-			cDebug::leave();
-			return;
-		}
-		
-		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
-		?>
-			<SELECT 
-				type="appdmenus" menu="appagents" 				
-				home="<?=$home?>"
-				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</SELECT>
-		<?php
-		cDebug::leave();
-	}
 
 	//******************************************************************************************
 	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
@@ -77,12 +56,14 @@ class cRenderMenus{
 		
 		$sApps_fragment = self::get_apps_fragment();
 
+		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT
 				type="appdmenus" menu="appsmenu" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>>
+				<option selected><?=$psCaption?> - please wait
 			</SELECT>
 		<?php
 		self::show_app_functions();
@@ -90,46 +71,80 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	public static function show_app_agent_menu($poApp = null){
 		global $home;
-		
+
 		cDebug::enter();
 		$oCred = cRenderObjs::get_appd_credentials();
-		if ($oCred->restricted_login){
+		if ($oCred->restricted_login) {
 			cDebug::leave();
 			return;
 		}
-
-		$oApp = cRenderObjs::get_current_app();
 		
-		try{
-			$oTiers = $oApp->GET_Tiers();
-		}
-		catch (Exception $e)
-		{
-			cRender::errorbox("Oops unable to get tier data from controller");
-			cDebug::leave();
-			exit;
-		}
-		
-		$sFragment = "";
-		$iCount = 1;
-		foreach ($oTiers as $oTier){
-			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";
-			$iCount++;
-		}
-		
+		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
+		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
-				type="appdmenus" menu="tiermenu" 
+				type="appdmenus" menu="appagents" 				
 				home="<?=$home?>"
-				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
-				extra="<?=$psExtraQS?>" <?=$sFragment?>>
+				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
 			</SELECT>
 		<?php
 		cDebug::leave();
 	}
-	
+
+	//******************************************************************************************
+	//******************************************************************************************
+	public static function get_apps_attr(){
+
+		cDebug::enter();
+		try{
+			$aApps = cADController::GET_Applications();
+		}
+		catch (Exception $e)
+		{
+			cRender::errorbox("Oops unable to get application data from controller");
+			cDebug::leave();
+			exit;
+		}
+		uasort($aApps,"sort_by_app_name" );
+		$iCount=0;
+		$sfragment = "";
+		foreach ($aApps as $oApp){
+			$iCount++;
+			if ($iCount > 1)$sfragment.=",";
+			$sfragment.= "'appname.$iCount':\"".$oApp->name."\",'appid.$iCount':\"$oApp->id\"";
+		}
+		
+		cDebug::leave();
+		return $sfragment;
+	}
+	//******************************************************************************************
+	public static function get_apps_fragment(){
+
+		cDebug::enter();
+		try{
+			$aApps = cADController::GET_Applications();
+		}
+		catch (Exception $e)
+		{
+			cRender::errorbox("Oops unable to get application data from controller");
+			cDebug::leave();
+			exit;
+		}
+		uasort($aApps,"sort_by_app_name" );
+		$iCount=0;
+		$sApps_fragment = "";
+		foreach ($aApps as $oApp){
+			$iCount++;
+			$sApps_fragment.= "appname.$iCount =\"".$oApp->name."\" appid.$iCount=\"$oApp->id\" ";
+		}
+		
+		cDebug::leave();
+		return $sApps_fragment;
+	}
+
+	//******************************************************************************************
 	//******************************************************************************************
 	// this is a slightly different type of menu - so initialises differently
 	public static function top_menu(){
@@ -166,6 +181,7 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
+	//******************************************************************************************
 	public static function show_tier_functions($poTier = null, $psNode=null){
 		global $home;
 
@@ -180,64 +196,59 @@ class cRenderMenus{
 		if ($poTier == null){
 			$poTier = cRenderObjs::get_current_tier();
 		}
+		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
 				type="appdmenus" menu="tierfunctions"  
 				home="<?=$home?>"
 				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
+				<option selected><?=$poTier->name?> - please wait
 			</SELECT>
 		<?php
 		cDebug::leave();
 	}
 	
 	//******************************************************************************************
-	public static function get_apps_attr(){
-
+	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+		global $home;
+		
 		cDebug::enter();
+		$oCred = cRenderObjs::get_appd_credentials();
+		if ($oCred->restricted_login){
+			cDebug::leave();
+			return;
+		}
+
+		$oApp = cRenderObjs::get_current_app();
+		
 		try{
-			$aApps = cAppDynController::GET_Applications();
+			$oTiers = $oApp->GET_Tiers();
 		}
 		catch (Exception $e)
 		{
-			cRender::errorbox("Oops unable to get application data from controller");
+			cRender::errorbox("Oops unable to get tier data from controller");
 			cDebug::leave();
 			exit;
 		}
-		uasort($aApps,"sort_by_app_name" );
-		$iCount=0;
-		$sfragment = "";
-		foreach ($aApps as $oApp){
+		
+		$sFragment = "";
+		$iCount = 1;
+		foreach ($oTiers as $oTier){
+			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";
 			$iCount++;
-			if ($iCount > 1)$sfragment.=",";
-			$sfragment.= "'appname.$iCount':\"".$oApp->name."\",'appid.$iCount':\"$oApp->id\"";
 		}
 		
+		//TODO change to a DIV - widget can replace with a select menu
+		?>
+			<SELECT 
+				type="appdmenus" menu="tierchangemenu" 
+				home="<?=$home?>"
+				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
+				extra="<?=$psExtraQS?>" <?=$sFragment?>>
+				<option selected><?=$psCaption?> - please wait
+			</SELECT>
+		<?php
 		cDebug::leave();
-		return $sfragment;
-	}
-	//******************************************************************************************
-	public static function get_apps_fragment(){
-
-		cDebug::enter();
-		try{
-			$aApps = cAppDynController::GET_Applications();
-		}
-		catch (Exception $e)
-		{
-			cRender::errorbox("Oops unable to get application data from controller");
-			cDebug::leave();
-			exit;
-		}
-		uasort($aApps,"sort_by_app_name" );
-		$iCount=0;
-		$sApps_fragment = "";
-		foreach ($aApps as $oApp){
-			$iCount++;
-			$sApps_fragment.= "appname.$iCount =\"".$oApp->name."\" appid.$iCount=\"$oApp->id\" ";
-		}
-		
-		cDebug::leave();
-		return $sApps_fragment;
-	}
+	}	
 }
 ?>

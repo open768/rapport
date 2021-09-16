@@ -12,10 +12,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-require_once("$appdlib/appdynamics.php");
-require_once("$appdlib/common.php");
-require_once("$appdlib/metrics.php");
-require_once("$appdlib/account.php");
+require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/common.php");
+require_once("$ADlib/metrics.php");
+require_once("$ADlib/account.php");
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
@@ -105,7 +105,7 @@ class cMetricGetter{
 		$oOutput->app = $poApp->name;
 		$aData = null;
 		
-		if (strstr($psMetric, cAppDynMetric::USAGE_METRIC)){
+		if (strstr($psMetric, cADMetric::USAGE_METRIC)){
 			//license usage metrics are special
 			$aParams = explode("/",$psMetric);
 			$sModule = $aParams[1];
@@ -115,13 +115,13 @@ class cMetricGetter{
 			$oOutput->epoch_end = time()*1000;
 
 			try{
-				$aData = cAppDynAccount::GET_license_usage($sModule, $iDuration);
+				$aData = cADAccount::GET_license_usage($sModule, $iDuration);
 			}
 			catch (Exception $e){}
 			
 			if ($aData)
 				foreach ($aData as $oItem){
-					$oDate = date_create_from_format(cAppdynCore::DATE_FORMAT,$oItem->date);
+					$oDate = date_create_from_format(cADCore::DATE_FORMAT,$oItem->date);
 					$sDate = $oDate->format(DateTime::W3C);
 					$oOutput->add($sDate,$oItem->value);
 				}
@@ -143,10 +143,10 @@ class cMetricGetter{
 			}
 			
 			try{
-				if (cAppDyn::is_demo()){
-					$aData = cAppDynDemo::GET_MetricData($poApp, $psMetric, $oTime, false);
+				if (cAD::is_demo()){
+					$aData = cADDemo::GET_MetricData($poApp, $psMetric, $oTime, false);
 				}else{
-					$aData = cAppDynCore::GET_MetricData($poApp, $psMetric, $oTime, false);
+					$aData = $poApp->GET_MetricData($psMetric, $oTime, false);
 				}
 			}
 			catch (Exception $e){}

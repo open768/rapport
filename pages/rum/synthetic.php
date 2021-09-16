@@ -36,10 +36,10 @@ $oTimes = cRender::get_times();
 
 cRenderMenus::show_apps_menu("Show Synthetics for:", "synthetic.php");
 cRender::button("All Synthetics", "$home/pages/all/allsynth.php");
-cRender::appdButton(cAppDynControllerUI::webrum_synthetics($oApp, $oTimes));
+cRender::appdButton(cADControllerUI::webrum_synthetics($oApp, $oTimes));
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;

@@ -13,6 +13,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
+//# TODO make asynchronous as it can take a long time to load
+//####################################################################
+
+//####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
@@ -31,7 +35,11 @@ $oTimes = cRender::get_times();
 
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
-	cRenderMenus::show_app_functions($oApp);
+	cRenderCards::card_start();
+	cRenderCards::action_start();
+		cRenderMenus::show_app_functions($oApp);
+	cRenderCards::action_end();
+	cRenderCards::card_end();		
 }
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -41,21 +49,13 @@ function sort_metric_names($poRow1, $poRow2){
 $gsTABLE_ID = 0;
 
 //*****************************************************************************
-function render_tier($poTier){
+function render_tier_errors($poTier){
 	global $oApp, $oTimes, $home, $gsTABLE_ID;
 	
 	?><hr><?php
-	cRenderMenus::show_tier_functions($poTier);
-	
-	$sMetricpath = cAppdynMetric::Errors($poTier->name, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
-	
-	//check there is something to display
-	if (count($aData) == 0){
-		cRender::messagebox("Nothing found");
-		return;
-	}
-		
+	$sMetricpath = cADMetric::Errors($poTier->name, "*");
+	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
+			
 	$iRows = 0;
 	foreach ($aData as $oItem){
 			if ($oItem == null ) continue;
@@ -68,7 +68,15 @@ function render_tier($poTier){
 	}
 	
 	if ($iRows == 0){
-		cRender::messagebox("Nothing found");
+		cRenderCards::card_start($poTier->name);
+		cRenderCards::body_start();
+			cRender::messagebox("Nothing found");
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_tier_functions($poTier);
+			cRender::appdButton(cADControllerUI::tier_errors($oApp, $poTier));
+		cRenderCards::action_end();
+		cRenderCards::card_end();		
 		return;
 	}
 	
@@ -77,54 +85,60 @@ function render_tier($poTier){
 
 
 	$tierQS = cRenderQS::get_base_tier_QS( $poTier);
-	$sGraphUrl = cHttp::build_url("../tier/tiererrorgraphs.php", $tierQS);
-	cRender::button("Show Error Graphs", $sGraphUrl);	
-	cRender::appdButton(cAppDynControllerUI::tier_errors($oApp, $poTier));
 	
-	?><table class="maintable" id="TBL<?=$gsTABLE_ID?>" width="1024">
-		<thead><tr class="tableheader">
-			<th width="*">Name</th>
-			<th width="50">Count</th>
-			<th width="50">Average</th>
-		</tr></thead>
-		<tbody><?php
-			$sClass= cRender::getRowClass();
-			$iRows = 0;
-				
-			foreach ($aData as $oItem){
-				if ($oItem == null ) continue;
-				if ($oItem->metricValues == null ) continue;
-				
-				$oValues = $oItem->metricValues[0];
-				if ($oValues->count == 0 ) continue;
-				
-				$sName = cAppdynUtil::extract_error_name($poTier->name, $oItem->metricPath);
-				
-				$iRows++;
+	cRenderCards::card_start($poTier->name);
+	cRenderCards::body_start();
+		?><table class="maintable" id="TBL<?=$gsTABLE_ID?>" width="1024">
+			<thead><tr class="tableheader">
+				<th width="*">Name</th>
+				<th width="50">Count</th>
+				<th width="50">Average</th>
+			</tr></thead>
+			<tbody><?php
+				$sClass= cRender::getRowClass();
+				$iRows = 0;
+					
+				foreach ($aData as $oItem){
+					if ($oItem == null ) continue;
+					if ($oItem->metricValues == null ) continue;
+					
+					$oValues = $oItem->metricValues[0];
+					if ($oValues->count == 0 ) continue;
+					
+					$sName = cADUtil::extract_error_name($poTier->name, $oItem->metricPath);
+					
+					$iRows++;
 
-				?><tr class="<?=$sClass?>">
-					<td align="left"><?=$sName?></td>
-					<td align="middle"><?=$oValues->count?></td>
-					<td align="middle"><?=$oValues->value?></td>
-				</tr><?php
-			}
-			
-		?></tbody>
-	</table>
-	
+					?><tr class="<?=$sClass?>">
+						<td align="left"><?=$sName?></td>
+						<td align="middle"><?=$oValues->count?></td>
+						<td align="middle"><?=$oValues->value?></td>
+					</tr><?php
+				}
+				
+			?></tbody>
+		</table>
 		
-	<script language="javascript">
-		$( function(){ $("#TBL<?=$gsTABLE_ID?>").tablesorter();} );
-	</script>
+			
+		<script language="javascript">
+			$( function(){ $("#TBL<?=$gsTABLE_ID?>").tablesorter();} );
+		</script><?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRenderMenus::show_tier_functions($poTier);
+		$sGraphUrl = cHttp::build_url("../tier/tiererrorgraphs.php", $tierQS);
+		cRender::button("Show Error Graphs", $sGraphUrl);	
+		cRender::appdButton(cADControllerUI::tier_errors($oApp, $poTier));
+	cRenderCards::action_end();
+	cRenderCards::card_end();
 
-	<?php
 	if ($iRows == 0) cRender::messagebox("Nothing found for: $poTier->name");
 	$gsTABLE_ID++;
 	cDebug::flush();
 }
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -134,15 +148,12 @@ if (cAppdyn::is_demo()){
 
 //#############################################################
 //get the page metrics
-?>
-<h1>Application Errors <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h1>
-<?php
 $aResponse =$oApp->GET_Tiers();
 if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else
 	foreach ( $aResponse as $oTier)
-		render_tier($oTier);
+		render_tier_errors($oTier);
 
 cRenderHtml::footer();
 ?>

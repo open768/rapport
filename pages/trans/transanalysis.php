@@ -41,7 +41,7 @@ $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 $oTimes = cRender::get_times();
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -55,7 +55,7 @@ function sort_time($a, $b){
 function analyse_snapshot($poSnapshot){
 	global $oTable;
 	
-	$oExtCalls = cAppDynUtil::count_snapshot_ext_calls($poSnapshot);
+	$oExtCalls = cADUtil::count_snapshot_ext_calls($poSnapshot);
 	if ($oExtCalls == null) return null;
 	
 	$oTable->add_col_data($poSnapshot->requestGUID, $oExtCalls);
@@ -64,7 +64,7 @@ function analyse_snapshot($poSnapshot){
 
 //#####################################################################
 cRenderMenus::show_tier_functions();
-cRender::appdButton(cAppDynControllerUI::transaction($oApp,$trid));
+cRender::appdButton(cADControllerUI::transaction($oApp,$trid));
 cRender::button("back to Transaction details", "transdetails.php?$sTransQS");
 cDebug::flush();
 
@@ -111,7 +111,7 @@ if ($bProceed){
 				$sOriginalUrl = $oSnapshot->URL;
 				if ($sOriginalUrl === "") $sOriginalUrl = $trans;
 				
-				$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $oSnapshot->requestGUID, $oTimes);
+				$sAppdUrl = cADControllerUI::snapshot($oApp, $trid, $oSnapshot->requestGUID, $oTimes);
 				$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
 				$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
 				$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
@@ -122,7 +122,7 @@ if ($bProceed){
 					<td><?=$sDate?></td>
 					<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
 					<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
-					<td><?=cAppdynUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
+					<td><?=cADUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
 					<td><div style="max-width:200px;overflow-wrap:break-word;">
 						<a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=$sOriginalUrl?></a>
 					</div></td>

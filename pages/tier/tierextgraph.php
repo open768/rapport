@@ -38,7 +38,7 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 $title = "$oApp->name&gt;$oTier->name&gt;External Calls";
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -53,7 +53,7 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
 }
 cRender::button("show as table", "tierextcalls.php?$gsTierQs");
-cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
+cRender::appdButton(cADControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
 
 //************* basic information about the tier *********************
 ?>
@@ -62,11 +62,11 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 <?php
 	
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
+	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
+	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierErrorsPerMin($oTier->name);
+	$sMetricUrl=cADMetric::tierErrorsPerMin($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Error rates for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass());
 
@@ -82,11 +82,11 @@ cRender::appdButton(cAppDynControllerUI::tier_slow_remote($oApp, $oTier),"Slow R
 		$sTierTo = $oExt->name;
 		$sUrl = cHttp::build_url($linkUrl, cRender::BACKEND_QS, $sTierTo);
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo, cChart::WIDTH=>300];
-		$sMetric=cAppDynMetric::tierExtCallsPerMin($oTier->name, $sTierTo);
+		$sMetric=cADMetric::tierExtCallsPerMin($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"Drill down"];
-		$sMetric=cAppDynMetric::tierExtResponseTimes($oTier->name, $sTierTo);
+		$sMetric=cADMetric::tierExtResponseTimes($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
-		$sMetric=cAppDynMetric::tierExtErrorsPerMin($oTier->name, $sTierTo);
+		$sMetric=cADMetric::tierExtErrorsPerMin($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Errors Per minuts", cChart::METRIC=>$sMetric];
 	}
 	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass());

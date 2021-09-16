@@ -29,10 +29,10 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 cRender::show_top_banner("Node details: $node"); 
 cRender::button("Back to all nodes", "appagents.php?$sAppQS");
-cRender::appdButton(cAppDynControllerUI::nodeDashboard($oApp,$nodeID));
+cRender::appdButton(cADControllerUI::nodeDashboard($oApp,$nodeID));
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -44,7 +44,7 @@ if (cAppdyn::is_demo()){
 
 <?php
 //####################################################################
-$oResult = cAppDynRestUI::GET_Node_details($oApp->id, $nodeID);
+$oResult = cAD_RestUI::GET_Node_details($oApp->id, $nodeID);
 
 //####################################################################
 cRenderHtml::footer();

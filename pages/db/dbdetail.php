@@ -32,21 +32,21 @@ cRender::button("back to all databases", "alldb.php",false);
 cRender::button("Back to Summary", "db.php?".cRender::DB_QS."=$sDB",false);
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
 
-$aStats = cAppDyn::GET_Database_ServerStats($sDB);
-$sMetricPrefix = cAppDynMetric::databaseServerStats($sDB);
+$aStats = cADController::GET_Database_ServerStats($sDB);
+$sMetricPrefix = cADMetric::databaseServerStats($sDB);
 //####################################################################
 
 $aMetrics = [];
-$sMetric = cAppDynMetric::databaseCalls($sDB);
+$sMetric = cADMetric::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
-cChart::metrics_table(cAppDApp::$db_app,$aMetrics,1,cRender::getRowClass());
+cChart::metrics_table(cADApp::$db_app,$aMetrics,1,cRender::getRowClass());
 
 //***************************************************************************
 ?><h2>Database specific statistics</h2><?php
@@ -55,7 +55,7 @@ foreach ($aStats as $oRow){
 	$sMetric = $sMetricPrefix."|$oRow->name";
 	$aMetrics[] = [cChart::LABEL=>$oRow->name, cChart::METRIC=>$sMetric];
 }
-cChart::metrics_table(cAppDApp::$db_app,$aMetrics,2,cRender::getRowClass());
+cChart::metrics_table(cADApp::$db_app,$aMetrics,2,cRender::getRowClass());
 
 //***************************************************************************
 cChart::do_footer();

@@ -27,14 +27,14 @@ $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
-$aMetrics = cAppDynInfraMetric::getInfrastructureMetricTypes();
+$aMetrics = cADInfraMetric::getInfrastructureMetricTypes();
 
 //####################################################################
 cRender::show_top_banner("Agents for $oApp->name"); 
 cRenderMenus::show_app_agent_menu();
 cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -62,7 +62,7 @@ if ($oCred->restricted_login == null){
 		<option selected disabled>Show for all Servers...</option>
 		<?php
 			foreach ($aMetrics as $sMetricType){
-				$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
+				$oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 				$sDetailUrl = cHttp::build_url($sDetailBaseUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 				?><option value="<?="$sDetailUrl"?>"><?=$oMetric->short?></option><?php
 			}
@@ -78,7 +78,7 @@ if ($oCred->restricted_login == null){
 	<p>
 <?php
 }
-cRender::appdButton(cAppDynControllerUI::nodes($oApp), "All nodes");
+cRender::appdButton(cADControllerUI::nodes($oApp), "All nodes");
 
 //####################################################################
 
@@ -146,16 +146,16 @@ function render_tier_agents($paNodes){
 					
 					?><tr class="<?=$sClass?>">
 						<td><?php
-							cRender::appdButton(cAppDynControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
+							cRender::appdButton(cADControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
 						?><td><?=$oNode->agentType?></td>
 						<td align="right"><nobr><?php
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp, $oNode->id),"Go");
+							cRender::appdButton(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
 						?></nobr></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
-						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
-						<td><?=($oNode->appAgentPresent?cAppdynUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
+						<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
+						<td><?=($oNode->appAgentPresent?cADUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
 					</tr><?php
 				}
 			?>
@@ -186,7 +186,7 @@ function render_node_agents($paData){
 					$sMachine = $aNodes[0]->machineName;
 					$iMachineID = $aNodes[0]->machineId;
 					?><td rowspan="<?=$iRowSpan?>"><nobr>
-						<?=cRender::appdButton(cAppDynControllerUI::machineDetails($iMachineID), $sMachine)?>
+						<?=cRender::appdButton(cADControllerUI::machineDetails($iMachineID), $sMachine)?>
 					</nobr></td><?php
 				?></tr><?php
 				
@@ -206,11 +206,11 @@ function render_node_agents($paData){
 						<td><?php
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cAppDynControllerUI::nodeAgent($oApp, $oNode->id),"Go");
+							cRender::appdButton(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
 						?></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
-						<td><?=($oNode->machineAgentPresent?cAppdynUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
-						<td><?=($oNode->appAgentPresent?cAppdynUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
+						<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
+						<td><?=($oNode->appAgentPresent?cADUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
 					</tr><?php
 				}
 			}

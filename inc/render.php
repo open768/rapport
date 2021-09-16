@@ -14,10 +14,11 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
-require_once("$appdlib/appdynamics.php");
-require_once("$appdlib/core.php");
+require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/core.php");
 require_once("$root/inc/filter.php");
 require_once("$root/inc/rendermenus.php");
+require_once("$root/inc/rendercards.php");
 require_once("$root/inc/renderobjs.php");
 require_once("$root/inc/renderqs.php");
 require_once("$root/inc/renderhtml.php");
@@ -105,10 +106,10 @@ class cRender{
 	
 	//**************************************************************************
 	public static function get_times(){
-		$sTime = cCommon::get_session(cAppDynCommon::TIME_SESS_KEY);
-		if ($sTime == cAppDynCommon::TIME_CUSTOM){
-			$epochFrom = cCommon::get_session(cAppDynCommon::TIME_CUSTOM_FROM_KEY);
-			$epochTo = cCommon::get_session(cAppDynCommon::TIME_CUSTOM_TO_KEY);
+		$sTime = cCommon::get_session(cADCommon::TIME_SESS_KEY);
+		if ($sTime == cADCommon::TIME_CUSTOM){
+			$epochFrom = cCommon::get_session(cADCommon::TIME_CUSTOM_FROM_KEY);
+			$epochTo = cCommon::get_session(cADCommon::TIME_CUSTOM_TO_KEY);
 		}else{
 			if ($sTime == "") $sTime=60;
 			
@@ -116,7 +117,7 @@ class cRender{
 			$epochFrom = $epochTo - ((60 * $sTime)*1000);
 		}
 		
-		$oTimes = new cAppDynTimes();
+		$oTimes = new cADTimes();
 		$oTimes->start = $epochFrom;
 		$oTimes->end = $epochTo;
 		
@@ -233,7 +234,7 @@ class cRender{
 	}
 
 	//**************************************************************************
-	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
+	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null, $psTarget=null){
 		global $home;
 		$bShow = false;
 		$oCred = null;
@@ -261,19 +262,22 @@ class cRender{
 			}
 		
 		if ($bShow)
-			echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams);
+			echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams, $psTarget);
 		
 		//cDebug::leave();;
 	}
 	
 	//**************************************************************************
-	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null){
+	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null, $psTarget=null){
 		$sClass = "blue_button";
 		//cDebug::enter();
 		
-		if ($pbNewWindow) 
-			$sOnClick = "window.open(\"$psUrl\");";
-		else
+		if ($pbNewWindow){ 
+			if ($psTarget !== "")
+				$sOnClick = "window.open(\"$psUrl\",\"$psTarget\")";
+			else
+				$sOnClick = "window.open(\"$psUrl\")";
+		}else
 			$sOnClick = "document.location.href=\"$psUrl\"";
 		
 		if ($paParams !== null){
@@ -311,14 +315,14 @@ class cRender{
 		if (cDebug::is_debugging()) return;
 
 		$sUrl = urlencode($_SERVER['REQUEST_URI']);
-		echo cAppDynCommon::get_time_label();
+		echo cADCommon::get_time_label();
 		
-		$iDuration = cAppDynCommon::get_duration();
+		$iDuration = cADCommon::get_duration();
 		?>
 		<table border=1 cellpadding=0 cellspacing=0><tr><td>
 			Time Shown:<br>
 			<?php
-			foreach ( cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue)
+			foreach ( cADCommon::$TIME_RANGES as $sCaption=>$iValue)
 				if ($iValue== $iDuration){
 					?><button disabled="disabled"><?=$sCaption?></button><?php
 				}else
@@ -362,7 +366,7 @@ class cRender{
 		
 		$oCred = cRenderObjs::get_appd_credentials();
 		$sAccount = $oCred->account;
-		$iDuration = cAppDynCommon::get_duration();
+		$iDuration = cADCommon::get_duration();
 		
 		if (cDebug::is_debugging()) return;
 		
@@ -372,7 +376,7 @@ class cRender{
 				<input type="hidden" name="url" value="<?=$sUrl?>">
 				<table><tr>
 					<td width=90 ><select name="duration" onchange="document.getElementById('frmTime').submit();"><?php
-						foreach (cAppDynCommon::$TIME_RANGES as $sCaption=>$iValue){
+						foreach (cADCommon::$TIME_RANGES as $sCaption=>$iValue){
 							$sSelected = "";
 							if ($iValue== $iDuration)$sSelected =" selected";
 							echo "<option value='$iValue' $sSelected>$sCaption</option>";
@@ -397,8 +401,8 @@ class cRender{
 	//**************************************************************************
 	public static function getRowClass()
 	{
-		cAppDynCommon::$ROW_TOGGLE = !cAppDynCommon::$ROW_TOGGLE;
-		if (cAppDynCommon::$ROW_TOGGLE)
+		cADCommon::$ROW_TOGGLE = !cADCommon::$ROW_TOGGLE;
+		if (cADCommon::$ROW_TOGGLE)
 			return "row1";
 		else
 			return "row2";

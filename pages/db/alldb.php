@@ -28,10 +28,10 @@ cChart::$width=cChart::CHART_WIDTH_LARGE -200;
 
 //####################################################################
 
-cRender::appdButton(cAppDynControllerUI::databases());
+cRender::appdButton(cADControllerUI::databases());
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -39,7 +39,7 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 //####################################################################
-$oResponse = cAppDynController::GET_Databases();
+$oResponse = cADController::GET_Databases();
 if (count($oResponse) == 0){
 	cRender::messagebox("No Monitored Databases found");
 }else{
@@ -51,13 +51,13 @@ if (count($oResponse) == 0){
 	foreach ( $oResponse as $oDB){
 		$class=cRender::getRowClass();
 		$sDB=$oDB->name;
-		$sMetric = cAppDynMetric::databaseTimeSpent($sDB);
+		$sMetric = cADMetric::databaseTimeSpent($sDB);
 
 		$sButton = cRender::button_code($sDB, "db.php?".cRender::DB_QS."=$sDB", false);
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sButton];
-		$aMetrics[] = [cChart::LABEL => $sDB, cChart::METRIC=>$sMetric, cChart::APP=>cAppDynCore::DATABASE_APPLICATION];
+		$aMetrics[] = [cChart::LABEL => $sDB, cChart::METRIC=>$sMetric, cChart::APP=>cADCore::DATABASE_APPLICATION];
 	}
-	cChart::metrics_table(cAppDApp::$db_app, $aMetrics, 2, cRender::getRowClass());
+	cChart::metrics_table(cADApp::$db_app, $aMetrics, 2, cRender::getRowClass());
 }
 cChart::do_footer();
 

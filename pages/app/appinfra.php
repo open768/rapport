@@ -36,8 +36,8 @@ cRenderMenus::show_apps_menu("Infrastructure","appinfra.php");
 ?>
 <h2>Tiers</h2>
 <?php
-$aActivityMetrics = [cAppDynMetric::METRIC_TYPE_ACTIVITY, cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES];
-$aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
+$aActivityMetrics = [cADMetric::METRIC_TYPE_ACTIVITY, cADMetric::METRIC_TYPE_RESPONSE_TIMES];
+$aMetricTypes = cADInfraMetric::getInfrastructureMetricTypes();
 
 $aTiers =$oApp->GET_Tiers();
 foreach ($aTiers as $oTier){
@@ -49,7 +49,7 @@ foreach ($aTiers as $oTier){
 
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
-		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
+		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
 		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[] = [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 

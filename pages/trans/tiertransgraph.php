@@ -34,7 +34,7 @@ $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRenderQS::get_base_app_QS($oApp);
 $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-if ($gsMetricType==null) $gsMetricType = cAppDynMetric::METRIC_TYPE_ACTIVITY;
+if ($gsMetricType==null) $gsMetricType = cADMetric::METRIC_TYPE_ACTIVITY;
 
 $gsBaseUrl = cHttp::build_url("tiertransgraph.php", $gsTierQs );
 if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
@@ -44,7 +44,7 @@ $sExtraCaption = ($node?"($node) node":"");
 $title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transactions";
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -64,17 +64,17 @@ function render_tier_transactions($poApp, $poTier){
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 
-	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
-	$aStats = cAppdynCore::GET_MetricData($poApp, $sMetricpath, $oTimes,"true",false,true);
+	$sMetricpath = cADMetric::transResponseTimes($poTier->name, "*");
+	$aStats = $poApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	uasort($aStats,"sort_by_metricpath" );
 
 	$aMetrics=[];
 	$iCount  = 0;
 	foreach ($aStats as $oTrans){
-		$oStats =  cAppdynUtil::Analyse_Metrics($oTrans->metricValues);
-		$sTrName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $poTier->name);
+		$oStats =  cADUtil::Analyse_Metrics($oTrans->metricValues);
+		$sTrName = cADUtil::extract_bt_name($oTrans->metricPath, $poTier->name);
 		try{
-			$sTrID = cAppdynUtil::extract_bt_id($oTrans->metricName);
+			$sTrID = cADUtil::extract_bt_id($oTrans->metricName);
 		}
 		catch (Exception $e){
 			$sTrID = null;
@@ -88,23 +88,23 @@ function render_tier_transactions($poApp, $poTier){
 		
 		if ($node) $sLink = cHttp::build_url($sLink,cRender::NODE_QS,$node);
 		
-		$sMetricUrl=cAppdynMetric::transCallsPerMin($poTier->name, $sTrName, $node);
+		$sMetricUrl=cADMetric::transCallsPerMin($poTier->name, $sTrName, $node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Calls ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
 		];
 		
-		$sMetricUrl=cAppDynMetric::transResponseTimes($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetric::transResponseTimes($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Response ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
 
-		$sMetricUrl=cAppDynMetric::transErrors($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetric::transErrors($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Errors ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
 
-		$sMetricUrl=cAppDynMetric::transCpuUsed($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetric::transCpuUsed($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"CPU ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
@@ -159,7 +159,7 @@ if ($oCred->restricted_login == null){
 	);
 	</script><?php
 }
-cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
+cRender::appdButton(cADControllerUI::tier($oApp,$oTier));
 
 //###############################################
 ?>
@@ -170,28 +170,28 @@ cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 	$sBaseUrl = cHttp::build_url("alltiertrans.php",$gsTierQs);
 	
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cAppDynMetric::CALLS_PER_MIN );
+	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::CALLS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl=cAppDynMetric::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cAppDynMetric::RESPONSE_TIME );
+	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::RESPONSE_TIME );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl=cAppDynMetric::tierErrorsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cAppDynMetric::ERRS_PER_MIN );
+	$sMetricUrl=cADMetric::tierErrorsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::ERRS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl = cAppDynMetric::InfrastructureCpuBusy($oTier->name);
+	$sMetricUrl = cADMetric::InfrastructureCpuBusy($oTier->name);
 	$aMetrics[] = [
 		cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl
 	];
@@ -202,9 +202,9 @@ cRender::appdButton(cAppDynControllerUI::tier($oApp,$oTier));
 if ($node){ 
 	?><h3>Stats for (<?=$node?>) Server</h3><?php
 	$aMetrics=[];
-	$sMetricUrl=cAppDynMetric::tierNodeCallsPerMin($oTier->name, $node);
+	$sMetricUrl=cADMetric::tierNodeCallsPerMin($oTier->name, $node);
 	$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::tierNodeResponseTimes($oTier->name, $node);
+	$sMetricUrl=cADMetric::tierNodeResponseTimes($oTier->name, $node);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 }

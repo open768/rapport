@@ -38,7 +38,7 @@ $oCred = cRenderObjs::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -53,7 +53,7 @@ if (cAppdyn::is_demo()){
 <h2>Overall Disks Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 	$aData = $oTier->GET_DiskMetrics();
-	$sBaseMetric = cAppdynMetric::InfrastructureNodeDisks($oTier->name);
+	$sBaseMetric = cADMetric::InfrastructureNodeDisks($oTier->name);
 	$aMetrics = [];
 	foreach ($aData as $oMetric)
 		$aMetrics[]= [cChart::LABEL=>$oMetric->name, cChart::METRIC=>$oMetric->name];

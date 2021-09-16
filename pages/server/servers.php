@@ -26,7 +26,7 @@ cChart::do_header();
 cChart::$hideGroupIfNoData = true;
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -34,7 +34,7 @@ if (cAppdyn::is_demo()){
 
 //####################################################################
 
-cRender::appdButton(cAppDynControllerUI::servers());
+cRender::appdButton(cADControllerUI::servers());
 
 //####################################################################
 ?>

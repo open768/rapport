@@ -46,7 +46,7 @@ class cRenderHtml{
 		<html>
 		<head>
 			<title><?=$psTitle?></title>
-			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/reporter.css" >
+			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.css">			
@@ -114,7 +114,7 @@ class cRenderHtml{
 						<nav class="mdl-navigation" id="<?=self::CONTROLLER_ID?>">
 						<?php
 							if ($bLoggedin){
-								echo "Account: $oCred->account &mdash;&nbsp;".cAppDynCommon::get_time_label();
+								echo "Account: $oCred->account &mdash;&nbsp;".cADCommon::get_time_label();
 								cRender::show_time_options();
 							}else
 								echo "not logged in";
@@ -127,6 +127,7 @@ class cRenderHtml{
 					</div>
 				</header>
 				<main class="mdl-layout__content" style="flex: 1 0 auto;">
+					<div id="page_content">
   <?php
 		//show the navigation menu - this updates the material design navigation menu
 		cDebug::extra_debug("showing top menu");
@@ -141,6 +142,7 @@ class cRenderHtml{
 		global $home;
 		if (cDebug::is_debugging()) return;
 		?>
+					</div>
 				</main><!-- page content -->
 				<div class="footer-container">
 					<footer class="mdl-mini-footer">

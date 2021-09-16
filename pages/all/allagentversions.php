@@ -29,7 +29,7 @@ const AGENT_WIDTH=150;
 cRender::show_top_banner("All AgentVersions"); 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -78,12 +78,13 @@ function render_machine_agents(){
 	global $gaAppIds;
 	
 	try{
-		$aAgents = cAppDynRestUI::GET_machine_agents();
+		$aAgents = cAD_RestUI::GET_machine_agents();
 	}
 	catch (Exception $e){
 		cRender::errorbox("Oops unable to get machine agent data from controller:<p>".$e->getMessage());		
 		return;
 	}
+	if (cDebug::is_extra_debugging())cDebug::vardump($aAgents[0]);
 	
 	?><table class="maintable" cellpadding="4">
 		<tr class="tableheader">
@@ -96,8 +97,9 @@ function render_machine_agents(){
 		</tr><?php
 		$sClass = cRender::getRowClass();
 		foreach ($aAgents as $oAgent){
+			$sApp = ($oAgent->applicationIds==null?"no application":get_application_from_id($oAgent->applicationIds[0]));
 			?><tr class="<?=$sClass?>">
-				<td><?=get_application_from_id($oAgent->applicationIds[0]) ?></td>
+				<td><?=$sApp?></td>
 				<td><?=$oAgent->hostName?></td>
 				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
 				<td><?=parse_buildDate($oAgent->agentDetails->agentVersion)?></td>
@@ -113,12 +115,14 @@ function render_machine_agents(){
 function render_app_agents(){
 	global $gaApps;
 	try {
-		$aAgents = cAppDynRestUI::GET_appServer_agents();
+		$aAgents = cAD_RestUI::GET_appServer_agents();
 	}
 	catch (Exception $e){
 		cRender::errorbox("Oops unable to get app agent data from controller:<p>".$e->getMessage());		
 		return;
 	}
+	if (cDebug::is_extra_debugging())cDebug::vardump($aAgents[0]);
+	
 	?><table class="maintable" cellpadding="4">
 		<tr class="tableheader">
 			<th>Application</th>
@@ -149,7 +153,7 @@ function render_app_agents(){
 function render_db_agents(){
 	global $gaApps;
 	try{
-		$aAgents = cAppDynRestUI::GET_database_agents();
+		$aAgents = cAD_RestUI::GET_database_agents();
 	}
 	catch (Exception $e){
 		cRender::errorbox("Oops unable to get database agent data from controller:<p>".$e->getMessage());		
@@ -176,28 +180,33 @@ function render_db_agents(){
 }
 
 //####################################################################
-$gaAppIds = cAppdynUtil::get_application_ids();
+$gaAppIds = cADUtil::get_application_ids();
 
-cRender::button("Back to Agents", "allagents.php");	
-cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
-cRender::button("latest AppDynamics versions", "appdversions.php");	
-cRender::appdButton(cAppDynControllerUI::agents(), "Agent Settings");
 
-?>
-<h2>Contents</h2>
-<ul>
-	<li><a href="#c">Controller Version</a>
-	<li><a href="#a">Machine Agents</a>
-	<li><a href="#a">App Agents</a>
-	<li><a href="#d">Database Agents</a>
-	<li><a href="#o">Other Agents</a>
-</ul>
 
-<p>
-<h2><a name="c">Controller Version</a></h2>
-<?=cAppDynController::GET_Controller_version();?>
-<p>
-<?php
+//####################################################################
+cRenderCards::card_start();
+	cRenderCards::title_start();
+		?><h1>Contents</h1><?php
+	cRenderCards::title_end();
+	cRenderCards::body_start();
+		?>
+		<ul>
+			<li><a href="#a">Machine Agents</a>
+			<li><a href="#a">App Agents</a>
+			<li><a href="#d">Database Agents</a>
+			<li><a href="#o">Other Agents</a>
+		</ul>
+		Controller Version: <?=cADController::GET_Controller_version();?>
+		<?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRender::button("Back to Agents", "allagents.php");	
+		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
+		cRender::button("latest AppDynamics versions", "appdversions.php");	
+		cRender::appdButton(cADControllerUI::agents(), "Agent Settings");
+	cRenderCards::action_end();
+cRenderCards::card_end();
 ?>
 <p>
 

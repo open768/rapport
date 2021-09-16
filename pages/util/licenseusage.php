@@ -27,7 +27,7 @@ if (!$sUsage) $sUsage = 1;
 cRender::show_top_banner("License Usage for $sUsage month(s)"); 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -38,7 +38,7 @@ if (cAppdyn::is_demo()){
 <h2>License Usage</h2>
 <?php
 try{
-	$oMods=cAppDynAccount::GET_license_modules();
+	$oMods=cADAccount::GET_license_modules();
 }
 catch (Exception $e){
 	cRender::errorbox("unable to get license details - check whether user has Site Owner role");
@@ -72,7 +72,7 @@ $aMods = $oMods->modules;
 sort ($aMods);
 $aMetrics = [];
 foreach ($aMods as $oModule)
-	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cAppdynMetric::moduleUsage($oModule->name, $sUsage)];
+	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cADMetric::moduleUsage($oModule->name, $sUsage)];
 
 cChart::render_metrics(null, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 

@@ -39,7 +39,7 @@ $oCred = cRenderObjs::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -54,7 +54,7 @@ if (cAppdyn::is_demo()){
 <h2>Overall Disks Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 	$aData = $oTier->GET_DiskMetrics();
-	$sBaseMetric = cAppdynMetric::InfrastructureNodeDisks($oTier->name);
+	$sBaseMetric = cADMetric::InfrastructureNodeDisks($oTier->name);
 	$aMetrics = [];
 	foreach ($aData as $oMetric)
 		$aMetrics[]= [cChart::LABEL=>$oMetric->name, cChart::METRIC=>$oMetric->name];
@@ -63,15 +63,15 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>disks for Node..<?=cRender::show_name(cRender::NAME_OTHER,$sNode)?></h2>
 <?php
-	$sBaseMetric = cAppDynMetric::InfrastructureNodeDisks($oTier->name, $sNode);
+	$sBaseMetric = cADMetric::InfrastructureNodeDisks($oTier->name, $sNode);
 	$aData = $oTier->GET_NodeDisks($sNode);
 	$aMetrics = [];
 	foreach ($aData as $oDisk){
 		$aMetrics[]= [cChart::LABEL=>$oDisk->name, cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>250];
 
-		$sMetric = cAppdynMetric::InfrastructureNodeDiskFree($oTier->name, $sNode, $oDisk->name);
+		$sMetric = cADMetric::InfrastructureNodeDiskFree($oTier->name, $sNode, $oDisk->name);
 		$aMetrics[]= [cChart::LABEL=>$oDisk->name." free", cChart::METRIC=>$oMetric->name];
-		$sMetric = cAppdynMetric::InfrastructureNodeDiskUsed($oTier->name, $sNode, $oDisk->name);
+		$sMetric = cADMetric::InfrastructureNodeDiskUsed($oTier->name, $sNode, $oDisk->name);
 		$aMetrics[]= [cChart::LABEL=>$oDisk->name." used", cChart::METRIC=>$oMetric->name];
 	}
 	cChart::metrics_table($oApp, $aMetrics, 3, cRender::getRowClass());

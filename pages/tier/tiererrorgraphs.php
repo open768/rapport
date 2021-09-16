@@ -38,7 +38,7 @@ if ($oCred->restricted_login == null){
 	
 	$sGraphUrl = cHttp::build_url("tiererrors.php", $gsTierQS);
 	cRender::button("Show Error Stats", $sGraphUrl);	
-	cRender::appdButton(cAppDynControllerUI::tier_errors($oApp, $oTier));
+	cRender::appdButton(cADControllerUI::tier_errors($oApp, $oTier));
 }
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -61,7 +61,7 @@ function render_table($paData){
 		$oValues = $oItem->metricValues[0];
 		if ($oValues->count == 0 ) continue;
 		
-		$sName = cAppdynUtil::extract_error_name($oTier->name, $oItem->metricPath);
+		$sName = cADUtil::extract_error_name($oTier->name, $oItem->metricPath);
 		$aMetrics[] = [	cChart::LABEL=>$sName, cChart::METRIC=>$oItem->metricPath];
 	}
 	$sClass = cRender::getRowClass();
@@ -69,7 +69,7 @@ function render_table($paData){
 }
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -82,8 +82,8 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Errors for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
-	$sMetricpath = cAppdynMetric::Errors($oTier->name, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
+	$sMetricpath = cADMetric::Errors($oTier->name, "*");
+	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	render_table($aData);
 	cChart::do_footer();
 	cRenderHtml::footer();

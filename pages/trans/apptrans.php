@@ -27,9 +27,9 @@ function render_tier_transactions($poTier){
 	global $giTotalTrans, $home;
 	
 	$oTimes = cRender::get_times();
-	$sMetricpath = cAppdynMetric::transResponseTimes($poTier->name, "*");
+	$sMetricpath = cADMetric::transResponseTimes($poTier->name, "*");
 	try{
-	$aStats = cAppdynCore::GET_MetricData($poTier->app, $sMetricpath, $oTimes,"true",false,true);
+	$aStats = $poTier->app->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
 	}catch (Exception $e){
 		cRender::errorbox("Oops unable to retrieve Transaction names: ".$e);
 		return;
@@ -51,10 +51,10 @@ function render_tier_transactions($poTier){
 		$giTotalTrans += count($aStats);
 		cDebug::vardump($aStats, true);
 		foreach ($aStats as $oTrans){
-			$oStats =  cAppdynUtil::Analyse_Metrics($oTrans->metricValues);
-			$sName = cAppdynUtil::extract_bt_name($oTrans->metricPath, $poTier->name);
+			$oStats =  cADUtil::Analyse_Metrics($oTrans->metricValues);
+			$sName = cADUtil::extract_bt_name($oTrans->metricPath, $poTier->name);
 			try{
-				$sTrID = cAppdynUtil::extract_bt_id($oTrans->metricName);
+				$sTrID = cADUtil::extract_bt_id($oTrans->metricName);
 			}
 			catch (Exception $e){
 				$sTrID = null;
@@ -118,7 +118,7 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 //header
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -133,7 +133,7 @@ if (cFilter::isFiltered()){
 	$sCleanAppQS = cRenderQS::get_base_app_QS($oApp);
 	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
 }
-cRender::appdButton(cAppDynControllerUI::businessTransactions($oApp));
+cRender::appdButton(cADControllerUI::businessTransactions($oApp));
 
 //####################################################################
 // work through each tier

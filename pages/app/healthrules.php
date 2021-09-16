@@ -23,14 +23,14 @@ cRender::force_login();
 
 //####################################################################
 cRender::show_top_banner("Health rules");
-$sUrl = cAppDynControllerUI::app_health_rules($oApp);
+$sUrl = cADControllerUI::app_health_rules($oApp);
 cDebug::extra_debug($sUrl);
 cRender::appdButton($sUrl);
 
 cRender::button("back to events", cHttp::build_url("events.php", cRender::APP_QS, $oApp->name));
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;

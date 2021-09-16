@@ -24,20 +24,26 @@ $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 cRender::show_top_banner("One Click Checkup"); 
 ?>
-<h2>One Click Checkup</h2>
 
 <?php
-function output_row($pbBad, $psCaption, $psContent){
+function output_row($pbBad, $psCaption, $psContent, $psAction=null){
 	$sClass = ($pbBad?"bad_row":"good_row");
 	?><tr class="<?=$sClass?>">
 		<th align='left' width='400'><?=$psCaption?>: </th>
 		<td><?=$psContent?></td>
+		<?php
+			if ($psAction !== null){
+				echo "<td>";
+				cRender::button('<span class="material-icons-outlined">arrow_circle_right</span>', $psAction);
+				echo "</td>";
+			}
+		?>
 	</tr><?php
 }
 
 //####################################################################
 //this needs to be asynchronous as when there are a lot of applications that page times out
-$aResponse = cAppDynController::GET_Applications();
+$aResponse = cADController::GET_Applications();
 foreach ( $aResponse as $oApp){
 	?><div><table width="100%">
 		<tr><td colspan="2"><?php 
@@ -62,7 +68,7 @@ foreach ( $aResponse as $oApp){
 		output_row($bBad, "Total number of Business Transactions in Application: $oApp->name", $sCaption);
 		
 		//************************************************************************************
-		$aTierCount = [];
+		$aTierCount = []; 	//counts the transactions per tier
 		foreach ($aTrans as $oTrans){
 			$sTier = $oTrans->tierName;
 			if (! isset($aTierCount[$sTier])) $aTierCount[$sTier] = 0;
@@ -82,7 +88,9 @@ foreach ( $aResponse as $oApp){
 				$bBad = false;
 				$sCaption .= " Thats good.";
 			}
-			output_row($bBad, "Business Transactions for Tier: '$sTier'", $sCaption);
+			$sUrl = cHttp::build_url("$home/pages/tier/tier.php", cRender::TIER_QS, $sTier);
+			$sUrl = cHttp::build_qs("$sUrl", cRender::APP_QS, $oApp->name);
+			output_row($bBad, "Business Transactions for Tier: '$sTier'", $sCaption, $sUrl);
 				
 		}
 

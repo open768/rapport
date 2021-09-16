@@ -32,9 +32,9 @@ if ($sGoKey){
 	//Set the time window
 	if (property_exists($oLinkData,"time_window")){
 		cDebug::write("setting time window");
-		$_SESSION[cAppDynCommon::TIME_SESS_KEY] = cAppDynCommon::TIME_CUSTOM ;
-		$_SESSION[cAppDynCommon::TIME_CUSTOM_FROM_KEY] = $oLinkData->time_window->start ;
-		$_SESSION[cAppDynCommon::TIME_CUSTOM_TO_KEY] = $oLinkData->time_window->end;
+		$_SESSION[cADCommon::TIME_SESS_KEY] = cADCommon::TIME_CUSTOM ;
+		$_SESSION[cADCommon::TIME_CUSTOM_FROM_KEY] = $oLinkData->time_window->start ;
+		$_SESSION[cADCommon::TIME_CUSTOM_TO_KEY] = $oLinkData->time_window->end;
 	}
 	
 	//then redirect

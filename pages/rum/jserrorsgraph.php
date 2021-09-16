@@ -60,8 +60,8 @@ function render_graphs($psType, $paData){
 		$oValues = $oItem->metricValues[0];
 		if ($oValues->count == 0 ) continue;
 
-		$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
-		$sRumId = cAppDynUtil::extract_RUM_id($psType, $oItem->metricName);
+		$sName = cADUtil::extract_RUM_name($psType, $oItem->metricPath);
+		$sRumId = cADUtil::extract_RUM_id($psType, $oItem->metricName);
 		$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
 		$sDetailQS = cHttp::build_QS($sDetailQS, cRender::RUM_PAGE_ID_QS,$sRumId);
 		$sUrl = "rumpage.php?$sDetailQS";
@@ -76,7 +76,7 @@ function render_graphs($psType, $paData){
 }
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -89,9 +89,9 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Requests with Javascript Errors</h2>
 <?php
-	$sMetricpath = cAppDynWebRumMetric::PageJavaScriptErrors(cAppdynMetric::BASE_PAGES, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
-	render_graphs(cAppdynMetric::BASE_PAGES, $aData);
+	$sMetricpath = cADWebRumMetric::PageJavaScriptErrors(cADMetric::BASE_PAGES, "*");
+	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
+	render_graphs(cADMetric::BASE_PAGES, $aData);
 	
 	// ############################################################
 cChart::do_footer();

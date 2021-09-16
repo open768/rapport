@@ -19,7 +19,7 @@ require_once "$root/inc/charts.php";
 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -49,8 +49,8 @@ $sUrl = cHttp::build_url("appexttiers.php", $sExtQS);
 <h2>All Calls from <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> to <?=cRender::show_name(cRender::NAME_EXT,$sExt)?></h2>
 <?php
 $aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"$oTier->name - Calls per min",cChart::METRIC=>cAppDynMetric::tierExtCallsPerMin($oTier->name,$sExt)];
-$aMetrics[] = [cChart::LABEL=>"$oTier->name - Response time in ms", cChart::METRIC=>cAppDynMetric::tierExtResponseTimes($oTier->name,$sExt)];
+$aMetrics[] = [cChart::LABEL=>"$oTier->name - Calls per min",cChart::METRIC=>cADMetric::tierExtCallsPerMin($oTier->name,$sExt)];
+$aMetrics[] = [cChart::LABEL=>"$oTier->name - Response time in ms", cChart::METRIC=>cADMetric::tierExtResponseTimes($oTier->name,$sExt)];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
 
 //####################################################################
@@ -71,24 +71,24 @@ foreach ( $aTrans as $oTrans){
 	
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name - Calls per min from Tier", 
-		cChart::METRIC=>cAppDynMetric::transCallsPerMin($oTier->name,$oTrans->name),
+		cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name,$oTrans->name),
 		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name to External - Calls per min ",
-		cChart::METRIC=>cAppDynMetric::transExtCalls($oTier->name,$oTrans->name, $sExt),
+		cChart::METRIC=>cADMetric::transExtCalls($oTier->name,$oTrans->name, $sExt),
 		cChart::GO_URL => $sUrl,
 		cChart::GO_HINT => "Transaction",
 		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name to External - Response time in ms", 
-		cChart::METRIC=>cAppDynMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
+		cChart::METRIC=>cADMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
 		cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
 		cChart::LABEL=>"$oTrans->name to External - errors", 
-		cChart::METRIC=>cAppDynMetric::transExtErrors($oTier->name,$oTrans->name,$sExt),
+		cChart::METRIC=>cADMetric::transExtErrors($oTier->name,$oTrans->name,$sExt),
 		cChart::HIDEIFNODATA=>1
 	];
 }

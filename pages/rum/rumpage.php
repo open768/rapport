@@ -35,10 +35,10 @@ cChart::do_header();
 
 cRenderMenus::show_app_functions($oApp);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
-cRender::appdButton(cAppDynControllerUI::webrum_detail($oApp, $rum_page_id));
+cRender::appdButton(cADControllerUI::webrum_detail($oApp, $rum_page_id));
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -49,17 +49,17 @@ if (cAppdyn::is_demo()){
 
 ?><H2>Real User Monitoring Details for (<?=$rum_page?>)</h2><?php
 $aMetrics = [];
-$sMetricUrl=cAppDynWebRumMetric::PageCallsPerMin($rum_type, $rum_page);
+$sMetricUrl=cADWebRumMetric::PageCallsPerMin($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page requests: $rum_page", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynWebRumMetric::PageResponseTimes($rum_type, $rum_page);
+$sMetricUrl=cADWebRumMetric::PageResponseTimes($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Response times: $rum_page", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynWebRumMetric::PageTCPTime($rum_type, $rum_page);
+$sMetricUrl=cADWebRumMetric::PageTCPTime($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page connection time", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynWebRumMetric::PageServerTime($rum_type, $rum_page);
+$sMetricUrl=cADWebRumMetric::PageServerTime($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Server time", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynWebRumMetric::PageFirstByte($rum_type, $rum_page);
+$sMetricUrl=cADWebRumMetric::PageFirstByte($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page first byte time", cChart::METRIC=>$sMetricUrl];
-$sMetricUrl=cAppDynWebRumMetric::PageJavaScriptErrors($rum_type, $rum_page);
+$sMetricUrl=cADWebRumMetric::PageJavaScriptErrors($rum_type, $rum_page);
 $aMetrics[] = [cChart::LABEL=>"Page Views with Javascript errors", cChart::METRIC=>$sMetricUrl];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 

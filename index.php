@@ -27,7 +27,7 @@ cDebug::extra_debug("Page Initialising - finished");
 if (cHeader::get(cLogin::KEY_SUBMIT))
 {
 	cDebug::extra_debug("form submitted");
-	$oCred = new cAppDynCredentials();
+	$oCred = new cADCredentials();
 	try{
 		$oCred->load_from_header();
 	}	
@@ -64,7 +64,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	cDebug::extra_debug("token found ");
 	try{
 		$sToken = cHeader::get(cRender::LOGIN_TOKEN_QS);
-		cAppDynCredentials::login_with_token($sToken);
+		cADCredentials::login_with_token($sToken);
 	}	
 	catch (Exception $e)
 	{
@@ -151,10 +151,10 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<form action="index.php" method="POST" >
-					<input type="hidden" name="<?=cLogin::KEY_ACCOUNT?>" value="<?=cAppDynCredentials::DEMO_ACCOUNT?>">
-					<input type="hidden" name="<?=cLogin::KEY_USERNAME?>" value="<?=cAppDynCredentials::DEMO_USER?>">
-					<input type="hidden" name="<?=cLogin::KEY_PASSWORD?>" value="<?=cAppDynCredentials::DEMO_PASS?>">
-					<input type="hidden" name="<?=cLogin::KEY_HOST?>" value="<?=cAppDynCore::DEMO_HOST?>">
+					<input type="hidden" name="<?=cLogin::KEY_ACCOUNT?>" value="<?=cADCredentials::DEMO_ACCOUNT?>">
+					<input type="hidden" name="<?=cLogin::KEY_USERNAME?>" value="<?=cADCredentials::DEMO_USER?>">
+					<input type="hidden" name="<?=cLogin::KEY_PASSWORD?>" value="<?=cADCredentials::DEMO_PASS?>">
+					<input type="hidden" name="<?=cLogin::KEY_HOST?>" value="<?=cADCore::DEMO_HOST?>">
 					<input type="hidden" name="<?=cLogin::KEY_HTTPS?>" value="no">
 					<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect login_submit" id="demologin" name="<?=cLogin::KEY_SUBMIT?>" value="1" type="submit">Demo Mode</button>
 					<div class="mdl-tooltip" for="demologin">

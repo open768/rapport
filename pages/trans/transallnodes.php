@@ -40,7 +40,7 @@ $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -48,7 +48,7 @@ if (cAppdyn::is_demo()){
 
 //********************************************************************
 $oCred = cRenderObjs::get_appd_credentials();
-cRender::appdButton(cAppDynControllerUI::transaction($oApp,$trid));
+cRender::appdButton(cADControllerUI::transaction($oApp,$trid));
 cDebug::flush();
 
 // ################################################################################
@@ -70,11 +70,11 @@ foreach ($aNodes as $oNode){
 	$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
 	$sUrl = "transdetails.php?$sNodeQs";
 					
-	$sMetricUrl=cAppDynMetric::transCallsPerMin($oTier->name, $trans, $sNodeName);
+	$sMetricUrl=cADMetric::transCallsPerMin($oTier->name, $trans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Calls  ($sNodeName)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>$oNode->name];
-	$sMetricUrl=cAppDynMetric::transResponseTimes($oTier->name, $trans, $sNodeName);
+	$sMetricUrl=cADMetric::transResponseTimes($oTier->name, $trans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"response ($sNodeName)", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cAppDynMetric::transErrors($oTier->name, $trans, $sNodeName);
+	$sMetricUrl=cADMetric::transErrors($oTier->name, $trans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
 }
 $sClass = cRender::getRowClass();

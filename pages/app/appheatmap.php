@@ -43,15 +43,15 @@ cRenderMenus::show_apps_menu("heatmap", "appheatmap.php");
 
 // get the data from 
 if ($tier === null)
-	$metric = cAppDynMetric::appResponseTimes();
+	$metric = cADMetric::appResponseTimes();
 else
-	$metric = cAppDynMetric::tierCallsPerMin($tier);
+	$metric = cADMetric::tierCallsPerMin($tier);
 
 ?>
 <h2>Heatmap for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 <?php
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -59,8 +59,8 @@ if (cAppdyn::is_demo()){
 //********************************************************************
 
 $oTime= cRender::get_times();
-$oResponse = cAppdynCore::GET_MetricData($oApp,$metric, $oTime);
-$aHeatData = cAppdynUtil::Analyse_heatmap( $oResponse);
+$oResponse = $oApp->GET_MetricData($metric, $oTime);
+$aHeatData = cADUtil::Analyse_heatmap( $oResponse);
 cRender::render_Heatmap($aHeatData["days"], "HeatMap for Days of Week", "hour", "day");
 cRender::render_Heatmap($aHeatData["hours"], "HeatMap for Hours", "hour", "min");
 ?>

@@ -23,7 +23,7 @@ require_once "$root/inc/charts.php";
 $sDuration = cHeader::get("duration");
 $sUrl = cHeader::get("url");
 
-$_SESSION[ cAppDynCommon::TIME_SESS_KEY] = $sDuration;
+$_SESSION[ cADCommon::TIME_SESS_KEY] = $sDuration;
 cDebug::write("setting duration to $sDuration");
 cDebug::write("setting Location to $sUrl");
 header( "Location: $sUrl" ) ;

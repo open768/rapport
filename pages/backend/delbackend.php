@@ -13,38 +13,38 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
+//####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
-
-
-$sDB = cHeader::get(cRender::DB_QS);
 
 
 //####################################################################
-cRenderHtml::header("Database - $sDB");
+cRenderHtml::header("Delete Backend");
 cRender::force_login();
-cChart::do_header();
+
+
+//********************************************************************
+if (cAD::is_demo()){
+	cRender::errorbox("function not support ed for Demo");
+	cRenderHtml::footer();
+	exit;
+}
+//********************************************************************
+$iBackend = cHeader::get(cRender::BACKEND_QS);
+
 
 //####################################################################
+?><h2> Delete Backend <?=$iBackend?></h2>
+<?php
+	try {
+		cAD_RestUI::DELETE_backend($iBackend);
+	}catch (Exception $e){
+		//ignore all exceptions?
+	}
+?>	
+Done
 
-cRender::button("back to all databases", "alldb.php",false);
-cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false);
-
-
+<?php
 //####################################################################
-$aMetrics=[];
-
-$sMetric = cADMetric::databaseTimeSpent($sDB);
-$aMetrics[] = [cChart::LABEL=>"Time spent in Database", cChart::METRIC=>$sMetric];
-$sMetric = cADMetric::databaseCalls($sDB);
-$aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
-$sMetric = cADMetric::databaseConnections($sDB);
-$aMetrics[] = [cChart::LABEL=>"Database Connections", cChart::METRIC=>$sMetric];
-cChart::metrics_table(cADApp::$db_app,$aMetrics,1,cRender::getRowClass());
-
-
-cChart::do_footer();
-
 cRenderHtml::footer();
 ?>

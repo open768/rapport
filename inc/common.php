@@ -11,10 +11,10 @@ require_once("$phpinc/ckinc/header.php");
 	
 
 //####################################################################
-require_once("$appdlib/appdynamics.php");
-require_once("$appdlib/common.php");
-require_once("$appdlib/account.php");
-require_once("$appdlib/metrics.php");
+require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/common.php");
+require_once("$ADlib/account.php");
+require_once("$ADlib/metrics.php");
 require_once("$root/inc/secret.php");
 require_once("$root/inc/render.php");
 require_once("$root/inc/metrics.php");

@@ -53,9 +53,9 @@ if (cHeader::get("fromh")){
 	$_SESSION["tody"] = $yy2;
 	
 	//session variables
-	$_SESSION[cAppDynCommon::TIME_SESS_KEY] = cAppDynCommon::TIME_CUSTOM ;
-	$_SESSION[cAppDynCommon::TIME_CUSTOM_FROM_KEY] = $msFrom ;
-	$_SESSION[cAppDynCommon::TIME_CUSTOM_TO_KEY] = $msTo;
+	$_SESSION[cADCommon::TIME_SESS_KEY] = cADCommon::TIME_CUSTOM ;
+	$_SESSION[cADCommon::TIME_CUSTOM_FROM_KEY] = $msFrom ;
+	$_SESSION[cADCommon::TIME_CUSTOM_TO_KEY] = $msTo;
 	header( "Location: $url" );
 }else{
 	if (isset($_SESSION["fromdd"])) {

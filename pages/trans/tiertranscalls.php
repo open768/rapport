@@ -30,14 +30,14 @@ $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 $title =  "Graphs for transaction calls per minute for transactions for $tier in $oApp->name";
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
 //####################################################################
-$oResponse =cAppdyn::GET_Tier_transactions($oApp->name, $tier);
+$oResponse =cAD::GET_Tier_transactions($oApp->name, $tier);
 
 $sBaseUrl = cHttp::build_url("transdetails.php", $gsTierQS;) 
 $oTimes = cRender::get_times();
@@ -49,8 +49,8 @@ foreach ($oResponse as $oDetail){
 	
 	cCommon::flushprint ("<h2><a href='$link'>$trans</a></h2>");   
 	
-	$sMetricpath = cAppdynMetric::transCallsPerMin($tier, $trans);
-	$oResponse = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes, "false");
+	$sMetricpath = cADMetric::transCallsPerMin($tier, $trans);
+	$oResponse = $oApp->GET_MetricData( $sMetricpath, $oTimes, "false");
 	
 	$iTotalRows = count($oResponse);
     $charturl = generate_chart("ttc", "call per min $trans",  $oResponse);

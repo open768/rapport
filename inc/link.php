@@ -15,7 +15,7 @@ require_once("$phpinc/ckinc/hash.php");
 require_once("$phpinc/ckinc/debug.php");
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
-require_once("$appdlib/core.php");
+require_once("$ADlib/core.php");
 require_once("$root/inc/secret.php");
 
 class cLinkPageData{
@@ -35,7 +35,7 @@ class cLinkPage{
 		$sReferrer = cHeader::get_referer();
 	
 		//-- get the unique key for the hash
-		$oCred = new cAppDynCredentials();
+		$oCred = new cADCredentials();
 		$oTimes = cRender::get_times();
 
 		$sKey = $sReferrer."#H".$oCred->host."#U".$oCred->get_username()."#S".$oTimes->start."#E".$oTimes->end;
@@ -73,7 +73,7 @@ class cLinkPage{
 			cDebug::write("creating hash object");
 
 			$sReferrer = cHeader::get_referer();
-			$oAppdynCredentials = new cAppDynCredentials();
+			$oAppdynCredentials = new cADCredentials();
 
 			$oData = new cLinkPageData;
 			$oData->page = $sReferrer;

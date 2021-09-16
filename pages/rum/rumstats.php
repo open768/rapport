@@ -32,7 +32,7 @@ $oTimes = cRender::get_times();
 
 $sGraphUrl = cHttp::build_url("rumgraphs.php", $gsAppQS);
 cRender::button("Graphs", $sGraphUrl);	
-cRender::appdButton(cAppDynControllerUI::webrum_pages($oApp));
+cRender::appdButton(cADControllerUI::webrum_pages($oApp));
 
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -69,8 +69,8 @@ function render_table($psType, $paData){
 				if ($oValues->count == 0 ) continue;
 				$iRows++;
 				$sImgMax = "$home/".cRender::get_trans_speed_colour($oValues->max);
-				$sName = cAppDynUtil::extract_RUM_name($psType, $oItem->metricPath);
-				$sRumId = cAppDynUtil::extract_RUM_id($psType, $oItem->metricName);
+				$sName = cADUtil::extract_RUM_name($psType, $oItem->metricPath);
+				$sRumId = cADUtil::extract_RUM_id($psType, $oItem->metricName);
 				$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
 				$sDetailQS = cHttp::build_QS($sDetailQS, cRender::RUM_PAGE_ID_QS,$sRumId);
 
@@ -97,7 +97,7 @@ function render_table($psType, $paData){
 }
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -110,20 +110,20 @@ if (cAppdyn::is_demo()){
 ?>
 <h2>Page Requests</h2>
 <?php
-	$sMetricpath = cAppDynWebRumMetric::PageResponseTimes(cAppdynMetric::BASE_PAGES, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
+	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetric::BASE_PAGES, "*");
+	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	//cDebug::on(true);
 	//cDebug::vardump($aData);
 	//cDebug::off();
-	render_table(cAppdynMetric::BASE_PAGES, $aData);
+	render_table(cADMetric::BASE_PAGES, $aData);
 	
 // ############################################################
 ?>
 <h2>Ajax Requests</h2>
 <?php
-	$sMetricpath = cAppDynWebRumMetric::PageResponseTimes(cAppdynMetric::AJAX_REQ, "*");
-	$aData = cAppdynCore::GET_MetricData($oApp, $sMetricpath, $oTimes,"true",false,true);
-	render_table(cAppdynMetric::AJAX_REQ, $aData);
+	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetric::AJAX_REQ, "*");
+	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
+	render_table(cADMetric::AJAX_REQ, $aData);
 
 	// ############################################################
 	cRenderHtml::footer();

@@ -23,13 +23,13 @@ cRender::show_top_banner("Appdynamics Versions");
 
 cRender::button("Back to Agent Versions", "allagentversions.php");	
 cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
-cRender::appdButton(cAppDynControllerUI::agents(), "Agent Settings");
+cRender::appdButton(cADControllerUI::agents(), "Agent Settings");
 ?>
 <h2>Latest Appdynamics Versions</h2>
 
 <?php
 //####################################################################
-$aDownloads = cAppDynWebsite::GET_latest_downloads();
+$aDownloads = cADWebsite::GET_latest_downloads();
 if (count($aDownloads) == 0){
 	cRender::errorbox("DEBUG in progress");
 }else{

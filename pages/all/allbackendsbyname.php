@@ -35,7 +35,7 @@ cChart::do_header();
 $title ="All Remote Services";
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -44,13 +44,13 @@ if (cAppdyn::is_demo()){
 
 
 //####################################################################
-$oApps = cAppDynController::GET_Applications();
+$oApps = cADController::GET_Applications();
 ?>
 
 
 <h2><?=$title?></h2>
 <div class="maintable"><ul><?php
-	$aBackends = cAppDynController::GET_allBackends();
+	$aBackends = cADController::GET_allBackends();
 	$iBackID = 0;
 	foreach ($aBackends as $sBackend=>$aApps){
 		$iBackID++;
@@ -71,9 +71,9 @@ $oApps = cAppDynController::GET_Applications();
 				?><h4><?=cRender::show_name(cRender::NAME_APP,$oApp)?></h4><?php
 				
 				$aMetrics = [];
-				$sMetricUrl = cAppDynMetric::backendCallsPerMin($sBackend);
+				$sMetricUrl = cADMetric::backendCallsPerMin($sBackend);
 				$aMetrics[] = [cChart::LABEL=>"Calls Per minute: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
-				$sMetricUrl = cAppDynMetric::backendResponseTimes($sBackend);
+				$sMetricUrl = cADMetric::backendResponseTimes($sBackend);
 				$aMetrics[] = [cChart::LABEL=>"Response Times: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
 				cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 

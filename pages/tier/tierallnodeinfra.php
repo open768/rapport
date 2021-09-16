@@ -33,7 +33,7 @@ $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-$oMetricDetails = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
+$oMetricDetails = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 
 $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
 
@@ -46,14 +46,14 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 
 //other buttons
-$aMetrics = cAppDynInfraMetric::getInfrastructureMetricDetails($oTier);
+$aMetrics = cADInfraMetric::getInfrastructureMetricDetails($oTier);
 $oCred = cRenderObjs::get_appd_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
 $sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType);
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -79,7 +79,7 @@ if (cAppdyn::is_demo()){
 	?>
 	</optgroup>
 	<optgroup label="Other Statistics">
-		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cAppDynMetric::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
+		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
 
 	</optgroup>
 </select>
@@ -95,7 +95,7 @@ $(
 
 //data for the page
 $aNodes = $oTier->GET_Nodes();	
-$aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
+$aMetricTypes = cADInfraMetric::getInfrastructureMetricTypes();
 
 
 	
@@ -113,7 +113,7 @@ $aMetricTypes = cAppDynInfraMetric::getInfrastructureMetricTypes();
 		$sNode = $oNode->name;
 		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
-		$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oTier->name,$sNode, $sMetricType);
+		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
 		$aMetrics[]= [cChart::LABEL=>$sNode." - ".$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"all metrics ($sNode)", cChart::HIDEIFNODATA=>1];
 	}

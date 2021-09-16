@@ -33,14 +33,14 @@ function sort_config($a,$b){
 	return strcmp($a->description, $b->description );
 }
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
 
-$aConfig=cAppDynController::GET_configuration();
+$aConfig=cADController::GET_configuration();
 uasort($aConfig,"sort_config");
 $sStyle = cRender::getRowClass();			
 

@@ -30,8 +30,8 @@ if ($tier == null)	cDebug::error("Tier not set");
 if ($trans == null)	cDebug::error("Trans not set");
 
 //*************************************************************************
-$sMetricPath = cAppDynMetric::transExtNames($tier, $trans);
-$oWalker = new cAppDynTransFlow();
-$oWalker->walk($oApp->name, $tier, $trans);
+$sMetricPath = cADMetric::transExtNames($tier, $trans);
+$oWalker = new cADTransFlow();
+$oWalker->walk($oApp, $tier, $trans);
 cCommon::write_json($oWalker);	
 ?>

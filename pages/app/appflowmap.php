@@ -28,7 +28,7 @@ cRender::messagebox("work in progress");
 
 cDebug::write("fetching flowmap");
 cDebug::on(true);
-$oData = cAppDynRestUI::GET_app_flowmap($oApp);
+$oData = cAD_RestUI::GET_app_flowmap($oApp);
 cDebug::write("got data");
 cDebug::vardump($oData, true);
 cDebug::off();

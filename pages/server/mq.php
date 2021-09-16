@@ -22,62 +22,66 @@ require_once "$root/inc/charts.php";
 //####################################################################
 cRenderHtml::header("All Servers - MQ");
 cRender::force_login(); 
-cChart::do_header();
-cChart::$hideGroupIfNoData = true;
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
 //####################################################################
-cRender::show_top_banner( "All servers - MQ"); 		
+$aData = cADController::GET_server_nodes_with_MQ();
+$iCount = count($aData);
 
 //####################################################################
-?>
-<div id="page_content">
-	<?php
+cRenderCards::card_start(($iCount==0?"MQ Nodes":"Pick a Node"));
+	cRenderCards::body_start();
+		if ($iCount == 0)
+			cRender::errorbox("sorry - no nodes found");
+		else
+			echo "All these nodes have MQ Queue managers associated with them";
+	cRenderCards::body_end();
+	cRenderCards::action_start();
 		cRender::button("Back to servers", "servers.php");	
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", "mq.php");
 		else
 			cRender::button("show as list", "mq.php?".cRender::LIST_MODE_QS);
-	?>
-	<p>
-	<h2>Pick a Node</h2>
-	All these nodes have MQ Queue managers associated with them
-	<p>&nbsp;<p>
-	<?php
-		// get the list of all servers that have MQ metrics
-		$aData = cAppDynController::GET_server_nodes_with_MQ();
-		$iCount = count($aData);
-		if ($iCount == 0)
-			cRender::errorbox("sorry - no nodes found");
-		else{
-			//echo "found $iCount nodes<p>";
-			$sPrevious = "";
-			$iColumn=0;
-			foreach ($aData as $sNode){
-				if (cRender::is_list_mode())
-						echo "$sNode<br>";	
-					else{
-						$sChar = strtolower($sNode[0]);
-						if ($sChar !== $sPrevious){
-							$sPrevious = $sChar;
-							echo "<h2>$sChar</h2>";
-						}
-						$sUrl=cHttp::build_url("mqnode.php", cRender::NODE_QS, $sNode);
-						cRender::button($sNode, $sUrl);	
-					}
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
+// get the list of all servers that have MQ metrics
+if ($iCount >= 0){
+	if (cRender::is_list_mode()){
+		cRenderCards::card_start();
+			cRenderCards::body_start();
+			foreach ($aData as $sNode)
+				echo "$sNode<br>";	
+			cRenderCards::body_end();
+		cRenderCards::card_end();
+	}else{
+		$sPrevious = "";
+		$iColumn=0;
+		foreach ($aData as $sNode){
+			$sChar = strtolower($sNode[0]);
+			if ($sChar !== $sPrevious){
+				if ($sPrevious !== "") {
+					cRenderCards::body_end();
+					cRenderCards::card_end();
+				}
+				cRenderCards::card_start($sChar);
+				cRenderCards::body_start();
 			}
+			$sUrl=cHttp::build_url("mqnode.php", cRender::NODE_QS, $sNode);
+			cRender::button($sNode, $sUrl);	
+			$sPrevious = $sChar;
 		}
-	?>
-</div>
-<?php
+		cRenderCards::body_end();
+		cRenderCards::card_end();
+	}
+}
 
 //####################################################################
-cChart::do_footer();
 cRenderHtml::footer();
 ?>

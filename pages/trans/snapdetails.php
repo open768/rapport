@@ -53,7 +53,7 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 cRender::show_top_banner("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans&gt;$sSnapURL"); 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -63,9 +63,9 @@ if (cAppdyn::is_demo()){
 $oCred = cRenderObjs::get_appd_credentials();
 cDebug::flush();
 
-$oTime = cAppdynUtil::make_time_obj($sSnapTime);
-cAppDynRestUI::$oTimes = cRender::get_times();
-$sAppdUrl = cAppDynControllerUI::snapshot($oApp, $trid, $sSnapGUID, $oTime);
+$oTime = cADUtil::make_time_obj($sSnapTime);
+cAD_RestUI::$oTimes = cRender::get_times();
+$sAppdUrl = cADControllerUI::snapshot($oApp, $trid, $sSnapGUID, $oTime);
 
 cRender::appdButton($sAppdUrl);
 if ($trid=="")	cRender::messagebox("trid is missing");
@@ -75,9 +75,9 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 <H2>Snapshot Details for <span class="transaction"><?=$sSnapURL?></span></h2>
 <?php
 	cDebug::flush();
-	$oSnapshot = cAppDynRestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
+	$oSnapshot = cAD_RestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
 	cDebug::vardump($oSnapshot);
-	$sDate = cAppdynTime::timestamp_to_date($sSnapTime);
+	$sDate = cADTime::timestamp_to_date($sSnapTime);
 	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
 
 	$sClass = cRender::getRowClass();
@@ -101,7 +101,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
-		<tr><th align="right">Server:</th><td><?=cAppdynUtil::get_node_name($oApp,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
+		<tr><th align="right">Server:</th><td><?=cADUtil::get_node_name($oApp,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
 	</table>
 	
 <!-- ************************************************************** -->
@@ -136,14 +136,14 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	$oFlow = null;
 	$bProceed = true;
 	try{
-		$oFlow = cAppDynRestUI::GET_snapshot_flow($oSegment);
+		$oFlow = cAD_RestUI::GET_snapshot_flow($oSegment);
 	}catch (Exception $e){
 		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bProceed = false;
 	}
 	
 	if ($bProceed){
-		$oExtCalls = cAppDynUtil::count_flow_ext_calls($oFlow);
+		$oExtCalls = cADUtil::count_flow_ext_calls($oFlow);
 		if ($oExtCalls == null) 
 			cDebug::error("Unable to count external calls");
 		else{
@@ -172,7 +172,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	cDebug::flush();
 	$bProceed = true;
 	try{
-		$aData = cAppDynRestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
+		$aData = cAD_RestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
 	}catch (Exception $e){
 		cRender::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
 		$bProceed = false;
@@ -222,7 +222,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 	cDebug::flush();
 	$bError = false;
 	try{
-		$oFlow = cAppDynRestUI::GET_snapshot_flow($oSegment);
+		$oFlow = cAD_RestUI::GET_snapshot_flow($oSegment);
 	}catch (Exception $e){
 		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bError = true;

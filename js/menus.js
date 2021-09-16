@@ -65,6 +65,7 @@ var cTopMenu={
 		
 		var sAppPrefixUrl = sHome+"/pages/app";
 		var sAllPrefixUrl = sHome+"/pages/all";
+		var sUtilPrefixUrl = sHome+"/pages/util";
 		var sRumPrefixUrl = sHome+"/pages/rum";
 		var sSrvPrefixUrl = sHome+"/pages/server";
 		
@@ -81,16 +82,17 @@ var cTopMenu={
 			this.pr__add_to_expansion(oContentDiv, "API tester", sHome +"/pages/api/api.php");
 		
 		oContentDiv = this.pr__add_expansion(poDiv, "Check");
-			this.pr__add_to_expansion(oContentDiv, "Configuration", sAllPrefixUrl+"/config.php");
-			this.pr__add_to_expansion(oContentDiv, "License Usage", sAllPrefixUrl+"/usage.php");
-			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sAllPrefixUrl+"/checkup.php");
+			this.pr__add_to_expansion(oContentDiv, "Configuration", sUtilPrefixUrl+"/config.php");
+			this.pr__add_to_expansion(oContentDiv, "License Usage", sUtilPrefixUrl+"/licenseusage.php");
+			this.pr__add_to_expansion(oContentDiv, "Agent Licenses", sUtilPrefixUrl+"/agentlicense.php");
+			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sUtilPrefixUrl+"/checkup.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Dashboards");
 			this.pr__add_to_expansion(oContentDiv, "Launch", sHome +"/pages/dash/index.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Agents");
 			this.pr__add_to_expansion(oContentDiv, "Installed", sAllPrefixUrl+"/allagentversions.php");
-			this.pr__add_to_expansion(oContentDiv, "Downloads", sAllPrefixUrl+"/appdversions.php");
+			this.pr__add_to_expansion(oContentDiv, "Downloads", sUtilPrefixUrl+"/appdversions.php");
 
 		oContentDiv = this.pr__add_expansion(poDiv, "Servers");
 			this.pr__add_to_expansion(oContentDiv, "Server Visibility", sSrvPrefixUrl+"/servers.php");

@@ -34,7 +34,7 @@ $oTimes = cRender::get_times();
 $title= "$oApp->name&gt;Service EndPoints";
 
 cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
-cRender::appdButton(cAppDynControllerUI::serviceEndPoints($oApp,$oTimes));
+cRender::appdButton(cADControllerUI::serviceEndPoints($oApp,$oTimes));
 
 //####################################################################
 //retrieve tiers
@@ -51,7 +51,7 @@ function pr__sort_endpoints($a,$b){
 foreach ($aTiers as $oTier){
 
 	//****************************************************************************************
-	$aEndPoints = cAppDynRestUI::GET_service_end_points($oTier);
+	$aEndPoints = cAD_RestUI::GET_service_end_points($oTier);
 	//$aEndPoints = $oTier->GET_ServiceEndPoints();
 	if (count($aEndPoints) == 0){
 		cRender::messagebox("no Service endpoints found for $oTier->name");
@@ -71,9 +71,9 @@ foreach ($aTiers as $oTier){
 		$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
 
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];
-		$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cAppdynMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name), cChart::GO_URL=>$sUrl];
-		$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cAppdynMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
-		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cAppdynMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name), cChart::GO_URL=>$sUrl];
+		$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cADMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
+		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cADMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
 	}
 	$sClass = cRender::getRowClass();
 	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,(cChart::CHART_WIDTH_LETTERBOX-150)/3, $aHeaders);

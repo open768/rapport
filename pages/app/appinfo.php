@@ -48,11 +48,11 @@ else{
 			$aMetrics=[];
 			
 			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oInfoPoint->name, cChart::WIDTH=>180];
-			$sMetricUrl = cAppdynMetric::infoPointCallsPerMin($oInfoPoint->name);
+			$sMetricUrl = cADMetric::infoPointCallsPerMin($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>$sMetricUrl];
-			$sMetricUrl = cAppdynMetric::infoPointResponseTimes($oInfoPoint->name);
+			$sMetricUrl = cADMetric::infoPointResponseTimes($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>$sMetricUrl];
-			$sMetricUrl = cAppdynMetric::infoPointErrorsPerMin($oInfoPoint->name);
+			$sMetricUrl = cADMetric::infoPointErrorsPerMin($oInfoPoint->name);
 			$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>$sMetricUrl];
 			cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 

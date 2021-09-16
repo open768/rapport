@@ -23,6 +23,7 @@ $.widget( "ck.appdmenu",{
 		//set basic stuff
 		oThis = this;
 		oElement = oThis.element;
+		oElement.empty();
 		oElement.uniqueId();
 		oElement.css({position:"relative"});
 		
@@ -50,8 +51,8 @@ $.widget( "ck.appdmenu",{
 			case "appagents":
 				this.pr__showAppAgentsMenu();
 				break;
-			case "tiermenu":
-				this.pr__showTierMenu();
+			case "tierchangemenu":
+				this.pr__showChangeTierMenu();
 				break;
 			case "tiernodesmenu":
 				this.pr__showTierNodesMenu();
@@ -241,7 +242,7 @@ $.widget( "ck.appdmenu",{
 	},
 	
 	//****************************************************************
-	pr__showTierMenu: function(){
+	pr__showChangeTierMenu: function(){
 		var oOptions, oElement;
 		oOptions = this.options;
 		oElement = this.element;
@@ -306,13 +307,13 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS(sAppPrefixUrl+"/tiers.php"));
 						
 			//--------------------------------------------------------------------
+			this.pr__addToGroup(oSelect, "Backends", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierbackends.php"));
 			this.pr__addToGroup(oSelect, "Errors", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tiererrors.php"));
 			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextgraph.php"));
 			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextcalls.php"));
 			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierinfrstats.php"));
 			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS(sSrvPrefixUrl+"/services.php"));
 			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl+"/apptrans.php"));
-
 		//add and make the menu a selectmenu
 		var oThis = this;		
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);

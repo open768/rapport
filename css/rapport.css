@@ -8,9 +8,10 @@ body
 }
 /* On screens that are 992px wide or less, the background color is blue */
 
-h2
+.card_title
 {
 	color:#2D95BF;
+    font-size:24px;
 }
 
 /*************************************************************
@@ -46,9 +47,6 @@ div.ui-selectmenu-open {
         font-size:40px
     }
 }
-
-
-
 
 /*************************************************************
 *************************************************************/
@@ -239,6 +237,15 @@ div.ui-selectmenu-open {
 	font-size: 15px;
 }
 
+.note
+{
+	outline: 2px solid #FFE042;
+	outline-offset: 0px;
+	width: 100pct;
+	background:#ffffff;
+	margin: 10px 0px 10px 0px;
+}
+
 .clipbox{
 	font-family: Courier;
 	font-size: 15px;
@@ -293,6 +300,14 @@ div.ui-selectmenu-open {
 
 .pgrn-navigation.mdl-navigation .mdl-navigation__link {
     padding: 5px;
+}
+
+.rapport-card.mdl-card {
+  width: 1150px;
+}
+
+.page-title.mdl-card {
+  height: 100px;
 }
 
 /*************************************************************

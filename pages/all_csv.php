@@ -32,7 +32,7 @@ cDebug::write("Generating CSV - please wait");
 $oMerged = new cMergedMetrics();
 for ($i = 1; $i<=$iCount; $i++){
 	$sApp = cHeader::get(cRender::CHART_APP_FIELD."_$i");
-	$oApp = new cAppDApp($sApp,$sApp);
+	$oApp = new cADApp($sApp,$sApp);
 	$sMetric = cHeader::get(cRender::CHART_METRIC_FIELD."_$i");
 	$sTitle  = cHeader::get(cRender::CHART_TITLE_FIELD."_$i");
 	

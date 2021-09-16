@@ -31,7 +31,7 @@ $psHeirarchy = cHeader::get(cRender::METRIC_HEIRARCHY_QS);
 //*************************************************************************
 cDebug::write("getting metric - $psMetric");
 if ($psHeirarchy)
-	$oResult = cAppdynCore::GET_Metric_heirarchy($oApp->name, $psMetric, false);
+	$oResult = $oApp->GET_Metric_heirarchy($psMetric, false);
 else
 	$oResult = cMetricGetter::get_metric($oApp, $psMetric, ($psPrevious != null));
 cDebug::write("got metric - $psMetric");
@@ -58,7 +58,7 @@ if (!$psCSV){ //got something
 $sFilename = str_replace("/","_",$psMetric);
 cHeader::set_download_filename("$sFilename.csv");
 
-cCommon::do_echo("controller,". cAppdynCore::GET_controller());
+cCommon::do_echo("controller,". cADCore::GET_controller());
 cCommon::do_echo("Application,$oApp->name");
 cCommon::do_echo("Date now,".date(DateTime::W3C,time()));
 cCommon::do_echo("metric,$psMetric");

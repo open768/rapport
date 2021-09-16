@@ -19,26 +19,31 @@ require_once "$root/inc/charts.php";
 
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
-	case cAppDynMetric::METRIC_TYPE_RUMCALLS:
-	case cAppDynMetric::METRIC_TYPE_RUMRESPONSE:
+	case cADMetric::METRIC_TYPE_RUMCALLS:
+	case cADMetric::METRIC_TYPE_RUMRESPONSE:
+		$sOtherTitle = "Application Activity";
+		$sOtherUrl = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_ACTIVITY);
+
 		$sTitle1 = "Web Browser Page Requests";
-		$sMetric1 = cAppDynWebRumMetric::CallsPerMin();
+		$sMetric1 = cADWebRumMetric::CallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
-		$sMetric2 = cAppDynWebRumMetric::ResponseTimes();
+		$sMetric2 = cADWebRumMetric::ResponseTimes();
 		$sTitle3 = "Pages With Javascript Errors";
-		$sMetric3 = cAppDynWebRumMetric::JavaScriptErrors();
+		$sMetric3 = cADWebRumMetric::JavaScriptErrors();
 		
 		$sBaseUrl = "$home/pages/rum/apprum.php";
 		break;
-	case cAppDynMetric::METRIC_TYPE_RESPONSE_TIMES:
-	case cAppDynMetric::METRIC_TYPE_ACTIVITY:
+	case cADMetric::METRIC_TYPE_RESPONSE_TIMES:
+	case cADMetric::METRIC_TYPE_ACTIVITY:
 	default:
+		$sOtherTitle = "Web Browser Activity";
+		$sOtherUrl = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_RUMCALLS);
 		$sTitle1 = "Application Activity";
-		$sMetric1 = cAppDynMetric::appCallsPerMin();
+		$sMetric1 = cADMetric::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
-		$sMetric2 = cAppDynMetric::appResponseTimes();
+		$sMetric2 = cADMetric::appResponseTimes();
 		$sTitle3 = "Application Errors";
-		$sMetric3 = cAppDynMetric::appErrorsPerMin();
+		$sMetric3 = cADMetric::appErrorsPerMin();
 		$sBaseUrl = "$home/pages/app/tiers.php";
 		break;
 }
@@ -50,12 +55,60 @@ cChart::do_header();
 cChart::$hideGroupIfNoData = true;
 
 //####################################################################
-
-cRender::appdButton(cAppDynControllerUI::apps_home());
+cRenderCards::card_start();
+	cRenderCards::body_start();
+		?><form action="#">
+			<div class="mdl-textfield mdl-js-textfield">
+				<input class="mdl-textfield__input" type="text" id="filter">
+				<label class="mdl-textfield__label" for="sample1">Filter...</label>
+			</div>
+		</form>
+		<script language="javascript">
+			
+			function onKeyUp( poEvent){
+				//look through divs with selectmenu
+				var aSelect = $("div[type=appdmenus]");
+				var sInput = $("#filter").val().toLowerCase();
+				
+				//iterate
+				aSelect.each(
+					function(index){
+						//check if the select menu matches
+						var oCard=$(this).parent(".mdl-card");
+						if (sInput == ""){
+							oCard.show();
+						}else{
+							var sApp = $(this).attr("appname").toLowerCase();
+							if ( sApp.indexOf(sInput) == -1)
+								oCard.hide();
+							else
+								oCard.show();
+						}
+					}
+				);
+			}
+			
+			$( 			
+				function setFilterKeyUp(){
+					$(
+						function(){
+							$("#filter" ).keyup(onKeyUp);
+						}
+					);
+				}
+			);
+		</script>
+	<?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRender::appdButton(cADControllerUI::apps_home());
+		cRender::button($sOtherTitle,$sOtherUrl);
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
 //this should be done asynchronously
-$aResponse = cAppDynController::GET_Applications();
+$aResponse = cADController::GET_Applications();
 if ( count($aResponse) == 0)
 	cRender::messagebox("Nothing found");
 else{
@@ -69,15 +122,21 @@ else{
 			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],
 			[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
 		];
-		cRenderMenus::show_app_functions($oApp);
 		
-		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cRenderCards::card_start();
+			cRenderCards::body_start();
+				cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+			cRenderCards::body_end();
+			cRenderCards::action_start();
+				cRenderMenus::show_app_functions($oApp);
+			cRenderCards::action_end();
+		cRenderCards::card_end();
 		cDebug::flush();
+		
 		if (cDebug::is_extra_debugging()) {
 			cDebug::vardump($oApp);	
 			break;	//DEBUG
 		}
-		?><br><?php
 		cCommon::flushprint("");
 	}
 }

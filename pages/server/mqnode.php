@@ -17,19 +17,19 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
+$sNode = cHeader::get(cRender::NODE_QS);
 
 //####################################################################
-cRenderHtml::header("pick a Queue Manager");
+cRenderHtml::header("pick a Queue Manager on Node $sNode");
 cRender::force_login(); 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
-$sNode = cHeader::get(cRender::NODE_QS);
 if (!$sNode){
 	cRender::errorbox("no Node specified");
 	cRenderHtml::footer();
@@ -37,53 +37,62 @@ if (!$sNode){
 }
 
 //####################################################################
-cRender::show_top_banner( "MQ Queue Managers for $sNode"); 		
+$sMetricPath= cADMetric::serverMQManagers($sNode);  
+$aData = (cADApp::$server_app)->GET_Metric_heirarchy($sMetricPath, true);
+$iCount = count($aData);
 
 //####################################################################
-?>
-<div id="page_content">
-	<?php
+cRenderCards::card_start(($iCount==0?"Queue Managers":"Pick a Queue Manager"));
+	cRenderCards::body_start();
+		if ($iCount == 0)
+			cRender::errorbox("sorry - no Queue Managers found");
+		else
+			echo "All these Queue managers have Queues";
+	cRenderCards::body_end();
+	cRenderCards::action_start();
 		cRender::button("Back to nodes", "mq.php");	
 		$sUrl = cHttp::build_url("mqnode.php", cRender::NODE_QS, $sNode);
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", $sUrl);
 		else
 			cRender::button("show as list", $sUrl."&".cRender::LIST_MODE_QS);
-	?>
-	<p>
-	<h2>Pick a Queue Manager for node: <?=$sNode?></h2>
-	<?php
-		// get the list of all queue managers for the node
-		$sMetricPath= cAppDynMetric::serverMQManagers($sNode);  
-		$aData = cAppdynCore::GET_Metric_heirarchy(cAppDynCore::SERVER_APPLICATION, $sMetricPath, true);
-		$iCount = count($aData);
-		if ($iCount == 0){
-			cRender::errorbox("sorry - no QueueManagers found");
-			cRenderHtml::footer();
-			exit;
-		}
-		//echo "found $iCount nodes<p>";
-		uasort($aData,"sort_by_app_name" );
+	cRenderCards::action_end();
+cRenderCards::card_end();
+		
+//echo "found $iCount nodes<p>";
+if ($iCount > 0){
+	uasort($aData,"sort_by_app_name" );
+	if (cRender::is_list_mode()){
+		cRenderCards::card_start();
+			cRenderCards::body_start();
+			foreach ($aData as $oItem)
+				if ($oItem->type === "folder")
+					echo "$oItem->name<br>";
+			cRenderCards::body_end();
+		cRenderCards::card_end();
+	}else{
 		$sPrevious = "";
-		$iColumn=0;
 		foreach ($aData as $oItem){
-			if ($oItem->type === "folder")
-				if (cRender::is_list_mode())
-					echo "$oItem->name<br>";	
-				else{
-					$sChar = strtolower(($oItem->name)[0]);
-					if ($sChar !== $sPrevious){
-						$sPrevious = $sChar;
-						echo "<h2>$sChar</h2>";
+			if ($oItem->type === "folder"){
+				$sChar = strtolower(($oItem->name)[0]);
+				if ($sChar !== $sPrevious){
+					if ($sPrevious !== "") {
+						cRenderCards::body_end();
+						cRenderCards::card_end();
 					}
-					$sUrl=cHttp::build_url("mqqueues.php", cRender::NODE_QS, $sNode);
-					$sUrl=cHttp::build_qs($sUrl, cRender::SERVER_MQ_MANAGER_QS, $oItem->name);
-					cRender::button($oItem->name, $sUrl);	
+					cRenderCards::card_start($sChar);
+					cRenderCards::body_start();
 				}
+				$sUrl=cHttp::build_url("mqqueues.php", cRender::NODE_QS, $sNode);
+				$sUrl=cHttp::build_qs($sUrl, cRender::SERVER_MQ_MANAGER_QS, $oItem->name);
+				cRender::button($oItem->name, $sUrl);	
+				$sPrevious = $sChar;
+			}
 		}
-	?>
-</div>
-<?php
+		cRenderCards::body_end();
+		cRenderCards::card_end();
+	}
+}
 
 //####################################################################
 cRenderHtml::footer();

@@ -66,7 +66,7 @@ if (!$gsMetricType ){
 	cRender::errorbox("no metric type");
 	exit;
 }
-$oMetric = cAppDynInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricType);
+$oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricType);
 $sTitle  = $oMetric->caption;
 
 //####################################################################
@@ -80,11 +80,11 @@ cRenderMenus::show_app_agent_menu();
 
 cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url("appagentdetail.php",cRender::METRIC_TYPE_QS,$gsMetricType));
 
-cRender::appdButton(cAppDynControllerUI::nodes($oApp), "All nodes");
+cRender::appdButton(cADControllerUI::nodes($oApp), "All nodes");
 //####################################################################
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -127,7 +127,7 @@ if ($iNodes==0){
 				foreach ($aTierNodes as $oNode){
 					$sNode = $oNode->name;
 
-					$oMetric = cAppDynInfraMetric::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
+					$oMetric = cADInfraMetric::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
 					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRender::NODE_QS,$sNode);
 					
 					$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];

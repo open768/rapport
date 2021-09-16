@@ -27,10 +27,10 @@ cChart::do_header();
 $title ="All Remote Services";
 
 //####################################################################
-$oApps = cAppDynController::GET_Applications();
+$oApps = cADController::GET_Applications();
 cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 	//********************************************************************
-	if (cAppdyn::is_demo()){
+	if (cAD::is_demo()){
 		cRender::errorbox("function not support ed for Demo");
 		cRenderHtml::footer();
 		exit;
@@ -60,7 +60,7 @@ foreach ($oApps as $oApp){
 			$aBackends = $oApp->GET_Backends();
 			$aMetrics = [];
 			foreach ($aBackends as $oItem){
-				$sMetric = cAppDynMetric::backendResponseTimes($oItem->name);
+				$sMetric = cADMetric::backendResponseTimes($oItem->name);
 				$aMetrics[] = [
 					cChart::LABEL=>"Backend Response Times: $oItem->name", 
 					cChart::METRIC=>$sMetric, 

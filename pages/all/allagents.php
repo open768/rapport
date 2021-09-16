@@ -16,16 +16,10 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-
 cRenderHtml::header("All agents");
 cRender::force_login();
 
-
-//####################################################################
-cRender::show_top_banner("All Agents"); 
-
-$moApps = cAppDynController::GET_Applications();
-
+//********************************************************************************
 class cAgentTotals {
 	public $total=0;
 	public $machine=0;
@@ -38,100 +32,92 @@ class cAgentTotals {
 	}
 }
 
-function get_app_node_data($poApp){
-	$aTierData = [];
-	
-	cDebug::write($poApp->name . ":" . $poApp->id);
-	$aResponse = $poApp->GET_Nodes();
-	foreach ($aResponse as $aNodes)
-		foreach ($aNodes as $oNode){
-			$sTier = $oNode ->tierName;
-			
-			if (!isset($aTierData[$sTier]))	$aTierData[$sTier] = new cAgentTotals();
-			$aTierData[$sTier]->total ++;
-			if ($oNode->machineAgentPresent) $aTierData[$sTier]->machine ++;
-			if ($oNode->appAgentPresent) $aTierData[$sTier]->appserver++;
-		}
-	cDebug::vardump($aTierData);
-	return $aTierData;
-}
 
-?>
-<h2>All Agents</h2>
-<?php
+//********************************************************************************
 const BLANK_WIDTH=200;
 const TIERCOL_WIDTH=300;
 const TOTALCOL_WIDTH=150;
 
-if (cAppdyn::is_demo()){
+$moApps = cADController::GET_Applications();
+if (cAD::is_demo()){
 	cRender::errorbox("function not support ed for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
+//#############################################################
+cRenderCards::card_start();
+	cRenderCards::action_start();
+		cRender::appdButton(cADControllerUI::agents());
+		cRender::button("Show All Agent Versions", "allagentversions.php");	
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
 //####################################################################
-?>
-<table class="maintable">
-	<?php
-	$oGrandTotal = new cAgentTotals();
+$oGrandTotal = new cAgentTotals();
+
+foreach ($moApps as $oApp){
+	$aNodes = $oApp->GET_nodes();
+	$aAppData = cADUtil::analyse_app_nodes($aNodes);
+	$oAppTotals = new cAgentTotals();
 	
-	foreach ($moApps as $oApp){
-		$aAppData = get_app_node_data($oApp);
-		$oAppTotals = new cAgentTotals();
-				
+	cRenderCards::card_start($oApp->name);
+	cRenderCards::body_start();
 		if (count($aAppData) == 0) continue;
 		
 		$sClass = cRender::getRowClass();
-		?><tr class="<?=$sClass?>"><td colspan="5" align="left">
+		?>
+		<table>
+			<tr class="tableheader">
+				<th width="<?=TIERCOL_WIDTH?>">Tier</th>
+				<th width="<?=TOTALCOL_WIDTH?>">Machine agents</th>
+				<th width="<?=TOTALCOL_WIDTH?>">App server agents</th>
+			</tr>
 			<?php
-				cRenderMenus::show_app_functions($oApp);
-				cRenderMenus::show_app_agent_menu($oApp);
-			?>
-		</tr>
-		<tr class="tableheader">
-			<th width="<?=BLANK_WIDTH?>"></th>
-			<th width="<?=TIERCOL_WIDTH?>">Tier</th>
-			<th width="<?=TOTALCOL_WIDTH?>">total</th>
-			<th width="<?=TOTALCOL_WIDTH?>">Machine agents</th>
-			<th width="<?=TOTALCOL_WIDTH?>">App server agents</th>
-		</tr>
-		<?php
 			foreach ($aAppData as $sTier=>$oTierCounts){
 				$oAppTotals->add($oTierCounts);
 				$oGrandTotal->add($oTierCounts);
 				?><tr class="<?=$sClass?>">
-					<th width="<?=BLANK_WIDTH?>"></th>
 					<td width="<?=TIERCOL_WIDTH?>"><?=$sTier?></td>
-					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><?=$oTierCounts->total?></td>
 					<td width="<?=TOTALCOL_WIDTH?>" align="middle"><?=$oTierCounts->machine?></td>
 					<?php
 						if ($oTierCounts->machine != $oTierCounts->appserver){
-							?><td width="<?=TOTALCOL_WIDTH?>"align="middle"><font color="red"><b><?=$oTierCounts->appserver?></b></font></td><?php
+							?><td width="<?=TOTALCOL_WIDTH?>"align="middle">
+								<font color="red"><b><?=$oTierCounts->appserver?></b></font>
+							</td><?php
 						}else{
-							?><td width="<?=TOTALCOL_WIDTH?>"align="middle"><?=$oTierCounts->appserver?></td><?php
+							?><td width="<?=TOTALCOL_WIDTH?>"align="middle">
+								<?=$oTierCounts->appserver?>
+							</td><?php
 						}
 					?>
 				</tr><?php
-			}
+			} //foreach
 			?><tr class="<?=$sClass?>">
-				<td width="<?=BLANK_WIDTH?>"></td>
 				<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Total for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></b></td>
-				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->total?></font></b></td>
 				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->machine?></font></b></td>
 				<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue"><?=$oAppTotals->appserver?></font></b></td>
 			</tr>
 			<tr class="<?=$sClass?>" align="left"><td colspan="5">&nbsp;</td></tr>
+		</table>
 		<?php
-	}
-	?><tr>
-		<td></td>
-		<td width="<?=TIERCOL_WIDTH?>" align="right"><b>Grand Totals</b></td>
-		<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->total?></font></b></td>
-		<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->machine?></font></b></td>
-		<td width="<?=TOTALCOL_WIDTH?>" align="middle"><b><font color="blue" size="+1"><?=$oGrandTotal->appserver?></font></b></td>
-	</tr>
-</table><?php
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_app_functions($oApp);
+			cRenderMenus::show_app_agent_menu($oApp);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}
 
-cRender::button("Show All Agent Versions", "allagentversions.php");	
+//#############################################################
+cRenderCards::card_start("Grand Totals");
+	cRenderCards::body_start();
+	?>
+		Machine Agent: <?=$oGrandTotal->total?><br>
+		App Agent: <?=$oGrandTotal->appserver?>
+	<?php
+	cRenderCards::body_end();
+cRenderCards::card_end();
+
 cRenderHtml::footer();
 ?>

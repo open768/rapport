@@ -32,7 +32,7 @@ $oTimes = cRender::get_times();
 
 
 //********************************************************************
-if (cAppdyn::is_demo()){
+if (cAD::is_demo()){
 	cRender::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
@@ -43,7 +43,7 @@ if (cAppdyn::is_demo()){
 <script src="<?=$home?>/js/widgets/synthetics.js"></script>
 <div id="container">
 <?php
-	$aResponse = cAppDynController::GET_Applications();
+	$aResponse = cADController::GET_Applications();
 	if ( count($aResponse) == 0)
 		cRender::messagebox("Nothing found");
 	else{

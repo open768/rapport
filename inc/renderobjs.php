@@ -14,8 +14,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
-require_once("$appdlib/appdynamics.php");
-require_once("$appdlib/core.php");
+require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/core.php");
 
 
 //#######################################################################
@@ -31,7 +31,7 @@ class cRenderObjs{
 		$oCred = self::$oAppDCredentials;
 		if (!$oCred){
 			cDebug::extra_debug("got credentials");
-			$oCred = new cAppDynCredentials;
+			$oCred = new cADCredentials;
 			$oCred->check();
 			self::$oAppDCredentials = $oCred;
 		}
@@ -41,15 +41,15 @@ class cRenderObjs{
 	
 	//***************************************************************************
 	public static function make_app_obj($psApp, $psAID){
-		return new cAppDApp($psApp, $psAID);		
+		return new cADApp($psApp, $psAID);		
 	}
 	
 	public static function make_tier_obj($poApp, $psTier, $psTID){
-		return new cAppDTier($poApp, $psTier, $psTID);
+		return new cADTier($poApp, $psTier, $psTID);
 	}
 	
 	public static function make_trans_obj($poTier, $psTrans, $psTrID){
-		return new cAppDTrans($poTier, $psTrans, $psTrID);
+		return new cADTrans($poTier, $psTrans, $psTrID);
 	}
 	
 	//***************************************************************************
