@@ -36,6 +36,9 @@ $oTimes = cRender::get_times();
 $oCred = cRenderObjs::get_appd_credentials();
 if ($oCred->restricted_login == null){
 	cRenderCards::card_start();
+	cRenderCards::body_start();
+		cRender::add_filter_box("span[type=tiername]","tiername",".mdl-card");
+	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cRenderMenus::show_app_functions($oApp);
 	cRenderCards::action_end();
@@ -52,94 +55,28 @@ $gsTABLE_ID = 0;
 function render_tier_errors($poTier){
 	global $oApp, $oTimes, $home, $gsTABLE_ID;
 	
-	?><hr><?php
-	$sMetricpath = cADMetric::Errors($poTier->name, "*");
-	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
-			
-	$iRows = 0;
-	foreach ($aData as $oItem){
-			if ($oItem == null ) continue;
-			if ($oItem->metricValues == null ) continue;
-		
-			$oValues = $oItem->metricValues[0];
-			if ($oValues->count == 0 ) continue;
-		
-		$iRows++;
-	}
-	
-	if ($iRows == 0){
-		cRenderCards::card_start($poTier->name);
-		cRenderCards::body_start();
-			cRender::messagebox("Nothing found");
-		cRenderCards::body_end();
-		cRenderCards::action_start();
-			cRenderMenus::show_tier_functions($poTier);
-			cRender::appdButton(cADControllerUI::tier_errors($oApp, $poTier));
-		cRenderCards::action_end();
-		cRenderCards::card_end();		
-		return;
-	}
-	
-	//----------ok go ahead and render---------------------------
-	uasort ($aData, "sort_metric_names");
-
-
 	$tierQS = cRenderQS::get_base_tier_QS( $poTier);
+	$sGraphUrl = cHttp::build_url("../tier/tiererrorgraphs.php", $tierQS);
 	
-	cRenderCards::card_start($poTier->name);
+	cRenderCards::card_start("<span type=\"tiername\" tiername=\"$poTier->name\">$poTier->name</span>");
 	cRenderCards::body_start();
-		?><table class="maintable" id="TBL<?=$gsTABLE_ID?>" width="1024">
-			<thead><tr class="tableheader">
-				<th width="*">Name</th>
-				<th width="50">Count</th>
-				<th width="50">Average</th>
-			</tr></thead>
-			<tbody><?php
-				$sClass= cRender::getRowClass();
-				$iRows = 0;
-					
-				foreach ($aData as $oItem){
-					if ($oItem == null ) continue;
-					if ($oItem->metricValues == null ) continue;
-					
-					$oValues = $oItem->metricValues[0];
-					if ($oValues->count == 0 ) continue;
-					
-					$sName = cADUtil::extract_error_name($poTier->name, $oItem->metricPath);
-					
-					$iRows++;
-
-					?><tr class="<?=$sClass?>">
-						<td align="left"><?=$sName?></td>
-						<td align="middle"><?=$oValues->count?></td>
-						<td align="middle"><?=$oValues->value?></td>
-					</tr><?php
-				}
-				
-			?></tbody>
-		</table>
-		
-			
-		<script language="javascript">
-			$( function(){ $("#TBL<?=$gsTABLE_ID?>").tablesorter();} );
-		</script><?php
+		?><div type="tiererrors" home="<?=$home?>" 
+				<?=cRender::TIER_QS?>="<?=$poTier->name?>"
+				<?=cRender::APP_ID_QS?>="<?=$oApp->id?>">
+					Loading Errors for: <?=$poTier->name?>
+		</div><?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cRenderMenus::show_tier_functions($poTier);
-		$sGraphUrl = cHttp::build_url("../tier/tiererrorgraphs.php", $tierQS);
+		cADCommon::button(cADControllerUI::tier_errors($oApp, $poTier));
 		cRender::button("Show Error Graphs", $sGraphUrl);	
-		cRender::appdButton(cADControllerUI::tier_errors($oApp, $poTier));
 	cRenderCards::action_end();
-	cRenderCards::card_end();
-
-	if ($iRows == 0) cRender::messagebox("Nothing found for: $poTier->name");
-	$gsTABLE_ID++;
-	cDebug::flush();
+	cRenderCards::card_end();		
 }
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -150,10 +87,18 @@ if (cAD::is_demo()){
 //get the page metrics
 $aResponse =$oApp->GET_Tiers();
 if ( count($aResponse) == 0)
-	cRender::messagebox("Nothing found");
+	cCommon::messagebox("Nothing found");
 else
 	foreach ( $aResponse as $oTier)
 		render_tier_errors($oTier);
+?>
+<script language="javascript">
+	function init_widget(piIndex, poElement){
+		$(poElement).adtiererrors();
+	}
+	$("div[type=tiererrors]").each( init_widget);
+</script>
 
+<?php
 cRenderHtml::footer();
 ?>

@@ -1,6 +1,6 @@
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.appdmenu",{
+$.widget( "ck.admenu",{
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -114,7 +114,7 @@ $.widget( "ck.appdmenu",{
 				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
 				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl(sAppPrefixUrl+"/appavail.php", oParams));
 				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl(sAppPrefixUrl+"/apperrors.php", oParams));
-				this.pr__addToGroup(oGroup, "Events", cBrowser.buildUrl(sAppPrefixUrl+"/events.php", oParams));
+				this.pr__addToGroup(oGroup, "Events and Health", cBrowser.buildUrl(sAppPrefixUrl+"/events.php", oParams));
 				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl(sAppPrefixUrl+"/appext.php", oParams));
 				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl(sAppPrefixUrl+"/appinfra.php", oParams));
 				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl(sAppPrefixUrl+"/appinfo.php", oParams));

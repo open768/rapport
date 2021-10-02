@@ -52,7 +52,7 @@ else
 <?php
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

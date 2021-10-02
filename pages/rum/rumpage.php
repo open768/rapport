@@ -35,11 +35,11 @@ cChart::do_header();
 
 cRenderMenus::show_app_functions($oApp);
 cRender::button("Back to page requests", "rumstats.php?$gsAppQS");
-cRender::appdButton(cADControllerUI::webrum_detail($oApp, $rum_page_id));
+cADCommon::button(cADControllerUI::webrum_detail($oApp, $rum_page_id));
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

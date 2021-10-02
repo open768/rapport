@@ -24,7 +24,6 @@ require_once("$root/inc/link.php");
 cRenderHtml::header("AuthToken");
 cRender::force_login();
 
-cRender::show_top_banner("AuthToken"); 
 $sToken = cADCredentials::get_login_token();
 $sURL = cHeader::get_server().dirname($_SERVER["SCRIPT_NAME"])."/$home/index.php";
 $sURL = cHttp::build_URL($sURL,cRender::LOGIN_TOKEN_QS, $sToken);

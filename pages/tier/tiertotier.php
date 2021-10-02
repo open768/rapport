@@ -45,7 +45,7 @@ cRender::button("back to ($oTier->name) external tiers", cHttp::build_url("tiere
 <?php
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

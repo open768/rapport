@@ -17,7 +17,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
-
 require_once("$root/inc/filter.php");
 
 const HOWMANY=10;
@@ -42,7 +41,7 @@ $oTimes = cRender::get_times();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -63,23 +62,27 @@ function analyse_snapshot($poSnapshot){
 }
 
 //#####################################################################
-cRenderMenus::show_tier_functions();
-cRender::appdButton(cADControllerUI::transaction($oApp,$trid));
-cRender::button("back to Transaction details", "transdetails.php?$sTransQS");
-cDebug::flush();
+cRenderCards::card_start($trans);
+cRenderCards::body_start();
+	?>
+		Top <?=HOWMANY?> slowest Transaction Snapshots
+	<?php
+cRenderCards::body_end();
+cRenderCards::action_start();
+	cRenderMenus::show_tier_functions();
+	cADCommon::button(cADControllerUI::transaction($oApp,$trid));
+	cRender::button("back to Transaction details", "transdetails.php?$sTransQS");
+cRenderCards::action_end();
+cRenderCards::card_end();
 
-$oTable = new c2DArray;
+	$oTable = new c2DArray;
 
 
 //#####################################################################
-?>
-<h1><?=cRender::show_name(cRender::NAME_TRANS,$trans)?></h1>
-<h2><a name="5">Top <?=HOWMANY?> slowest Transaction Snapshots</a></h2>
-<?php
 $bProceed = true;
 $aSnapshots = $oApp->GET_snaphot_info($trid, $oTimes);
 if (count($aSnapshots) == 0){
-	?><div class="maintable">No Snapshots found</div><?php
+	cRender::messagebox("No Snapshots found");
 	$bProceed = false;
 }
 
@@ -92,8 +95,10 @@ if ($bProceed){
 		if (count($aTopTen) >=HOWMANY) break;				
 		$aTopTen[] = $oSnapshot;
 	}
+	cRenderCards::card_start($trans);
+	cRenderCards::body_start();
 	?>
-	<table class="maintable" id="trans" class="<?=cRender::getRowClass()?>">
+	<table class="maintable" id="trans" border="1" cellspacing="0">
 		<thead><tr class="tableheader">
 			<th width="140">start time</th>
 			<th width="10"></th>
@@ -127,7 +132,7 @@ if ($bProceed){
 						<a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=$sOriginalUrl?></a>
 					</div></td>
 					<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
-					<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
+					<td><?=cADCommon::button($sAppdUrl, "Go")?></td>
 				</tr>
 			<?php }
 		?></tbody>
@@ -143,12 +148,16 @@ if ($bProceed){
 
 	</script>
 	<?php
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 }
 
 //#####################################################################
+//TODO make this asynchronous
 if ($bProceed){
+	cRenderCards::card_start("Analysis of Transactions External Calls");
+	cRenderCards::body_start();
 	?>
-	<h2>Analysis of Transactions External Calls</h2>
 	<div ID="progress"><?php
 		$i=0;
 		foreach ($aTopTen as $oSnapshot){
@@ -162,9 +171,9 @@ if ($bProceed){
 		}
 		echo "Analysis Complete";
 	?></div>
-	<script language="javascript">$(function(){ $("#progress").hide()});</script>
+	<script language="javascript">$(function(){ $("#progress").empty()});</script>
 	
-	<table border="1" cellpadding="2" cellspacing="0" class="<?=cRender::getRowClass()?>">
+	<table border="1" cellpadding="2" cellspacing="0">
 		<thead><tr>
 			<td>url</td>
 			<td>start time</td>
@@ -202,6 +211,8 @@ if ($bProceed){
 			?></tr><?php
 		}
 	?></table><?php
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 		
 }
 

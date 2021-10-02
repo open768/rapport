@@ -41,7 +41,6 @@ switch($sMetricType){
 cRenderHtml::header("About");
 
 //####################################################################
-cRender::show_top_banner( "About"); 
 ?>
 		<h2>About the Rapport - an Interactive Reporter for Appdynamics&trade;</h2>
 

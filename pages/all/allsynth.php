@@ -33,7 +33,7 @@ $oTimes = cRender::get_times();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not supported for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -45,7 +45,7 @@ if (cAD::is_demo()){
 <?php
 	$aResponse = cADController::GET_Applications();
 	if ( count($aResponse) == 0)
-		cRender::messagebox("Nothing found");
+		cCommon::messagebox("Nothing found");
 	else{
 		foreach ( $aResponse as $oApp){		?>
 			<div app="<?=$oApp->name?>" aid="<?=$oApp->id?>">Loading synthetic data for ...<?=$oApp->name?></div>
@@ -58,7 +58,7 @@ $( function(){
 	$("#container > div").each( 
 		function (){
 			var oElement = $(this);
-			oElement.appdsynlist( {
+			oElement.adsynlist( {
 				home:"<?=$home?>",
 				app:oElement.attr("app"),
 				app_id:oElement.attr("aid")

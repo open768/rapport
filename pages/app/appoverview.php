@@ -34,7 +34,7 @@ $title ="$oApp->name&gt;Overview";
 
 //####################################################################
 cRenderMenus::show_apps_menu("Show Overview for:","appoverview.php");
-cRender::appdButton(cADControllerUI::application($oApp));
+cADCommon::button(cADControllerUI::application($oApp));
 
 //####################################################################
 ?>
@@ -110,7 +110,7 @@ cDebug::flush();
 <?php
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("Transactions not support ed for Demo");
+	cCommon::errorbox("Transactions not supported for Demo");
 	cChart::do_footer();
 	cRenderHtml::footer();
 	exit;
@@ -125,7 +125,7 @@ foreach ($aTiers as $oTier){
 	?><h3><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3><?php
 	$aTransactions = $oTier->GET_transaction_names();
 	if ($aTransactions==null) {
-		cRender::errorbox("unable to get transaction names");
+		cCommon::errorbox("unable to get transaction names");
 		continue;
 	}
 		

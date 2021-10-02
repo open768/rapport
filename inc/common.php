@@ -11,7 +11,7 @@ require_once("$phpinc/ckinc/header.php");
 	
 
 //####################################################################
-require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/AD.php");
 require_once("$ADlib/common.php");
 require_once("$ADlib/account.php");
 require_once("$ADlib/metrics.php");

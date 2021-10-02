@@ -20,10 +20,10 @@ var cMenus={
 	//*********************************************************
 	renderMenus: function(){	
 		
-		$("[type='appdmenus']").each( 
+		$("[type='admenus']").each( 
 			function(pIndex, pElement){
 				var oElement = $(pElement);
-				oElement.appdmenu(); //see widgets
+				oElement.admenu(); //see widgets
 			}
 		);
 	}
@@ -68,6 +68,7 @@ var cTopMenu={
 		var sUtilPrefixUrl = sHome+"/pages/util";
 		var sRumPrefixUrl = sHome+"/pages/rum";
 		var sSrvPrefixUrl = sHome+"/pages/server";
+		var sAnalyticsPrefixUrl = sHome+"/pages/analytics";
 		
 		
 		//add the sections
@@ -101,6 +102,7 @@ var cTopMenu={
 		oContentDiv = this.pr__add_expansion(poDiv, "All");
 			oParams = {};
 			oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
+			this.pr__add_to_expansion(oContentDiv, "Analytics", sAnalyticsPrefixUrl+"/analytics.php");
 			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Databases", sHome +"/pages/db/alldb.php");

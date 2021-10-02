@@ -41,14 +41,14 @@ $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
 //********************************************************************
 $oCred = cRenderObjs::get_appd_credentials();
-cRender::appdButton(cADControllerUI::transaction($oApp,$trid));
+cADCommon::button(cADControllerUI::transaction($oApp,$trid));
 cDebug::flush();
 
 // ################################################################################

@@ -36,15 +36,15 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
 $oCred = cRenderObjs::get_appd_credentials();
 cRenderMenus::show_tier_functions();
-//cRender::appdButton(cADControllerUI::transaction($oApp,$oTrans->id));
-cRender::appdButton(cADControllerUI::serviceEndPoint($oTier,$sServiceID));
+//cADCommon::button(cADControllerUI::transaction($oApp,$oTrans->id));
+cADCommon::button(cADControllerUI::serviceEndPoint($oTier,$sServiceID));
 cDebug::flush();
 
 ?>
@@ -101,7 +101,7 @@ if (count($aSnapshots) == 0){
 						<td><?=cADUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
 						<td><a href="<?=$home?>/pages/trans/snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$sOriginalUrl?></div></a></td>
 						<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
-						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
+						<td><?=cADCommon::button($sAppdUrl, "Go")?></td>
 					</tr>
 				<?php }
 			?></tbody>

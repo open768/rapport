@@ -39,7 +39,7 @@ $title = "$oApp->name&gt;$oTier->name&gt;External Calls";
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -53,7 +53,7 @@ if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
 }
 cRender::button("show as table", "tierextcalls.php?$gsTierQs");
-cRender::appdButton(cADControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
+cADCommon::button(cADControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
 
 //************* basic information about the tier *********************
 ?>

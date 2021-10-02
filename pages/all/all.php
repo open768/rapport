@@ -51,58 +51,23 @@ switch($sMetricType){
 //####################################################################
 cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
-cChart::do_header();
-cChart::$hideGroupIfNoData = true;
 
 //####################################################################
 cRenderCards::card_start();
 	cRenderCards::body_start();
-		?><form action="#">
-			<div class="mdl-textfield mdl-js-textfield">
-				<input class="mdl-textfield__input" type="text" id="filter">
-				<label class="mdl-textfield__label" for="sample1">Filter...</label>
-			</div>
-		</form>
-		<script language="javascript">
-			
-			function onKeyUp( poEvent){
-				//look through divs with selectmenu
-				var aSelect = $("div[type=appdmenus]");
-				var sInput = $("#filter").val().toLowerCase();
-				
-				//iterate
-				aSelect.each(
-					function(index){
-						//check if the select menu matches
-						var oCard=$(this).parent(".mdl-card");
-						if (sInput == ""){
-							oCard.show();
-						}else{
-							var sApp = $(this).attr("appname").toLowerCase();
-							if ( sApp.indexOf(sInput) == -1)
-								oCard.hide();
-							else
-								oCard.show();
-						}
-					}
-				);
-			}
-			
-			$( 			
-				function setFilterKeyUp(){
-					$(
-						function(){
-							$("#filter" ).keyup(onKeyUp);
-						}
-					);
-				}
-			);
-		</script>
-	<?php
+		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRender::appdButton(cADControllerUI::apps_home());
+		cADCommon::button(cADControllerUI::apps_home());
 		cRender::button($sOtherTitle,$sOtherUrl);
+		$sUrl = cHttp::build_url("all.php",cRender::METRIC_TYPE_QS,$sMetricType);
+		if (!cRender::is_list_mode()){
+			$sUrl.= "&".cRender::LIST_MODE_QS;
+			cRender::button("list mode", $sUrl);
+		}else			
+			cRender::button("chart mode", $sUrl);
+
+
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
@@ -110,36 +75,62 @@ cRenderCards::card_end();
 //this should be done asynchronously
 $aResponse = cADController::GET_Applications();
 if ( count($aResponse) == 0)
-	cRender::messagebox("Nothing found");
+	cCommon::messagebox("Nothing found");
 else{
-	cDebug::write( count($aResponse). " applications found");
-	//display the results
-	foreach ( $aResponse as $oApp){
-		if (cFilter::isAppFilteredOut($oApp)) continue;
-		$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
-		$aMetrics = [
-			[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name", ],
-			[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],
-			[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
-		];
-		
+	if (cRender::is_list_mode()){
 		cRenderCards::card_start();
 			cRenderCards::body_start();
-				cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+				$sLastCh = "";
+				echo "There are ".count($aResponse)." applications<p>";
+				echo '<DIV style="column-count:3">';
+					foreach ( $aResponse as $oApp){
+						$sApp = $oApp->name;
+						$sCh = strtoupper($sApp[0]);
+						if ($sCh !== $sLastCh){
+							echo "<h3>$sCh</h3>";
+							$sLastCh = $sCh;
+						}
+						$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
+						echo "<a href=\"$sUrl\">$sApp</a><br>";
+					}
+				echo '</DIV>';
 			cRenderCards::body_end();
-			cRenderCards::action_start();
-				cRenderMenus::show_app_functions($oApp);
-			cRenderCards::action_end();
 		cRenderCards::card_end();
-		cDebug::flush();
+	}
+	else{
 		
-		if (cDebug::is_extra_debugging()) {
-			cDebug::vardump($oApp);	
-			break;	//DEBUG
+		cChart::do_header();
+		cChart::$hideGroupIfNoData = true;
+		
+		cDebug::write( count($aResponse). " applications found");
+		//display the results
+		foreach ( $aResponse as $oApp){
+			if (cFilter::isAppFilteredOut($oApp)) continue;
+			$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
+			$aMetrics = [
+				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name", ],
+				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],
+				[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
+			];
+			
+			cRenderCards::card_start();
+				cRenderCards::body_start();
+					cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+				cRenderCards::body_end();
+				cRenderCards::action_start();
+					cRenderMenus::show_app_functions($oApp);
+				cRenderCards::action_end();
+			cRenderCards::card_end();
+			cDebug::flush();
+			
+			if (cDebug::is_extra_debugging()) {
+				cDebug::vardump($oApp);	
+				break;	//DEBUG
+			}
+			cCommon::flushprint("");
 		}
-		cCommon::flushprint("");
+		cChart::do_footer();
 	}
 }
-cChart::do_footer();
 cRenderHtml::footer();
 ?>

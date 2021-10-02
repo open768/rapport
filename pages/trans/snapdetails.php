@@ -50,11 +50,9 @@ $sSnapTime = cHeader::get(cRender::SNAP_TIME_QS);
 
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
-cRender::show_top_banner("snapshot detail: $oApp->name&gt;$oApp->name&gt;$oTier->name&gt;$trans&gt;$sSnapURL"); 
-
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -63,58 +61,59 @@ if (cAD::is_demo()){
 $oCred = cRenderObjs::get_appd_credentials();
 cDebug::flush();
 
-$oTime = cADUtil::make_time_obj($sSnapTime);
-cAD_RestUI::$oTimes = cRender::get_times();
+$oTime = new cADTimes($sSnapTime);
 $sAppdUrl = cADControllerUI::snapshot($oApp, $trid, $sSnapGUID, $oTime);
 
-cRender::appdButton($sAppdUrl);
-if ($trid=="")	cRender::messagebox("trid is missing");
+if ($trid=="")	cCommon::messagebox("trid is missing");
 
-?>
-<!-- ************************************************************** -->
-<H2>Snapshot Details for <span class="transaction"><?=$sSnapURL?></span></h2>
-<?php
-	cDebug::flush();
+//###############################################################################################
+cRenderCards::card_start("Snapshot Details for $sSnapURL");
+cRenderCards::body_start();
 	$oSnapshot = cAD_RestUI::GET_snapshot_segments($sSnapGUID, $sSnapTime);	
 	cDebug::vardump($oSnapshot);
 	$sDate = cADTime::timestamp_to_date($sSnapTime);
 	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
 
-	$sClass = cRender::getRowClass();
-	?><table class="<?=$sClass?>">
+	?><table border="1" cellspacing="0">
 		<tr><th align="right">Business Transaction:</th><td><?=cRender::show_name(cRender::NAME_TRANS,$oSnapshot->btName)?></td></tr>
 		<tr><th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
 		<tr><th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
 		<tr><th align="right">Number of Segments:</th><td><?=$oSnapshot->segmentCount?></td></tr>
-	</table>
-	<?php
+	</table><?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cADCommon::button($sAppdUrl);
 		$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
 		$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
 		cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
-	?>
-<!-- ************************************************************** -->
-<H2>Segment Details</h2>
-<?php
-	cDebug::flush();
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
+//###############################################################################################
+cRenderCards::card_start("Segment Details");
+cRenderCards::body_start();
 	$oSegment = $oSnapshot->requestSegmentData;
-	?><table class="<?=cRender::getRowClass();?>">
+	?><table border="1" cellspacing="0">
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
 		<tr><th align="right">Server:</th><td><?=cADUtil::get_node_name($oApp,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
-	</table>
+	</table><?php
+cRenderCards::body_end();
+cRenderCards::card_end();
 	
-<!-- ************************************************************** -->
-<h2>Http Parameters</h2>
-<?php
+	
+//###############################################################################################
+cRenderCards::card_start("http parameters");
+cRenderCards::body_start();
 	cDebug::flush();
 	$bProceed = true;
 	if (count($oSegment->httpParameters)==0){
-		cRender::messagebox("no http parameters captured");
+		cCommon::messagebox("no http parameters captured");
 		$bProceed = false;
 	}
 	if ($bProceed){
-		?><table border="1" cellpadding="3" cellspacing="0" class="<?=cRender::getRowClass();?>">
+		?><table border="1" cellpadding="3" cellspacing="0" >
 			<tr>
 				<th>Name</th>
 				<th>Value</th>
@@ -127,18 +126,19 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 			}
 		?></table><?php
 	}
-?>
+cRenderCards::body_end();
+cRenderCards::card_end();
 
-<!-- ************************************************************** -->
-<H2>All External Calls Made</h2>
-<?php
+//###############################################################################################
+cRenderCards::card_start("All External Calls Made");
+cRenderCards::body_start();
 	cDebug::flush();
 	$oFlow = null;
 	$bProceed = true;
 	try{
 		$oFlow = cAD_RestUI::GET_snapshot_flow($oSegment);
 	}catch (Exception $e){
-		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
+		cCommon::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bProceed = false;
 	}
 	
@@ -147,7 +147,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 		if ($oExtCalls == null) 
 			cDebug::error("Unable to count external calls");
 		else{
-			?><table border="1" cellpadding="3" cellspacing="0" class="<?=cRender::getRowClass();?>">
+			?><table border="1"cellspacing="0" >
 				<tr>
 					<th>External Call</th>
 					<th>Count</th>
@@ -165,23 +165,25 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 			?></table><?php
 		}
 	}
-?>
-<!-- ************************************************************** -->
-<H2>Slow methods - (minimum <?=MIN_TOTAL_TIME_METHOD?>ms)</h2>
-<?php
+cRenderCards::body_end();
+cRenderCards::card_end();
+
+//###############################################################################################
+cRenderCards::card_start("Slow methods - (minimum ".MIN_TOTAL_TIME_METHOD."ms)");
+cRenderCards::body_start();
 	cDebug::flush();
 	$bProceed = true;
 	try{
 		$aData = cAD_RestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
 	}catch (Exception $e){
-		cRender::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
+		cCommon::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
 		$bProceed = false;
 	}
 
 	if (!$bProceed || (count($aData) == 0)){
-		cRender::messagebox("no data found");
+		cCommon::messagebox("no data found");
 	}else{
-		?><div class="<?=cRender::getRowClass()?>"><table border="1" cellspacing="0" id="SLOW__METHODS" >
+		?><table border="1" cellspacing="0" id="SLOW__METHODS" >
 			<thead><tr>
 				<th width="50">Total time (ms)</th>
 				<th width="400">Class</th>
@@ -203,7 +205,7 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 					</tr><?php				
 				}
 			?></tbody>
-		</table></div>
+		</table>
 		<script language="javascript">
 			$( function(){ 
 				$("#SLOW__METHODS").tablesorter({
@@ -216,29 +218,33 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 			});
 		</script><?php
 	}
-?>
-<!-- ************************************************************** -->
-<?php
-	cDebug::flush();
+cRenderCards::body_end();
+cRenderCards::card_end();
+
+
+//###############################################################################################
 	$bError = false;
 	try{
 		$oFlow = cAD_RestUI::GET_snapshot_flow($oSegment);
 	}catch (Exception $e){
-		cRender::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
+		cCommon::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bError = true;
 	}
 	if (!$bError){		
 		$aNodes = $oFlow->nodes;
 
 		foreach ($aNodes as $oNode){
-			?><h2><?=$oNode->name?></h2><?php
-			$aSegments = $oNode->requestSegmentDataItems;
-			if (count($aSegments)==0) {
-				cRender::messagebox("No data found");
-				continue;
-			}
+			cRenderCards::card_start("Node: $oNode->name");
+			cRenderCards::body_start();
+				$aSegments = $oNode->requestSegmentDataItems;
+				if ($aSegments == null || count($aSegments)==0) {
+					cCommon::messagebox("No data found");
+					cRenderCards::body_end();
+					cRenderCards::card_end();
+					continue;
+				}
 			
-			?><h3>Slow DB and Remote Service Calls - (minimum <?=MIN_TOTAL_TIME_REMOTE?>ms)</h3><?php
+				//***************************************************************************************************
 				//extract the slow calls
 				$iElapsed = 0;
 				$iElapsedAll = 0;
@@ -250,115 +256,126 @@ if ($trid=="")	cRender::messagebox("trid is missing");
 						if ($oExitCall->timeTakenInMillis < MIN_TOTAL_TIME_REMOTE) continue;
 						$aExitCalls[] = $oExitCall;
 					}
-				if (count($aExitCalls) == 0)
-					cRender::messagebox("no Slow remote calls found");
-				else{
-					uasort($aExitCalls, "sort_by_time");
 					
-					//render
-					?><div class="<?=cRender::getRowClass()?>">
-						<table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
-							<thead><tr>
-								<th width="50">Total time (ms)</th>
-								<th width="50">Type</th>
-								<th width="300">Called By</th>
-								<th >Detail</th>
-								<th width="50">Count</th>
-								<th width="50">Avg time (ms)</th>
-							</tr></thead>
-							<tbody><?php
+				//***************************************************************************************************
+				cRenderCards::card_start("Slow DB and Remote Service Calls - (minimum ".MIN_TOTAL_TIME_REMOTE."ms)");
+				cRenderCards::body_start();
+					if (count($aExitCalls) == 0)
+						cCommon::messagebox("no Slow remote calls found");
+					else{
+						uasort($aExitCalls, "sort_by_time");
+						
+						//render
+						?><div class="<?=cRender::getRowClass()?>">
+							<table border="1" cellspacing="0" id="SLOW<?=$oNode->name?>" width="100%">
+								<thead><tr>
+									<th width="50">Total time (ms)</th>
+									<th width="50">Type</th>
+									<th width="300">Called By</th>
+									<th >Detail</th>
+									<th width="50">Count</th>
+									<th width="50">Avg time (ms)</th>
+								</tr></thead>
+								<tbody><?php
+									foreach ($aExitCalls as $oExitCall){
+										$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
+										$iElapsed += $oExitCall->timeTakenInMillis;
+										?><tr>
+											<td><b><?=$oExitCall->timeTakenInMillis?></b></td>
+											<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
+											<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
+											<td><?=htmlspecialchars($oExitCall->detailString)?></td>
+											<td><?=$oExitCall->count?></td>
+											<td><?=$avg?></td>
+										</tr><?php
+									}
+								?></tbody>
+							</table>
+							<b>Total time taken for all remote calls: <?=$iElapsedAll?> ms, 
+							of which slow calls account for: <?=$iElapsed?> ms</b>
+						</div>
+						<script language="javascript">
+							$( function(){ 
+								$("#SLOW<?=$oNode->name?>").tablesorter({
+									headers:{
+										1:{ sorter: 'digit' },
+										5:{ sorter: 'digit' },
+										6:{ sorter: 'digit' }
+									}
+								});
+							});
+						</script><?php
+					}
+				cRenderCards::body_end();
+				cRenderCards::card_end();
+
+				//***************************************************************************************************
+				cRenderCards::card_start("High Frequency Calls  (minimum ".MIN_EXT_COUNT." calls)");
+				cRenderCards::body_start();
+					$iElapsed = 0;
+					$iElapsedAll = 0;
+					
+					//extract the exit calls we're interested in
+					$aExitCalls = [];
+					foreach ($aSegments as $oSegment)
+						foreach ($oSegment->exitCalls as $oExitCall){
+							$iElapsedAll += $oExitCall->timeTakenInMillis;
+							if ($oExitCall->count < MIN_EXT_COUNT) continue;
+							$aExitCalls[] = $oExitCall;
+						}
+					if (count($aExitCalls) == 0)
+						cCommon::messagebox("No High Frequency Calls found");
+					else{
+						uasort($aExitCalls, "sort_by_count");
+						$iCount = 0;
+						//render
+						?><div class="<?=cRender::getRowClass()?>">
+							<table border="1" cellspacing="0" id="REPT<?=$oNode->name?>" width="100%">
+								<thead><tr>
+									<th width="50">Type</th>
+									<th width="50">Count</th>
+									<th width="50">Total time (ms)</th>
+									<th width="50">Avg time (ms)</th>
+									<th width="300">Called By</th>
+									<th >Detail</th>
+								</tr></thead>
+								<tbody><?php
 								foreach ($aExitCalls as $oExitCall){
-									$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
 									$iElapsed += $oExitCall->timeTakenInMillis;
+									if (stripos($oExitCall->detailString,"pooled")) continue;
+									$iCount+=$oExitCall->count;
+									
+									$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
 									?><tr>
-										<td><b><?=$oExitCall->timeTakenInMillis?></b></td>
 										<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
+										<td><b><?=$oExitCall->count?></b></td>
+										<td><?=$oExitCall->timeTakenInMillis?></td>
+										<td><?=$avg?></td>
 										<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
 										<td><?=htmlspecialchars($oExitCall->detailString)?></td>
-										<td><?=$oExitCall->count?></td>
-										<td><?=$avg?></td>
 									</tr><?php
 								}
-							?></tbody>
-						</table>
-						<b>Total time taken for all remote calls: <?=$iElapsedAll?> ms, 
-						of which slow calls account for: <?=$iElapsed?> ms</b>
-					</div>
-					<script language="javascript">
-						$( function(){ 
-							$("#SLOW<?=$oNode->name?>").tablesorter({
-								headers:{
-									1:{ sorter: 'digit' },
-									5:{ sorter: 'digit' },
-									6:{ sorter: 'digit' }
-								}
+								?></tbody>
+							</table>
+							<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
+							of which <?=$iCount?> high frequency calls account for: <?=$iElapsed?> ms</h3>
+						</div>
+						<script language="javascript">
+							$( function(){ 
+								$("#REPT<?=$oNode->name?>").tablesorter({
+									headers:{
+										1:{ sorter: 'digit' },
+										5:{ sorter: 'digit' },
+										6:{ sorter: 'digit' }
+									}
+								});
 							});
-						});
-					</script><?php
-				}
-				
-			//***********************************************************************
-			?><h3>High Frequency Calls  (minimum <?=MIN_EXT_COUNT?> calls)</h3><?php
-				$iElapsed = 0;
-				$iElapsedAll = 0;
-				
-				//extract the exit calls we're interested in
-				$aExitCalls = [];
-				foreach ($aSegments as $oSegment)
-					foreach ($oSegment->exitCalls as $oExitCall){
-						$iElapsedAll += $oExitCall->timeTakenInMillis;
-						if ($oExitCall->count < MIN_EXT_COUNT) continue;
-						$aExitCalls[] = $oExitCall;
+						</script><?php
 					}
-				if (count($aExitCalls) == 0)
-					cRender::messagebox("No High Frequency Calls found");
-				else{
-					uasort($aExitCalls, "sort_by_count");
-					$iCount = 0;
-					//render
-					?><div class="<?=cRender::getRowClass()?>">
-						<table border="1" cellspacing="0" id="REPT<?=$oNode->name?>" width="100%">
-							<thead><tr>
-								<th width="50">Type</th>
-								<th width="50">Count</th>
-								<th width="50">Total time (ms)</th>
-								<th width="50">Avg time (ms)</th>
-								<th width="300">Called By</th>
-								<th >Detail</th>
-							</tr></thead>
-							<tbody><?php
-							foreach ($aExitCalls as $oExitCall){
-								$iElapsed += $oExitCall->timeTakenInMillis;
-								if (stripos($oExitCall->detailString,"pooled")) continue;
-								$iCount+=$oExitCall->count;
-								
-								$avg = round($oExitCall->timeTakenInMillis/$oExitCall->count,0);
-								?><tr>
-									<td><?=htmlspecialchars($oExitCall->exitPointName)?></td>
-									<td><b><?=$oExitCall->count?></b></td>
-									<td><?=$oExitCall->timeTakenInMillis?></td>
-									<td><?=$avg?></td>
-									<td><?=cCommon::fixed_width_div(300,htmlspecialchars($oExitCall->callingMethod))?></td>
-									<td><?=htmlspecialchars($oExitCall->detailString)?></td>
-								</tr><?php
-							}
-							?></tbody>
-						</table>
-						<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
-						of which <?=$iCount?> high frequency calls account for: <?=$iElapsed?> ms</h3>
-					</div>
-					<script language="javascript">
-						$( function(){ 
-							$("#REPT<?=$oNode->name?>").tablesorter({
-								headers:{
-									1:{ sorter: 'digit' },
-									5:{ sorter: 'digit' },
-									6:{ sorter: 'digit' }
-								}
-							});
-						});
-					</script><?php
-				}
+				cRenderCards::body_end();
+				cRenderCards::card_end();
+			cRenderCards::body_end();
+			cRenderCards::card_end();
 		}
 	}
 ?>

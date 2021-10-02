@@ -24,6 +24,22 @@ cDebug::check_GET_or_POST();
 cDebug::extra_debug("Page Initialising - finished");
 
 //####################################################################
+function pr__show_error($psTitle, $psMessage){
+	global $home;
+	
+	cRenderHtml::header($psTitle);
+	
+	cRenderCards::card_start($psTitle);
+		cRenderCards::body_start();
+			cCommon::errorbox("check login details: Error was: $psMessage");
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRender::button("Back to login", "$home/index.php", false);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}
+
+//####################################################################
 if (cHeader::get(cLogin::KEY_SUBMIT))
 {
 	cDebug::extra_debug("form submitted");
@@ -33,20 +49,16 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	}	
 	catch (Exception $e)
 	{
-		cRenderHtml::header("unable to login");
-		$sError = $e->getMessage();
-		cRender::show_top_banner("Unable to Login !"); 
-		cRender::errorbox($sError);
-		try{
-			cRender::button("Back to login", "index.php", false);
-		} catch (Exception $e){}
+		pr__show_error("unable to login", $e->getMessage());
 		exit;
 	}
 	
 	//---------- where are we going
 	$sReferrer = cHeader::get(cLogin::KEY_REFERRER);
 	$sIgnoreReferrer = cHeader::get(cRender::IGNORE_REF_QS);
-	$sLocation = "$home/pages/all/all.php";
+	$sLocation = cHeader::get(cRender::LOCATION_QS);
+	if (!$sLocation)
+		$sLocation = "$home/pages/all/all.php";
 
 	if ($sReferrer && !$sIgnoreReferrer){
 		$aUrl = parse_url($sReferrer);
@@ -68,11 +80,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	}	
 	catch (Exception $e)
 	{
-		cRenderHtml::header("unable to login");
-		$sError = $e->getMessage();
-		cRender::show_top_banner("Unable to Login !"); 
-		cRender::errorbox($sError);
-		cRender::button("Back to login", "$home/index.php", false);
+		pr__show_error("unable to login with token", $e->getMessage());
 		exit;
 	}
 	cHeader::redirect("$home/pages/all/all.php");
@@ -127,6 +135,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 						</select>
 						<label class="mdl-textfield__label" for="<?=cLogin::KEY_HTTPS?>">use https:</label>
 					</div>
+					<input type="hidden" name="<?=cRender::LOCATION_QS?>" value="<?=cHeader::get(cRender::LOCATION_QS)?>">
 
 					<?php
 						if (cDebug::is_debugging()){

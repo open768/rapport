@@ -26,7 +26,7 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not supported for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -44,15 +44,15 @@ if ($a->eventTime == $b->eventTime) {
 
 $aEvents = $oApp->GET_Events($oTimes);
 if (count($aEvents) == 0){
-	cRender::errorbox("No Events found");
+	cCommon::errorbox("No Events found");
 	cRenderHtml::footer();
 	exit;
 }
 
 uasort($aEvents,"sort_events");
-$oAnalysed = cADUtil::analyse_events($aEvents);
-$aTypes = $oAnalysed->types;
-$aAnalysed = $oAnalysed->analysis;
+$oAnalysedEvents = cADUtil::analyse_events($aEvents);
+$aPolicyTypes = $oAnalysedEvents->types;
+$aAnalysedEvents = $oAnalysedEvents->analysis;
 
 
 //####################################################################
@@ -62,16 +62,16 @@ cRenderCards::card_start("Summary");
 		?><table class="maintable" border="1" cellspacing="0">
 			<thead><tr>
 				<th width="250">Health Rule</th><?php
-				foreach ($aTypes as $sType=>$i){
+				foreach ($aPolicyTypes as $sType=>$i){
 					$sType = str_replace("_", " ", $sType);
 					echo "<th align='middle'>$sType</th>";
 				}
 			?></tr></thead>
 			<tbody><?php
-				foreach ($aAnalysed as $sKey=>$oItem){
+				foreach ($aAnalysedEvents as $sKey=>$oItem){
 					?><tr>
 						<td width="250" align="right"><?=$sKey?></td><?php
-						foreach ($aTypes as $sType=>$i){
+						foreach ($aPolicyTypes as $sType=>$i){
 							echo "<TD align='middle'>";
 							if (array_key_exists($sType, $oItem->typeCount)) 
 								echo $oItem->typeCount[$sType];
@@ -83,16 +83,49 @@ cRenderCards::card_start("Summary");
 		</table><?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRender::appdButton(cADControllerUI::events($oApp), "Events");
-		cRender::appdButton(cADControllerUI::app_health_rules($oApp), "Health Rules");
-		cRender::appdButton(cADControllerUI::app_health_policies($oApp), "Health Policies");
+		cADCommon::button(cADControllerUI::events($oApp), "Events");
+		cADCommon::button(cADControllerUI::app_health_rules($oApp), "Health Rules");
+		cADCommon::button(cADControllerUI::app_health_policies($oApp), "Health Policies");
 		cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
 		cRenderMenus::show_apps_menu("Events", "events.php");
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
+//####################################################################
 $aCorrelated = cAD_RestUI::GET_correlatedEvents($aEvents);
 $aAnalysedEvents = cADUtil::analyse_CorrelatedEvents($aEvents, $aCorrelated);
+
+$oAnalysedActions = cADUtil::analyse_CorrelatedEventActions($aAnalysedEvents);
+//cDebug::vardump($oAnalysed);
+$aActionTypes = $oAnalysedActions->types;
+$aAnalysedActions = $oAnalysedActions->analysis;
+
+cRenderCards::card_start("Action Summary");
+	cRenderCards::body_start();
+		?><table class="maintable" border="1" cellspacing="0">
+			<thead><tr>
+				<th width="250">Policies\Actions</th><?php
+				foreach ($aActionTypes as $sType=>$i){
+					$sType = str_replace("_", " ", $sType);
+					echo "<th align='middle'>$sType</th>";
+				}
+			?></tr></thead>
+			<tbody><?php
+				foreach ($aAnalysedActions as $sKey=>$oItem){
+					?><tr>
+						<td width="250" align="right"><?=$sKey?></td><?php
+						foreach ($aActionTypes as $sType=>$i){
+							echo "<TD align='middle'>";
+							if (array_key_exists($sType, $oItem->typeCount)) 
+								echo $oItem->typeCount[$sType];
+							echo "</TD>";
+						}
+					?></tr><?php
+				}
+		?></tbody>
+		</table><?php
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
 
 //####################################################################
@@ -133,8 +166,10 @@ cRenderCards::body_start();
 				<td><?=$oEvent->bt?></td>
 				<td><?=$oEvent->policy?></td>
 				<td><?=$oEvent->type?></td>
-				<td><?=($oEvent->action==null?"":"X")?></td>
-				<td><?=cRender::appdButton($oEvent->deepLinkUrl,"")?></td>
+				<td><?php
+					if($oEvent->action) cRenderCards::chip($oEvent->action->type,$oEvent->action->summary);
+				?></td>
+				<td><?=cADCommon::button($oEvent->deepLinkUrl,"")?></td>
 			</tr>
 			<?php	
 		}

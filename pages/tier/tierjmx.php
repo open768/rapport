@@ -44,11 +44,11 @@ $title = "$oApp->name&gt;$oTier->name&gt;Infrastructure&gt;JMX";
 
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 if (!$oTier->name){
-	cRender::errorbox("no Tier parameter found");
+	cCommon::errorbox("no Tier parameter found");
 	exit;
 }
 if (!$gsMetric){
-	cRender::errorbox("no Metric found");
+	cCommon::errorbox("no Metric found");
 	exit;
 }
 
@@ -105,7 +105,7 @@ if ($oCred->restricted_login == null) cRenderMenus::show_tier_functions();
 //####################################################################
 $aPools = $oTier->GET_JDBC_Pools($node);
 if (count($aPools) == 0)
-	cRender::messagebox("No JDBC Pools Found");
+	cCommon::messagebox("No JDBC Pools Found");
 else{
 	?><h2>JDBC Pools for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
 	if ($node){

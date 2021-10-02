@@ -16,23 +16,24 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-cRenderHtml::header("All Agent Versions");
+cRenderHtml::header("AppDynamics Latest  Versions");
 
-//####################################################################
-cRender::show_top_banner("Appdynamics Versions"); 
+cRenderCards::card_start();
+	cRenderCards::action_start();
+		cRender::button("Back to Agent Versions", "../all/allagentversions.php");	
+		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
+		cADCommon::button(cADControllerUI::agents(), "Agent Settings");
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
-cRender::button("Back to Agent Versions", "allagentversions.php");	
-cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
-cRender::appdButton(cADControllerUI::agents(), "Agent Settings");
-?>
-<h2>Latest Appdynamics Versions</h2>
-
-<?php
 //####################################################################
 $aDownloads = cADWebsite::GET_latest_downloads();
 if (count($aDownloads) == 0){
-	cRender::errorbox("DEBUG in progress");
+	cCommon::errorbox("nothing found!");
 }else{
+	cRenderCards::card_start();
+	cRenderCards::body_start();
+
 	?><table border="1" class="maintable">
 		<tr>
 			<th width="150">Title</th>
@@ -48,6 +49,8 @@ if (count($aDownloads) == 0){
 		}
 		
 	?></table><?php
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 }
 
 

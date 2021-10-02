@@ -19,7 +19,7 @@ require_once "$root/inc/charts.php";
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -47,7 +47,7 @@ cRenderMenus::show_app_functions();
 $oResponse =$oApp->GET_Tiers();
 $sMatched = cADUtil::get_matching_extcall($oApp, $sExt);
 if ($sMatched == null){
-	cRender::errorbox("unable to find a matching external call: $sExt");
+	cCommon::errorbox("unable to find a matching external call: $sExt");
 	exit;
 }
 $sExtQS = cHttp::build_qs($sAppQS, cRender::BACKEND_QS, $sMatched);

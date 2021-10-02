@@ -19,7 +19,6 @@ require_once "$home/inc/common.php";
 cRenderHtml::header("Admin Auditing");
 cRender::force_login();
 
-cRender::show_top_banner("Admin Auditing");
 
 //####################################################################
 const HOST_ID="5";
@@ -64,7 +63,7 @@ if ($sAccount){
 }else{
 	$aAccounts = cADAudit::get_audited_accounts();
 	if ($aAccounts == null){
-		cRender::messagebox("no Accounts found");
+		cCommon::messagebox("no Accounts found");
 	}else{
 		?><ul><?php
 			foreach ($aAccounts as $oAccount){

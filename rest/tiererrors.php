@@ -12,26 +12,12 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-//####################################################################
-$home="../..";
+$home="..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 
-
-//-----------------------------------------------
-$oApp = cRenderObjs::get_current_app();
-
-//####################################################################
-cRenderHtml::header("Flowmap for Application $oApp->name");
-cRender::force_login();
-cCommon::messagebox("work in progress");
-
-cDebug::write("fetching flowmap");
-cDebug::on(true);
-$oData = $oApp->GET_flowmap();
-cDebug::write("got data");
-cDebug::vardump($oData, true);
-cDebug::off();
-
-cRenderHtml::footer();
+$oTier = cRenderObjs::get_current_tier();
+$oTimes = cRender::get_times();
+$aData = $oTier->GET_errors($oTimes);
+$aAnalysed = cADUtil::analyse_tier_errors($oTier, $aData);
+cCommon::write_json($aAnalysed);	
 ?>

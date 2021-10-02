@@ -11,38 +11,30 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
+
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
-
 
 
 //####################################################################
-cRenderHtml::header("Dashboards");
+cRenderHtml::header("Analytics");
 cRender::force_login();
-cChart::do_header();
 
 //####################################################################
-$sUsage = cHeader::get(cRender::USAGE_QS);
-if (!$sUsage) $sUsage = 1;
-?>
-<h2>Dashboards</h2>
-not implemented 
-<ul>
-	<li>drag and drop interface_exists
-	<li>pick any metrics
-	<li>many types of representation (Kibana?)
-	<ul>
-		<li>GRaphs
-		<li>charts
-		<li>traffic lights etc
-		<li>use rules to display something
+cRenderCards::card_start();
+	cRenderCards::body_start();
+	?><ul>
+		<li><a href="log.php">Log Analytics</a>
+		<li><a href="trans.php">Transaction Analytics</a>
 	</ul>
-	<li>reuse with different applications/tiers/etc
-	<li>share dashboards
-	<li>copy dashboards
-</ul>
-<?php
+	<?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cADCommon::button(cADControllerUI::analytics_home());
+		cADCommon::button(cADControllerUI::analytics_config(), "Analytics configuration");
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
 cRenderHtml::footer();
 ?>

@@ -47,7 +47,6 @@ if ($sGoKey){
 cRenderHtml::header("link");
 cRender::force_login();
 
-cRender::show_top_banner("link"); 
 $sUrl = cLinkPage::get_referrer_link();
 $sLinkID = cLinkPage::get_link_id();
 $oLinkData = cLinkPage::get_obj($sLinkID);

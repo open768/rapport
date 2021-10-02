@@ -35,7 +35,7 @@ $title ="$oApp->name&gtWeb Real User Monitoring Stats";
 cRenderMenus::show_apps_menu("Show Stats for:", "rumstats.php");
 $oTimes = cRender::get_times();
 cRender::button("Statistics", $sGraphUrl);	
-cRender::appdButton(cADControllerUI::webrum_pages($oApp));
+cADCommon::button(cADControllerUI::webrum_pages($oApp));
 
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -77,7 +77,7 @@ function render_graphs($psType, $paData){
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

@@ -22,9 +22,6 @@ cRenderHtml::header("test the API");
 cRender::force_login();
 
 //####################################################################
-cRender::show_top_banner("test the API"); 
-
-//####################################################################
 	?>
 		<FORM method="get" action='<?="$home/rest/getMetric.php"?>'>
 			Application name:<br>

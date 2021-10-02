@@ -27,14 +27,14 @@ cChart::$hideGroupIfNoData = true;
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not supported for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
 //####################################################################
 
-cRender::appdButton(cADControllerUI::servers());
+cADCommon::button(cADControllerUI::servers());
 
 //####################################################################
 ?>

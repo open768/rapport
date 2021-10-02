@@ -45,7 +45,7 @@ $title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transactions";
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -113,7 +113,7 @@ function render_tier_transactions($poApp, $poTier){
 	if ($iCount >0)
 		cChart::metrics_table($poApp,$aMetrics,4,cRender::getRowClass(),null,null,["calls per minute", "Response Times (ms)", "Errors per minute"]);
 	else{
-		cRender::messagebox("No transactions found");
+		cCommon::messagebox("No transactions found");
 	}
 	
 	cDebug::leave();
@@ -159,7 +159,7 @@ if ($oCred->restricted_login == null){
 	);
 	</script><?php
 }
-cRender::appdButton(cADControllerUI::tier($oApp,$oTier));
+cADCommon::button(cADControllerUI::tier($oApp,$oTier));
 
 //###############################################
 ?>

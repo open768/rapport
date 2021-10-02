@@ -36,7 +36,7 @@ if ($oCred->restricted_login == null){
 	
 	$sGraphUrl = cHttp::build_url("tiererrorgraphs.php", $gsTierQS);
 	cRender::button("Show Error Graphs", $sGraphUrl);	
-	cRender::appdButton(cADControllerUI::tier_errors($oApp, $oTier));
+	cADCommon::button(cADControllerUI::tier_errors($oApp, $oTier));
 }
 //#############################################################
 function sort_metric_names($poRow1, $poRow2){
@@ -93,7 +93,7 @@ function render_table($paData){
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

@@ -25,12 +25,10 @@ const NAME_WIDTH=150;
 const AGENT_WIDTH=150;
 
 
-//####################################################################
-cRender::show_top_banner("All AgentVersions"); 
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -57,13 +55,6 @@ function parse_BuildDate($psInput){
 		return $psInput;
 	
 }
-//********************************************************************
-function parse_version($psInput){
-	if ( preg_match('/\s(v[\.\d]*)\s/', $psInput, $aMatches))
-		return $aMatches[1];
-	else
-		return $psInput;
-}
 
 //********************************************************************
 function epoch_to_date($psEpoch){
@@ -81,34 +72,50 @@ function render_machine_agents(){
 		$aAgents = cAD_RestUI::GET_machine_agents();
 	}
 	catch (Exception $e){
-		cRender::errorbox("Oops unable to get machine agent data from controller:<p>".$e->getMessage());		
+		cCommon::errorbox("Oops unable to get machine agent data from controller:<p>".$e->getMessage());		
 		return;
 	}
 	if (cDebug::is_extra_debugging())cDebug::vardump($aAgents[0]);
 	
-	?><table class="maintable" cellpadding="4">
-		<tr class="tableheader">
-			<th>Application</th>
-			<th>Hostname</th>
-			<th>Version</th>
-			<th>Build Date</th>			
-			<th>Installed</th>			
-			<th>Runtime</th>			
-		</tr><?php
-		$sClass = cRender::getRowClass();
-		foreach ($aAgents as $oAgent){
-			$sApp = ($oAgent->applicationIds==null?"no application":get_application_from_id($oAgent->applicationIds[0]));
-			?><tr class="<?=$sClass?>">
-				<td><?=$sApp?></td>
-				<td><?=$oAgent->hostName?></td>
-				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
-				<td><?=parse_buildDate($oAgent->agentDetails->agentVersion)?></td>
-				<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
-				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
-			</tr><?php
-		}
-	?></table><?php
-	cCommon::flushprint("");
+	cRenderCards::card_start("<a name='m'>Machine agents</a>");
+	cRenderCards::body_start();
+		?><div class="note" id="notem">
+			<div id="p0" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+		</div>
+		<table class="maintable" cellspacing="0" border="1" id="tblm">
+			<thead><tr class="tableheader">
+				<th width="100">Application</th>
+				<th width="100">Hostname</th>
+				<th width="100">Version</th>
+				<th width="100">Build Date</th>			
+				<th width="100">Installed</th>			
+				<th width="100">Runtime</th>			
+			</tr></thead>
+			<tbody><?php
+				foreach ($aAgents as $oAgent){
+					$sApp = ($oAgent->applicationIds==null?"no application":get_application_from_id($oAgent->applicationIds[0]));
+					?><tr>
+						<td><?=$sApp?></td>
+						<td><?=cCommon::put_in_wbrs($oAgent->hostName)?></td>
+						<td><?=cADUtil::extract_agent_version($oAgent->agentDetails->agentVersion)?></td>
+						<td><?=parse_buildDate($oAgent->agentDetails->agentVersion)?></td>
+						<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
+						<td><?=cCommon::put_in_wbrs($oAgent->agentDetails->latestAgentRuntime)?></td>
+					</tr><?php
+				}
+			?></tbody>
+		</table>
+		<script language="javascript">
+			$( 
+				function(){ 
+					$("#tblm").tablesorter();
+					$("#notem").html("click on table heading to sort");
+				}
+			);
+		</script>
+	<?php
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 }
 
 //********************************************************************
@@ -118,35 +125,52 @@ function render_app_agents(){
 		$aAgents = cAD_RestUI::GET_appServer_agents();
 	}
 	catch (Exception $e){
-		cRender::errorbox("Oops unable to get app agent data from controller:<p>".$e->getMessage());		
+		cCommon::errorbox("Oops unable to get app agent data from controller:<p>".$e->getMessage());		
 		return;
 	}
 	if (cDebug::is_extra_debugging())cDebug::vardump($aAgents[0]);
 	
-	?><table class="maintable" cellpadding="4">
-		<tr class="tableheader">
-			<th>Application</th>
-			<th>Tier</th>
-			<th>Hostname</th>
-			<th>Node</th>
-			<th>Version</th>
-			<th>Installed</th>
-			<th>Runtime</th>			
-		</tr><?php
-		$sClass = cRender::getRowClass();
-		foreach ($aAgents as $oAgent){
-			?><tr class="<?=$sClass?>">
-				<td><?=$oAgent->applicationName?></td>
-				<td><?=$oAgent->applicationComponentName?></td>
-				<td><?=$oAgent->hostName?></td>
-				<td><?=$oAgent->applicationComponentNodeName?></td>
-				<td><?=parse_version($oAgent->agentDetails->agentVersion)?></td>
-				<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
-				<td><?=$oAgent->agentDetails->latestAgentRuntime?></td>
-			</tr><?php
-		}
-	?></table><?php
-	cCommon::flushprint("");
+	cRenderCards::card_start("<a name='a'>App agents</a>");
+	cRenderCards::body_start();
+		?>
+		<div class="note" id="notea">
+			<div id="p1" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+		</div>
+		<table class="maintable" cellspacing="0" border="1" id="tbla">
+			<thead><tr class="tableheader">
+				<th width="100">Application</th>
+				<th width="100">Tier</th>
+				<th width="100">Hostname</th>
+				<th width="100">Node</th>
+				<th width="100">Version</th>
+				<th width="100">Installed</th>
+				<th width="100">Runtime</th>			
+			</tr></thead>
+			<tbody><?php
+				foreach ($aAgents as $oAgent){
+					?><tr>
+						<td><?=$oAgent->applicationName?></td>
+						<td><?=cCommon::put_in_wbrs($oAgent->applicationComponentName)?></td>
+						<td><?=cCommon::put_in_wbrs($oAgent->hostName)?></td>
+						<td><?=cCommon::put_in_wbrs($oAgent->applicationComponentNodeName)?></td>
+						<td><?=cADUtil::extract_agent_version($oAgent->agentDetails->agentVersion)?></td>
+						<td><?=epoch_to_date($oAgent->agentDetails->installTime)?></td>
+						<td><?=cCommon::put_in_wbrs($oAgent->agentDetails->latestAgentRuntime)?></td>
+					</tr><?php
+				}
+			?></tbody>
+		</table>
+		<script language="javascript">
+			$( 
+				function(){ 
+					$("#tbla").tablesorter();
+					$("#notea").html("click on table heading to sort");
+				}
+			);
+		</script>
+	<?php
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 }
 
 //********************************************************************
@@ -156,39 +180,51 @@ function render_db_agents(){
 		$aAgents = cAD_RestUI::GET_database_agents();
 	}
 	catch (Exception $e){
-		cRender::errorbox("Oops unable to get database agent data from controller:<p>".$e->getMessage());		
+		cCommon::errorbox("Oops unable to get database agent data from controller:<p>".$e->getMessage());		
 		return;
 	}
-	?><table class="maintable" cellpadding="4">
-		<tr class="tableheader">
-			<th>Name</th>
-			<th>Hostname</th>
-			<th>Version</th>
-			<th>Status</th>			
-		</tr><?php
-		$sClass = cRender::getRowClass();
-		foreach ($aAgents as $oAgent){
-			?><tr class="<?=$sClass?>">
-				<td><?=$oAgent->agentName?></td>
-				<td><?=$oAgent->hostName?></td>
-				<td><?=parse_version($oAgent->version)?></td>
-				<td><?=$oAgent->status?></td>
-			</tr><?php
-		}
-	?></table><?php
-	cCommon::flushprint("");
+	cRenderCards::card_start("<a name='d'>Database</a>");
+	cRenderCards::body_start();
+		?>
+		<div class="note" id="noted">
+			<div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+		</div>
+		<table class="maintable" cellspacing="0" border="1" id="tbldb">
+			<thead><tr class="tableheader">
+				<th width="100">Name</th>
+				<th width="100">Hostname</th>
+				<th width="100">Version</th>
+				<th width="100">Status</th>			
+			</tr></thead>
+			<tbody><?php
+				foreach ($aAgents as $oAgent){
+				?><tr>
+					<td><?=$oAgent->agentName?></td>
+					<td><?=cCommon::put_in_wbrs($oAgent->hostName)?></td>
+					<td><?=cADUtil::extract_agent_version($oAgent->version)?></td>
+					<td><?=$oAgent->status?></td>
+				</tr><?php
+				}
+			?></tbody>
+		</table>
+		<script language="javascript">
+			$( 
+				function(){ 
+					$("#tbld").tablesorter();
+					$("#noted").html("click on table heading to sort");
+				}
+			);
+		</script>
+	<?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRender::button("Goto Database Agents", "alldb.php");	
+	cRenderCards::action_end();
+	cRenderCards::card_end();
 }
 
 //####################################################################
-$gaAppIds = cADUtil::get_application_ids();
-
-
-
-//####################################################################
-cRenderCards::card_start();
-	cRenderCards::title_start();
-		?><h1>Contents</h1><?php
-	cRenderCards::title_end();
+cRenderCards::card_start("Contents");
 	cRenderCards::body_start();
 		?>
 		<ul>
@@ -203,30 +239,18 @@ cRenderCards::card_start();
 	cRenderCards::action_start();
 		cRender::button("Back to Agents", "allagents.php");	
 		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
-		cRender::button("latest AppDynamics versions", "appdversions.php");	
-		cRender::appdButton(cADControllerUI::agents(), "Agent Settings");
+		cRender::button("latest AppDynamics versions", "../util/appdversions.php");	
+		cADCommon::button(cADControllerUI::agents(), "Agent Settings");
 	cRenderCards::action_end();
 cRenderCards::card_end();
-?>
-<p>
 
-<!-- ############################################################ -->
-<h2><a name="m">Machine</h2>
-<?php render_machine_agents();?>
-<p>
 
-<!-- ############################################################ -->
-<h2><a name="a">Application</h2>
-<?php render_app_agents();?>
-<p>
-
-<!-- ############################################################ -->
-<h2><a name="d">Database</a> Agents</h2>
-<?php
+//####################################################################
+$gaAppIds = cADUtil::get_application_ids();
+render_machine_agents();
+render_app_agents();
 render_db_agents();
-cRender::button("Goto Database Agents", "alldb.php");	
 ?>
-<p>
 <!-- ############################################################ -->
 <h2><a name="o">More</a> Agents</h2>
 Work in Progress

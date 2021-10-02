@@ -27,7 +27,7 @@ var cCharts={
 		iCount = 0;
 		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cChartConsts.CHART_ALL_CSV,target:"_blank"});
 		
-		$("DIV[type='appdchart']").each( //all  elements which have their type set to appdchart
+		$("DIV[type='adchart']").each( //all  elements which have their type set to adchart
 			function(pIndex, pElement){
 				var oElement = $(pElement);
 				
@@ -41,7 +41,7 @@ var cCharts={
 					iPrevious = parseInt(sPrevious);
 				} catch (e){}
 								
-				oElement.appdchart({
+				oElement.adchart({
 					appName:sAppName,
 					home:sHome,
 					title:sTitle,
@@ -96,7 +96,7 @@ cCharts.queue.maxTransfers = 3	; 	//dont overload the controller
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.appdchart",{
+$.widget( "ck.adchart",{
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -133,7 +133,6 @@ $.widget( "ck.appdchart",{
 		zoom_url:"metriczoom.php",
 		compare_url:"compare.php",
 		
-		WAIT_VISIBLE:1200,
 		INFO_WIDTH:70,
 		BUTTON_WIDTH:30
 	},
@@ -150,6 +149,7 @@ $.widget( "ck.appdchart",{
 		oElement.uniqueId();
 		
 		//check for necessary classes
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
 		if (!bean)						$.error("bean class is missing! check includes");	
 		if (!cHttp2)					$.error("http2 class is missing! check includes");	
 		if (!oElement.gSpinner) 		$.error("gSpinner is missing! check includes");		
@@ -178,7 +178,12 @@ $.widget( "ck.appdchart",{
 		
 		
 		//wait for widget to become visible
-		this.pr__setInViewListener();
+		var oQueue = new cQueueifVisible();
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
+		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
+		oQueue.go(oElement, this.pr__get_chart_url());
 	},
 
 	//*******************************************************************
@@ -197,98 +202,21 @@ $.widget( "ck.appdchart",{
 		oElement.slideout({width:oOptions.width, height:oOptions.height, uppercontent:oUpperDiv, lowercontent:oLowerDiv});
 	},
 
-	//*******************************************************************
-	pr__setInViewListener: function(){
-		var oThis = this;
-		var oOptions = this.options;
-		var oElement = $("#"+oOptions.pr__upper_div );
-		
-		oElement.empty();
-		oElement.append("Waiting to become visible ");
-		var btnForce = $("<button>").append("load");
-		oElement.append(btnForce);
-		
-		//set the event listeners
-		btnForce.click( 		function(){oThis.onInView(true);}		);
-		oElement.on('inview', 	function(poEvent, pbIsInView){oThis.onInView(pbIsInView);}	);		
-	},
 
 	//#################################################################
 	//# events
 	//#################################################################`
-	onInView: function(pbIsInView){
+	onStatus: function(psStatus){
 		var oThis = this;
 		var oOptions = this.options;
 		var oElement = $("#"+oOptions.pr__upper_div );
 
-		//check if element is visible
-		if (!pbIsInView) return;	
-		
-		oElement.off('inview');	//turn off the inview listener
 		oElement.empty();
-		oElement.removeClass();
 		oElement.addClass("chart_widget");
 		oElement.addClass("chart_initialising");
-		oElement.append("Initialising: " + oOptions.title);
-
-		setTimeout(	function(){	oThis.onVisibleTimer()}, this.consts.WAIT_VISIBLE);
+		oElement.append(psStatus);
 	},
 	
-	//*******************************************************************
-	// visible timer incase the element is being scrolled. 
-	//
-	onVisibleTimer: function(){
-		var oThis = this;
-		var oOptions = this.options;
-		var oElement = $("#"+oOptions.pr__upper_div );
-
-		if (cCharts.queue.stopping) return;
-		
-		if (!oElement.inViewport()){ //check it again
-			this.pr__setInViewListener();
-			return;
-		}
-
-		if (cCharts.queue.stopping) return;
-		
-		//loading message
-		oElement.empty();
-		oElement.removeClass();
-		oElement.addClass("chart_widget");
-		oElement.addClass("chart_queuing");
-		oElement.append("Queueing: " + oOptions.title);
-		
-		//add the data request to the http queue
-		var oItem = new cHttpQueueItem();
-		oItem.url = this.pr__get_chart_url();
-		oItem.fnCheckContinue = function(){return oThis.checkContinue();};
-
-		bean.on(oItem, "start", 	function(){oThis.onStart(oItem);}	);				
-		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		cCharts.queue.add(oItem);
-		
-		//
-	},
-	
-	//*******************************************************************
-	checkContinue: function(){
-		var oThis = this;
-		var oOptions = this.options;
-		var oElement = $("#"+oOptions.pr__upper_div );
-		var bOK = true;
-		
-		oElement.empty();
-		
-		if (!oElement.inViewport()){
-			this.pr__setInViewListener();
-			bOK = false;
-			oElement.append("Aborting " + oOptions.title);
-		}else
-			oElement.append("Loading.. "+ oOptions.title);		
-		
-		return bOK;
-	},
 	
 	//*******************************************************************
 	onError: function(poHttp, psMessage){
@@ -310,14 +238,6 @@ $.widget( "ck.appdchart",{
 	onStart: function(poItem){
 		var oOptions = this.options;
 		var oElement = $("#"+oOptions.pr__upper_div );
-
-		if (cCharts.queue.stopping) return;
-		
-		if (!oElement.inViewport()){
-			poItem.abort = true;
-			this.pr__setInViewListener();
-			return;
-		}
 		
 		oElement.empty();
 		oElement.removeClass();
@@ -335,7 +255,6 @@ $.widget( "ck.appdchart",{
 		var oOptions = this.options;
 		var oElement = $("#"+oOptions.pr__upper_div );
 
-		if (cCharts.queue.stopping) return;
 		oElement.empty();
 		oElement.removeClass();
 		oElement.addClass("chart_widget");

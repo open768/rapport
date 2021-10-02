@@ -53,131 +53,137 @@ $sFilterTierQS = cHttp::build_QS($sAppQS, $sFilterTierQS);
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
 $aNodes = $oTier->GET_Nodes();
-function sort_nodes($a, $b){
-	return strcmp($a->name, $b->name);
-}
-uasort($aNodes , "sort_nodes");
+uasort($aNodes , "AD_name_sort_fn");
 
+//TODO make this a widget
 $oCred = cRenderObjs::get_appd_credentials();
-if ($oCred->restricted_login == null){?>
-	<select id="showMenu">
-		<optgroup label="Nodes">
+
+function show_nodes($psNode){
+	global $oNodes, $sTransQS, $aNodes, $oCred;
+	
+	if ($oCred->restricted_login == null){?>
+		<select id="showMenu">
+			<optgroup label="Nodes">
+				<?php
+					if ($node){
+						?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
+						$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $psNode);
+						?><option value="tiertransgraph.php?<?=$sNodeQs?>">
+							(<?=($node)?>) server
+						</option><?php 
+					}
+				?>
+			</optgroup>
+			<optgroup label="Nodes">
 			<?php
-				if ($node){
-					?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
-					$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $node);
-					?><option value="tiertransgraph.php?<?=$sNodeQs?>">
-						(<?=($node)?>) server
-					</option><?php 
+				foreach ($aNodes as $oNode){
+					$sDisabled = ($oNode->name==$node?"disabled":"");
+					$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
+					$sUrl = "transdetails.php?$sNodeQs";
+					?>
+						<option <?=$sDisabled?> value="<?=$sUrl?>"><?=$oNode->name?></option>
+					<?php
 				}
 			?>
-		</optgroup>
-		<optgroup label="Nodes">
-		<?php
-			foreach ($aNodes as $oNode){
-				$sDisabled = ($oNode->name==$node?"disabled":"");
-				$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
-				$sUrl = "transdetails.php?$sNodeQs";
-				?>
-					<option <?=$sDisabled?> value="<?=$sUrl?>"><?=$oNode->name?></option>
-				<?php
-			}
-		?>
-		</optgroup>
-	</select>
-	<script language="javascript">
-	$(  
-		function(){
-			$("#showMenu").selectmenu({change:common_onListChange});
-		}  
-	);
-	</script><?php
-}
-cRenderMenus::show_tier_functions();
-cRender::appdButton(cADControllerUI::transaction($oApp,$oTrans->id));
-cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
-cDebug::flush();
-
-?>
-<H2>Contents</h2>
-<ul>
-	<li><a href="#1">Data for <?=cRender::show_name(cRender::NAME_TRANS,$oTrans->name)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a>
-	<li><a href="#2">Transaction Map</a>
-	<li><a href="#4">Remote Services</a>
-	<li><a href="#5">Transaction Snapshots</a>
-</ul>
-<p>
-<!-- #############################################################################-->
-<!-- #############################################################################-->
-<h2><a name="1">Data for <?=cRender::show_name(cRender::NAME_TRANS,$oTrans->name)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a></h2>
-<?php
-	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name, $oTrans->name)];
-	$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cADMetric::transResponseTimes($oTier->name, $oTrans->name)];
-	$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cADMetric::transErrors($oTier->name, $oTrans->name)];
-	$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cADMetric::transCpuUsed($oTier->name, $oTrans->name)];
-	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
-	cDebug::flush();
-?>
-
-<p>
-<!-- #############################################################################-->
-<!-- #############################################################################-->
-<h2><a name="2">Transaction map</a></h2>
-<div class="transactionflow" id="<?=FLOW_ID?>">
-	Please wait...
-</div>
-<script>
-	function load_trans_flow(){
-		var oLoader = new cTransFlow("<?=FLOW_ID?>");
-		oLoader.home="<?=$home?>";
-		oLoader.APP_QS="<?=cRender::APP_QS?>";
-		oLoader.TIER_QS="<?=cRender::TIER_QS?>";
-		oLoader.TRANS_QS="<?=cRender::TRANS_QS?>";
-		oLoader.load("<?=$oApp->name?>", "<?=$oTier->name?>", "<?=$oTrans->name?>");
+			</optgroup>
+		</select>
+		<script language="javascript">
+		$(  
+			function(){
+				$("#showMenu").selectmenu({change:common_onListChange});
+			}  
+		);
+		</script><?php
 	}
-	$(load_trans_flow);	
-</script>
-
-<?php
-
-// ################################################################################
-// ################################################################################
-cDebug::flush();
-if ($node){ ?>
-	<h2><a name="3">Data</a> for Transaction: <?=cRender::show_name(cRender::NAME_TRANS,$oTrans->name)?> for node (<?=$node?>)</h2>
-	<?php
-		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name, $oTrans->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cADMetric::transResponseTimes($oTier->name, $oTrans->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cADMetric::transErrors($oTier->name, $oTrans->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cADMetric::transCpuUsed($oTier->name, $oTrans->name, $node)];
-		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
-	?>
-	<h2>Server Data</h2>
-	<?php
-		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cADMetric::InfrastructureCpuBusy($oTier->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cADMetric::InfrastructureJavaHeapUsed($oTier->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cADMetric::InfrastructureJavaGCTime($oTier->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cADMetric::InfrastructureDotnetHeapUsed($oTier->name, $node)];
-		$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cADMetric::InfrastructureDotnetGCTime($oTier->name, $node)];
-		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 }
-?>
 
-<p>
-<!-- #############################################################################-->
-<!-- #############################################################################-->
-<h2><a name="4">Remote</a>Services used by <?=cRender::show_name(cRender::NAME_TRANS,$oTrans->name)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
-	<?php
-		cDebug::flush();
+//#####################################################################################################
+cRenderCards::card_start("Contents");
+	cRenderCards::body_start();
+	?><ul>
+		<li><a href="#1">Data for <?=cRender::show_name(cRender::NAME_TRANS,$oTrans->name)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a>
+		<li><a href="#2">Transaction Map</a>
+		<li><a href="#4">Remote Services</a>
+		<li><a href="#5">Transaction Snapshots</a>
+	</ul><?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cADCommon::button(cADControllerUI::transaction($oApp,$oTrans->id));
+		cRenderMenus::show_tier_functions();
+		cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
+		show_nodes($node);
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
+
+//#####################################################################################################
+cRenderCards::card_start("<a name='1'>Data</a> for $oTrans->name $oTier->name");
+	cRenderCards::body_start();
+		$aMetrics = [];
+		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cADMetric::transResponseTimes($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cADMetric::transErrors($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cADMetric::transCpuUsed($oTier->name, $oTrans->name)];
+		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+	cRenderCards::body_end();
+cRenderCards::card_end();
+
+//#####################################################################################################
+cRenderCards::card_start("<a name='2'>Transaction map</a>");
+	cRenderCards::body_start();
+	
+	?><div class="transactionflow" id="<?=FLOW_ID?>">
+		Please wait...
+	</div>
+	<script>
+		function load_trans_flow(){
+			var oLoader = new cTransFlow("<?=FLOW_ID?>");
+			oLoader.home="<?=$home?>";
+			oLoader.APP_QS="<?=cRender::APP_QS?>";
+			oLoader.TIER_QS="<?=cRender::TIER_QS?>";
+			oLoader.TRANS_QS="<?=cRender::TRANS_QS?>";
+			oLoader.load("<?=$oApp->name?>", "<?=$oTier->name?>", "<?=$oTrans->name?>");
+		}
+		$(load_trans_flow);	
+	</script><?php
+	cRenderCards::body_end();
+cRenderCards::card_end();
+
+// ################################################################################
+if ($node){ 
+	cRenderCards::card_start("<a name='3'>Data</a> for Transaction: $oTrans->name for node $node)");
+		cRenderCards::body_start();
+			$aMetrics = [];
+			$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cADMetric::transResponseTimes($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cADMetric::transErrors($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cADMetric::transCpuUsed($oTier->name, $oTrans->name, $node)];
+			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cRenderCards::body_end();
+	cRenderCards::card_end();
+
+	cRenderCards::card_start("Server Data");
+		cRenderCards::body_start();
+			$aMetrics = [];
+			$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cADMetric::InfrastructureCpuBusy($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cADMetric::InfrastructureJavaHeapUsed($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cADMetric::InfrastructureJavaGCTime($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cADMetric::InfrastructureDotnetHeapUsed($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cADMetric::InfrastructureDotnetGCTime($oTier->name, $node)];
+			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cRenderCards::body_end();
+	cRenderCards::card_end();
+}
+
+// ################################################################################
+cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oTrans->name in Tier: $oTier->name");
+	cRenderCards::body_start();
 		//******get the external tiers used by this transaction
 		$oData = $oTrans->GET_ExtTiers();
 		if ($oData){
@@ -194,79 +200,76 @@ if ($node){ ?>
 			}
 			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
 		}else
-			echo "<h3>This transaction has no external calls</h3>";
-	?>
-</table>
-<p>
-<!-- #############################################################################-->
-<!-- #############################################################################-->
-<h2><a name="5">Transaction Snapshots</a></h2>
-Showing snapshots taking over <?=MIN_TRANS_TIME?>ms
-<?php
-cDebug::flush();
+			cRender::messagebox("This transaction has no external calls");
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
+// ################################################################################
 $oTimes = cRender::get_times();
 $sAppdUrl = cADControllerUI::transaction_snapshots($oApp,$oTrans->id, $oTimes);
-
 $aSnapshots = $oApp->GET_snaphot_info($oTrans->id, $oTimes);
-cDebug::vardump($aSnapshots);
 
-if (count($aSnapshots) == 0){
-	?><div class="maintable">No Snapshots found</div><?php
-}else{
-	cRender::button("Analyse top ten slowest transactions", "transanalysis.php?$sTransQS", true);
-	?>
-		<table class="maintable" id="trans">
-			<thead><tr class="tableheader">
-				<th width="140">start time</th>
-				<th width="10"></th>
-				<th width="80">Duration</th>
-				<th>Server</th>
-				<th>URL</th>
-				<th>Summary</th>
-				<th width="80"></th>
-			</tr></thead>
-			<tbody><?php
-				foreach ($aSnapshots as $oSnapshot){
-					if ($oSnapshot->timeTakenInMilliSecs < MIN_TRANS_TIME) continue;
+cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
+	cRenderCards::body_start();
+		echo "Showing snapshots taking over ".MIN_TRANS_TIME."ms<br>";
+		if (count($aSnapshots) == 0)
+			cRender::messagebox("No Snapshots found");
+		else{
+			cRender::button("Analyse top ten slowest transactions", "transanalysis.php?$sTransQS", true);
+			?><p><table class="maintable" id="trans">
+				<thead><tr class="tableheader">
+					<th width="140">start time</th>
+					<th width="10"></th>
+					<th width="80">Duration</th>
+					<th>Server</th>
+					<th>URL</th>
+					<th>Summary</th>
+					<th width="80"></th>
+				</tr></thead>
+				<tbody><?php
+					foreach ($aSnapshots as $oSnapshot){
+						if ($oSnapshot->timeTakenInMilliSecs < MIN_TRANS_TIME) continue;
 
-					$sOriginalUrl = $oSnapshot->URL;
-					if ($sOriginalUrl === "") $sOriginalUrl = $oTrans->name;
-					
-					$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
-					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
-					$sAppdUrl = cADControllerUI::snapshot($oApp, $oTrans->id, $oSnapshot->requestGUID, $oTimes);
-					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
-					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
-					
-					?>
-					<tr class="<?=cRender::getRowClass()?>">
-						<td><?=$sDate?></td>
-						<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
-						<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
-						<td><?=cADUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
-						<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><div style="max-width:200px;overflow-wrap:break-word;"><?=$sOriginalUrl?></div></a></td>
-						<td><?=cCommon::fixed_width_div(600, $oSnapshot->summary)?></div></td>
-						<td><?=cRender::appdButton($sAppdUrl, "Go")?></td>
-					</tr>
-				<?php }
-			?></tbody>
-		</table>
-		<script language="javascript">
-			$( function(){ 
-				$("#trans").tablesorter({
-					headers:{
-						3:{ sorter: 'digit' }
+						$sOriginalUrl = $oSnapshot->URL;
+						if ($sOriginalUrl === "") $sOriginalUrl = $oTrans->name;
+						
+						$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
+						$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
+						$sAppdUrl = cADControllerUI::snapshot($oApp, $oTrans->id, $oSnapshot->requestGUID, $oTimes);
+						$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
+						$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
+						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
+						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
+						
+						?><tr class="<?=cRender::getRowClass()?>">
+							<td><?=$sDate?></td>
+							<td><img src="<?=$home?>/<?=$sImgUrl?>"></td>
+							<td align="middle"><?=$oSnapshot->timeTakenInMilliSecs?></td>
+							<td><?=cADUtil::get_node_name($oApp,$oSnapshot->applicationComponentNodeId)?></td>
+							<td><a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=cCommon::fixed_width_div(200,$sOriginalUrl)?></div></a></td>
+							<td><?=cCommon::fixed_width_div(400, $oSnapshot->summary)?></div></td>
+							<td><?=cADCommon::button($sAppdUrl, "Go")?></td>
+						</tr><?php 
 					}
+				?></tbody>
+			</table>
+			<script language="javascript">
+				$( function(){ 
+					$("#trans").tablesorter({
+						headers:{
+							3:{ sorter: 'digit' }
+						}
+					});
 				});
-			});
 
-		</script>
-	<?php
-	cRender::appdButton($sAppdUrl, "Goto Transaction Snapshots");
-}
+			</script><?php
+		}
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cADCommon::button($sAppdUrl, "Goto Transaction Snapshots");
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
 
 
 // ################################################################################

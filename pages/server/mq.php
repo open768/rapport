@@ -25,7 +25,7 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not supported for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -38,7 +38,7 @@ $iCount = count($aData);
 cRenderCards::card_start(($iCount==0?"MQ Nodes":"Pick a Node"));
 	cRenderCards::body_start();
 		if ($iCount == 0)
-			cRender::errorbox("sorry - no nodes found");
+			cCommon::errorbox("sorry - no nodes found");
 		else
 			echo "All these nodes have MQ Queue managers associated with them";
 	cRenderCards::body_end();

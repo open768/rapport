@@ -25,16 +25,13 @@ cRender::force_login();
 $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 
-cRender::show_top_banner("Configuration"); 
-
-
 //####################################################################
 function sort_config($a,$b){
 	return strcmp($a->description, $b->description );
 }
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

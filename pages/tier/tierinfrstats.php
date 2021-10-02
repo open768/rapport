@@ -53,13 +53,13 @@ $oApp = cRenderObjs::get_current_app();
 
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 if (!$oTier->name){
-	cRender::errorbox("no Tier parameter found");
+	cCommon::errorbox("no Tier parameter found");
 	exit;
 }
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -96,7 +96,7 @@ if ($node) {
 	$sNodeID = cADUtil::get_node_id($oApp, $node);
 	if ($sNodeID){
 		$sUrl = cADControllerUI::nodeDashboard($oApp, $sNodeID);
-		cRender::appdButton($sUrl);
+		cADCommon::button($sUrl);
 	}
 }
 $sDiskUrl = cHttp::build_url("tierdisks.php", $sTierQs);

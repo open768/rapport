@@ -27,13 +27,12 @@ $node = cHeader::get(cRender::NODE_QS);
 $nodeID = cHeader::get(cRender::NODE_ID_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
-cRender::show_top_banner("Node details: $node"); 
 cRender::button("Back to all nodes", "appagents.php?$sAppQS");
-cRender::appdButton(cADControllerUI::nodeDashboard($oApp,$nodeID));
+cADCommon::button(cADControllerUI::nodeDashboard($oApp,$nodeID));
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

@@ -34,7 +34,7 @@ $oTimes = cRender::get_times();
 $title= "$oApp->name&gt;Service EndPoints";
 
 cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
-cRender::appdButton(cADControllerUI::serviceEndPoints($oApp,$oTimes));
+cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
 
 //####################################################################
 //retrieve tiers
@@ -54,7 +54,7 @@ foreach ($aTiers as $oTier){
 	$aEndPoints = cAD_RestUI::GET_service_end_points($oTier);
 	//$aEndPoints = $oTier->GET_ServiceEndPoints();
 	if (count($aEndPoints) == 0){
-		cRender::messagebox("no Service endpoints found for $oTier->name");
+		cCommon::messagebox("no Service endpoints found for $oTier->name");
 		continue;
 	}
 	uasort($aEndPoints, "pr__sort_endpoints");

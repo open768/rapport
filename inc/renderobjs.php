@@ -14,7 +14,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
-require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/AD.php");
 require_once("$ADlib/core.php");
 
 
@@ -29,10 +29,15 @@ class cRenderObjs{
 	public static function get_appd_credentials(){
 		//cDebug::enter();
 		$oCred = self::$oAppDCredentials;
-		if (!$oCred){
-			cDebug::extra_debug("got credentials");
-			$oCred = new cADCredentials;
-			$oCred->check();
+		if ($oCred == null){
+			cDebug::extra_debug("getting credentials");
+			try{
+				$oCred = new cADCredentials;
+				$oCred->check();
+			}
+			catch (Exception $e){
+				$oCred = null;
+			}
 			self::$oAppDCredentials = $oCred;
 		}
 		//cDebug::leave();;
@@ -54,17 +59,23 @@ class cRenderObjs{
 	
 	//***************************************************************************
 	public static function get_current_app(){
+		cDebug::enter();
 		$sApp = cHeader::get(cRender::APP_QS);
 		$sAID = cHeader::get(cRender::APP_ID_QS);
 		$oApp = self::make_app_obj($sApp, $sAID);
+		cDebug::leave();
+		
 		return $oApp;
 	}
 
 	public static function get_current_tier(){
+		cDebug::enter();
 		$oApp = self::get_current_app();
 		$sTier = cHeader::get(cRender::TIER_QS);
 		$sTID = cHeader::get(cRender::TIER_ID_QS);
-		return self::make_tier_obj($oApp, $sTier, $sTID);
+		$oObj = self::make_tier_obj($oApp, $sTier, $sTID);
+		cDebug::leave();
+		return $oObj;
 	}
 	
 	public static function get_current_trans(){

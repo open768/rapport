@@ -15,18 +15,23 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //#######################################################################
 //#######################################################################
 class cRenderCards{
-	private static $iID = 0;
+	private static $iCardID = 0;
+	private static $iChipID = 0;
+
+	//**************************************************************************
+	//*
 	//**************************************************************************
 	public static function card_start($psTitle="", $psExtraClass=""){
-		self::$iID++;
+		self::$iCardID++;
 		$sClass = "mdl-card mdl-shadow--2dp rapport-card";
 		if ($psExtraClass !== "") $sClass.=" $psExtraClass";
-		?><div class='<?=$sClass?>' id="RCID_<?=self::$iID?>"><?php
+		?><div class='<?=$sClass?>' id="CARDID_<?=self::$iCardID?>"><?php
 		if ($psTitle !== ""){
 			self::title_start();
 			echo "<font class='card_title'>$psTitle</font>";
 			self::title_end();
 		}
+		return self::$iCardID;
 	}
 	//**************************************************************************
 	public static function title_start(){
@@ -41,26 +46,39 @@ class cRenderCards{
 	public static function body_start(){
 		?><div class='mdl-card__supporting-text'><?php
 	}
+	
+	//**************************************************************************
+	//*
 	//**************************************************************************
 	public static function action_end(){
-		?></div><?php
+		?></div><!-- mdl actions --><?php
 	}
 	//**************************************************************************
 	public static function title_end(){
-		?></div><?php
+		?></div><!-- mdl title --><?php
 	}
 	//**************************************************************************
 	public static function body_end(){
-		?></div><?php
+		?></div><!-- mdl body --><?php
 	}
+	//**************************************************************************
 	public static function card_end(){
 		?></div><p><!--mdl-card--><?php
 	}
 	
-	public static function chip($psContent){
+	//**************************************************************************
+	//*
+	//**************************************************************************
+	public static function chip($psContent, $psTooltip=null){
+		self::$iChipID++;
 		?><span class="mdl-chip">
-			<span class="mdl-chip__text"><?=$psContent?></span>
+			<span class="mdl-chip__text" id="CHIPID_<?=self::$iChipID?>"><?=$psContent?></span>
 		</span>&nbsp;<?php
+		
+		if ($psTooltip){ 
+			?><div class="mdl-tooltip" data-mdl-for="CHIPID_<?=self::$iChipID?>"><?=$psTooltip?></div><?php 
+		}
+		return 	self::$iChipID;
 	}
 }
 ?>

@@ -22,7 +22,6 @@ cRender::force_login();
 //####################################################################
 $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
-cRender::show_top_banner("One Click Checkup"); 
 ?>
 
 <?php

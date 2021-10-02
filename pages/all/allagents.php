@@ -40,7 +40,7 @@ const TOTALCOL_WIDTH=150;
 
 $moApps = cADController::GET_Applications();
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -48,7 +48,7 @@ if (cAD::is_demo()){
 //#############################################################
 cRenderCards::card_start();
 	cRenderCards::action_start();
-		cRender::appdButton(cADControllerUI::agents());
+		cADCommon::button(cADControllerUI::agents());
 		cRender::button("Show All Agent Versions", "allagentversions.php");	
 	cRenderCards::action_end();
 cRenderCards::card_end();

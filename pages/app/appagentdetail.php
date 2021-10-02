@@ -59,11 +59,11 @@ function count_nodes($paData){
 
 //####################################################################
 if (!$oApp->name ){
-	cRender::errorbox("no application");
+	cCommon::errorbox("no application");
 	exit;
 }
 if (!$gsMetricType ){
-	cRender::errorbox("no metric type");
+	cCommon::errorbox("no metric type");
 	exit;
 }
 $oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricType);
@@ -80,12 +80,12 @@ cRenderMenus::show_app_agent_menu();
 
 cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url("appagentdetail.php",cRender::METRIC_TYPE_QS,$gsMetricType));
 
-cRender::appdButton(cADControllerUI::nodes($oApp), "All nodes");
+cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 //####################################################################
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

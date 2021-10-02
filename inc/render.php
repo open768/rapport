@@ -14,7 +14,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 require_once("$phpinc/ckinc/colour.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/http.php");
-require_once("$ADlib/appdynamics.php");
+require_once("$ADlib/AD.php");
 require_once("$ADlib/core.php");
 require_once("$root/inc/filter.php");
 require_once("$root/inc/rendermenus.php");
@@ -73,10 +73,21 @@ class cRender{
 	const LIST_MODE_QS = "list";
 	
 	//************************************************************
+	const LOCATION_QS="loc";
+	
+	//************************************************************
 	const GROUP_TYPE_QS ="gtq";
 	const GROUP_TYPE_NODE ="n";
 	const GROUP_TYPE_TIER ="t";
 	const GROUP_TYPE_IP ="i";
+
+	//************************************************************
+	const LOG_ID_QS ="loi";
+	const LOG_VERSION_QS = "lov";
+	const LOG_CREATED_QS = "loc";
+	
+	//************************************************************
+	const HEALTH_ID_QS ="hi";
 	
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";
@@ -95,6 +106,7 @@ class cRender{
 	
 	//**************************************************************************
 	const SERVER_MQ_MANAGER_QS = "mqm";
+	
 	
 	//**************************************************************************
 	const NAME_APP = 1;
@@ -138,47 +150,19 @@ class cRender{
 	//**************************************************************************
 	public static function force_login(){
 		global $home;
-		cDebug::enter();
-		try{
-			$oCred = cRenderObjs::get_appd_credentials();
-			cDebug::leave();;
-			return $oCred->logged_in();
+		//cDebug::enter();
+		
+		$oCred = cRenderObjs::get_appd_credentials();
+		if ($oCred == null || !$oCred->logged_in()){
+			cCommon::errorbox("not logged in in");
+			$sUrl = cHttp::build_url("$home/index.php", cRender::LOCATION_QS, $_SERVER["REQUEST_URI"]);
+			self::button("Back to login", "$sUrl", false);
+			cDebug::flush();
+			exit;
 		}
-		catch (Exception $e)
-		{
-			$sMsg = $e->getMessage();
-			self::show_top_banner("not logged in "); 
-			self::errorbox("there was a problem logging in - $sMsg");
-			self::button("Back to login", "$home/index.php", false);
-			die;
-		}
-		cDebug::flush();
-		cDebug::leave();;
+		//cDebug::leave();;
 	}
-	
-	//**************************************************************************
-	public static function errorbox($psMessage){
-		?>
-			<p>
-			<div class='errorbox'>
-				<h2>Oops there was an error</h2>
-				<p>
-				<?=$psMessage?>
-			</div>
-		<?php
-		cDebug::flush();
-	}
-	//**************************************************************************
-	public static function messagebox($psMessage){
-		?>
-			<p>
-			<div class='errorbox'>
-				<?=$psMessage?>
-			</div>
-		<?php
-		cDebug::flush();
-	}
-	
+
 	//*************************************************************
 	public static function render_heatmap($paData, $psCaption, $psColCaption, $psRowCaption){
 		$aColours = cColour::multigradient([ [0,255,0,7],[255,0,0,5],[255,255,0,7],[255,255,255,0]]);
@@ -232,6 +216,58 @@ class cRender{
 
 		echo  "<button onclick=\"document.location.href='$psUrl';return false;\">$psCaption</button>";
 	}
+	
+	//**************************************************************************
+	public static function add_filter_box($psSelector,$psAttr,$psParentSelector){
+		if 	(self::is_list_mode()) return;
+
+		?><form action="#">
+			<div class="mdl-textfield mdl-js-textfield">
+				<input class="mdl-textfield__input" type="text" id="filter" disabled>
+				<label class="mdl-textfield__label" for="filter">Filter...</label>
+			</div>
+		</form>
+		<script language="javascript">
+			
+			function onKeyUp( poEvent){
+				//look through divs with selectmenu
+				var aSelected = $("<?=$psSelector?>");
+				var sInput = $("#filter").val().toLowerCase();
+				//iterate
+				aSelected.each(
+					function(index){
+						//skip selected that dont have the desired attribute
+						var oEl = $(this);
+						var sAttr = oEl.attr("<?=$psAttr?>");
+						if (sAttr) {
+							//check the attribute for a match
+							var oParent=$(this).closest("<?=$psParentSelector?>");
+							if (sInput.length < 3){	//must be at least 3 chars
+								oParent.show();
+							}else{
+								sAttr = sAttr.toLowerCase();
+								if ( sAttr.indexOf(sInput) == -1)
+									oParent.hide();
+								else
+									oParent.show();
+							}
+						}
+					}
+				);
+			}
+			
+			$( 			
+				function setFilterKeyUp(){
+					$(
+						function(){
+							$("#filter" ).prop( "disabled", false );
+							$("#filter" ).keyup(onKeyUp);
+						}
+					);
+				}
+			);
+		</script>
+	<?php	}
 
 	//**************************************************************************
 	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null, $psTarget=null){
@@ -240,7 +276,7 @@ class cRender{
 		$oCred = null;
 		//cDebug::enter();
 		
-		if ($psUrl === "$home/index.php")	{
+		if ($psUrl === "$home/index.php") {
 			cDebug::write("showing login page");
 			$bShow = true;
 		}
@@ -291,17 +327,6 @@ class cRender{
   		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
 	}
 	
-	//**************************************************************************
-	public static function appdButton ($psUrl, $psCaption = "Launch in AppDynamics"){
-		$sClass="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect";
-		?>
-			<button class="<?=$sClass?>" onclick="window.open('<?=$psUrl?>','appdynamics');">
-				<i class="material-icons-outlined">north_east</i>
-				&nbsp;
-				<?=$psCaption?>
-			</button>
-		<?php
-	}
 	
 	//**************************************************************************
 	public static function is_list_mode(){
@@ -391,11 +416,6 @@ class cRender{
 			</form>
 		<?php
 		cDebug::flush();
-	}
-	//**************************************************************************
-	public static function show_top_banner( $psTitle){
-		//deprecated
-		cDebug::write("this function is Deprecated");
 	}
 		
 	//**************************************************************************

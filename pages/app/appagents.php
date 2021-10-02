@@ -18,67 +18,6 @@ require_once "$root/inc/charts.php";
 
 
 
-cRenderHtml::header("Application Nodes");
-cRender::force_login();
-
-
-$oApp = cRenderObjs::get_current_app();
-$psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
-if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
-$sAppQS = cRenderQS::get_base_app_QS($oApp);
-$sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
-$aMetrics = cADInfraMetric::getInfrastructureMetricTypes();
-
-//####################################################################
-cRender::show_top_banner("Agents for $oApp->name"); 
-cRenderMenus::show_app_agent_menu();
-cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
-//********************************************************************
-if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
-	cRenderHtml::footer();
-	exit;
-}
-	//********************************************************************
-?>
-<select id="showMenu">
-	<option selected disabled>Show...</option>
-	<option <?=($psAggType == cRender::GROUP_TYPE_NODE?"selected disabled":"")?> value="<?=cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_NODE)?>">Group by Node</option>
-	<option <?=($psAggType == cRender::GROUP_TYPE_TIER?"selected disabled":"")?> value="<?=cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_TIER)?>">Group by Tier</option>
-</select>
-	<script language="javascript">
-	$(  
-		function(){
-			$("#showMenu").selectmenu({change:common_onListChange});  
-		}  
-	);
-	</script>
-	<?php
-$oCred = cRenderObjs::get_appd_credentials();
-$sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
-
-if ($oCred->restricted_login == null){ 
-	?><select id="nodeMenu">
-		<option selected disabled>Show for all Servers...</option>
-		<?php
-			foreach ($aMetrics as $sMetricType){
-				$oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
-				$sDetailUrl = cHttp::build_url($sDetailBaseUrl, cRender::METRIC_TYPE_QS, $sMetricType);
-				?><option value="<?="$sDetailUrl"?>"><?=$oMetric->short?></option><?php
-			}
-		?>
-	</select>
-	<script language="javascript">
-	$(  
-		function(){
-			$("#nodeMenu").selectmenu({change:common_onListChange});  
-		}  
-	);
-	</script>
-	<p>
-<?php
-}
-cRender::appdButton(cADControllerUI::nodes($oApp), "All nodes");
 
 //####################################################################
 
@@ -146,12 +85,12 @@ function render_tier_agents($paNodes){
 					
 					?><tr class="<?=$sClass?>">
 						<td><?php
-							cRender::appdButton(cADControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
+							cADCommon::button(cADControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
 						?><td><?=$oNode->agentType?></td>
 						<td align="right"><nobr><?php
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
+							cADCommon::button(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
 						?></nobr></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
 						<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
@@ -186,7 +125,7 @@ function render_node_agents($paData){
 					$sMachine = $aNodes[0]->machineName;
 					$iMachineID = $aNodes[0]->machineId;
 					?><td rowspan="<?=$iRowSpan?>"><nobr>
-						<?=cRender::appdButton(cADControllerUI::machineDetails($iMachineID), $sMachine)?>
+						<?=cADCommon::button(cADControllerUI::machineDetails($iMachineID), $sMachine)?>
 					</nobr></td><?php
 				?></tr><?php
 				
@@ -206,7 +145,7 @@ function render_node_agents($paData){
 						<td><?php
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cRender::appdButton(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
+							cADCommon::button(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
 						?></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
 						<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
@@ -220,14 +159,89 @@ function render_node_agents($paData){
 }
 
 //***********************************************************************
+function render_agent_counts($psCaption, $paCounts){
+	$aKeys = array_keys($paCounts);
+	if (count($aKeys) == 0)
+		echo "no agents found";
+	else{
+		asort($aKeys);
+		?><table class="maintable" border="1" cellspacing="0">
+			<tr class="tableheader">
+				<td></td><?php
+				foreach ($aKeys as $sKey)
+					echo "<th>$sKey</th>";
+			?></tr><tr>
+				<td width="200" align="right"><?=$psCaption?> agent count</td><?php
+				foreach ($aKeys as $sKey){
+					$iCount = $paCounts[$sKey];
+					echo "<td width='100' align='middle'>$iCount</td>";
+				}
+			?></tr>
+		</table><?php
+	}
+		
+		
+}
+
+//####################################################################
+//#
+//####################################################################
+cRenderHtml::header("Application Nodes");
+cRender::force_login();
+if (cAD::is_demo()){
+	cCommon::errorbox("function not supported for Demo");
+	cRenderHtml::footer();
+	exit;
+}
+//####################################################################
+$oApp = cRenderObjs::get_current_app();
+$psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
+$aMetrics = cADInfraMetric::getInfrastructureMetricTypes();
+if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
+
+//####################################################################
 $aData = $oApp->GET_Nodes();
 $iNodes = count_nodes($aData);	
-?>
-	<h2>There are <?=$iNodes;?> agents in total in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
-<?php
-if ($iNodes==0)
-	cRender::messagebox("no Agents found");
-else
+
+//####################################################################
+cRenderCards::card_start();
+cRenderCards::body_start();
+	if ($iNodes==0)
+		cCommon::messagebox("no Agents found");
+	else{
+		echo "There are $iNodes Nodes in total";
+		$oCounts = cADUtil::analyse_agent_versions($aData);
+		$aMacCounts = $oCounts->machineAgents;
+		render_agent_counts("machine", $aMacCounts);
+		$aAppCounts = $oCounts->appAgents;
+		render_agent_counts("App", $aAppCounts);
+	}
+cRenderCards::body_end();
+cRenderCards::action_start();
+	cRenderMenus::show_app_agent_menu();
+	cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
+	
+	//********************************************************************
+	if ($psAggType===cRender::GROUP_TYPE_NODE){
+		$sUrl = cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_TIER);
+		cRender::button("Group by Tier",$sUrl);
+	}else{
+		$sUrl = cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_NODE);
+		cRender::button("Group by Node",$sUrl);
+	}
+	$oCred = cRenderObjs::get_appd_credentials();
+	$sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
+
+	cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
+cRenderCards::action_end();
+cRenderCards::card_end();
+
+//####################################################################
+if ($iNodes > 0){
+	cRenderCards::card_start();
+	cRenderCards::body_start();
 	switch($psAggType){
 		case cRender::GROUP_TYPE_TIER:
 			render_tier_agents($aData);
@@ -237,7 +251,11 @@ else
 			render_node_agents($aData);
 			break;
 		default:
-			cRender::errorbox("unknown groupp mode");
+			cCommon::errorbox("unknown groupp mode");
 	}
+	cRenderCards::body_end();
+	cRenderCards::card_end();
+}
+
 cRenderHtml::footer();
 ?>

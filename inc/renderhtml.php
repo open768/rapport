@@ -26,18 +26,13 @@ class cRenderHtml{
 		cDebug::enter();
 		$bLoggedin = true;
 
-		if (cDebug::is_debugging()) return;
+
 
 		//-------------------------------------------------------------
 		//getting credentials to pre-fill the form
 		cDebug::extra_debug("getting credentials");
-		try{
-			$oCred = cRenderObjs::get_appd_credentials();
-		}
-		catch( Exception $e)
-		{
-			$bLoggedin = false;
-		}
+		$oCred = cRenderObjs::get_appd_credentials();
+		$bLoggedin = ($oCred != null);
 		
 		//-------------------------------------------------------------
 		cDebug::extra_debug("displaying page");
@@ -48,6 +43,12 @@ class cRenderHtml{
 			<title><?=$psTitle?></title>
 			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
+			<?php 		
+				if (cDebug::is_debugging()) {
+					echo "</head><body>";
+					return;				
+				}
+			?>
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.css">			
 			<link rel="stylesheet" href="<?=$jsinc?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
@@ -93,9 +94,13 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jqueryui.slideout.js"></script>
 			
+			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
 			<script src="<?=$home?>/js/widgets/chart.js"></script>
 			<script src="<?=$home?>/js/menus.js"></script>
-			<script src="<?=$home?>/js/widgets/appdmenu.js"></script>
+			<script src="<?=$home?>/js/widgets/menu.js"></script>
+			<script src="<?=$home?>/js/widgets/healthrule.js"></script>
+			<script src="<?=$home?>/js/widgets/logdetail.js"></script>
+			<script src="<?=$home?>/js/widgets/tiererrors.js"></script>
 			<script src="<?=$home?>/js/common.js"></script>
 			<script src="<?=$home?>/js/qtip-init.js"></script>
 			<script src="<?=$home?>/js/dialog-init.js"></script>
@@ -130,8 +135,8 @@ class cRenderHtml{
 					<div id="page_content">
   <?php
 		//show the navigation menu - this updates the material design navigation menu
-		cDebug::extra_debug("showing top menu");
-		cRenderMenus::top_menu();
+		if ($bLoggedin)	cRenderMenus::top_menu();
+
 		cDebug::flush();
 		cDebug::leave();
 		//error_reporting(E_ALL & ~E_WARNING);

@@ -46,7 +46,8 @@ if (cRender::is_list_mode()){
 			cRender::button("show as buttons", $sUrl);
 		cRenderCards::action_end();
 	cRenderCards::card_end();
-	echo "<p>";
+
+	//*********************************************************************
 	cRenderCards::card_start();
 		cRenderCards::title_start();
 			echo "there are ".count($aResponse)." tiers in this application";
@@ -76,10 +77,11 @@ if (cRender::is_list_mode()){
 		cRenderCards::body_end();
 		cRenderCards::action_start();
 			cRenderMenus::show_apps_menu("Application Tier Activity for:","tiers.php");
-			cRender::appdButton(cADControllerUI::application($oApp));
-			cRender::appdButton(cADControllerUI::app_slow_transactions($oApp), "Slow Transactions");
+			cADCommon::button(cADControllerUI::application($oApp));
+			cADCommon::button(cADControllerUI::app_slow_transactions($oApp), "Slow Transactions");
 			$sUrl.= "&".cRender::LIST_MODE_QS;
 			cRender::button("show as list", $sUrl);
+			cRender::add_filter_box("select[menu=tierfunctions]","tier",".mdl-card");
 		cRenderCards::action_end();
 	cRenderCards::card_end();
 	

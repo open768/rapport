@@ -36,7 +36,7 @@ class cChartItem{
 		$iWidth = round($this->width);
 		$iHeight=round($this->height);
 		?><DIV
-			type="appdchart" 
+			type="adchart" 
 			home="<?=$home?>"
 			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$iWidth?>" height="<?=$iHeight?>" 

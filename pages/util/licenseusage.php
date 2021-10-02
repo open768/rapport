@@ -24,11 +24,10 @@ cChart::do_header();
 //####################################################################
 $sUsage = cHeader::get(cRender::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
-cRender::show_top_banner("License Usage for $sUsage month(s)"); 
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -41,7 +40,7 @@ try{
 	$oMods=cADAccount::GET_license_modules();
 }
 catch (Exception $e){
-	cRender::errorbox("unable to get license details - check whether user has Site Owner role");
+	cCommon::errorbox("unable to get license details - check whether user has Site Owner role");
 	cRenderHtml::footer();
 	exit;	
 }

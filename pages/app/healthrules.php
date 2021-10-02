@@ -22,30 +22,102 @@ cRenderHtml::header("Health Rules for $oApp->name");
 cRender::force_login();
 
 //####################################################################
-cRender::show_top_banner("Health rules");
-$sUrl = cADControllerUI::app_health_rules($oApp);
-cDebug::extra_debug($sUrl);
-cRender::appdButton($sUrl);
-
-cRender::button("back to events", cHttp::build_url("events.php", cRender::APP_QS, $oApp->name));
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not supported for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
-//********************************************************************
-	$aRules = $oApp->GET_HealthRules();
-	cDebug::vardump($aRules);
-	if (count($aRules) == 0){
-		cRender::errorbox("no health rules found for this application");
-		cRenderHtml::footer();
-		exit;
-	}
 
-	//display widgets for health rules
-	//they will be asynchronously fetched by the javascript using a http queue;
-	cRender::messagebox("under construction - use debug2");
+$aRules = $oApp->GET_HealthRules();
+$iCount = ($aRules==null?0:count($aRules));
+if ( $iCount == 0){
+	cCommon::errorbox("no health rules found for this application");
 	cRenderHtml::footer();
+	exit;
+}
+
+//######################################################################################
+//----count disabled
+$iDisabled = 0;
+foreach ($aRules as $oRule)
+	if (!$oRule->enabled)
+		$iDisabled++;
+
+if ($iDisabled == $iCount){
+	cCommon::errorbox("all rules are disabled - nothing to show here");
+	cRenderHtml::footer();
+	exit;
+}
+
+//######################################################################################
+cRenderCards::card_start("Overview");
+cRenderCards::body_start();
+	echo "there are $iCount Rules of which $iDisabled are disabled";
+	cRender::add_filter_box("SPAN[type=filter]", "name", ".mdl-card");
+cRenderCards::body_end();
+cRenderCards::action_start();
+	$sADUrl = cADControllerUI::app_health_rules($oApp);
+	$sBaseUrl = cHttp::build_url("healthrules.php", cRenderQS::get_base_app_QS($oApp));
+	cADCommon::button($sADUrl);
+	cRenderMenus::show_apps_menu("Health rules for:","healthrules.php");
+	cRender::button("back to events", cHttp::build_url("events.php", cRender::APP_QS, $oApp->name));
+	if (cRender::is_list_mode())
+		cRender::button("show details", $sBaseUrl);
+	else
+		cRender::button("show as list", $sBaseUrl."&".cRender::LIST_MODE_QS);
+cRenderCards::action_end();
+cRenderCards::card_end();
+
+
+//######################################################################################
+if (cRender::is_list_mode()){
+	cRenderCards::card_start("Health Rules");
+	cRenderCards::body_start();
+		echo '<DIV style="column-count:3">';
+		$sLastCh = "";
+		foreach ($aRules as $oRule){
+			$sRule = $oRule->name;
+			$sCh = strtoupper($sRule[0]);
+			if ($sCh !== $sLastCh){
+				echo "<h3>$sCh</h3>";
+				$sLastCh = $sCh;
+			}
+			echo "$sRule<br>";
+		}	
+		echo '</DIV>';
+	cRenderCards::body_end();
+	cRenderCards::card_end();
+}else{
+	foreach ($aRules as $oRule){
+		if ($oRule->enabled){
+			cRenderCards::card_start("<span type='filter' name='$oRule->name'>Rule</span>: $oRule->name");
+			cRenderCards::body_start();
+				//display widgets for health rules
+				//they will be asynchronously fetched by the javascript using a http queue;
+				echo "<div type='appdhealthrule' home='$home' ".
+						cRender::APP_QS."='$oApp->name' ".
+						cRender::APP_ID_QS."='$oApp->id' ".
+						cRender::HEALTH_ID_QS."='$oRule->id'>".
+							"please Wait - loading details for rule $oRule->name".
+					"</div>";
+			cRenderCards::body_end();
+			cRenderCards::card_end();
+		}
+	}
+	?><script language="javascript">
+		function init_widget(piIndex, poElement){
+			$(poElement).adhealthdetail();
+		}
+		
+		function init_health_widgets(){
+			$("DIV[type='appdhealthrule']").each(init_widget);
+		}
+		
+		$( init_health_widgets);
+	</script><?php
+}
+
+cRenderHtml::footer();
 ?>

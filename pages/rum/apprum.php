@@ -30,11 +30,11 @@ cChart::do_header();
 $title ="$oApp->name&gt;Web Real User Monitoring";
 
 cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
-cRender::appdButton(cADControllerUI::webrum($oApp));
+cADCommon::button(cADControllerUI::webrum($oApp));
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

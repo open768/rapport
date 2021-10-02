@@ -41,7 +41,7 @@ $oTimes = cRender::get_times();
 $aInfoPoints = $oApp->GET_InfoPoints($oTimes);
 cDebug::vardump($aInfoPoints, true);
 if (count($aInfoPoints) == 0)
-	cRender::messagebox("No information points found");
+	cCommon::messagebox("No information points found");
 else{
 	foreach ($aInfoPoints as $oInfoPoint){
 		?><div class="<?=cRender::getRowClass()?>"><?php

@@ -25,13 +25,13 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not supported for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 
 if (!$sNode){
-	cRender::errorbox("no Node specified");
+	cCommon::errorbox("no Node specified");
 	cRenderHtml::footer();
 	exit;
 }
@@ -45,7 +45,7 @@ $iCount = count($aData);
 cRenderCards::card_start(($iCount==0?"Queue Managers":"Pick a Queue Manager"));
 	cRenderCards::body_start();
 		if ($iCount == 0)
-			cRender::errorbox("sorry - no Queue Managers found");
+			cCommon::errorbox("sorry - no Queue Managers found");
 		else
 			echo "All these Queue managers have Queues";
 	cRenderCards::body_end();

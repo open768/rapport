@@ -33,7 +33,7 @@ class cRenderMenus{
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		?>
 			<div
-				type="appdmenus" menu="appfunctions" 
+				type="admenus" menu="appfunctions" 
 				home="<?=$home?>"
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
 				<font class="ui-selectmenu-text"><?=$poApp->name?></font>
@@ -59,7 +59,7 @@ class cRenderMenus{
 		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT
-				type="appdmenus" menu="appsmenu" 
+				type="admenus" menu="appsmenu" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>>
@@ -85,7 +85,7 @@ class cRenderMenus{
 		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
-				type="appdmenus" menu="appagents" 				
+				type="admenus" menu="appagents" 				
 				home="<?=$home?>"
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
 			</SELECT>
@@ -103,9 +103,7 @@ class cRenderMenus{
 		}
 		catch (Exception $e)
 		{
-			cRender::errorbox("Oops unable to get application data from controller");
-			cDebug::leave();
-			exit;
+			return null;
 		}
 		uasort($aApps,"sort_by_app_name" );
 		$iCount=0;
@@ -128,7 +126,7 @@ class cRenderMenus{
 		}
 		catch (Exception $e)
 		{
-			cRender::errorbox("Oops unable to get application data from controller");
+			cCommon::errorbox("Oops unable to get application data from controller");
 			cDebug::leave();
 			exit;
 		}
@@ -151,13 +149,12 @@ class cRenderMenus{
 		global $home;
 
 		cDebug::enter();
-		try{
-			$oCred = cRenderObjs::get_appd_credentials();
-		}
-		catch (Exception $e){
-			return;
-		}
+		
+		$oCred = cRenderObjs::get_appd_credentials();
+		if ($oCred == null) return;
+
 		$sApps_attr = self::get_apps_attr();
+		if ($sApps_attr== null) return;
 
 		?>
 			<script>
@@ -199,7 +196,7 @@ class cRenderMenus{
 		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
-				type="appdmenus" menu="tierfunctions"  
+				type="admenus" menu="tierfunctions"  
 				home="<?=$home?>"
 				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
 				<option selected><?=$poTier->name?> - please wait
@@ -226,7 +223,7 @@ class cRenderMenus{
 		}
 		catch (Exception $e)
 		{
-			cRender::errorbox("Oops unable to get tier data from controller");
+			cCommon::errorbox("Oops unable to get tier data from controller");
 			cDebug::leave();
 			exit;
 		}
@@ -241,7 +238,7 @@ class cRenderMenus{
 		//TODO change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
-				type="appdmenus" menu="tierchangemenu" 
+				type="admenus" menu="tierchangemenu" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>

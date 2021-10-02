@@ -13,7 +13,7 @@ var cSynthetics = {
 cSynthetics.queue.maxTransfers = 3	; 	//dont overload the controller
 
 
-$.widget( "ck.appdsynlist",{
+$.widget( "ck.adsynlist",{
 	//#################################################################
 	//# Definition
 	//#################################################################

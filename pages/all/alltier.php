@@ -30,7 +30,7 @@ cChart::do_header();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -38,7 +38,7 @@ if (cAD::is_demo()){
 	
 
 $aApps = cADController::GET_Applications();
-if (count($aApps) == 0) cRender::errorbox("No Applications found");
+if (count($aApps) == 0) cCommon::errorbox("No Applications found");
 
 //####################################################################
 foreach ( $aApps as $oApp){

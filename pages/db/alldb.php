@@ -28,11 +28,11 @@ cChart::$width=cChart::CHART_WIDTH_LARGE -200;
 
 //####################################################################
 
-cRender::appdButton(cADControllerUI::databases());
+cADCommon::button(cADControllerUI::databases());
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -41,7 +41,7 @@ if (cAD::is_demo()){
 //####################################################################
 $oResponse = cADController::GET_Databases();
 if (count($oResponse) == 0){
-	cRender::messagebox("No Monitored Databases found");
+	cCommon::messagebox("No Monitored Databases found");
 }else{
 	//tables are needed here as each chart is for a different application
 	?><h2>Databases</h2><?php	

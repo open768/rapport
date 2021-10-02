@@ -20,12 +20,9 @@ require_once "$root/inc/charts.php";
 cRenderHtml::header("Agent License Usage");
 cRender::force_login();
 
-//####################################################################
-cRender::show_top_banner("Agent licenses used"); 
-
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -35,7 +32,7 @@ try{
 	$aRules=cAD_RestUI::GET_allocationRules();
 }
 catch (Exception $e){
-	cRender::errorbox("unable to get license details - $e");
+	cCommon::errorbox("unable to get license details - $e");
 	cRenderHtml::footer();
 	exit;	
 }
@@ -46,7 +43,7 @@ function filter_sort($a,$b){
 	return strnatcasecmp($k1,$k2);
 }
 
-cRender::appdButton(cADControllerUI::licenses());
+cADCommon::button(cADControllerUI::licenses());
 
 $iRuleCount = 0;
 cRenderCards::card_start("Summary");

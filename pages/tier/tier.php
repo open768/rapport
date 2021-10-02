@@ -34,7 +34,7 @@ cChart::do_header();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -58,8 +58,8 @@ cDebug::flush();
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
 		cRenderCards::body_end();
 		cRenderCards::action_start();
-			cRender::appdButton(cADControllerUI::tier($oApp, $oTier));
-			cRender::appdButton(cADControllerUI::tier_slow_transactions($oApp, $oTier),"Slow Transactions");
+			cADCommon::button(cADControllerUI::tier($oApp, $oTier));
+			cADCommon::button(cADControllerUI::tier_slow_transactions($oApp, $oTier),"Slow Transactions");
 			cRender::button("Show Transactions", "../trans/apptrans.php?$sTierQS");
 			if ($oCred->restricted_login == null){
 				cRenderMenus::show_tier_functions();
@@ -90,9 +90,9 @@ cDebug::flush();
 	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
 	cDebug::flush();
 ?>
-//####################################################################
 <h2>Key Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
+	//####################################################################
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADMetric::tierSlowCalls($oTier->name),cChart::STYLE=>cRender::getRowClass()];
 	$aMetrics[] = [cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADMetric::tierVerySlowCalls($oTier->name)];

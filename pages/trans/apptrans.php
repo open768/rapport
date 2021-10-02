@@ -31,7 +31,7 @@ function render_tier_transactions($poTier){
 	try{
 	$aStats = $poTier->app->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
 	}catch (Exception $e){
-		cRender::errorbox("Oops unable to retrieve Transaction names: ".$e);
+		cCommon::errorbox("Oops unable to retrieve Transaction names: ".$e);
 		return;
 	}
 
@@ -104,70 +104,81 @@ function render_tier_transactions($poTier){
 	<?php
 }
 //####################################################################
-cRenderHtml::header("Transactions");
-cRender::force_login();
-
 //get passed in values
 $tier = cHeader::get(cRender::TIER_QS);
 $tid = cHeader::get(cRender::TIER_ID_QS);
 $oApp = cRenderObjs::get_current_app();
 $oTier = cRenderObjs::get_current_tier();
-
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
+cRenderHtml::header("Transactions for $oApp->name");
+cRender::force_login();
 //header
 
 //********************************************************************
 if (cAD::is_demo()){
-	cRender::errorbox("function not support ed for Demo");
+	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
 //********************************************************************
 
-?><h2>Transaction statistics <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
 
-//header
-cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
-if (cFilter::isFiltered()){
-	$sCleanAppQS = cRenderQS::get_base_app_QS($oApp);
-	cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
-}
-cRender::appdButton(cADControllerUI::businessTransactions($oApp));
+cRenderCards::card_start();
+cRenderCards::action_start();
+	cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
+	if (cFilter::isFiltered()){
+		$sCleanAppQS = cRenderQS::get_base_app_QS($oApp);
+		cRender::button("Clear Filter", "apptrans.php?$sCleanAppQS");
+	}
+	cADCommon::button(cADControllerUI::businessTransactions($oApp));
+	cRender::add_filter_box("select[type=admenus]","tier",".mdl-card");
+cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
 // work through each tier
+// TODO make asynchronous
+/* TODO USE restui instead of multiple calls
+https://XXXX.saas.appdynamics.com/controller/restui/v1/bt/listViewDataByColumns
+{"requestFilter":[APP],"searchFilters":null,"timeRangeStart":[EPIC START EG 1632168237113],"timeRangeEnd":[EPIC END] ,"columnSorts":null,"resultColumns":["NAME","BT_HEALTH","AVERAGE_RESPONSE_TIME","CALL_PER_MIN","ERRORS_PER_MIN","PERCENTAGE_ERROR","PERCENTAGE_SLOW_TRANSACTIONS","PERCENTAGE_VERY_SLOW_TRANSACTIONS","PERCENTAGE_STALLED_TRANSACTIONS","MAX_RESPONSE_TIME","TIER","TYPE"],"offset":0,"limit":-1}
+*/
+//
 $aTierIDsWithData = [];
 $aTiers =$oApp->GET_Tiers();
-?>
-<div class="maintable"><?php
-	$giTotalTrans = 0;
-	foreach ( $aTiers as $oAppTier){
-		$oAppTier->app = $oApp;
-		if ($oTier->id	&& ($oAppTier->id != $oTier->id)) continue; //tier not same as selected
-		if (cFilter::isTierFilteredOut($oAppTier)) continue;
-		
-		//get the transaction names for the Tier
-		$aTrans = $oAppTier->GET_transaction_names();	
-		if (!$aTrans) continue;
-		if (count($aTrans) == 0) continue;
+$giTotalTrans = 0;
+foreach ( $aTiers as $oTier){
+	$oTier->app = $oApp;
+	if (cFilter::isTierFilteredOut($oTier)) continue;
+	
+	//get the transaction names for the Tier
+	cRenderCards::card_start();
+		cRenderCards::body_start();
+			$aTrans = $oTier->GET_transaction_names();	
+			if (!$aTrans) continue;
+			if (count($aTrans) == 0) continue;
 
-		//set up urls
-		$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
-		$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oAppTier->name);
-		$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oAppTier->id);
+			//set up urls
+			$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
+			$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oTier->name);
+			$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
 
-		//display the transaction data
-		?><h2>Transactions for <?=cRender::show_name(cRender::NAME_TIER,$oAppTier)?></h2><?php
-		cRenderMenus::show_tier_functions($oAppTier);
-		cRender::button("show transaction graphs", $sUrl);
-		render_tier_transactions($oAppTier);
-	}
-	?><div class="<?=cRender::getRowClass()?>">
-			Total Transactions = <?=$giTotalTrans?>
-	</div>
-</div>
+			
+			//display the transaction data
+			render_tier_transactions($oTier);
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_tier_functions($oTier);
+			cRender::button("show transaction graphs", $sUrl);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}
+//***************************************************************
+cRenderCards::card_start("Totals");
+cRenderCards::body_start();
+	echo "Total Transactions = $giTotalTrans";
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
-<?php
 cRenderHtml::footer();
-
+?>
