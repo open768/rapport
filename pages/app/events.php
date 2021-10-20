@@ -50,7 +50,7 @@ if (count($aEvents) == 0){
 }
 
 uasort($aEvents,"sort_events");
-$oAnalysedEvents = cADUtil::analyse_events($aEvents);
+$oAnalysedEvents = cADAnalysis::analyse_events($aEvents);
 $aPolicyTypes = $oAnalysedEvents->types;
 $aAnalysedEvents = $oAnalysedEvents->analysis;
 
@@ -92,10 +92,10 @@ cRenderCards::card_start("Summary");
 cRenderCards::card_end();
 
 //####################################################################
-$aCorrelated = cAD_RestUI::GET_correlatedEvents($aEvents);
-$aAnalysedEvents = cADUtil::analyse_CorrelatedEvents($aEvents, $aCorrelated);
+$aCorrelated = cADRestUI::GET_correlatedEvents($aEvents);
+$aAnalysedEvents = cADAnalysis::analyse_CorrelatedEvents($aEvents, $aCorrelated);
 
-$oAnalysedActions = cADUtil::analyse_CorrelatedEventActions($aAnalysedEvents);
+$oAnalysedActions = cADAnalysis::analyse_CorrelatedEventActions($aAnalysedEvents);
 //cDebug::vardump($oAnalysed);
 $aActionTypes = $oAnalysedActions->types;
 $aAnalysedActions = $oAnalysedActions->analysis;
@@ -167,7 +167,7 @@ cRenderCards::body_start();
 				<td><?=$oEvent->policy?></td>
 				<td><?=$oEvent->type?></td>
 				<td><?php
-					if($oEvent->action) cRenderCards::chip($oEvent->action->type,$oEvent->action->summary);
+					if($oEvent->action) cRenderW3::tag($oEvent->action->type,$oEvent->action->summary);
 				?></td>
 				<td><?=cADCommon::button($oEvent->deepLinkUrl,"")?></td>
 			</tr>

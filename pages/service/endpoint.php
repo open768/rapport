@@ -41,7 +41,7 @@ if (cAD::is_demo()){
 	exit;
 }
 
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 cRenderMenus::show_tier_functions();
 //cADCommon::button(cADControllerUI::transaction($oApp,$oTrans->id));
 cADCommon::button(cADControllerUI::serviceEndPoint($oTier,$sServiceID));
@@ -60,7 +60,7 @@ cDebug::flush();
 // ################################################################################
 ?><h2>Snapshots</h2><?php
 $oTimes = cRender::get_times();
-$oData = cAD_RestUI::GET_Service_end_point_snapshots($oTier, $sServiceID, $oTimes);
+$oData = cADRestUI::GET_Service_end_point_snapshots($oTier, $sServiceID, $oTimes);
 $aSnapshots = $oData->requestSegmentDataListItems;
 if (count($aSnapshots) == 0){
 	?><div class="maintable">No Snapshots found</div><?php

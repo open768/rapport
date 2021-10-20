@@ -8,6 +8,8 @@ require_once("$phpinc/ckinc/session.php");
 require_once("$phpinc/ckinc/common.php");
 require_once("$phpinc/ckinc/http.php");
 require_once("$phpinc/ckinc/header.php");
+require_once("$phpinc/ckinc/rendercards.php");
+require_once("$phpinc/ckinc/renderw3.php");
 	
 
 //####################################################################

@@ -24,7 +24,7 @@ $sLogRuleID = cHeader::get(cRender::LOG_ID_QS);
 
 //*************************************************************************
 cDebug::write("getting log rule detail  - $sLogRuleID");
-$oResult = cAD_RestUI::GET_log_analytics_details($sLogRuleID );
+$oResult = cADRestUI::GET_log_analytics_details($sLogRuleID );
 
 //*************************************************************************
 //* output

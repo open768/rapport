@@ -31,7 +31,7 @@ class cRenderHtml{
 		//-------------------------------------------------------------
 		//getting credentials to pre-fill the form
 		cDebug::extra_debug("getting credentials");
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		$bLoggedin = ($oCred != null);
 		
 		//-------------------------------------------------------------
@@ -43,6 +43,7 @@ class cRenderHtml{
 			<title><?=$psTitle?></title>
 			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
+			<link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">			
 			<?php 		
 				if (cDebug::is_debugging()) {
 					echo "</head><body>";
@@ -95,15 +96,21 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jqueryui.slideout.js"></script>
 			
 			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
-			<script src="<?=$home?>/js/widgets/chart.js"></script>
 			<script src="<?=$home?>/js/menus.js"></script>
 			<script src="<?=$home?>/js/widgets/menu.js"></script>
-			<script src="<?=$home?>/js/widgets/healthrule.js"></script>
-			<script src="<?=$home?>/js/widgets/logdetail.js"></script>
-			<script src="<?=$home?>/js/widgets/tiererrors.js"></script>
 			<script src="<?=$home?>/js/common.js"></script>
 			<script src="<?=$home?>/js/qtip-init.js"></script>
 			<script src="<?=$home?>/js/dialog-init.js"></script>
+
+			<!-- these widgets not needed on every page -->
+			<script src="<?=$home?>/js/widgets/chart.js"></script>
+			<script src="<?=$home?>/js/widgets/healthrule.js"></script>
+			<script src="<?=$home?>/js/widgets/logdetail.js"></script>
+			<script src="<?=$home?>/js/widgets/tiererrors.js"></script>
+			<script src="<?=$home?>/js/widgets/dashhealth.js"></script>
+			<script src="<?=$home?>/js/widgets/dashsearch.js"></script>
+			<script src="<?=$home?>/js/widgets/appcheckup.js"></script>
+			<script src="<?=$home?>/js/widgets/tiertrans.js"></script>
 		</head>
 		<BODY>
 			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">

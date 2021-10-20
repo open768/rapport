@@ -52,8 +52,9 @@ var cTopMenu={
 		
 	//*********************************************************
 	pr__add_to_expansion: function(poDiv, psCaption, psUrl){
-		var $oLink = $("<a>", {class:"mdl-navigation__link",href:psUrl}).append(psCaption);
-		poDiv.append($oLink);
+		var sJS = "window.stop();document.location='"+psUrl+"';";
+		var oLink = $("<span>", {class:"mdl-navigation__link",onclick:sJS}).append(psCaption);
+		poDiv.append(oLink);
 	},
 	
 	render: function(poDiv){
@@ -89,7 +90,8 @@ var cTopMenu={
 			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sUtilPrefixUrl+"/checkup.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Dashboards");
-			this.pr__add_to_expansion(oContentDiv, "Launch", sHome +"/pages/dash/index.php");
+			this.pr__add_to_expansion(oContentDiv, "Check", sHome +"/pages/dash/check.php");
+			this.pr__add_to_expansion(oContentDiv, "Search", sHome +"/pages/dash/search.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Agents");
 			this.pr__add_to_expansion(oContentDiv, "Installed", sAllPrefixUrl+"/allagentversions.php");
@@ -106,6 +108,7 @@ var cTopMenu={
 			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Databases", sHome +"/pages/db/alldb.php");
+			this.pr__add_to_expansion(oContentDiv, "Health", sAllPrefixUrl+"/health.php");
 			this.pr__add_to_expansion(oContentDiv, "Remote Services", sAllPrefixUrl+"/allbackends.php");
 			this.pr__add_to_expansion(oContentDiv, "Synthetics", sAllPrefixUrl+"/allsynth.php");
 			this.pr__add_to_expansion(oContentDiv, "Tiers", sAllPrefixUrl+"/alltier.php");

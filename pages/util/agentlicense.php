@@ -29,7 +29,7 @@ if (cAD::is_demo()){
 //********************************************************************
 
 try{
-	$aRules=cAD_RestUI::GET_allocationRules();
+	$aRules=cADRestUI::GET_allocationRules();
 }
 catch (Exception $e){
 	cCommon::errorbox("unable to get license details - $e");
@@ -64,14 +64,14 @@ foreach ($aRules as $oRule){
 			//cDebug::vardump($oRule);
 			$sAllocID = $oRule->allocationId;
 			echo "License Key:";
-			cRenderCards::chip("$oRule->licenseKey");
+			cRenderW3::tag("$oRule->licenseKey");
 			echo "<hr>";
 			
 			//----------------------------------------------------------------------
 			$aPackages = $oRule->allocatedPackages;
 			echo "Packages:<br>";
 			foreach ($aPackages as $oPackage)
-				cRenderCards::chip("$oPackage->packageName : $oPackage->allocatedUnits");
+				cRenderW3::tag("$oPackage->packageName : $oPackage->allocatedUnits");
 			echo "<hr>";
 			
 			//----------------------------------------------------------------------
@@ -85,7 +85,7 @@ foreach ($aRules as $oRule){
 					$sEntity = 	$oFilter->entityName;
 					$sOperator = $oFilter->operator;
 					if ($sOperator === "ID_EQUALS") $sOperator = "=";
-					cRenderCards::chip ("$oFilter->type <i>$sOperator</i> $sEntity");
+					cRenderW3::tag ("$oFilter->type <i>$sOperator</i> $sEntity");
 				}
 			}
 			echo "<hr>";
@@ -93,7 +93,7 @@ foreach ($aRules as $oRule){
 			
 			//----------------------------------------------------------------------
 			echo "connected agents:<br>";
-			$aAllocHosts = cAD_RestUI::GET_allocationHosts($sAllocID);
+			$aAllocHosts = cADRestUI::GET_allocationHosts($sAllocID);
 			$aHosts = [];
 			foreach ($aAllocHosts as $oHost)
 				$aHosts[] = $oHost->hostId;
@@ -101,8 +101,8 @@ foreach ($aRules as $oRule){
 			if (count($aHosts) == 0)
 				echo "<b>No connected hosts found!</b>";
 			else{
-				$aUsage = 	cAD_RestUI::GET_license_usage($sAllocID, $aHosts);
-				$aAnalysed = cADUtil::analyse_license_usage($aUsage);
+				$aUsage = 	cADRestUI::GET_license_usage($sAllocID, $aHosts);
+				$aAnalysed = cADAnalysis::analyse_license_usage($aUsage);
 				$aKeys = array_keys($aAnalysed);
 
 				$iMax = 0;
@@ -111,7 +111,7 @@ foreach ($aRules as $oRule){
 						foreach ($aKeys as $sKey){
 							echo "<th width='33%'>";
 								echo "$sKey ";
-								cRenderCards::chip("".count($aAnalysed[$sKey])." agents");
+								cRenderW3::tag("".count($aAnalysed[$sKey])." agents");
 							echo "</th>";
 						}
 					?></tr>

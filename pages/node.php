@@ -43,7 +43,7 @@ if (cAD::is_demo()){
 
 <?php
 //####################################################################
-$oResult = cAD_RestUI::GET_Node_details($oApp->id, $nodeID);
+$oResult = cADRestUI::GET_Node_details($oApp->id, $nodeID);
 
 //####################################################################
 cRenderHtml::footer();

@@ -77,7 +77,7 @@ cRenderCards::card_start();
 					echo "$oItem->name<br>";	
 			}else{
 				if ($iCount > cRender::$MAX_ITEMS_PER_PAGE){
-					cRenderCards::chip("thats a lot of charts");
+					cRenderW3::tag("thats a lot of charts");
 					echo "<br>";
 				}
 				$aMetrics = [];

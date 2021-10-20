@@ -17,7 +17,6 @@ require_once "$home/inc/common.php";
 
 $oTier = cRenderObjs::get_current_tier();
 $oTimes = cRender::get_times();
-$aData = $oTier->GET_errors($oTimes);
-$aAnalysed = cADAnalysis::analyse_tier_errors($oTier, $aData);
-cCommon::write_json($aAnalysed);	
+$oData = $oTier->GET_transaction_times($oTimes);
+cCommon::write_json($oData);	
 ?>

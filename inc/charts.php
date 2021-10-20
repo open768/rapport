@@ -149,11 +149,12 @@ class cChart{
 				if ($piWidth) $oItem->width = $piWidth;
 				if ($piHeight) $oItem->height = $piHeight;
 				
-				if (isset($paItem[self::APP])) $oItem->app = $paItem[self::APP];
+				//if (isset($paItem[self::APP])) $oItem->app = $paItem[self::APP];
 				if (isset($paItem[self::GO_URL])) $oItem->go_URL = $paItem[self::GO_URL];
 				if (isset($paItem[self::GO_HINT])) $oItem->go_hint = $paItem[self::GO_HINT];
 				
 				//--------------------------------------------------
+				//cDebug::vardump($oItem);
 				$oItem->write_html();
 		}		
 	}

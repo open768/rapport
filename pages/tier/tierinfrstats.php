@@ -70,7 +70,7 @@ if (cAD::is_demo()){
 //other buttons
 $aNodes = $oTier->GET_Nodes();	
 
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
 ?><select id="menuNodes">

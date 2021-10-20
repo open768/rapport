@@ -103,15 +103,15 @@ $.widget( "ck.admenu",{
 				var oOption = $("<option>",{selected:1,disabled:1}).append(sAppname);
 				oGroup.append(oOption);		
 				
-				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams));
+				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
+				this.pr__addToGroup(oGroup, "Data collectors", cBrowser.buildUrl(sAppPrefixUrl+"/datacollectors.php", oParams));
 				this.pr__addToGroup(oGroup, "Flow Map", cBrowser.buildUrl(sAppPrefixUrl+"/appflowmap.php", oParams));
-				
-			oSelect.append(oGroup);
+				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams));
+				oSelect.append(oGroup);
 		
 			//- - - - - - - - Application Functions group
 			oGroup = $("<optgroup>",{label:"Show..."});
 				this.pr__addToGroup(oGroup, "Activity (tiers)", cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
-				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
 				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl(sAppPrefixUrl+"/appavail.php", oParams));
 				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl(sAppPrefixUrl+"/apperrors.php", oParams));
 				this.pr__addToGroup(oGroup, "Events and Health", cBrowser.buildUrl(sAppPrefixUrl+"/events.php", oParams));
@@ -120,15 +120,18 @@ $.widget( "ck.admenu",{
 				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl(sAppPrefixUrl+"/appinfo.php", oParams));
 				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl(sSrvPrefixUrl+"/services.php", oParams));
 				this.pr__addToGroup(oGroup, "Transactions", cBrowser.buildUrl(sTransPrefixUrl+"/apptrans.php", oParams));
-				oGroup2 = $("<optgroup>",{label:"Web Real User Monitoring"});
-					this.pr__addToGroup(oGroup2, "Overall stats", cBrowser.buildUrl(sRumPrefixUrl+"/apprum.php", oParams));
-					this.pr__addToGroup(oGroup2, "Page requests", cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams));
-					this.pr__addToGroup(oGroup2, "Errors", cBrowser.buildUrl(sRumPrefixUrl+"/rumerrors.php", oParams));
-				oGroup.append(oGroup2);
-				oGroup3 = $("<optgroup>",{label:"Synthetics"});
-					this.pr__addToGroup(oGroup3, "Overview", cBrowser.buildUrl(sRumPrefixUrl+"/synthetic.php", oParams));
-				oGroup.append(oGroup3);
-			oSelect.append(oGroup);
+				oSelect.append(oGroup);
+		
+			oGroup = $("<optgroup>",{label:"Synthetics"});
+				this.pr__addToGroup(oGroup, "Overview", cBrowser.buildUrl(sRumPrefixUrl+"/synthetic.php", oParams));
+				oSelect.append(oGroup);
+				
+			oGroup = $("<optgroup>",{label:"Web Real User Monitoring"});
+				this.pr__addToGroup(oGroup, "Overall stats", cBrowser.buildUrl(sRumPrefixUrl+"/apprum.php", oParams));
+				this.pr__addToGroup(oGroup, "Page requests", cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams));
+				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl(sRumPrefixUrl+"/rumerrors.php", oParams));
+				oSelect.append(oGroup);
+				
 		
 		//add and make the menu a selectmenu
 		var oThis = this;		
@@ -363,6 +366,9 @@ $.widget( "ck.admenu",{
 	//#################################################################`
 	onSelectItem: function(poTarget){
 		var sUrl = poTarget.attr("value");
-		if (sUrl)	document.location.href = sUrl;
+		if (sUrl){
+			window.stop();
+			document.location.href = sUrl;
+		}
 	}
 });

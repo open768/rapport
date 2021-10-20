@@ -45,7 +45,7 @@ if (cAD::is_demo()){
 }
 
 //********************************************************************
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 cRenderMenus::show_tier_functions();
 
 //###############################################

@@ -82,7 +82,7 @@ cRenderCards::card_end();
 $bProceed = true;
 $aSnapshots = $oApp->GET_snaphot_info($trid, $oTimes);
 if (count($aSnapshots) == 0){
-	cRender::messagebox("No Snapshots found");
+	cCommon::messagebox("No Snapshots found");
 	$bProceed = false;
 }
 

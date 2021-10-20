@@ -12,6 +12,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 //####################################################################
+//TODO make asynchronous - separate calls for machine/db/app agents
 $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
@@ -62,6 +63,28 @@ function epoch_to_date($psEpoch){
 	return $sDate;
 }
 
+//********************************************************************
+function count_agents($paAgents){
+	$aCount = [];
+	foreach ($paAgents as $oAgent){
+	
+		$sRaw = null;
+		if (property_exists($oAgent,"agentDetails"))
+			if (property_exists($oAgent->agentDetails,"agentVersion"))
+				$sRaw = $oAgent->agentDetails->agentVersion;
+		
+		if (!$sRaw)		$sRaw = $oAgent->version;
+		
+		$sVer = cADUtil::extract_agent_version($sRaw);
+		@$aCount[$sVer ] ++;
+	}
+	ksort($aCount);
+	
+	echo "<div class='w3-panel w3-sand'>Agent Counts: ";
+		foreach ($aCount as $sVer=>$iCount)
+			echo cRenderW3::tag("$sVer: $iCount");
+	echo "</div>";
+}
 
 //********************************************************************
 function render_machine_agents(){
@@ -69,7 +92,7 @@ function render_machine_agents(){
 	global $gaAppIds;
 	
 	try{
-		$aAgents = cAD_RestUI::GET_machine_agents();
+		$aAgents = cADRestUI::GET_machine_agents();
 	}
 	catch (Exception $e){
 		cCommon::errorbox("Oops unable to get machine agent data from controller:<p>".$e->getMessage());		
@@ -77,19 +100,22 @@ function render_machine_agents(){
 	}
 	if (cDebug::is_extra_debugging())cDebug::vardump($aAgents[0]);
 	
+	
 	cRenderCards::card_start("<a name='m'>Machine agents</a>");
 	cRenderCards::body_start();
+	count_agents($aAgents);
+		
 		?><div class="note" id="notem">
 			<div id="p0" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 		</div>
-		<table class="maintable" cellspacing="0" border="1" id="tblm">
+		<table class="maintable" cellspacing="0" border="1" id="tblm" width="100%">
 			<thead><tr class="tableheader">
-				<th width="100">Application</th>
+				<th width="200">Application</th>
 				<th width="100">Hostname</th>
 				<th width="100">Version</th>
 				<th width="100">Build Date</th>			
 				<th width="100">Installed</th>			
-				<th width="100">Runtime</th>			
+				<th width="*">Runtime</th>			
 			</tr></thead>
 			<tbody><?php
 				foreach ($aAgents as $oAgent){
@@ -122,7 +148,7 @@ function render_machine_agents(){
 function render_app_agents(){
 	global $gaApps;
 	try {
-		$aAgents = cAD_RestUI::GET_appServer_agents();
+		$aAgents = cADRestUI::GET_appServer_agents();
 	}
 	catch (Exception $e){
 		cCommon::errorbox("Oops unable to get app agent data from controller:<p>".$e->getMessage());		
@@ -132,6 +158,7 @@ function render_app_agents(){
 	
 	cRenderCards::card_start("<a name='a'>App agents</a>");
 	cRenderCards::body_start();
+		count_agents($aAgents);
 		?>
 		<div class="note" id="notea">
 			<div id="p1" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
@@ -177,7 +204,7 @@ function render_app_agents(){
 function render_db_agents(){
 	global $gaApps;
 	try{
-		$aAgents = cAD_RestUI::GET_database_agents();
+		$aAgents = cADRestUI::GET_database_agents();
 	}
 	catch (Exception $e){
 		cCommon::errorbox("Oops unable to get database agent data from controller:<p>".$e->getMessage());		
@@ -185,6 +212,7 @@ function render_db_agents(){
 	}
 	cRenderCards::card_start("<a name='d'>Database</a>");
 	cRenderCards::body_start();
+		count_agents($aAgents);
 		?>
 		<div class="note" id="noted">
 			<div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>

@@ -18,7 +18,6 @@ require_once("$ADlib/AD.php");
 require_once("$ADlib/core.php");
 require_once("$root/inc/filter.php");
 require_once("$root/inc/rendermenus.php");
-require_once("$root/inc/rendercards.php");
 require_once("$root/inc/renderobjs.php");
 require_once("$root/inc/renderqs.php");
 require_once("$root/inc/renderhtml.php");
@@ -76,6 +75,10 @@ class cRender{
 	const LOCATION_QS="loc";
 	
 	//************************************************************
+	const DASH_ID_QS ="dai";
+	const DASH_NAME_QS ="dan";
+	const DASH_URL_TEMPLATE = "dut";
+	//************************************************************
 	const GROUP_TYPE_QS ="gtq";
 	const GROUP_TYPE_NODE ="n";
 	const GROUP_TYPE_TIER ="t";
@@ -88,6 +91,8 @@ class cRender{
 	
 	//************************************************************
 	const HEALTH_ID_QS ="hi";
+	
+	const HOME_QS = "home";
 	
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";
@@ -105,6 +110,7 @@ class cRender{
 	const CHART_APP_FIELD = "caf";
 	
 	//**************************************************************************
+	const SEARCH_QS = "srch";
 	const SERVER_MQ_MANAGER_QS = "mqm";
 	
 	
@@ -152,7 +158,7 @@ class cRender{
 		global $home;
 		//cDebug::enter();
 		
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null || !$oCred->logged_in()){
 			cCommon::errorbox("not logged in in");
 			$sUrl = cHttp::build_url("$home/index.php", cRender::LOCATION_QS, $_SERVER["REQUEST_URI"]);
@@ -211,45 +217,55 @@ class cRender{
 	//**************************************************************************
 	public static function plain_button ($psCaption, $psUrl){
 		
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) return;
 
-		echo  "<button onclick=\"document.location.href='$psUrl';return false;\">$psCaption</button>";
+		echo  "<button onclick=\"window.stop();document.location.href='$psUrl';return false;\">$psCaption</button>";
 	}
 	
 	//**************************************************************************
-	public static function add_filter_box($psSelector,$psAttr,$psParentSelector){
+	public static function add_filter_box($psSelector,$psAttr,$psParentSelector, $psCaption = "Filter"){
 		if 	(self::is_list_mode()) return;
 
 		?><form action="#">
 			<div class="mdl-textfield mdl-js-textfield">
 				<input class="mdl-textfield__input" type="text" id="filter" disabled>
-				<label class="mdl-textfield__label" for="filter">Filter...</label>
+				<label class="mdl-textfield__label" for="filter"><?=$psCaption?>...</label>
 			</div>
 		</form>
 		<script language="javascript">
 			
-			function onKeyUp( poEvent){
+			function onFilterKeyUp( poEvent){
 				//look through divs with selectmenu
 				var aSelected = $("<?=$psSelector?>");
 				var sInput = $("#filter").val().toLowerCase();
 				//iterate
 				aSelected.each(
 					function(index){
-						//skip selected that dont have the desired attribute
+						
 						var oEl = $(this);
-						var sAttr = oEl.attr("<?=$psAttr?>");
-						if (sAttr) {
-							//check the attribute for a match
+						var sAttr = oEl.attr("<?=$psAttr?>"); 
+						if (sAttr) { //skip selected that dont have the desired attribute
+							
 							var oParent=$(this).closest("<?=$psParentSelector?>");
+							var oTRParent = $(this).closest("TR");					
+							var oHider = oParent;
+							if (oTRParent.length > 0){
+								 if (oTRParent.parents().length > oParent.parents().length) //element is in a table
+								 	oHider = oTRParent;
+							}
+							
+							
 							if (sInput.length < 3){	//must be at least 3 chars
-								oParent.show();
+								oHider.show();
 							}else{
 								sAttr = sAttr.toLowerCase();
-								if ( sAttr.indexOf(sInput) == -1)
-									oParent.hide();
-								else
+								if ( sAttr.indexOf(sInput) == -1)	////check the attribute for a match
+									oHider.hide();
+								else{
+									oHider.show();
 									oParent.show();
+								}
 							}
 						}
 					}
@@ -261,7 +277,7 @@ class cRender{
 					$(
 						function(){
 							$("#filter" ).prop( "disabled", false );
-							$("#filter" ).keyup(onKeyUp);
+							$("#filter" ).keyup(onFilterKeyUp);
 						}
 					);
 				}
@@ -283,7 +299,7 @@ class cRender{
 		
 		if (! $bShow){
 			try{
-				$oCred = cRenderObjs::get_appd_credentials();
+				$oCred = cRenderObjs::get_AD_credentials();
 				$bShow = true;
 			}
 			catch (Exception $e){
@@ -324,7 +340,7 @@ class cRender{
 		
 		///cDebug::leave();;
 		$sClass="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect";
-  		return "<button  class='$sClass' onclick='$sOnClick;return false;'>$psCaption</button>";
+  		return "<button  class='$sClass' onclick='window.stop();$sOnClick;return false;'>$psCaption</button>";
 	}
 	
 	
@@ -389,7 +405,7 @@ class cRender{
 		$sUrl = $_SERVER['REQUEST_URI'];
 		if (strpos($sUrl,"%")) $sUrl = urldecode($sUrl);
 		
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		$sAccount = $oCred->account;
 		$iDuration = cADCommon::get_duration();
 		

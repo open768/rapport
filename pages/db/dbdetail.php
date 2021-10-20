@@ -39,14 +39,14 @@ if (cAD::is_demo()){
 }
 //********************************************************************
 
-$aStats = cADController::GET_Database_ServerStats($sDB);
+$aStats = cADDB::GET_Database_ServerStats($sDB);
 $sMetricPrefix = cADMetric::databaseServerStats($sDB);
 //####################################################################
 
 $aMetrics = [];
 $sMetric = cADMetric::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
-cChart::metrics_table(cADApp::$db_app,$aMetrics,1,cRender::getRowClass());
+cChart::metrics_table(cADDB::$db_app,$aMetrics,1,cRender::getRowClass());
 
 //***************************************************************************
 ?><h2>Database specific statistics</h2><?php
@@ -55,7 +55,7 @@ foreach ($aStats as $oRow){
 	$sMetric = $sMetricPrefix."|$oRow->name";
 	$aMetrics[] = [cChart::LABEL=>$oRow->name, cChart::METRIC=>$sMetric];
 }
-cChart::metrics_table(cADApp::$db_app,$aMetrics,2,cRender::getRowClass());
+cChart::metrics_table(cADDB::$db_app,$aMetrics,2,cRender::getRowClass());
 
 //***************************************************************************
 cChart::do_footer();

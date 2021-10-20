@@ -33,7 +33,7 @@ cRender::force_login();
 
 $oTimes = cRender::get_times();
 
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 if ($oCred->restricted_login == null){
 	cRenderCards::card_start();
 	cRenderCards::body_start();

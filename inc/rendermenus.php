@@ -23,7 +23,7 @@ class cRenderMenus{
 	public static function show_app_functions($poApp=null){
 		global $home;
 		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($poApp->name,null);
 			cDebug::leave();
@@ -47,7 +47,7 @@ class cRenderMenus{
 		global $home;
 	
 		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psCaption,null);
 			cDebug::leave();
@@ -75,7 +75,7 @@ class cRenderMenus{
 		global $home;
 
 		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) {
 			cDebug::leave();
 			return;
@@ -99,7 +99,7 @@ class cRenderMenus{
 
 		cDebug::enter();
 		try{
-			$aApps = cADController::GET_Applications();
+			$aApps = cADApp::GET_Applications();
 		}
 		catch (Exception $e)
 		{
@@ -122,7 +122,7 @@ class cRenderMenus{
 
 		cDebug::enter();
 		try{
-			$aApps = cADController::GET_Applications();
+			$aApps = cADApp::GET_Applications();
 		}
 		catch (Exception $e)
 		{
@@ -150,7 +150,7 @@ class cRenderMenus{
 
 		cDebug::enter();
 		
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null) return;
 
 		$sApps_attr = self::get_apps_attr();
@@ -183,7 +183,7 @@ class cRenderMenus{
 		global $home;
 
 		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 	
 		if ($oCred->restricted_login) {
 			cRender::button($poTier->name,null);
@@ -210,7 +210,7 @@ class cRenderMenus{
 		global $home;
 		
 		cDebug::enter();
-		$oCred = cRenderObjs::get_appd_credentials();
+		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login){
 			cDebug::leave();
 			return;

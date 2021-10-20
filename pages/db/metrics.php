@@ -20,7 +20,7 @@ require_once "$root/inc/charts.php";
 
 
 //####################################################################
-cRenderHtml::header("All Applications - Databases");
+cRenderHtml::header("Databases - custom metrics");
 cRender::force_login();
 cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE -200;
@@ -38,40 +38,32 @@ if (cAD::is_demo()){
 //********************************************************************
 
 //####################################################################
-$oResponse = cADDB::GET_Databases();
 
-cRenderCards::card_start("Databases");
+cRenderCards::card_start();
 cRenderCards::body_start();
-if (count($oResponse) == 0) cCommon::messagebox("No Monitored Databases found");
+		cRender::add_filter_box("span[type=name]","value",".mdl-card");
 cRenderCards::body_end();
 cRenderCards::action_start();
-	cADCommon::button(cADControllerUI::databases());
-	cRender::button("custom metrics","metrics.php");
+	cADCommon::button(cADControllerUI::db_custom_metrics());
 cRenderCards::action_end();
 cRenderCards::card_end();
 
-
-if (count($oResponse) > 0){
-	cRenderCards::card_start();
+$aData = cADDB::GET_all_custom_metrics();
+foreach ($aData as $sDB=>$aEntries){
+	cRenderCards::card_start("<span type='name' value='$sDB'>$sDB</span>");
 	cRenderCards::body_start();
-	
-	//tables are needed here as each chart is for a different application
-	$aMetrics = [];
-	
-	foreach ( $oResponse as $oDB){
-		$class=cRender::getRowClass();
-		$sDB=$oDB->name;
-		$sMetric = cADMetric::databaseTimeSpent($sDB);
-
-		$sButton = cRender::button_code($sDB, "db.php?".cRender::DB_QS."=$sDB", false);
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sButton];
-		$aMetrics[] = [cChart::LABEL=>$sDB, cChart::METRIC=>$sMetric, cChart::APP=>cADCore::DATABASE_APPLICATION];
-	}
-	cChart::metrics_table(cADDB::$db_app, $aMetrics, 2, cRender::getRowClass());
+		$sHTML = "<table border='1' cellspacing='0' width='100%'>";
+		foreach ($aEntries as $oItem){
+			$sHTML .= "<tr>";
+				$sHTML .= "<th width='200'><span type='name' value='$oItem->name'>$oItem->name</span></th>";
+				$sHTML .= "<td width='*'>".htmlspecialchars($oItem->query)."</td>";
+			$sHTML .= "</tr>";
+		}
+		$sHTML .= "</table>";
+		echo $sHTML;
 	cRenderCards::body_end();
 	cRenderCards::card_end();
 }
-	
 
 cChart::do_footer();
 cRenderHtml::footer();

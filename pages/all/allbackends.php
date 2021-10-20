@@ -27,7 +27,7 @@ cChart::do_header();
 $title ="All Remote Services";
 
 //####################################################################
-$oApps = cADController::GET_Applications();
+$oApps = cADApp::GET_Applications();
 cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 	//********************************************************************
 	if (cAD::is_demo()){

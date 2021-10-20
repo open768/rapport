@@ -38,7 +38,7 @@ const BLANK_WIDTH=200;
 const TIERCOL_WIDTH=300;
 const TOTALCOL_WIDTH=150;
 
-$moApps = cADController::GET_Applications();
+$moApps = cADApp::GET_Applications();
 if (cAD::is_demo()){
 	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
@@ -58,7 +58,7 @@ $oGrandTotal = new cAgentTotals();
 
 foreach ($moApps as $oApp){
 	$aNodes = $oApp->GET_nodes();
-	$aAppData = cADUtil::analyse_app_nodes($aNodes);
+	$aAppData = cADAnalysis::analyse_app_nodes($aNodes);
 	$oAppTotals = new cAgentTotals();
 	
 	cRenderCards::card_start($oApp->name);

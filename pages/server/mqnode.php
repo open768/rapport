@@ -65,9 +65,11 @@ if ($iCount > 0){
 	if (cRender::is_list_mode()){
 		cRenderCards::card_start();
 			cRenderCards::body_start();
-			foreach ($aData as $oItem)
-				if ($oItem->type === "folder")
-					echo "$oItem->name<br>";
+				echo "<div  style='column-count:3'>";
+				foreach ($aData as $oItem)
+					if ($oItem->type === "folder")
+						echo "$oItem->name<br>";
+				echo "</div>";
 			cRenderCards::body_end();
 		cRenderCards::card_end();
 	}else{

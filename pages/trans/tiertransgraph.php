@@ -20,10 +20,6 @@ require_once "$root/inc/charts.php";
 require_once("$root/inc/filter.php");
 
 //####################################################################
-cRenderHtml::header("Tier Transactions");
-cRender::force_login();
-cChart::do_header();
-cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 	
 //###################### DATA #############################################################
 //display the results
@@ -40,8 +36,12 @@ $gsBaseUrl = cHttp::build_url("tiertransgraph.php", $gsTierQs );
 if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
 
 $sExtraCaption = ($node?"($node) node":"");
+$title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transaction graphs";
 
-$title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transactions";
+cRenderHtml::header($title);
+cRender::force_login();
+cChart::do_header();
+cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -71,7 +71,7 @@ function render_tier_transactions($poApp, $poTier){
 	$aMetrics=[];
 	$iCount  = 0;
 	foreach ($aStats as $oTrans){
-		$oStats =  cADUtil::Analyse_Metrics($oTrans->metricValues);
+		$oStats =  cADAnalysis::analyse_metrics($oTrans->metricValues);
 		$sTrName = cADUtil::extract_bt_name($oTrans->metricPath, $poTier->name);
 		try{
 			$sTrID = cADUtil::extract_bt_id($oTrans->metricName);
@@ -120,10 +120,9 @@ function render_tier_transactions($poApp, $poTier){
 }
 
 //********************************************************************
-$oCred = cRenderObjs::get_appd_credentials();
-if ($oCred->restricted_login == null){
-	cRenderMenus::show_tier_functions();
-	cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");
+function show_node_menu(){
+	global $oTier, $oApp, $gsTierQs, $gsAppQs;
+	
 	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($oTier->name));
 
 
@@ -159,14 +158,10 @@ if ($oCred->restricted_login == null){
 	);
 	</script><?php
 }
-cADCommon::button(cADControllerUI::tier($oApp,$oTier));
 
 //###############################################
-?>
-<h2>Transactions for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> <?=$sExtraCaption?></h2>
-
-<h3>Overall Stats for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3>
-<?php
+cRenderCards::card_start("Overall Stats for $oTier->name");
+cRenderCards::body_start();
 	$sBaseUrl = cHttp::build_url("alltiertrans.php",$gsTierQs);
 	
 	$aMetrics=[];
@@ -197,21 +192,39 @@ cADCommon::button(cADControllerUI::tier($oApp,$oTier));
 	];
 	
 	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass());
+cRenderCards::body_end();
+cRenderCards::action_start();
+	$oCred = cRenderObjs::get_AD_credentials();
+	if ($oCred->restricted_login == null){
+		cADCommon::button(cADControllerUI::tier($oApp,$oTier));
+		cRenderMenus::show_tier_functions();
+		cRenderMenus::show_tier_menu("change tier", "tiertransgraph.php");
+		show_node_menu();
+	}
+cRenderCards::action_end();
+cRenderCards::card_end();
 
 
 if ($node){ 
-	?><h3>Stats for (<?=$node?>) Server</h3><?php
-	$aMetrics=[];
-	$sMetricUrl=cADMetric::tierNodeCallsPerMin($oTier->name, $node);
-	$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cADMetric::tierNodeResponseTimes($oTier->name, $node);
-	$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
-	cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
+	cRenderCards::card_start("Stats for ($node) Server");
+	cRenderCards::body_start();
+		$aMetrics=[];
+		$sMetricUrl=cADMetric::tierNodeCallsPerMin($oTier->name, $node);
+		$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
+		$sMetricUrl=cADMetric::tierNodeResponseTimes($oTier->name, $node);
+		$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
+		cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 }
 
 //################################################################################################
 ?><p><h3>Transaction Details</h3><?php
-render_tier_transactions($oApp, $oTier);
+cRenderCards::card_start("Transaction Details");
+cRenderCards::body_start();
+	render_tier_transactions($oApp, $oTier);
+cRenderCards::body_end();
+cRenderCards::card_end();
 
 //###############################################
 cChart::do_footer();

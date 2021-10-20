@@ -47,7 +47,7 @@ if (cAD::is_demo()){
 }
 
 //********************************************************************
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 cADCommon::button(cADControllerUI::transaction($oApp,$trid));
 cDebug::flush();
 

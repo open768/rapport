@@ -51,7 +51,7 @@ function pr__sort_endpoints($a,$b){
 foreach ($aTiers as $oTier){
 
 	//****************************************************************************************
-	$aEndPoints = cAD_RestUI::GET_service_end_points($oTier);
+	$aEndPoints = cADRestUI::GET_service_end_points($oTier);
 	//$aEndPoints = $oTier->GET_ServiceEndPoints();
 	if (count($aEndPoints) == 0){
 		cCommon::messagebox("no Service endpoints found for $oTier->name");

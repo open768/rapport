@@ -37,7 +37,7 @@ $iBackend = cHeader::get(cRender::BACKEND_QS);
 ?><h2> Delete Backend <?=$iBackend?></h2>
 <?php
 	try {
-		cAD_RestUI::DELETE_backend($iBackend);
+		cADRestUI::DELETE_backend($iBackend);
 	}catch (Exception $e){
 		//ignore all exceptions?
 	}

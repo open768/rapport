@@ -44,7 +44,7 @@ if (cAD::is_demo()){
 
 
 //####################################################################
-$oApps = cADController::GET_Applications();
+$oApps = cADApp::GET_Applications();
 ?>
 
 

@@ -61,7 +61,7 @@ $sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
 //####################################################################
 //other buttons
 
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 
 cDebug::flush();
 $aNodes = $oTier->GET_Nodes();	

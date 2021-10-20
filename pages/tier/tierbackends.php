@@ -38,11 +38,11 @@ if (cAD::is_demo()){
 //********************************************************************
 
 //####################################################################
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 cDebug::flush();
 
 //####################################################################
-$aData = cAD_RestUI::GET_tier_backends($oTier);
+$aData = cADRestUI::GET_tier_backends($oTier);
 if ($aData == null || count($aData) ==0)
 	$iCount = 0;
 else

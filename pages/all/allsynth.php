@@ -43,7 +43,7 @@ if (cAD::is_demo()){
 <script src="<?=$home?>/js/widgets/synthetics.js"></script>
 <div id="container">
 <?php
-	$aResponse = cADController::GET_Applications();
+	$aResponse = cADApp::GET_Applications();
 	if ( count($aResponse) == 0)
 		cCommon::messagebox("Nothing found");
 	else{

@@ -34,7 +34,7 @@ $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;disks";
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 
 //other buttons
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 
 //********************************************************************

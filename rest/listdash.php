@@ -14,28 +14,23 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 $home="..";
 require_once "$home/inc/common.php";
-	
-//###################### DATA #############################################
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
-$oApp = cRenderObjs::get_current_app();
-if (!$oApp->name) $oApp->name = "no application set";
-$oTimes = cRender::get_times();
+
 //*************************************************************************
-cDebug::write("getting synthetics list - $oApp->name");
-$sGetDetails = cHeader::get(cRender::SYNTH_DETAILS_QS);
-if ($sGetDetails)
-	$oResult = cADRestUI::GET_Synthetic_jobs($oApp, $oTimes, true);
-else
-	$oResult = cADRestUI::GET_Synthetic_jobs($oApp, $oTimes, false);	
-
+cDebug::write("getting dashboard list");
+$aData = cADRestUI::GET_dashboards();
 
 //*************************************************************************
 //* output
 //*************************************************************************
-cCommon::write_json($oResult);	
+
+cDebug::write("outputting json");
+$aOut = [];
+foreach ($aData as $key=>$value)
+	$aOut[] = $value;
+
+cCommon::write_json($aOut);	
+return;
 ?>

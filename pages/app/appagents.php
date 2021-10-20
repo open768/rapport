@@ -212,7 +212,7 @@ cRenderCards::body_start();
 		cCommon::messagebox("no Agents found");
 	else{
 		echo "There are $iNodes Nodes in total";
-		$oCounts = cADUtil::analyse_agent_versions($aData);
+		$oCounts = cADAnalysis::analyse_agent_versions($aData);
 		$aMacCounts = $oCounts->machineAgents;
 		render_agent_counts("machine", $aMacCounts);
 		$aAppCounts = $oCounts->appAgents;
@@ -231,7 +231,7 @@ cRenderCards::action_start();
 		$sUrl = cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_NODE);
 		cRender::button("Group by Node",$sUrl);
 	}
-	$oCred = cRenderObjs::get_appd_credentials();
+	$oCred = cRenderObjs::get_AD_credentials();
 	$sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
 
 	cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");

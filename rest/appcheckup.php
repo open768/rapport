@@ -12,27 +12,23 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-//####################################################################
-$home="../..";
+$home="..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 
 
-//-----------------------------------------------
+//###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
 
-//####################################################################
-cRenderHtml::header("Flowmap for Application $oApp->name");
-cRender::force_login();
-?><script src="https://d3js.org/d3.v7.min.js"></script><?php
-cCommon::messagebox("work in progress");
+//*************************************************************************
+cDebug::write("doing a checkup on  - $oApp->name");
 
-cDebug::write("fetching flowmap");
-cDebug::on(true);
-$oData = $oApp->GET_flowmap();
-cDebug::write("got data");
-cDebug::vardump($oData, true);
-cDebug::off();
+$oOutput = $oApp->checkup($oApp);
 
-cRenderHtml::footer();
+//*************************************************************************
+//* output
+//*************************************************************************
+
+cDebug::write("outputting json");
+cCommon::write_json($oOutput);	
+return;
 ?>

@@ -34,7 +34,7 @@ cRenderCards::card_start();
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
-$aData = cAD_RestUI::GET_log_analytics_sources();
+$aData = cADRestUI::GET_log_analytics_sources();
 cDebug::vardump($aData);
 
 foreach ($aData as $oSource){

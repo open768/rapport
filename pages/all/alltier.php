@@ -37,7 +37,7 @@ if (cAD::is_demo()){
 //********************************************************************
 	
 
-$aApps = cADController::GET_Applications();
+$aApps = cADApp::GET_Applications();
 if (count($aApps) == 0) cCommon::errorbox("No Applications found");
 
 //####################################################################

@@ -26,7 +26,7 @@ class cRenderObjs{
 	
 	
 	//**************************************************************************
-	public static function get_appd_credentials(){
+	public static function get_AD_credentials(){
 		//cDebug::enter();
 		$oCred = self::$oAppDCredentials;
 		if ($oCred == null){

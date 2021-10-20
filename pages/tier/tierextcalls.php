@@ -76,7 +76,7 @@ function render_tier_ext($poApp, $poTier, $poData){
 cRenderHtml::header("External tier calls");
 cRender::force_login();
 
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();
 	cRenderMenus::show_tier_functions();

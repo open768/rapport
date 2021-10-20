@@ -60,7 +60,7 @@ if (cAD::is_demo()){
 
 $oTime= cRender::get_times();
 $oResponse = $oApp->GET_MetricData($metric, $oTime);
-$aHeatData = cADUtil::Analyse_heatmap( $oResponse);
+$aHeatData = cADAnalysis::analyse_heatmap( $oResponse);
 cRender::render_Heatmap($aHeatData["days"], "HeatMap for Days of Week", "hour", "day");
 cRender::render_Heatmap($aHeatData["hours"], "HeatMap for Hours", "hour", "min");
 ?>

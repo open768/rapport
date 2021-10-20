@@ -39,80 +39,44 @@ function output_row($pbBad, $psCaption, $psContent, $psAction=null){
 		?>
 	</tr><?php
 }
+cRenderCards::card_start("Checkup");
+cRenderCards::body_start();
+	cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
+cRenderCards::body_end();
+cRenderCards::card_end();
 
 //####################################################################
 //this needs to be asynchronous as when there are a lot of applications that page times out
-$aResponse = cADController::GET_Applications();
+$aResponse = cADApp::GET_Applications();
 foreach ( $aResponse as $oApp){
-	?><div><table width="100%">
-		<tr><td colspan="2"><?php 
-			cRenderMenus::show_app_functions($oApp);
-		?></td></tr>
-		<?php
-		//************************************************************************************
-		$aTrans = $oApp->GET_Transactions();
-		$iCount = count($aTrans);
-		$sCaption = "There are $iCount BTs.";
-		$bBad = true;
-		if ($iCount < 5)
-			$sCaption .= " There are too few BTs - check BT detection configuration";
-		elseif ($iCount >=250)
-			$sCaption .= " This must be below 250. <b>Investigate configuration</b>";
-		elseif ($iCount >=200)
-			$sCaption .= " The number of transactions is on the high side. Above 250 will affect correlation";
-		else{
-			$bBad = false;
-			$sCaption .= " Thats good.";
-		}
-		output_row($bBad, "Total number of Business Transactions in Application: $oApp->name", $sCaption);
-		
-		//************************************************************************************
-		$aTierCount = []; 	//counts the transactions per tier
-		foreach ($aTrans as $oTrans){
-			$sTier = $oTrans->tierName;
-			if (! isset($aTierCount[$sTier])) $aTierCount[$sTier] = 0;
-			$aTierCount[$sTier] = $aTierCount[$sTier] +1;
-		}
-		
-		foreach ($aTierCount as $sTier=>$iCount){
-			$bBad = true;
-			$sCaption = "there are $iCount BTs.";
-			if ($iCount < 5)
-				$sCaption .= " There are too few BTs for this tier - check BT detection configuration";
-			elseif ($iCount >=50)
-				$sCaption .= " This must be below 50. <b>Investigate instrumentation</b>";
-			elseif ($iCount >=40)
-				$sCaption .= " The number of transactions is on the high side. Above 50 will affect correlation";
-			else{
-				$bBad = false;
-				$sCaption .= " Thats good.";
-			}
-			$sUrl = cHttp::build_url("$home/pages/tier/tier.php", cRender::TIER_QS, $sTier);
-			$sUrl = cHttp::build_qs("$sUrl", cRender::APP_QS, $oApp->name);
-			output_row($bBad, "Business Transactions for Tier: '$sTier'", $sCaption, $sUrl);
-				
-		}
-
-		//************************************************************************************
-		$aBackends = $oApp->GET_Backends();
-		$iCount = count($aBackends);
-		$bBad = true;
-		$sCaption = "There are $iCount remote services.";
-		if ($iCount >=50)
-			$sCaption .= " its a little on the high side";
-		elseif ($iCount >=100)
-			$sCaption .= " this doesnt look right, check the detection";
-		else{
-			$bBad = false;
-			$sCaption .= " Thats looks ok.";
-		}
-		output_row($bBad, "Remote services used by Application: $oApp->name", $sCaption);
-				
-		//************************************************************************************
-	?></table></div><p><?php
-	if (cDebug::is_debugging()) break;
-	cCommon::flushprint("");
+	cRenderCards::card_start();
+	cRenderCards::body_start();
+	?><div 
+			type="appcheckup" 
+			<?=cRender::APP_QS?>="<?=$oApp->name?>"
+			<?=cRender::APP_ID_QS?>="<?=$oApp->id?>"
+			<?=cRender::HOME_QS?>="<?=$home?>">
+			loading...
+	</div><?php
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRenderMenus::show_app_functions($oApp);
+		cADCommon::button(cADControllerUI::app_BT_config($oApp));
+	cRenderCards::action_end();
+	cRenderCards::card_end();
 }
+?>
+	<script language="javascript">
+		function init_a_checkup_widget(piIndex, poElement){
+			$(poElement).adappcheckup();
+		}
+		function init_checkup_widgets(){
+			$("DIV[type=appcheckup]").each(init_a_checkup_widget);
+		}
+		
+		$(init_checkup_widgets);
+	</script>
+<?php
 
 cRenderHtml::footer();
 ?>

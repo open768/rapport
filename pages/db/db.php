@@ -41,7 +41,7 @@ $sMetric = cADMetric::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
 $sMetric = cADMetric::databaseConnections($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Connections", cChart::METRIC=>$sMetric];
-cChart::metrics_table(cADApp::$db_app,$aMetrics,1,cRender::getRowClass());
+cChart::metrics_table(cADDB::$db_app,$aMetrics,1,cRender::getRowClass());
 
 
 cChart::do_footer();

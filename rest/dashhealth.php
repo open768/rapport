@@ -14,28 +14,21 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 $home="..";
 require_once "$home/inc/common.php";
-	
-//###################### DATA #############################################
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
-$oApp = cRenderObjs::get_current_app();
-if (!$oApp->name) $oApp->name = "no application set";
-$oTimes = cRender::get_times();
+$sDashID = cHeader::get(cRender::DASH_ID_QS);
+
 //*************************************************************************
-cDebug::write("getting synthetics list - $oApp->name");
-$sGetDetails = cHeader::get(cRender::SYNTH_DETAILS_QS);
-if ($sGetDetails)
-	$oResult = cADRestUI::GET_Synthetic_jobs($oApp, $oTimes, true);
-else
-	$oResult = cADRestUI::GET_Synthetic_jobs($oApp, $oTimes, false);	
-
+cDebug::write("getting dash_health  - $sDashID");
+$oDetail = cADRestUI::GET_dashboard_detail($sDashID );
+$aOutput = cADAnalysis::analyse_dash_detail($oDetail);
 
 //*************************************************************************
 //* output
 //*************************************************************************
-cCommon::write_json($oResult);	
+
+cDebug::write("outputting json");
+cCommon::write_json($aOutput);	
+return;
 ?>

@@ -18,8 +18,6 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-require_once("$root/inc/filter.php");
-
 const COLUMNS=6;
 const FLOW_ID = "trflw";
 const MIN_TRANS_TIME=150;
@@ -48,8 +46,6 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
 
-$sFilterTierQS = cFilter::makeTierFilter($oTier->name);
-$sFilterTierQS = cHttp::build_QS($sAppQS, $sFilterTierQS);
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -61,8 +57,7 @@ if (cAD::is_demo()){
 $aNodes = $oTier->GET_Nodes();
 uasort($aNodes , "AD_name_sort_fn");
 
-//TODO make this a widget
-$oCred = cRenderObjs::get_appd_credentials();
+$oCred = cRenderObjs::get_AD_credentials();
 
 function show_nodes($psNode){
 	global $oNodes, $sTransQS, $aNodes, $oCred;
@@ -117,6 +112,7 @@ cRenderCards::card_start("Contents");
 		cADCommon::button(cADControllerUI::transaction($oApp,$oTrans->id));
 		cRenderMenus::show_tier_functions();
 		cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
+		cRender::button("Search Snapshots", "searchsnaps.php?$sTransQS");
 		show_nodes($node);
 	cRenderCards::action_end();
 cRenderCards::card_end();
@@ -135,6 +131,7 @@ cRenderCards::card_start("<a name='1'>Data</a> for $oTrans->name $oTier->name");
 cRenderCards::card_end();
 
 //#####################################################################################################
+//TODO make this a widget
 cRenderCards::card_start("<a name='2'>Transaction map</a>");
 	cRenderCards::body_start();
 	
@@ -182,6 +179,7 @@ if ($node){
 }
 
 // ################################################################################
+//TODO make this a widget
 cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oTrans->name in Tier: $oTier->name");
 	cRenderCards::body_start();
 		//******get the external tiers used by this transaction
@@ -200,22 +198,24 @@ cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oT
 			}
 			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
 		}else
-			cRender::messagebox("This transaction has no external calls");
+			cCommon::messagebox("This transaction has no external calls");
 	cRenderCards::body_end();
 cRenderCards::card_end();
 
 // ################################################################################
+//TODO make this a widget
 $oTimes = cRender::get_times();
 $sAppdUrl = cADControllerUI::transaction_snapshots($oApp,$oTrans->id, $oTimes);
-$aSnapshots = $oApp->GET_snaphot_info($oTrans->id, $oTimes);
+$aSnapshots = $oTrans->GET_snapshots($oTimes);
 
 cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
 	cRenderCards::body_start();
 		echo "Showing snapshots taking over ".MIN_TRANS_TIME."ms<br>";
 		if (count($aSnapshots) == 0)
-			cRender::messagebox("No Snapshots found");
+			cCommon::messagebox("No Snapshots found");
 		else{
 			cRender::button("Analyse top ten slowest transactions", "transanalysis.php?$sTransQS", true);
+			cRender::button("Search Snapshots", "searchsnaps.php?$sTransQS");
 			?><p><table class="maintable" id="trans">
 				<thead><tr class="tableheader">
 					<th width="140">start time</th>
@@ -267,6 +267,7 @@ cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cADCommon::button($sAppdUrl, "Goto Transaction Snapshots");
+		cRender::button("Search Snapshots", "searchsnaps.php?$sTransQS");
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
