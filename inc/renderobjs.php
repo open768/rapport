@@ -53,9 +53,6 @@ class cRenderObjs{
 		return new cADTier($poApp, $psTier, $psTID);
 	}
 	
-	public static function make_trans_obj($poTier, $psTrans, $psTrID){
-		return new cADTrans($poTier, $psTrans, $psTrID);
-	}
 	
 	//***************************************************************************
 	public static function get_current_app(){
@@ -80,9 +77,16 @@ class cRenderObjs{
 	
 	public static function get_current_trans(){
 		$oTier = self::get_current_tier();
-		$trans = cHeader::get(cRender::TRANS_QS);
-		$trid = cHeader::get(cRender::TRANS_ID_QS);
-		return self::make_trans_obj($oTier, $trans, $trid);
+		$sTrans = cHeader::get(cRender::TRANS_QS);
+		$sTrid = cHeader::get(cRender::TRANS_ID_QS);
+		return new cADTrans($oTier, $sTrans, $sTrid);
+	}
+	
+	public static function get_current_snapshot(){
+		$oTrans = self::get_current_trans();
+		$sGuuid = cHeader::get(cRender::SNAP_GUID_QS);
+		$sStartTime = cHeader::get(cRender::SNAP_TIME_QS);
+		return new cADSnapshot($oTrans, $sGuuid, $sStartTime);
 	}
 }
 ?>

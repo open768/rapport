@@ -109,7 +109,7 @@ cRenderCards::card_start("Contents");
 	</ul><?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cADCommon::button(cADControllerUI::transaction($oApp,$oTrans->id));
+		cADCommon::button(cADControllerUI::transaction($oTrans));
 		cRenderMenus::show_tier_functions();
 		cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
 		cRender::button("Search Snapshots", "searchsnaps.php?$sTransQS");
@@ -205,7 +205,7 @@ cRenderCards::card_end();
 // ################################################################################
 //TODO make this a widget
 $oTimes = cRender::get_times();
-$sAppdUrl = cADControllerUI::transaction_snapshots($oApp,$oTrans->id, $oTimes);
+$sAppdUrl = cADControllerUI::transaction_snapshots($oTrans, $oTimes);
 $aSnapshots = $oTrans->GET_snapshots($oTimes);
 
 cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
@@ -230,16 +230,16 @@ cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
 					foreach ($aSnapshots as $oSnapshot){
 						if ($oSnapshot->timeTakenInMilliSecs < MIN_TRANS_TIME) continue;
 
-						$sOriginalUrl = $oSnapshot->URL;
+						$sOriginalUrl = $oSnapshot->url;
 						if ($sOriginalUrl === "") $sOriginalUrl = $oTrans->name;
 						
-						$iEpoch = (int) ($oSnapshot->serverStartTime/1000);
+						$iEpoch = (int) ($oSnapshot->starttime/1000);
 						$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
-						$sAppdUrl = cADControllerUI::snapshot($oApp, $oTrans->id, $oSnapshot->requestGUID, $oTimes);
+						$sAppdUrl = cADControllerUI::snapshot( $oSnapshot);
 						$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
-						$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
+						$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->guuid);
 						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
-						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
+						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->starttime);
 						
 						?><tr class="<?=cRender::getRowClass()?>">
 							<td><?=$sDate?></td>

@@ -5,8 +5,6 @@ $.widget( "ck.addashhealth",{
 	//# Definition
 	//#################################################################
 	consts:{
-		DASH_ID_QS: "dai",
-		HOME_QS:"home",
 		REST_API:"/rest/dashhealth.php"
 	},
 
@@ -25,8 +23,8 @@ $.widget( "ck.addashhealth",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(this.consts.DASH_ID_QS))		$.error("dash ID  missing!");			
-		if (!oElement.attr(this.consts.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRender.DASH_ID_QS))		$.error("dash ID  missing!");			
+		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -94,10 +92,10 @@ $.widget( "ck.addashhealth",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ oConsts.DASH_ID_QS ] = oElement.attr(oConsts.DASH_ID_QS);
+		oParams[ cRender.DASH_ID_QS ] = oElement.attr(cRender.DASH_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(oConsts.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},

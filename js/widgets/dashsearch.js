@@ -5,11 +5,6 @@ $.widget( "ck.addashsearch",{
 	//# Definition
 	//#################################################################
 	consts:{
-		DASH_ID_QS: "dai",
-		DASH_NAME_QS: "dan",
-		DASH_URL_TEMPLATE :"dut",
-		SEARCH_QS: "srch",
-		HOME_QS:"home",
 		REST_API:"/rest/dashsearch.php"
 	},
 
@@ -28,11 +23,11 @@ $.widget( "ck.addashsearch",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(this.consts.DASH_ID_QS))		$.error("dash ID  missing!");			
-		if (!oElement.attr(this.consts.DASH_NAME_QS))	$.error("dash name missing!");			
-		if (!oElement.attr(this.consts.DASH_URL_TEMPLATE))	$.error("dash url template missing!");					
-		if (!oElement.attr(this.consts.SEARCH_QS))		$.error("search missing!");			
-		if (!oElement.attr(this.consts.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRender.DASH_ID_QS))		$.error("dash ID  missing!");			
+		if (!oElement.attr(cRender.DASH_NAME_QS))	$.error("dash name missing!");			
+		if (!oElement.attr(cRender.DASH_URL_TEMPLATE))	$.error("dash url template missing!");					
+		if (!oElement.attr(cRender.SEARCH_QS))		$.error("search missing!");			
+		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -100,11 +95,11 @@ $.widget( "ck.addashsearch",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ oConsts.DASH_ID_QS ] = oElement.attr(oConsts.DASH_ID_QS);
-		oParams[ oConsts.SEARCH_QS ] = oElement.attr(oConsts.SEARCH_QS);
+		oParams[ cRender.DASH_ID_QS ] = oElement.attr(cRender.DASH_ID_QS);
+		oParams[ cRender.SEARCH_QS ] = oElement.attr(cRender.SEARCH_QS);
 		
 		
-		var sBaseUrl = oElement.attr(oConsts.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -118,11 +113,11 @@ $.widget( "ck.addashsearch",{
 			oElement.hide();
 			return;
 		}
-		var sDash = oElement.attr(oConsts.DASH_NAME_QS);
-		var iDash = oElement.attr(oConsts.DASH_ID_QS);
+		var sDash = oElement.attr(cRender.DASH_NAME_QS);
+		var iDash = oElement.attr(cRender.DASH_ID_QS);
 		
 		oElement.empty();
-		var sUrl = oElement.attr(oConsts.DASH_URL_TEMPLATE);
+		var sUrl = oElement.attr(cRender.DASH_URL_TEMPLATE);
 		sUrl = sUrl.replace("-tmp-", iDash);
 		sJS= "window.open('"+sUrl+"','appd');"
 		var oButton = $("<button>",{onclick:sJS}).append("->");

@@ -1,11 +1,11 @@
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adtiererrors",{
+$.widget( "ck.adsnapsearch",{
 	//#################################################################
 	//# Definition
 	//#################################################################
 	consts:{
-		REST_API:"/rest/tiererrors.php"
+		REST_API:"/rest/snapsearch.php"
 	},
 
 	//#################################################################
@@ -23,8 +23,13 @@ $.widget( "ck.adtiererrors",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.TIER_QS))		$.error("tier ID  missing!");			
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRender.TIER_ID_QS))		$.error("tier ID  missing!");			
+		if (!oElement.attr(cRender.APP_ID_QS))		$.error("appid  missing!");			
+		if (!oElement.attr(cRender.TRANS_QS))		$.error("trans  missing!");			
+		if (!oElement.attr(cRender.TRANS_ID_QS))	$.error("transid  missing!");			
+		if (!oElement.attr(cRender.SNAP_GUID_QS))	$.error("snapguuid  missing!");			
+		if (!oElement.attr(cRender.SNAP_TIME_QS))	$.error("appid  missing!");			
+		if (!oElement.attr(cRender.SEARCH_QS))		$.error("search missing!");			
 		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
@@ -34,7 +39,7 @@ $.widget( "ck.adtiererrors",{
 		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
 		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_tier_error_url());
+		oQueue.go(oElement, this.get_snap_search_url());
 	},
 
 
@@ -80,21 +85,26 @@ $.widget( "ck.adtiererrors",{
 		if (aResponse.length == 0 )
 			oElement.append("<i>no errors found</i>");
 		else
-			this.render_errors(poHttp.response);
+			this.render(poHttp.response);
 	},
 
 	
 	//#################################################################
 	//# functions
 	//#################################################################`
-	get_tier_error_url: function (){
+	get_snap_search_url: function (){
 		var sUrl;
 		var oConsts = this.consts;
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.TIER_QS ] = oElement.attr(cRender.TIER_QS);
 		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
+		oParams[ cRender.TRANS_QS ] = oElement.attr(cRender.TRANS_QS);
+		oParams[ cRender.TRANS_ID_QS ] = oElement.attr(cRender.TRANS_ID_QS);
+		oParams[ cRender.SNAP_GUID_QS ] = oElement.attr(cRender.SNAP_GUID_QS);
+		oParams[ cRender.SNAP_TIME_QS ] = oElement.attr(cRender.SNAP_TIME_QS);
+		oParams[ cRender.SEARCH_QS ] = oElement.attr(cRender.SEARCH_QS);
 		
 		
 		var sBaseUrl = oElement.attr(cRender.HOME_QS)+oConsts.REST_API;
@@ -103,40 +113,17 @@ $.widget( "ck.adtiererrors",{
 	},
 	
 	//*******************************************************************
-	render_errors: function(paData){
+	render: function(piCount){
 		var oThis = this;
 		var oElement = this.element;
-		
-		oElement.empty();
-		if (paData.length == 0){
-			oElement.append("<i>no information found</i>");
+		var oConsts = this.consts;
+		if (piCount == 0){
+			oElement.hide();
 			return;
 		}
 		
-		var oTable = $("<TABLE>", {width:"100%", border:1, cellspacing:0});
-		oTable.append(
-			"<thead><tr>" +
-				"<th width=\"*\">Name</th>" +
-				"<th width=\"50\">Count</th>" + 
-				"<th width=\"50\">Average</th>" +
-				"</tr></thead>"
-		);
+		oElement.empty();
+		oElement.append(" Snapshot: has " + piCount + " matches " );
 		
-		var oBody = $("<tbody>");
-		for (var i=0; i< paData.length; i++){
-			var oItem = paData[i];
-			oBody.append("<tr>" +
-				"<td>"+ oItem.name +"</td>" +
-				"<td>"+ oItem.count+"</td>" +
-				"<td>"+ oItem.average+"</td>" +
-			"</tr>");
-		}
-		oTable.append(oBody);
-		
-		//---------------------------------------------------
-		var sID = oElement.attr("id") + "tbl";
-		oTable.attr("id", sID );
-		oElement.append(oTable);
-		$("#"+sID).tablesorter();
 	}
 });

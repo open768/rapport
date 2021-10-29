@@ -2,11 +2,6 @@
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 var cSynthetics = {
 	queue: new cHttpQueue,
-	APP_QS:"app",
-	APPID_QS:"aid",
-	SYNTH_DETAILS_QS:"syd",
-	METRIC_QS:"met",
-	METRIC_HEIRARCHY_QS: "meh",
 	METRIC_API:"rest/getMetric.php",
 	SYNLIST_API:"rest/getSynList.php"
 };
@@ -66,9 +61,9 @@ $.widget( "ck.adsynlist",{
 		
 		//create http object and add to the queue
 		var oParams = {};
-		oParams[ cSynthetics.APP_QS ] = oOptions.app;
-		oParams[ cSynthetics.APPID_QS ] = oOptions.app_id;
-		oParams[ cSynthetics.SYNTH_DETAILS_QS] = 0;
+		oParams[ cRender.APP_QS ] = oOptions.app;
+		oParams[ cRender.APPID_QS ] = oOptions.app_id;
+		oParams[ cRender.SYNTH_DETAILS_QS] = 0;
 		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
 
 		var oItem = new cHttpQueueItem();
@@ -199,9 +194,9 @@ $.widget( "ck.appdsyntimeline",{
 		oElement.append(oLoader).append("Loading: Synthetics");
 				
 		var oParams = {};
-		oParams[ cSynthetics.APP_QS ] = oOptions.app;
-		oParams[ cSynthetics.APPID_QS ] = oOptions.app_id;
-		oParams[ cSynthetics.SYNTH_DETAILS_QS] = 1;
+		oParams[ cRender.APP_QS ] = oOptions.app;
+		oParams[ cRender.APPID_QS ] = oOptions.app_id;
+		oParams[ cRender.SYNTH_DETAILS_QS] = 1;
 		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
 		
 		ohttp = new cHttp2();

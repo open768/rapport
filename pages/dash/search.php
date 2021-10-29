@@ -19,6 +19,9 @@ require_once "$home/inc/common.php";
 
 //####################################################################
 cRenderHtml::header("Search Dashboards");
+?>
+	<script type="text/javascript" src="<?=$home?>/js/widgets/dashsearch.js"></script>	
+<?php
 cRender::force_login();
 $oTimes = cRender::get_times();
 $sTemplate = cADControllerUI::dashboard_detail("-tmp-", $oTimes);

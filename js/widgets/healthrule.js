@@ -385,9 +385,6 @@ $.widget( "ck.adhealthdetail",{
 	//# Definition
 	//#################################################################
 	consts:{
-		APPID_QS:"aid",
-		HEALTH_ID_QS: "hi",
-		HOME_QS:"home",
 		HEALTH_API:"/rest/healthdetail.php"
 	},
 
@@ -482,11 +479,11 @@ $.widget( "ck.adhealthdetail",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ oConsts.APPID_QS ] = oElement.attr(oConsts.APPID_QS);
-		oParams[ oConsts.HEALTH_ID_QS ] = oElement.attr(oConsts.HEALTH_ID_QS);
+		oParams[ cRender.APPID_QS ] = oElement.attr(cRender.APPID_QS);
+		oParams[ cRender.HEALTH_ID_QS ] = oElement.attr(cRender.HEALTH_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(oConsts.HOME_QS)+this.consts.HEALTH_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.HEALTH_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},

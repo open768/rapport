@@ -18,7 +18,6 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-require_once("$root/inc/filter.php");
 
 CONST MIN_TOTAL_TIME_REMOTE=150;
 CONST MIN_TOTAL_TIME_METHOD=40;
@@ -33,21 +32,17 @@ function sort_by_time($a,$b){
 }
 
 //####################################################################
-$trans = cHeader::get(cRender::TRANS_QS);
-cRenderHtml::header("Snapshot - $trans");
+$oSnap = cRenderObjs::get_current_snapshot();
+cDebug::vardump($oSnap);
+$oTrans = $oSnap->trans;
+$oTier = $oTrans->tier;
+$oApp = $oTier->app;
+cRenderHtml::header("Snapshot - $oTrans->name");
 cRender::force_login();
 
 //####################################################
 //display the results
-$oTier = cRenderObjs::get_current_tier();
-$oApp = $oTier->app;
-
-$oTrans = cRenderObjs::get_current_trans();
-$oTier = $oTrans->tier;
-$oApp = $oTier->app;
-$sSnapGUID = cHeader::get(cRender::SNAP_GUID_QS);
 $sSnapURL = cHeader::get(cRender::SNAP_URL_QS);
-$sSnapTime = cHeader::get(cRender::SNAP_TIME_QS);
 
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
@@ -62,13 +57,12 @@ if (cAD::is_demo()){
 $oCred = cRenderObjs::get_AD_credentials();
 cDebug::flush();
 
-$oTime = new cADTimes($sSnapTime);
-$sAppdUrl = cADControllerUI::snapshot($oApp, $oTrans->id, $sSnapGUID, $oTime);
-
+$oTime = new cADTimes($oSnap->starttime);
+$sAppdUrl = cADControllerUI::snapshot($oSnap);
 
 try{
-	$oSnapshot = $oTrans->GET_snapshot_segments($sSnapGUID, $sSnapTime);	
-	cDebug::vardump($oSnapshot);
+	$oSegments = $oSnap->GET_segments();	
+	cDebug::vardump($oSegments);
 }catch (Exception $e){
 	cCommon::messagebox("no segments found");
 	cRenderHtml::footer();
@@ -77,33 +71,32 @@ try{
 //###############################################################################################
 cRenderCards::card_start("Snapshot Details for $sSnapURL");
 cRenderCards::body_start();
-	$sDate = cADTime::timestamp_to_date($sSnapTime);
-	$trid=$oSnapshot->requestSegmentData->businessTransactionId;
+	$sDate = cADTime::timestamp_to_date($oSnap->starttime);
 
 	?><table border="1" cellspacing="0">
-		<tr><th align="right">Business Transaction:</th><td><?=cRender::show_name(cRender::NAME_TRANS,$oSnapshot->btName)?></td></tr>
+		<tr><th align="right">Business Transaction:</th><td><?=cRender::show_name(cRender::NAME_TRANS,$oSegments->btName)?></td></tr>
 		<tr><th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
 		<tr><th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
-		<tr><th align="right">Number of Segments:</th><td><?=$oSnapshot->segmentCount?></td></tr>
+		<tr><th align="right">Number of Segments:</th><td><?=$oSegments->segmentCount?></td></tr>
 	</table><?php
 cRenderCards::body_end();
 cRenderCards::action_start();
 	cADCommon::button($sAppdUrl);
-	$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$trans);
-	$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$trid);
-	cRender::button("back to transaction: $trans", "transdetails.php?$sTransQS");
+	$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
+	$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+	cRender::button("back to transaction: $oTrans->name", "transdetails.php?$sTransQS");
 cRenderCards::action_end();
 cRenderCards::card_end();
 
 //###############################################################################################
 cRenderCards::card_start("Segment Details");
 cRenderCards::body_start();
-	$oSegment = $oSnapshot->requestSegmentData;
+	$oSegment = $oSegments->requestSegmentData;
 	?><table border="1" cellspacing="0">
 		<tr><th align="right">Time Taken:</th><td><?=$oSegment->timeTakenInMilliSecs?> ms</td></tr>
 		<tr><th align="right">User Experience:</th><td><?=$oSegment->userExperience?></td></tr>
 		<tr><th align="right">Summary:</th><td><?=$oSegment->summary?></td></tr>
-		<tr><th align="right">Server:</th><td><?=cADUtil::get_node_name($oApp,$oSnapshot->requestSegmentData->applicationComponentNodeId)?></td></tr>
+		<tr><th align="right">Server:</th><td><?=cADUtil::get_node_name($oApp,$oSegments->requestSegmentData->applicationComponentNodeId)?></td></tr>
 	</table><?php
 cRenderCards::body_end();
 cRenderCards::card_end();
@@ -141,7 +134,7 @@ cRenderCards::body_start();
 	$oFlow = null;
 	$bProceed = true;
 	try{
-		$oFlow = cADRestUI::GET_snapshot_flow($oSegment);
+		$oFlow = $oSnap->GET_segments_flow($oSegment);
 	}catch (Exception $e){
 		cCommon::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bProceed = false;
@@ -179,7 +172,7 @@ cRenderCards::body_start();
 	cDebug::flush();
 	$bProceed = true;
 	try{
-		$aData = cADRestUI::GET_snapshot_expensive_methods($sSnapGUID, $sSnapTime);
+		$aData = $oSnap->GET_expensive_methods();
 	}catch (Exception $e){
 		cCommon::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
 		$bProceed = false;
@@ -230,7 +223,7 @@ cRenderCards::card_end();
 //###############################################################################################
 	$bError = false;
 	try{
-		$oFlow = cADRestUI::GET_snapshot_flow($oSegment);
+		$oFlow = $oSnap->GET_segments_flow($oSegment);
 	}catch (Exception $e){
 		cCommon::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bError = true;

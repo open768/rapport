@@ -43,7 +43,6 @@ if (cAD::is_demo()){
 
 $oCred = cRenderObjs::get_AD_credentials();
 cRenderMenus::show_tier_functions();
-//cADCommon::button(cADControllerUI::transaction($oApp,$oTrans->id));
 cADCommon::button(cADControllerUI::serviceEndPoint($oTier,$sServiceID));
 cDebug::flush();
 

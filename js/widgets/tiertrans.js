@@ -5,11 +5,6 @@ $.widget( "ck.adtiertrans",{
 	//# Definition
 	//#################################################################
 	consts:{
-		TIER_ID_QS: "tid",
-		APP_ID_QS: "aid",
-		TRANS_ID_QS: "trid",
-		TRANS_QS: "trans",
-		HOME_QS:"home",
 		REST_API:"/rest/tiertrans.php"
 	},
 
@@ -28,9 +23,9 @@ $.widget( "ck.adtiertrans",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(this.consts.TIER_ID_QS))		$.error("tier ID  missing!");			
-		if (!oElement.attr(this.consts.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(this.consts.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRender.TIER_ID_QS))		$.error("tier ID  missing!");			
+		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -98,11 +93,11 @@ $.widget( "ck.adtiertrans",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ oConsts.APP_ID_QS ] = oElement.attr(oConsts.APP_ID_QS);
-		oParams[ oConsts.TIER_ID_QS ] = oElement.attr(oConsts.TIER_ID_QS);
+		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(oConsts.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -116,8 +111,8 @@ $.widget( "ck.adtiertrans",{
 		oElement.empty();
 		
 		var sTransUrlBase = "transdetails.php?"+
-			oConsts.APP_ID_QS+"="+oElement.attr(oConsts.APP_ID_QS) + "&" +
-			oConsts.TIER_ID_QS+"="+oElement.attr(oConsts.TIER_ID_QS) ;
+			cRender.APP_ID_QS+"="+oElement.attr(cRender.APP_ID_QS) + "&" +
+			cRender.TIER_ID_QS+"="+oElement.attr(cRender.TIER_ID_QS) ;
 			
 		if (poData.active.length>0){
 			oTable = $("<table>", {border:1,cellspacing:0,width:"100%"});
@@ -134,8 +129,8 @@ $.widget( "ck.adtiertrans",{
 				oRow.append("<td>"+ sFragment+ "</td>");
 				
 				var sTransUrl = sTransUrlBase + 
-					"&" + oConsts.TRANS_ID_QS + "=" + oItem.id +
-					"&" + oConsts.TRANS_QS + "=" + oItem.name;
+					"&" + cRender.TRANS_ID_QS + "=" + oItem.id +
+					"&" + cRender.TRANS_QS + "=" + oItem.name;
 				oRow.append("<td><a href='"+sTransUrl+"'>"+oItem.name+"</a></td>");
 				oRow.append("<td>"+oItem.count+"</td>");
 				oRow.append("<td>"+oItem.avg+"</td>");

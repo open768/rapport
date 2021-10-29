@@ -38,6 +38,7 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
+?><script language="javascript" src="<?=$home?>/js/widgets/tiertrans.js"></script><?php
 
 
 cRenderCards::card_start();

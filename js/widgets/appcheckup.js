@@ -5,8 +5,6 @@ $.widget( "ck.adappcheckup",{
 	//# Definition
 	//#################################################################
 	consts:{
-		APP_ID_QS: "aid",
-		HOME_QS:"home",
 		REST_API:"/rest/appcheckup.php"
 	},
 
@@ -25,8 +23,8 @@ $.widget( "ck.adappcheckup",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(this.consts.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(this.consts.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -94,10 +92,10 @@ $.widget( "ck.adappcheckup",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ oConsts.APP_ID_QS ] = oElement.attr(oConsts.APP_ID_QS);
+		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(oConsts.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -121,8 +119,8 @@ $.widget( "ck.adappcheckup",{
 		var sClass, i, oMsg, sHome, sAid;
 		
 		oElement.empty();
-		sHome = oElement.attr(oConsts.HOME_QS)+"/pages";
-		sAid = oConsts.APP_ID_QS +"="+oElement.attr(oConsts.APP_ID_QS);
+		sHome = oElement.attr(cRender.HOME_QS)+"/pages";
+		sAid = cRender.APP_ID_QS +"="+oElement.attr(cRender.APP_ID_QS);
 		
 
 		sHTML = "<table border='1' cellspacing='0' width='100%'>";

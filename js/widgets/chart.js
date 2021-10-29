@@ -120,11 +120,6 @@ $.widget( "ck.adchart",{
 	},
 	
 	consts:{
-		APP_QS:"app",
-		METRIC_QS:"met",
-		TITLE_QS:"tit",
-		DIV_QS:"div",
-		PREVIOUS_QS: "prv",
 		METRIC_API:"rest/getMetric.php",
 		CHART_PHP_FOLDER:"pages/charts",
 		NO_DATA_HEIGHT: 90,
@@ -278,9 +273,9 @@ $.widget( "ck.adchart",{
 		var oConsts = this.consts;
 		
 		var oParams={};
-		oParams[oConsts.METRIC_QS]=oOptions.metric;
-		oParams[oConsts.APP_QS]=oOptions.appName;
-		oParams[oConsts.TITLE_QS]=oOptions.title;
+		oParams[cRender.METRIC_QS]=oOptions.metric;
+		oParams[cRender.APP_QS]=oOptions.appName;
+		oParams[cRender.TITLE_QS]=oOptions.title;
 		oParams["csv"]=1;
 		var sUrl = cBrowser.buildUrl(this.options.home+"/pages/"+oConsts.csv_url, oParams);
 		window.open(sUrl);
@@ -298,10 +293,10 @@ $.widget( "ck.adchart",{
 		var oConsts = this.consts;
 		
 		var oParams={};
-		oParams[oConsts.METRIC_QS]=oOptions.metric;
+		oParams[cRender.METRIC_QS]=oOptions.metric;
 		if (oOptions.appName)
-			oParams[oConsts.APP_QS]=oOptions.appName;
-		oParams[oConsts.TITLE_QS]=oOptions.title;
+			oParams[cRender.APP_QS]=oOptions.appName;
+		oParams[cRender.TITLE_QS]=oOptions.title;
 		var sUrl = cBrowser.buildUrl(oOptions.home+"/"+oConsts.CHART_PHP_FOLDER+"/"+oConsts.compare_url, oParams);
 		window.open(sUrl);		
 	},
@@ -312,9 +307,9 @@ $.widget( "ck.adchart",{
 		var oConsts = this.consts;
 		
 		var oParams={};
-		oParams[oConsts.METRIC_QS]=oOptions.metric;
-		oParams[oConsts.APP_QS]=oOptions.appName;
-		oParams[oConsts.TITLE_QS]=oOptions.title;
+		oParams[cRender.METRIC_QS]=oOptions.metric;
+		oParams[cRender.APP_QS]=oOptions.appName;
+		oParams[cRender.TITLE_QS]=oOptions.title;
 		var sUrl = cBrowser.buildUrl(oOptions.home+"/"+oConsts.CHART_PHP_FOLDER+"/"+oConsts.zoom_url, oParams);
 		window.open(sUrl);		
 	},
@@ -350,11 +345,11 @@ $.widget( "ck.adchart",{
 		var oConsts = this.consts;
 		
 		var oParams = {};
-		oParams[ oConsts.METRIC_QS ] = oOptions.metric;
-		if (oOptions.appName) oParams[ oConsts.APP_QS ] = oOptions.appName;
-		oParams[ oConsts.DIV_QS ] = "";
+		oParams[ cRender.METRIC_QS ] = oOptions.metric;
+		if (oOptions.appName) oParams[ cRender.APP_QS ] = oOptions.appName;
+		oParams[ cRender.DIV_QS ] = "";
 		if (oOptions.previous_period == 1) {
-			oParams[ oConsts.PREVIOUS_QS ] = 1;
+			oParams[ cRender.PREVIOUS_QS ] = 1;
 			oOptions.title = "(Previous) " + oOptions.title;
 		}
 		

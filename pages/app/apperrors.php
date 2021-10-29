@@ -30,6 +30,7 @@ $oApp = cRenderObjs::get_current_app();
 $title ="$oApp->name Application Errors and Exceptions";
 cRenderHtml::header("$title");
 cRender::force_login();
+?><script language="javascript" src="<?=$home?>/js/widgets/tiererrors.js"></script><?php
 
 $oTimes = cRender::get_times();
 

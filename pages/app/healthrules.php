@@ -29,6 +29,7 @@ if (cAD::is_demo()){
 	cRenderHtml::footer();
 	exit;
 }
+?><script language="javascript" src="<?=$home?>/js/widgets/healthrule.js"></script><?php
 
 $aRules = $oApp->GET_HealthRules();
 $iCount = ($aRules==null?0:count($aRules));

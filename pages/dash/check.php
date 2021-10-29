@@ -21,6 +21,7 @@ require_once "$home/inc/common.php";
 cRenderHtml::header("Dashboards");
 cRender::force_login();
 $oTimes = cRender::get_times();
+?><script language="javascript" src="<?=$home?>/js/widgets/dashhealth.js"></script><?php
 
 //####################################################################
 $aData = cADRestUI::GET_dashboards();

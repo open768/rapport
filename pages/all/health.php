@@ -67,7 +67,7 @@ function do_active($paData){
 }
 
 //####################################################################
-$aData = cADRestUI::GET_account_flowmap();
+$aData = cADRestUI::GET_account_flowmap(); //TODO make asynchronous this is slow
 $aData = cADAnalysis::analyse_account_flowmap($aData);
 
 //####################################################################

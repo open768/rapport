@@ -16,36 +16,23 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
-
-require_once("$root/inc/filter.php");
-
-const COLUMNS=6;
-const FLOW_ID = "trflw";
-const MIN_TRANS_TIME=150;
 
 //####################################################################
 $oTrans = cRenderObjs::get_current_trans();
 $oTier = $oTrans->tier;
 $oApp = $oTier->app;
-$node= cHeader::get(cRender::NODE_QS);
 
 //####################################################################
 cRenderHtml::header("Search Snapshots for Transaction");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="<?=$home?>/js/remote.js"></script>	
-	<script type="text/javascript" src="<?=$home?>/js/transflow.js"></script>
+	<script type="text/javascript" src="<?=$home?>/js/widgets/snapsearch.js"></script>	
 <?php
-cChart::do_header();
 
 //####################################################
 //display the results
-$sExtraCaption = ($node?"($node) node":"");
 
-$sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
-
 $sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
 $sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
 
@@ -131,11 +118,22 @@ cRenderCards::card_start("Search $oTrans->name");
 					var sSearch = $("#search").val();
 					for (var i=0 ; i<aResponse.length; i++){
 						var oItem = aResponse[i];
-						var sUrl = "snapdetails.php?" + oItem.snapqs;
+						var oTrans = oItem.trans;
+						var oParams = {
+							<?=cRender::TRANS_QS?>:oTrans.name,
+							<?=cRender::TIER_ID_QS?>:oTrans.tier.id,
+							<?=cRender::APP_ID_QS?>:oTrans.tier.app.id,
+							<?=cRender::TRANS_ID_QS?>:oTrans.id,
+							<?=cRender::SNAP_TIME_QS?>:oItem.startTime,
+							<?=cRender::SNAP_GUID_QS?>:oItem.guuid
+						};
+						var sUrl = cBrowser.buildUrl("snapdetails.php", oParams);
 						var sDiv = 
 							"<div type='searchsnap'" +
+								" <?=cRender::HOME_QS?>='<?=$home?>'" +
 								" <?=cRender::APP_ID_QS?>='<?=$oApp->id?>'" +
 								" <?=cRender::TIER_ID_QS?>='<?=$oTier->id?>'" +
+								" <?=cRender::TRANS_QS?>='<?=$oTrans->name?>'" +
 								" <?=cRender::TRANS_ID_QS?>='<?=$oTrans->id?>'" +
 								" <?=cRender::SNAP_TIME_QS?>='" + oItem.startTime +"'" +
 								" <?=cRender::SNAP_GUID_QS?>='" + oItem.guuid +"'" +
@@ -176,7 +174,6 @@ cRenderCards::card_end();
 
 // ################################################################################
 // ################################################################################
-cChart::do_footer();
 
 cRenderHtml::footer();
 ?>

@@ -44,7 +44,8 @@ if ($a->eventTime == $b->eventTime) {
 
 $aEvents = $oApp->GET_Events($oTimes);
 if (count($aEvents) == 0){
-	cCommon::errorbox("No Events found");
+	cCommon::messagebox("No Events found");
+	cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
 	cRenderHtml::footer();
 	exit;
 }

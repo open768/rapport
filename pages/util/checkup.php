@@ -20,11 +20,8 @@ cRenderHtml::header("One Click Checkup");
 cRender::force_login();
 
 //####################################################################
-$sUsage = cHeader::get(cRender::USAGE_QS);
-if (!$sUsage) $sUsage = 1;
-?>
+?><script language="javascript" src="<?=$home?>/js/widgets/appcheckup.js"></script><?php
 
-<?php
 function output_row($pbBad, $psCaption, $psContent, $psAction=null){
 	$sClass = ($pbBad?"bad_row":"good_row");
 	?><tr class="<?=$sClass?>">

@@ -97,20 +97,14 @@ class cRenderHtml{
 			
 			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
 			<script src="<?=$home?>/js/menus.js"></script>
-			<script src="<?=$home?>/js/widgets/menu.js"></script>
 			<script src="<?=$home?>/js/common.js"></script>
+			<script src="<?=$home?>/js/render.js"></script>
 			<script src="<?=$home?>/js/qtip-init.js"></script>
 			<script src="<?=$home?>/js/dialog-init.js"></script>
 
-			<!-- these widgets not needed on every page -->
+			<!-- common widgets  -->
 			<script src="<?=$home?>/js/widgets/chart.js"></script>
-			<script src="<?=$home?>/js/widgets/healthrule.js"></script>
-			<script src="<?=$home?>/js/widgets/logdetail.js"></script>
-			<script src="<?=$home?>/js/widgets/tiererrors.js"></script>
-			<script src="<?=$home?>/js/widgets/dashhealth.js"></script>
-			<script src="<?=$home?>/js/widgets/dashsearch.js"></script>
-			<script src="<?=$home?>/js/widgets/appcheckup.js"></script>
-			<script src="<?=$home?>/js/widgets/tiertrans.js"></script>
+			<script src="<?=$home?>/js/widgets/menu.js"></script>
 		</head>
 		<BODY>
 			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">

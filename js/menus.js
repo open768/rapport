@@ -6,16 +6,9 @@ var cMenus={
 	METRIC_FIELD: "cmf.",
 	TITLE_FIELD: "ctf.",
 	APP_FIELD: "caf.",
-	APP_QS:"app",
-	APPID_QS:"aid",
-	IGNORE_REF_QS: "igr",
-	METRIC_TYPE_QS:"mt",
 	METRIC_TYPE_ACTIVITY: "mac",
 	METRIC_TYPE_RUMCALLS:"mrc",
 	METRIC_TYPE_INFR_AVAIL:"mtia",
-	NODE_QS:"nd",
-	TIER_QS:"tier",
-	TIER_ID_QS: "tid",
 		
 	//*********************************************************
 	renderMenus: function(){	
@@ -76,7 +69,7 @@ var cTopMenu={
 		var oContentDiv;
 		oContentDiv = this.pr__add_expansion(poDiv, "General", true);
 			var oParams = {};
-			oParams[cMenus.IGNORE_REF_QS] = 1;
+			oParams[cRender.IGNORE_REF_QS] = 1;
 			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Login Token", sHome +"/pages/authtoken.php");
 			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
@@ -103,7 +96,7 @@ var cTopMenu={
 
 		oContentDiv = this.pr__add_expansion(poDiv, "All");
 			oParams = {};
-			oParams[cMenus.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
+			oParams[cRender.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
 			this.pr__add_to_expansion(oContentDiv, "Analytics", sAnalyticsPrefixUrl+"/analytics.php");
 			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
@@ -122,8 +115,8 @@ var cTopMenu={
 				sAppid = poDiv.attr("appid."+iCount);
 				
 				oParams = {};
-				oParams[cMenus.APP_QS] = sApp;
-				oParams[cMenus.APPID_QS] = sAppid;
+				oParams[cRender.APP_QS] = sApp;
+				oParams[cRender.APPID_QS] = sAppid;
 				this.pr__add_to_expansion(oContentDiv, sApp, cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
 				iCount++;
 			}

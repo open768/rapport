@@ -5,8 +5,6 @@ $.widget( "ck.adlogdetail",{
 	//# Definition
 	//#################################################################
 	consts:{
-		LOG_ID_QS: "loi",
-		HOME_QS:"home",
 		DETAIL_API:"/rest/logdetail.php"
 	},
 
@@ -25,8 +23,8 @@ $.widget( "ck.adlogdetail",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(this.consts.LOG_ID_QS))		$.error("log rule ID  missing!");			
-		if (!oElement.attr(this.consts.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRender.LOG_ID_QS))		$.error("log rule ID  missing!");			
+		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -94,10 +92,10 @@ $.widget( "ck.adlogdetail",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ oConsts.LOG_ID_QS ] = oElement.attr(oConsts.LOG_ID_QS);
+		oParams[ cRender.LOG_ID_QS ] = oElement.attr(cRender.LOG_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(oConsts.HOME_QS)+this.consts.DETAIL_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.DETAIL_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
