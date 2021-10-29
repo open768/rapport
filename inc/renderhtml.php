@@ -93,7 +93,6 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/http.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jqueryui.slideout.js"></script>
 			
 			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
 			<script src="<?=$home?>/js/menus.js"></script>
@@ -103,7 +102,6 @@ class cRenderHtml{
 			<script src="<?=$home?>/js/dialog-init.js"></script>
 
 			<!-- common widgets  -->
-			<script src="<?=$home?>/js/widgets/chart.js"></script>
 			<script src="<?=$home?>/js/widgets/menu.js"></script>
 		</head>
 		<BODY>

@@ -18,6 +18,8 @@ class cChartMetricItem{
 	public $caption;
 }
 
+//############################################################################################
+//############################################################################################
 class cChartItem{
 	public $type = "unknown";
 	public $caption = null;
@@ -32,12 +34,10 @@ class cChartItem{
 
 	
 	public function write_html(){
-		global $home;
 		$iWidth = round($this->width);
 		$iHeight=round($this->height);
 		?><DIV
 			type="adchart" 
-			home="<?=$home?>"
 			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$iWidth?>" height="<?=$iHeight?>" 
 			style="position:relative;max-width:<?=$iWidth?>px;width:<?=$iWidth?>px;height=<?=$iHeight?>px;overflow-wrap:break-all"
@@ -61,6 +61,8 @@ class cChartItem{
 	}
 }
 
+//############################################################################################
+//############################################################################################
 class cChart{
 	public static $width=1000;
 	public static $show_zoom = 1;
@@ -95,6 +97,12 @@ class cChart{
 	
 	//****************************************************************************
 	public static function do_header(){
+		global $home, $jsinc;
+		?>
+			<script src="<?=$jsinc?>/ck-inc/jquery/jqueryui.slideout.js"></script>
+			<script src="<?=$home?>/js/charts.js"></script>
+			<script src="<?=$home?>/js/widgets/chart.js"></script>
+		<?php
 	}
 	
 	//****************************************************************************
