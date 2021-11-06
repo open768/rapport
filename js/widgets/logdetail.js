@@ -71,7 +71,6 @@ $.widget( "ck.adlogdetail",{
 		var oThis = this;
 		var oElement = this.element;
 
-		if (cCharts.queue.stopping) return;
 		oElement.empty();
 		oElement.removeClass();
 		

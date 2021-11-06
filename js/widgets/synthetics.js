@@ -62,7 +62,7 @@ $.widget( "ck.adsynlist",{
 		//create http object and add to the queue
 		var oParams = {};
 		oParams[ cRender.APP_QS ] = oOptions.app;
-		oParams[ cRender.APPID_QS ] = oOptions.app_id;
+		oParams[ cRender.APP_ID_QS ] = oOptions.app_id;
 		oParams[ cRender.SYNTH_DETAILS_QS] = 0;
 		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
 
@@ -195,7 +195,7 @@ $.widget( "ck.appdsyntimeline",{
 				
 		var oParams = {};
 		oParams[ cRender.APP_QS ] = oOptions.app;
-		oParams[ cRender.APPID_QS ] = oOptions.app_id;
+		oParams[ cRender.APP_ID_QS ] = oOptions.app_id;
 		oParams[ cRender.SYNTH_DETAILS_QS] = 1;
 		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
 		

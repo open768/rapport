@@ -74,7 +74,6 @@ $.widget( "ck.addashsearch",{
 		var oThis = this;
 		var oElement = this.element;
 
-		if (cCharts.queue.stopping) return;
 		oElement.empty();
 		oElement.removeClass();
 		

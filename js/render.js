@@ -92,4 +92,12 @@ var cRender={
 	 NAME_EXT : 3,
 	 NAME_TRANS : 4,
 	 NAME_OTHER : 99
-}
+};
+
+var cRenderW3={
+	
+	//**********************************************************
+	tag:function(psTag, psColour="w3-light-grey"){
+		return  "<span class='w3-tag "+ psColour + " w3-round w3-border ' style='text-align:left'>"+psTag+"</span> ";
+	}
+};

@@ -168,6 +168,7 @@ function render_nodejs_cfg($poItem){
 function render_java_cfg($poItem){
 	echo cRenderW3::panel_start("w3-sand w3-padding-16");
 		cCommon::messagebox("java work in progress");
+		cDebug::vardump($poItem);
 	echo "</div>";
 }
 
@@ -175,6 +176,7 @@ function render_java_cfg($poItem){
 function render_dotnet_cfg($poItem){
 	echo cRenderW3::panel_start("w3-sand w3-padding-16");
 		cCommon::messagebox("dotnet work in progress");
+		cDebug::vardump($poItem);
 	echo "</div>";
 }
 
@@ -182,6 +184,7 @@ function render_dotnet_cfg($poItem){
 function render_python_cfg($poItem){
 	echo cRenderW3::panel_start("w3-sand w3-padding-16");
 		cCommon::messagebox("python work in progress");
+		cDebug::vardump($poItem);
 	echo "</div>";
 }
 
@@ -189,6 +192,7 @@ function render_python_cfg($poItem){
 function render_native_cfg($poItem){
 	echo cRenderW3::panel_start("w3-sand w3-padding-16");
 		cCommon::messagebox("native work in progress");
+		cDebug::vardump($poItem);
 	echo "</div>";
 }
 

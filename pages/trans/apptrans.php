@@ -18,7 +18,6 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-require_once("$root/inc/charts.php");
 
 //####################################################################
 // common functions
@@ -29,7 +28,6 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 cRenderHtml::header("Transactions for $oApp->name");
 cRender::force_login();
-//header
 
 //********************************************************************
 if (cAD::is_demo()){

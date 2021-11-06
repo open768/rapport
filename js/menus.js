@@ -116,7 +116,7 @@ var cTopMenu={
 				
 				oParams = {};
 				oParams[cRender.APP_QS] = sApp;
-				oParams[cRender.APPID_QS] = sAppid;
+				oParams[cRender.APP_ID_QS] = sAppid;
 				this.pr__add_to_expansion(oContentDiv, sApp, cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
 				iCount++;
 			}

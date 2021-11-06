@@ -86,7 +86,7 @@ $.widget( "ck.admenu",{
 		//build the params
 		var oParams = {};
 		oParams[cRender.APP_QS] = sAppname;
-		oParams[cRender.APPID_QS] = sAppid;
+		oParams[cRender.APP_ID_QS] = sAppid;
 		
 		
 		//build the menu
@@ -163,7 +163,7 @@ $.widget( "ck.admenu",{
 
 			var oParams = {};
 			oParams[cRender.APP_QS] = sAppname;
-			oParams[cRender.APPID_QS] = sAppid;
+			oParams[cRender.APP_ID_QS] = sAppid;
 			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
 
 			oParams[cRender.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL;
@@ -215,7 +215,7 @@ $.widget( "ck.admenu",{
 		oOptions = this.options;
 		oElement = this.element;
 		
-		var sThisID = cBrowser.data[cRender.APPID_QS];
+		var sThisID = cBrowser.data[cRender.APP_ID_QS];
 		var sUrl = oElement.attr("url") + oElement.attr("extra");
 		cJquery.setTopZindex(oElement);
 		
@@ -233,7 +233,7 @@ $.widget( "ck.admenu",{
 				
 				oParams = {};
 				oParams[cRender.APP_QS] = sApp;
-				oParams[cRender.APPID_QS] = sAppid;
+				oParams[cRender.APP_ID_QS] = sAppid;
 					
 				oOption = this.pr__addToGroup(oSelect, sApp, cBrowser.buildUrl(sUrl, oParams));
 				if (sAppid == sThisID)	oOption.attr("disabled",1);
@@ -337,7 +337,7 @@ $.widget( "ck.admenu",{
 		var oParams = {};
 		
 		oParams[cRender.APP_QS]= cBrowser.data[cRender.APP_QS];
-		oParams[cRender.APPID_QS]= cBrowser.data[cRender.APPID_QS];
+		oParams[cRender.APP_ID_QS]= cBrowser.data[cRender.APP_ID_QS];
 		
 		var sTier, sTid, sNode;
 		sTier = oElement.attr("tier");
@@ -356,7 +356,7 @@ $.widget( "ck.admenu",{
 	pr__get_base_app_QS: function(psBaseUrl){
 		var oParams = {};
 		oParams[cRender.APP_QS]= cBrowser.data[cRender.APP_QS];
-		oParams[cRender.APPID_QS]= cBrowser.data[cRender.APPID_QS];
+		oParams[cRender.APP_ID_QS]= cBrowser.data[cRender.APP_ID_QS];
 		
 		return cBrowser.buildUrl(psBaseUrl,oParams);
 	},

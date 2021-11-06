@@ -1,14 +1,16 @@
+"use strict";
 
 var cHR_AffectedRenderer = {
 	make: function(poObj){
 		var aRows = [];
 		var oRowT, oRowC;
-		
+
 		oRowT = cHR_Render.title_row("affected Entries");
 		aRows.push(oRowT);
 		
 		var oEntities,oScope, sScope,sFragment;
 		var sEntityType = poObj.affectedEntityType;
+		var aBackends, aBTs, aInfoPoints, sTierOrNode, oAffectedTiers, sTierScope, oAffectedNodes, oAffected, aAffectedTiers, sNodeScope, aTiers, aEndPoints;
 	
 		switch (sEntityType){
 			//-----------------------------------------------------------------------------------
@@ -18,7 +20,7 @@ var cHR_AffectedRenderer = {
 				sScope = oEntities.backendScope;
 				switch (sScope){
 					case "SPECIFIC_BACKENDS":
-						var aBackends = oEntities.backends;
+						aBackends = oEntities.backends;
 						aRows.push( cHR_Render.row("Backends", aBackends.join("<br>")));
 						break;
 					
@@ -39,10 +41,9 @@ var cHR_AffectedRenderer = {
 				oEntities = poObj.affectedBusinessTransactions;
 				oRow = aRows.push(cHR_Render.row("Health Rule Type", "Business Transaction Performance (load, response time, slow calls, etc)"));
 				sScope = oEntities.businessTransactionScope;
-				
 				switch (sScope){
 					case "SPECIFIC_BUSINESS_TRANSACTIONS":
-						var aBTs = oEntities.businessTransactions;
+						aBTs = oEntities.businessTransactions;
 						aRows.push(cHR_Render.row("Business Transactions", aBTs.join("<BR>")));
 						break;
 					case "ALL_BUSINESS_TRANSACTIONS":
@@ -89,7 +90,7 @@ var cHR_AffectedRenderer = {
 						break;
 					case "SPECIFIC_INFORMATION_POINTS":
 						aRows.push( cHR_Render.row("Health Rule affects?", "Specific information points"));
-						var aInfoPoints = oEntities.informationPoints;
+						aInfoPoints = oEntities.informationPoints;
 						aRows.push( cHR_Render.row("Information Points", aInfoPoints.join("<br>")));
 						break;
 					default:
@@ -104,20 +105,20 @@ var cHR_AffectedRenderer = {
 			//-----------------------------------------------------------------------------------
 			case "TIER_NODE_HARDWARE":
 				aRows.push( cHR_Render.row("Health Rule Type", "Tier / Node Health - Hardware, JVM, CLR (cpu, heap, disk I/O, etc)"));
-				var oEntities = poObj.affectedEntities;
-				var sTierOrNode = oEntities.tierOrNode;
+				oEntities = poObj.affectedEntities;
+				sTierOrNode = oEntities.tierOrNode;
 				
 				switch (sTierOrNode){
 					case "TIER_AFFECTED_ENTITIES":
-						var oAffectedTiers = oEntities.affectedTiers;
-						var sTierScope = oAffectedTiers.affectedTierScope;
+						oAffectedTiers = oEntities.affectedTiers;
+						sTierScope = oAffectedTiers.affectedTierScope;
 						switch (sTierScope){
 							case "ALL_TIERS":
 								aRows.push(  cHR_Render.row("Health Rule affects?", "All Tiers"));
 								break;
 							case "SPECIFIC_TIERS":
 								aRows.push(  cHR_Render.row("Health Rule affects?", "Specific Tiers"));
-								var aTiers = oAffectedTiers.tiers;
+								aTiers = oAffectedTiers.tiers;
 								aRows.push(  cHR_Render.row("Tiers", aTiers.join("<br>")));
 								break;
 							default:
@@ -125,14 +126,14 @@ var cHR_AffectedRenderer = {
 						}
 						break;
 					case "NODE_AFFECTED_ENTITIES" :
-						var oAffectedNodes = oEntities.affectedNodes;
-						var sNodeScope = oAffectedNodes.affectedNodeScope;
+						oAffectedNodes = oEntities.affectedNodes;
+						sNodeScope = oAffectedNodes.affectedNodeScope;
 						switch (sNodeScope){
 							case "ALL_NODES":
 								aRows.push( cHR_Render.row("Health Rule affects?", "All Nodes"));
 								break;
 							case "NODES_OF_SPECIFIC_TIERS":
-								var aTiers = oAffectedNodes.specificTiers;
+								aTiers = oAffectedNodes.specificTiers;
 								aRows.push(  cHR_Render.row("Nodes of Specific Tiers", aTiers.join("<br>")));
 								break;
 							default:
@@ -147,20 +148,20 @@ var cHR_AffectedRenderer = {
 			//-----------------------------------------------------------------------------------
 			case "TIER_NODE_TRANSACTION_PERFORMANCE":
 				aRows.push( cHR_Render.row("Health Rule Type", "Tier / Node Health - Transaction Performance (load, response time, slow calls, etc)"));
-				var oEntities = poObj.affectedEntities;
-				var sTierOrNode = oEntities.tierOrNode;
+				oEntities = poObj.affectedEntities;
+				sTierOrNode = oEntities.tierOrNode;
 				
 				switch (sTierOrNode){
 					case "TIER_AFFECTED_ENTITIES":
-						var aAffectedTiers = oEntities.affectedTiers;
-						var sTierScope = aAffectedTiers.affectedTierScope;
+						aAffectedTiers = oEntities.affectedTiers;
+						sTierScope = aAffectedTiers.affectedTierScope;
 						switch (sTierScope){
 							case "ALL_TIERS":
 								aRows.push( cHR_Render.row("Health Rule affects?", "All Tiers"));
 								break;
 							case "SPECIFIC_TIERS":
 								aRows.push( cHR_Render.row("Health Rule affects?", "Specific Tiers"));
-								var aTiers = aAffectedTiers.tiers;
+								aTiers = aAffectedTiers.tiers;
 								aRows.push( cHR_Render.row("Tiers", aTiers.join("<br>")));
 								break;
 							default:
@@ -168,8 +169,8 @@ var cHR_AffectedRenderer = {
 								}
 						break;
 					case "NODE_AFFECTED_ENTITIES":
-						var oAffectedNodes = oEntities.affectedNodes;
-						var sNodeScope = oAffectedNodes.affectedNodeScope;
+						oAffectedNodes = oEntities.affectedNodes;
+						sNodeScope = oAffectedNodes.affectedNodeScope;
 						switch (sNodeScope){
 							case "ALL_NODES":
 								aRows.push( cHR_Render.row("affected nodes", "All Nodes"));
@@ -184,13 +185,13 @@ var cHR_AffectedRenderer = {
 				break;
 			//-----------------------------------------------------------------------------------
 			case "SERVICE_ENDPOINTS":
-				var oAffected = poObj.affectedServiceEndpoints;
+				oAffected = poObj.affectedServiceEndpoints;
 				sScope = oAffected.serviceEndpointScope;
 				aRows.push( cHR_Render.row("Health Rule Type", "Service end points"));
 				
 				switch(sScope){
 					case "SPECIFIC_SERVICE_ENDPOINTS":
-						var aEndPoints = oAffected.serviceEndpoints;
+						aEndPoints = oAffected.serviceEndpoints;
 						aRows.push(cHR_Render.row("Service endpoints", aEndPoints.join("<br>")));
 						break;
 					default:
@@ -204,7 +205,7 @@ var cHR_AffectedRenderer = {
 		}
 		return aRows;
 	}
-}
+};
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,34 +228,32 @@ var cHR_CriteriaRenderer = {
 				var sFragment = "";
 	
 				//-----------------------------------------------------
-				if (!oItem.evaluateToTrueOnNoData)
-					sFragment += "<i>Does Not</i>";
-				sFragment += " evaluate to true if no data<br>";
+				if (oItem.evaluateToTrueOnNoData)
+					sFragment += " evaluates to "+cRenderW3.tag("true") + " if no data<br>";
 
 				//-----------------------------------------------------
 				var iMinTriggers = oItem.minimumTriggers;
 				if (iMinTriggers > 0)
-					sFragment += "Triggers only when violation occurs "+ iMinTriggers + " in the last 30 min(s)<br>";
+					sFragment += "minimum Triggers  "+ cRenderW3.tag(iMinTriggers) + " <br>";
 
 				//-----------------------------------------------------
 				var oDetail = oItem.evalDetail;
 				var sDetailType = oDetail.evalDetailType;
-				
+				var aVars,oVar, iV;
 				switch (sDetailType){
 					case "METRIC_EXPRESSION":
-						sFragment += "evaluates the Expression : <code>"+oDetail.metricExpression+"</code><br>";
-						var aVars = oDetail.metricExpressionVariables;
-						sFragment += "<dl>";
-							sFragment += "<dt>with the following variables</dt>";
-							sFragment += "<dd>";
-								for(var iV=0; iV<aVars.length; iV++){
-									var oVar = aVars[iV];
-									sFragment += oVar.variableName + " = <code>"  + oVar.metricPath +"</code><br>";
-								}
-						sFragment += "<\/dl>";
+						sFragment += "evaluates the Expression : " + cRenderW3.tag(oDetail.metricExpression) + "<br>";
+						aVars = oDetail.metricExpressionVariables;
+						sFragment += "with the following variables";
+						sFragment += "<ul>";
+							for(iV=0; iV<aVars.length; iV++){
+								oVar = aVars[iV];
+								sFragment += "<li>" + oVar.variableName + " = " + cRenderW3.tag( oVar.metricPath );
+							}
+						sFragment += "<\/ul>";
 						break;
 					case "SINGLE_METRIC":
-						sFragment += "evaluates single metric: <code>" + oDetail.metricPath +"<\/code><br>";
+						sFragment += "evaluates single metric: " + cRenderW3.tag( oDetail.metricPath) +"<br>";
 						break;
 					default:
 						sFragment += "unknown detail type sDetailType<br>";
@@ -264,9 +263,10 @@ var cHR_CriteriaRenderer = {
 				var oEvalCompare = oDetail.metricEvalDetail;
 				sFragment += "<p>condition triggers when evaluation is ";
 				var sEvalDetailType = oEvalCompare.metricEvalDetailType;
+				var sCompCondition;
 				switch (sEvalDetailType){
 					case "SPECIFIC_TYPE":
-						var sCompCondition = oEvalCompare.compareCondition;
+						sCompCondition = oEvalCompare.compareCondition;
 						switch ( sCompCondition ){
 							case "GREATER_THAN_SPECIFIC_VALUE":
 								sFragment += "greater than ";
@@ -274,13 +274,13 @@ var cHR_CriteriaRenderer = {
 							case "LESS_THAN_SPECIFIC_VALUE":
 								sFragment += "less than ";
 						}
-						sFragment += oEvalCompare.compareValue;
+						sFragment += cRenderW3.tag(oEvalCompare.compareValue);
 						break;
 					case "BASELINE_TYPE":
-						sFragment += oEvalCompare.baselineCondition;
-						sFragment += " of <code>"+oEvalCompare.baselineName+"<\/code>";
-						sFragment += " by "+oEvalCompare.compareValue;
-						sFragment += " "+oEvalCompare.baselineUnit;
+						sFragment += oEvalCompare.baselineCondition +
+							 " of " + cRenderW3.tag(oEvalCompare.baselineName) +
+							 " by "+ cRenderW3.tag(oEvalCompare.compareValue) +
+							 " "+ oEvalCompare.baselineUnit;
 						break;
 					default:
 						sFragment += "unknown type: sEvalDetailType";
@@ -301,6 +301,7 @@ var cHR_Render = {
 		poElement.empty();
 		
 		var oTable = $("<table>",{class:"ui-widget"});
+		var oRow;
 
 		oRow = this.pr_get_overview(poResponse);
 		oTable.append(oRow);
@@ -325,6 +326,8 @@ var cHR_Render = {
 		
 		return oRow;
 	},
+
+	//**********************************************************
 	row: function(psCaption, psContent){
 		var oRow = $("<TR>");
 		var oCell1 = $("<td>", {valign:"top", width:200,align:"right"}).append("<b>"+psCaption+"</b>");
@@ -350,8 +353,6 @@ var cHR_Render = {
 		return "work in progress";
 	},
 	
-	
-	//**********************************************************
 	//**********************************************************
 	pr_get_overview: function(poData){
 		var aRows = [];
@@ -363,13 +364,13 @@ var cHR_Render = {
 		oRowC = $("<tr>");
 		sFragment ="<td colspan='2'><table width='100%'><tr>";
 			sFragment +="<td align='right'>When Enabled</td>";
-			sFragment +="<td class='ui-widget-content'>"+poData.scheduleName+"</td>";
+			sFragment +="<td >"+cRenderW3.tag(poData.scheduleName)+"</td>";
 			sFragment +="<td align='right'>Use data from last</td>";
-			sFragment +="<td class='ui-widget-content'>" + poData.useDataFromLastNMinutes + " mins</td>";
+			sFragment +="<td >" + cRenderW3.tag(poData.useDataFromLastNMinutes + " mins")+"</td>";
 			sFragment +="<td align='right'>Wait time after violation</td>";
-			sFragment +="<td  class='ui-widget-content'>"+ poData.waitTimeAfterViolation + " mins</td>";
+			sFragment +="<td >"+ cRenderW3.tag(poData.waitTimeAfterViolation + " mins")+"</td>";
 			sFragment +="<td align='right'>Rule Enabled</td>";
-			sFragment +="<td class='ui-widget-content'>"+poData.enabled+"</td>";
+			sFragment +="<td >"+cRenderW3.tag(poData.enabled)+"</td>";
 		sFragment +="</tr></table></td>"
 		oRowC.append(sFragment);
 		aRows.push(oRowC);
@@ -479,7 +480,7 @@ $.widget( "ck.adhealthdetail",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APPID_QS ] = oElement.attr(cRender.APPID_QS);
+		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
 		oParams[ cRender.HEALTH_ID_QS ] = oElement.attr(cRender.HEALTH_ID_QS);
 		
 		
