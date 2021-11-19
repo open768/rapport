@@ -37,7 +37,7 @@ if (cAD::is_demo()){
 //********************************************************************
 	
 
-$aApps = cADApp::GET_Applications();
+$aApps = cADController::GET_all_Applications();
 if (count($aApps) == 0) cCommon::errorbox("No Applications found");
 
 //####################################################################
@@ -55,8 +55,8 @@ foreach ( $aApps as $oApp){
 			$sUrl = "tier.php?$sTierQs";
 			
 			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oTier->name];
-			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cADMetric::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
-			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cADMetric::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
+			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cADMetricPaths::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
+			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cADMetricPaths::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
 		}
 		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php

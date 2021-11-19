@@ -1,3 +1,4 @@
+'use strict';
 function common_onListChange(){
 	//stop all remote activity
 	if (typeof cRemote != 'undefined')

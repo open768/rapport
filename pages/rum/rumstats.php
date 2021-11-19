@@ -110,20 +110,20 @@ if (cAD::is_demo()){
 ?>
 <h2>Page Requests</h2>
 <?php
-	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetric::BASE_PAGES, "*");
+	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetricPaths::BASE_PAGES, "*");
 	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	//cDebug::on(true);
 	//cDebug::vardump($aData);
 	//cDebug::off();
-	render_table(cADMetric::BASE_PAGES, $aData);
+	render_table(cADMetricPaths::BASE_PAGES, $aData);
 	
 // ############################################################
 ?>
 <h2>Ajax Requests</h2>
 <?php
-	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetric::AJAX_REQ, "*");
+	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetricPaths::AJAX_REQ, "*");
 	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
-	render_table(cADMetric::AJAX_REQ, $aData);
+	render_table(cADMetricPaths::AJAX_REQ, $aData);
 
 	// ############################################################
 	cRenderHtml::footer();

@@ -44,7 +44,7 @@ cRenderCards::card_end();
 
 //####################################################################
 //this needs to be asynchronous as when there are a lot of applications that page times out
-$aResponse = cADApp::GET_Applications();
+$aResponse = cADController::GET_all_Applications();
 foreach ( $aResponse as $oApp){
 	cRenderCards::card_start();
 	cRenderCards::body_start();

@@ -14,24 +14,35 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 $home="..";
 require_once "$home/inc/common.php";
-	
-//###################### DATA #############################################
-cSession::set_folder();
-session_start();
-cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS) ;
-$trans = cHeader::get(cRender::TRANS_QS) ;
-if ($oApp->name == null)	cDebug::error("App not set");
-if ($tier == null)	cDebug::error("Tier not set");
-if ($trans == null)	cDebug::error("Trans not set");
 
 //*************************************************************************
-$sMetricPath = cADMetricPaths::transExtNames($tier, $trans);
-$oWalker = new cADTransFlow();
-$oWalker->walk($oApp, $tier, $trans);
-cCommon::write_json($oWalker);	
+cDebug::write("getting backends for $oApp->name");
+
+class cAppBackendOutput {
+	public $name;
+	public $metric;
+}
+
+$aData = $oApp->GET_Backends();
+
+$aOut = [];
+foreach ($aData as $oItem){
+	$oBackend = new cAppBackendOutput;
+	$oBackend->name = $oItem->name;
+	$oBackend->metric = cADMetricPaths::backendResponseTimes($oItem->name);
+	$aOut[] = $oBackend;
+}
+
+
+//*************************************************************************
+//* output
+//*************************************************************************
+
+cDebug::write("outputting json");
+cCommon::write_json($aOut);	
+return;
 ?>

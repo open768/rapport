@@ -45,51 +45,54 @@ if (cAD::is_demo()){
 }
 //********************************************************************
 
-
-$oCred = cRenderObjs::get_AD_credentials();
-if ($oCred->restricted_login == null){
-	cRenderMenus::show_app_functions();
-	cRenderMenus::show_tier_functions();
-	cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
-}
-cRender::button("show as table", "tierextcalls.php?$gsTierQs");
-cADCommon::button(cADControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
-
-//************* basic information about the tier *********************
-?>
-<h2>External calls made from <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> tier</h2>
-<h3>Overall Stats for tier</h3>
-<?php
-	
+cRenderCards::card_start("External calls made from $oTier->name tier");
+cRenderCards::body_start();
 	$aMetrics=[];
-	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
+	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Overall Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
+	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Overall  response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cADMetric::tierErrorsPerMin($oTier->name);
+	$sMetricUrl=cADMetricPaths::tierErrorsPerMin($oTier->name);
 	$aMetrics[] = [cChart::LABEL=>"Error rates for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,3,cRender::getRowClass());
+cRenderCards::body_end();
+cRenderCards::action_start();
+	$oCred = cRenderObjs::get_AD_credentials();
+	if ($oCred->restricted_login == null){
+		cRenderMenus::show_app_functions();
+		cRenderMenus::show_tier_functions();
+		cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
+	}
+	cRender::button("show as table", "tierextcalls.php?$gsTierQs");
+	cADCommon::button(cADControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
+cRenderCards::action_end();
+cRenderCards::card_end();
 
-
-?><h3>External calls</h3><?php
+//************* basic information about the tier *********************
+cRenderCards::card_start("External calls");
+cRenderCards::body_start();
 	$linkUrl = cHttp::build_url("tierextalltrans.php", $gsTierQs);
 	$oResponse = $oTier->GET_ext_calls();
-	
+	cRender::add_filter_box("span[tier]","tier",".mdl-card");
+
 	$aMetrics=[];
 	
 	foreach ($oResponse as $oExt){
 	
 		$sTierTo = $oExt->name;
 		$sUrl = cHttp::build_url($linkUrl, cRender::BACKEND_QS, $sTierTo);
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sTierTo, cChart::WIDTH=>300];
-		$sMetric=cADMetric::tierExtCallsPerMin($oTier->name, $sTierTo);
+		$sLabel = "<span tier='$sTierTo'>$sTierTo</span>";
+		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sLabel, cChart::WIDTH=>200];
+		$sMetric=cADMetricPaths::tierExtCallsPerMin($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"Drill down"];
-		$sMetric=cADMetric::tierExtResponseTimes($oTier->name, $sTierTo);
+		$sMetric=cADMetricPaths::tierExtResponseTimes($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Response Times in ms", cChart::METRIC=>$sMetric];
-		$sMetric=cADMetric::tierExtErrorsPerMin($oTier->name, $sTierTo);
+		$sMetric=cADMetricPaths::tierExtErrorsPerMin($oTier->name, $sTierTo);
 		$aMetrics[] = [cChart::LABEL=>"Errors Per minuts", cChart::METRIC=>$sMetric];
 	}
 	cChart::metrics_table($oApp,$aMetrics,4,cRender::getRowClass());
+cRenderCards::body_end();
+cRenderCards::card_end();
 
 //################ CHART
 cChart::do_footer();

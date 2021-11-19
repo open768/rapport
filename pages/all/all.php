@@ -18,10 +18,10 @@ require_once "$root/inc/charts.php";
 
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
-	case cADMetric::METRIC_TYPE_RUMCALLS:
-	case cADMetric::METRIC_TYPE_RUMRESPONSE:
+	case cADMetricPaths::METRIC_TYPE_RUMCALLS:
+	case cADMetricPaths::METRIC_TYPE_RUMRESPONSE:
 		$sOtherTitle = "Application Activity";
-		$sOtherUrl = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_ACTIVITY);
+		$sOtherUrl = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 
 		$sTitle1 = "Web Browser Page Requests";
 		$sMetric1 = cADWebRumMetric::CallsPerMin();
@@ -32,17 +32,17 @@ switch($sMetricType){
 		
 		$sBaseUrl = "$home/pages/rum/apprum.php";
 		break;
-	case cADMetric::METRIC_TYPE_RESPONSE_TIMES:
-	case cADMetric::METRIC_TYPE_ACTIVITY:
+	case cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES:
+	case cADMetricPaths::METRIC_TYPE_ACTIVITY:
 	default:
 		$sOtherTitle = "Web Browser Activity";
-		$sOtherUrl = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_RUMCALLS);
+		$sOtherUrl = cHttp::build_url("all.php", cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
 		$sTitle1 = "Application Activity";
-		$sMetric1 = cADMetric::appCallsPerMin();
+		$sMetric1 = cADMetricPaths::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
-		$sMetric2 = cADMetric::appResponseTimes();
+		$sMetric2 = cADMetricPaths::appResponseTimes();
 		$sTitle3 = "Application Errors";
-		$sMetric3 = cADMetric::appErrorsPerMin();
+		$sMetric3 = cADMetricPaths::appErrorsPerMin();
 		$sBaseUrl = "$home/pages/app/tiers.php";
 		break;
 }
@@ -50,6 +50,8 @@ switch($sMetricType){
 //####################################################################
 cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
+cChart::do_header();
+?><script language="javascript" src="<?=$home?>/js/widgets/allapps.js"></script><?php
 
 //####################################################################
 cRenderCards::card_start();
@@ -65,71 +67,27 @@ cRenderCards::card_start();
 			cRender::button("list mode", $sUrl);
 		}else			
 			cRender::button("chart mode", $sUrl);
-
-
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
 //####################################################################
-//this should be done asynchronously
-$aResponse = cADApp::GET_Applications();
-if ( count($aResponse) == 0)
-	cCommon::messagebox("Nothing found");
-else{
-	if (cRender::is_list_mode()){
-		cRenderCards::card_start();
-			cRenderCards::body_start();
-				$sLastCh = "";
-				echo "There are ".count($aResponse)." applications<p>";
-				echo '<DIV style="column-count:3">';
-					foreach ( $aResponse as $oApp){
-						$sApp = $oApp->name;
-						$sCh = strtoupper($sApp[0]);
-						if ($sCh !== $sLastCh){
-							echo "<h3>$sCh</h3>";
-							$sLastCh = $sCh;
-						}
-						$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
-						echo "<a href=\"$sUrl\">$sApp</a><br>";
-					}
-				echo '</DIV>';
-			cRenderCards::body_end();
-		cRenderCards::card_end();
-	}
-	else{
-		
-		cChart::do_header();
-		cChart::$hideGroupIfNoData = true;
-		
-		cDebug::write( count($aResponse). " applications found");
-		//display the results
-		foreach ( $aResponse as $oApp){
-			if (cFilter::isAppFilteredOut($oApp)) continue;
-			$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::get_base_app_QS($oApp));
-			$aMetrics = [
-				[cChart::LABEL=>$sTitle1, cChart::METRIC=>$sMetric1, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"detail for $oApp->name", ],
-				[cChart::LABEL=>$sTitle2, cChart::METRIC=>$sMetric2],
-				[cChart::LABEL=>$sTitle3, cChart::METRIC=>$sMetric3]
-			];
-			
-			cRenderCards::card_start();
-				cRenderCards::body_start();
-					cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
-				cRenderCards::body_end();
-				cRenderCards::action_start();
-					cRenderMenus::show_app_functions($oApp);
-				cRenderCards::action_end();
-			cRenderCards::card_end();
-			cDebug::flush();
-			
-			if (cDebug::is_extra_debugging()) {
-				cDebug::vardump($oApp);	
-				break;	//DEBUG
-			}
-			cCommon::flushprint("");
+?>
+	<div 
+		id='apps' 	type='adWidget' 
+		home='<?=$home?>' <?=cRender::LIST_MODE_QS?>='<?=cRender::is_list_mode()?>' baseUrl = '<?=$sBaseUrl?>'
+		title1='<?=$sTitle1?>' title2='<?=$sTitle2?>' title3='<?=$sTitle3?>'
+		metric1='<?=$sMetric1?>' metric2='<?=$sMetric2?>' metric3='<?=$sMetric3?>'>
+			please wait...
+	</div>
+	<script language="javascript">
+		function init_widget(){
+			$("#apps").adallapps();
 		}
-		cChart::do_footer();
-	}
-}
+		
+		$( init_widget);
+	</script>
+<?php
+
+
 cRenderHtml::footer();
 ?>

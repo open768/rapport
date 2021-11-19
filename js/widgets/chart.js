@@ -1,3 +1,4 @@
+'use strict';
 $.widget( "ck.adchart",{
 	//#################################################################
 	//# Definition
@@ -56,6 +57,7 @@ $.widget( "ck.adchart",{
 		
 		//check for required options
 		var oOptions = this.options;
+		if (!oOptions.appName)			$.error("appName  missing!");			
 		if (!oOptions.title)			$.error("title  missing!");			
 		if (!oOptions.metric)			$.error("metric  missing!");		
 		if (!oOptions.width)			$.error("width missing!");		
@@ -282,7 +284,7 @@ $.widget( "ck.adchart",{
 		
 
 		//build up the data array
-		for (i=0; i<poJson.data.length; i++ ){
+		for (var i=0; i<poJson.data.length; i++ ){
 			var oItem = poJson.data[i];
 			dDate = new Date(oItem.date);
 			iValue = oItem.value;
@@ -300,7 +302,7 @@ $.widget( "ck.adchart",{
 				iMin = Math.min(iMin, iValue);
 			
 			
-			sTooltip = "<div class='charttooltip'>value:" + iValue + sMax + "<br>" + dDate.toString() + "</i></div>";
+			var sTooltip = "<div class='charttooltip'>value:" + iValue + sMax + "<br>" + dDate.toString() + "</i></div>";
 			
 			oData.addRow([dDate, iValue, iItemMax, sTooltip]);
 		}

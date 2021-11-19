@@ -71,7 +71,7 @@ $aMods = $oMods->modules;
 sort ($aMods);
 $aMetrics = [];
 foreach ($aMods as $oModule)
-	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cADMetric::moduleUsage($oModule->name, $sUsage)];
+	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cADMetricPaths::moduleUsage($oModule->name, $sUsage)];
 
 cChart::render_metrics(null, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 

@@ -122,10 +122,10 @@ cRenderCards::card_end();
 cRenderCards::card_start("<a name='1'>Data</a> for $oTrans->name $oTier->name");
 	cRenderCards::body_start();
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name, $oTrans->name)];
-		$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cADMetric::transResponseTimes($oTier->name, $oTrans->name)];
-		$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cADMetric::transErrors($oTier->name, $oTrans->name)];
-		$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cADMetric::transCpuUsed($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cADMetricPaths::transResponseTimes($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cADMetricPaths::transErrors($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cADMetricPaths::transCpuUsed($oTier->name, $oTrans->name)];
 		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	cRenderCards::body_end();
 cRenderCards::card_end();
@@ -157,10 +157,10 @@ if ($node){
 	cRenderCards::card_start("<a name='3'>Data</a> for Transaction: $oTrans->name for node $node)");
 		cRenderCards::body_start();
 			$aMetrics = [];
-			$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name, $oTrans->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cADMetric::transResponseTimes($oTier->name, $oTrans->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cADMetric::transErrors($oTier->name, $oTrans->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cADMetric::transCpuUsed($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cADMetricPaths::transResponseTimes($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cADMetricPaths::transErrors($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cADMetricPaths::transCpuUsed($oTier->name, $oTrans->name, $node)];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		cRenderCards::body_end();
 	cRenderCards::card_end();
@@ -168,11 +168,11 @@ if ($node){
 	cRenderCards::card_start("Server Data");
 		cRenderCards::body_start();
 			$aMetrics = [];
-			$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cADMetric::InfrastructureCpuBusy($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cADMetric::InfrastructureJavaHeapUsed($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cADMetric::InfrastructureJavaGCTime($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cADMetric::InfrastructureDotnetHeapUsed($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cADMetric::InfrastructureDotnetGCTime($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cADMetricPaths::InfrastructureCpuBusy($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cADMetricPaths::InfrastructureJavaHeapUsed($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cADMetricPaths::InfrastructureJavaGCTime($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetHeapUsed($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetGCTime($oTier->name, $node)];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		cRenderCards::body_end();
 	cRenderCards::card_end();
@@ -191,9 +191,9 @@ cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oT
 				$sClass = cRender::getRowClass();
 				
 					$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>"<DIV style='max-width:200px;overflow-wrap:break-word'>$other</div>"];
-					$sMetricUrl=cADMetric::transExtCalls($oTier->name, $oTrans->name, $other);
+					$sMetricUrl=cADMetricPaths::transExtCalls($oTier->name, $oTrans->name, $other);
 					$aMetrics[] = [cChart::LABEL=>"Calls per min to: $other", cChart::METRIC=>$sMetricUrl];
-					$sMetricUrl=cADMetric::transExtResponseTimes($oTier->name, $oTrans->name, $other);
+					$sMetricUrl=cADMetricPaths::transExtResponseTimes($oTier->name, $oTrans->name, $other);
 					$aMetrics[] = [cChart::LABEL=>"response times: $other", cChart::METRIC=>$sMetricUrl];
 			}
 			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);

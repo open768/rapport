@@ -97,7 +97,7 @@ if (cRender::is_list_mode()){
 			cRenderCards::body_start();
 				//display widgets for health rules
 				//they will be asynchronously fetched by the javascript using a http queue;
-				echo "<div type='appdhealthrule' home='$home' ".
+				echo "<div type='adhealthrule' home='$home' ".
 						cRender::APP_QS."='$oApp->name' ".
 						cRender::APP_ID_QS."='$oApp->id' ".
 						cRender::HEALTH_ID_QS."='$oRule->id'>".
@@ -113,7 +113,7 @@ if (cRender::is_list_mode()){
 		}
 		
 		function init_health_widgets(){
-			$("DIV[type='appdhealthrule']").each(init_widget);
+			$("DIV[type='adhealthrule']").each(init_widget);
 		}
 		
 		$( init_health_widgets);

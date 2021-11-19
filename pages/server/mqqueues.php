@@ -61,7 +61,7 @@ cRenderCards::card_start();
 cRenderCards::card_end();
 
 // get the list of all queues for this manager
-$sMetricPath= cADMetric::serverMQQueues($sNode, $sQManager);  
+$sMetricPath= cADMetricPaths::serverMQQueues($sNode, $sQManager);  
 $aData = (cADApp::$server_app)->GET_Metric_heirarchy($sMetricPath, true);
 $iCount = count($aData);
 cRenderCards::card_start();
@@ -86,7 +86,7 @@ cRenderCards::card_start();
 						if (cRender::is_list_mode())
 							echo "$oItem->name<br>";	
 						else{
-							$sMetric = cADMetric::serverMQQueueCurrent($sNode, $sQManager, $oItem->name);
+							$sMetric = cADMetricPaths::serverMQQueueCurrent($sNode, $sQManager, $oItem->name);
 							$sTitle = $oItem->name." : Current";
 							$aMetrics[] = [cChart::LABEL=>$sTitle, cChart::METRIC=>$sMetric];
 						}

@@ -1,12 +1,12 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adsnapsearch",{
+$.widget( "ck.adappbackend",{
 	//#################################################################
 	//# Definition
 	//#################################################################
 	consts:{
-		REST_API:"/rest/snapsearch.php"
+		REST_API:"/rest/appbackend.php"
 	},
 
 	//#################################################################
@@ -20,17 +20,13 @@ $.widget( "ck.adsnapsearch",{
 		oElement.uniqueId();
 		
 		//check for necessary classes
+		if (!oElement.adchart)			$.error("charts widget is missing! check includes");	
 		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.TIER_ID_QS))		$.error("tier ID  missing!");			
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("appid  missing!");			
-		if (!oElement.attr(cRender.TRANS_QS))		$.error("trans  missing!");			
-		if (!oElement.attr(cRender.TRANS_ID_QS))	$.error("transid  missing!");			
-		if (!oElement.attr(cRender.SNAP_GUID_QS))	$.error("snapguuid  missing!");			
-		if (!oElement.attr(cRender.SNAP_TIME_QS))	$.error("appid  missing!");			
-		if (!oElement.attr(cRender.SEARCH_QS))		$.error("search missing!");			
+		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app  missing!");			
+		if (!oElement.attr(cRender.APP_QS))			$.error("appname  missing!");			
 		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
 	
@@ -40,7 +36,7 @@ $.widget( "ck.adsnapsearch",{
 		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
 		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_snap_search_url());
+		oQueue.go(oElement, this.get_url());
 	},
 
 
@@ -83,7 +79,7 @@ $.widget( "ck.adsnapsearch",{
 		
 		var aResponse = poHttp.response;
 		if (aResponse.length == 0 )
-			oElement.append("<i>no errors found</i>");
+			oElement.append(cRender.messagebox("<i>no BACKENDS found</i>"));
 		else
 			this.render(poHttp.response);
 	},
@@ -92,38 +88,70 @@ $.widget( "ck.adsnapsearch",{
 	//#################################################################
 	//# functions
 	//#################################################################`
-	get_snap_search_url: function (){
+	get_url: function (){
 		var sUrl;
 		var oConsts = this.consts;
 		var oElement = this.element;
 		
 		var oParams = {};
 		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
-		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
-		oParams[ cRender.TRANS_QS ] = oElement.attr(cRender.TRANS_QS);
-		oParams[ cRender.TRANS_ID_QS ] = oElement.attr(cRender.TRANS_ID_QS);
-		oParams[ cRender.SNAP_GUID_QS ] = oElement.attr(cRender.SNAP_GUID_QS);
-		oParams[ cRender.SNAP_TIME_QS ] = oElement.attr(cRender.SNAP_TIME_QS);
-		oParams[ cRender.SEARCH_QS ] = oElement.attr(cRender.SEARCH_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+oConsts.REST_API;
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
 	
 	//*******************************************************************
-	render: function(piCount){
-		var oThis = this;
+	render: function(paData){
 		var oElement = this.element;
-		var oConsts = this.consts;
-		if (piCount == 0){
-			oElement.hide();
-			return;
-		}
 		
 		oElement.empty();
-		oElement.append(" Snapshot: has " + piCount + " matches " );
+		if (oElement.attr(cRender.LIST_MODE_QS))
+			this.pr_render_list(paData);
+		else
+			this.pr_render_charts(paData);
+	},
+	
+	//*******************************************************************
+	pr_render_charts: function(paData){
+		var oElement = this.element;
+		var sbaseID, sID, iCount=0;
 		
+		sbaseID=  oElement.attr("id")+"_chart_";
+		paData.forEach( function(poItem){
+			sID = sbaseID +iCount;
+			oDiv = $("<DIV>", {type:"adchart", id:sID});
+			oDiv.append("please wait loading chart");
+			oElement.append(oDiv);
+			$("#"+sID).adchart({
+				home:oElement.attr(cRender.HOME_QS),
+				appName:oElement.attr(cRender.APP_QS),
+				title:poItem.name,
+				metric:poItem.metric,
+				width:341,
+				height:125,
+				showZoom:1,
+				showCompare:1,
+				previous_period:0
+			});
+			iCount++;
+		} );
+	},
+	
+	//*******************************************************************
+	pr_render_list: function(paData){
+		var oElement = this.element;
+		
+		oDiv = $("<DIV>", {style:"column-count:3"});
+		paData.forEach( function(poItem){		
+			var sName = poItem.name;
+			if (sName.startsWith("Discovered backend call")) sName = sName.slice(26);
+			sName = cRender.put_in_wbrs(sName,20);
+			oDiv.append(sName);
+			oDiv.append("<BR>");
+		} );
+		
+		oElement.append(oDiv);
 	}
 });

@@ -27,57 +27,64 @@ cChart::do_header();
 
 //####################################################################
 //get passed in values
-$oTier = cRenderObjs::get_current_tier();
-$oApp = $oTier->app;
+$oApp = cRenderObjs::get_current_app();
 $oTimes = cRender::get_times();
 
-$title= "$oApp->name&gt;Service EndPoints";
-
-cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
-cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
+cRenderCards::card_start();
+	cRenderCards::body_start();
+		cRender::add_filter_box("span[tier]","tier",".mdl-card");
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
+		cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
 //retrieve tiers
 //********************************************************************
-if ($oTier->name)
-	$aTiers = [ $oTier];
-else
-	$aTiers = $oApp->GET_Tiers();
+$aTiers = $oApp->GET_Tiers();
 
 function pr__sort_endpoints($a,$b){
 	return strcmp($a->name, $b->name);
 }
 
 foreach ($aTiers as $oTier){
-
+	//TODO make this asynchronous as this will crash when there are hundreds of  tiers
+	
 	//****************************************************************************************
 	$aEndPoints = cADRestUI::GET_service_end_points($oTier);
-	//$aEndPoints = $oTier->GET_ServiceEndPoints();
-	if (count($aEndPoints) == 0){
+	cRenderCards::card_start("<span tier='$oTier->name'>$oTier->name</span>");
+	cRenderCards::body_start();
+	
+		//$aEndPoints = $oTier->GET_ServiceEndPoints();
+	if (count($aEndPoints) == 0)
 		cCommon::messagebox("no Service endpoints found for $oTier->name");
-		continue;
-	}
-	uasort($aEndPoints, "pr__sort_endpoints");
-	$sTierQS = cRenderQS::get_base_tier_QS($oTier);
+	else{
+		
+		uasort($aEndPoints, "pr__sort_endpoints");
+		$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
-	//****************************************************************************************
-	?><p><?php
-	cRenderMenus::show_tier_functions($oTier);
-	$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
-	$aMetrics = [];
-	foreach ($aEndPoints as $oEndPoint){
-		$sUrl = cHttp::build_qs($sTierQS, cRender::SERVICE_QS, $oEndPoint->name);
-		$sUrl = cHttp::build_qs($sUrl, cRender::SERVICE_ID_QS, $oEndPoint->id);
-		$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
+		//****************************************************************************************
+		?><p><?php
+		cRenderMenus::show_tier_functions($oTier);
+		$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
+		$aMetrics = [];
+		foreach ($aEndPoints as $oEndPoint){
+			$sUrl = cHttp::build_qs($sTierQS, cRender::SERVICE_QS, $oEndPoint->name);
+			$sUrl = cHttp::build_qs($sUrl, cRender::SERVICE_ID_QS, $oEndPoint->id);
+			$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
 
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];
-		$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetric::endPointCallsPerMin($oTier->name, $oEndPoint->name), cChart::GO_URL=>$sUrl];
-		$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cADMetric::endPointResponseTimes($oTier->name, $oEndPoint->name)];
-		$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cADMetric::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
+			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];
+			$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetricPaths::endPointCallsPerMin($oTier->name, $oEndPoint->name), cChart::GO_URL=>$sUrl];
+			$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cADMetricPaths::endPointResponseTimes($oTier->name, $oEndPoint->name)];
+			$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cADMetricPaths::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
+		}
+		$sClass = cRender::getRowClass();
+		cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,(cChart::CHART_WIDTH_LETTERBOX-150)/3, $aHeaders);
 	}
-	$sClass = cRender::getRowClass();
-	cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,(cChart::CHART_WIDTH_LETTERBOX-150)/3, $aHeaders);
-	cDebug::flush();
+	cRenderCards::body_end();
+	cRenderCards::card_end();
 }
 
 //####################################################################

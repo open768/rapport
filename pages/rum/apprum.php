@@ -43,8 +43,8 @@ if (cAD::is_demo()){
 //####################################################################
 ?><h2>Overall Statistics</h2><?php
 $aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetric::appCallsPerMin()];
-$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetric::appResponseTimes()];
+$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetricPaths::appCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetricPaths::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
 ?><h2>Browser Stats for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php

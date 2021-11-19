@@ -49,13 +49,13 @@ cADCommon::button(cADControllerUI::application($oApp));
 <h2><a name="app">Application Overview</a></h2>
 <?php 
 $aMetrics  = [
-	[cChart::LABEL=>"response time in ms", cChart::METRIC=>cADMetric::appResponseTimes()],
-	[cChart::LABEL=>"Calls per min", cChart::METRIC=>cADMetric::appCallsPerMin()],
-	[cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADMetric::appSlowCalls()],
-	[cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADMetric::appVerySlowCalls()],
-	[cChart::LABEL=>"Stalled", cChart::METRIC=>cADMetric::appStalledCount()],
-	[cChart::LABEL=>"Errors per min", cChart::METRIC=>cADMetric::appErrorsPerMin()],
-	[cChart::LABEL=>"Exceptions", cChart::METRIC=>cADMetric::appExceptionsPerMin()]
+	[cChart::LABEL=>"response time in ms", cChart::METRIC=>cADMetricPaths::appResponseTimes()],
+	[cChart::LABEL=>"Calls per min", cChart::METRIC=>cADMetricPaths::appCallsPerMin()],
+	[cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADMetricPaths::appSlowCalls()],
+	[cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADMetricPaths::appVerySlowCalls()],
+	[cChart::LABEL=>"Stalled", cChart::METRIC=>cADMetricPaths::appStalledCount()],
+	[cChart::LABEL=>"Errors per min", cChart::METRIC=>cADMetricPaths::appErrorsPerMin()],
+	[cChart::LABEL=>"Exceptions", cChart::METRIC=>cADMetricPaths::appExceptionsPerMin()]
 ];
 cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 cDebug::flush();
@@ -73,11 +73,11 @@ cDebug::flush();
 		cRenderMenus::show_tier_functions($oTier);
 		?><br><?php
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"Calls Per min ", cChart::METRIC=>cADMetric::tierCallsPerMin($sTier)];
-		$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>cADMetric::tierResponseTimes($sTier)];
-		$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADMetric::InfrastructureCpuBusy($sTier)];
-		$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADMetric::InfrastructureJavaHeapUsed($sTier)];
-		$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cADMetric::InfrastructureDotnetHeapUsed($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Calls Per min ", cChart::METRIC=>cADMetricPaths::tierCallsPerMin($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>cADMetricPaths::tierResponseTimes($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADMetricPaths::InfrastructureCpuBusy($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADMetricPaths::InfrastructureJavaHeapUsed($sTier)];
+		$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetHeapUsed($sTier)];
 		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	}
 ?><p><?php
@@ -91,11 +91,11 @@ cDebug::flush();
 	foreach ( $oBackends as $oBackend){
 		$sClass=cRender::getRowClass();
 			$aMetrics = [];
-			$sMetricUrl=cADMetric::backendCallsPerMin($oBackend->name);
+			$sMetricUrl=cADMetricPaths::backendCallsPerMin($oBackend->name);
 			$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetricUrl];
-			$sMetricUrl=cADMetric::backendResponseTimes($oBackend->name);
+			$sMetricUrl=cADMetricPaths::backendResponseTimes($oBackend->name);
 			$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>$sMetricUrl];
-			$sMetricUrl=cADMetric::backendErrorsPerMin($oBackend->name);
+			$sMetricUrl=cADMetricPaths::backendErrorsPerMin($oBackend->name);
 			$aMetrics[] = [cChart::LABEL=>"Errors Per min", cChart::METRIC=>$sMetricUrl];
 			?><hr><?php
 			cRender::button($oBackend->name, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $oBackend->name));
@@ -139,16 +139,16 @@ foreach ($aTiers as $oTier){
 			cRender::button($oTrans->name, $sUrl);
 			
 			$aMetrics = [];
-				$sMetricUrl=cADMetric::transCallsPerMin($sTier, $sTrans);
+				$sMetricUrl=cADMetricPaths::transCallsPerMin($sTier, $sTrans);
 				$aMetrics[] = [cChart::LABEL=>"Calls per min", cChart::METRIC=>$sMetricUrl];
 				
-				$sMetricUrl=cADMetric::transResponseTimes($sTier, $sTrans);
+				$sMetricUrl=cADMetricPaths::transResponseTimes($sTier, $sTrans);
 				$aMetrics[] = [cChart::LABEL=>"Response times", cChart::METRIC=>$sMetricUrl];
 
-				$sMetricUrl=cADMetric::transErrors($sTier, $sTrans);
+				$sMetricUrl=cADMetricPaths::transErrors($sTier, $sTrans);
 				$aMetrics[] = [cChart::LABEL=>"Error", cChart::METRIC=>$sMetricUrl];
 				
-				$sMetricUrl=cADMetric::transCpuUsed($sTier, $sTrans);
+				$sMetricUrl=cADMetricPaths::transCpuUsed($sTier, $sTrans);
 				$aMetrics[] = [cChart::LABEL=>"CPU Used", cChart::METRIC=>$sMetricUrl];
 				
 			cChart::metrics_table($oApp, $aMetrics,4,$sClass);

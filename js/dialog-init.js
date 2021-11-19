@@ -1,3 +1,4 @@
+'use strict';
 //for details on qtip see http://qtip2.com/
 //documentation is here: https://github.com/qTip2/qtip2/wiki
 

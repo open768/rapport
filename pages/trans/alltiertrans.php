@@ -55,28 +55,28 @@ cRenderMenus::show_tier_functions();
 	$sBaseUrl = cHttp::build_url("alltiertrans.php",$gsTierQs);
 	$aMetrics=[];
 	
-	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::CALLS_PER_MIN );
+	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::CALLS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::RESPONSE_TIME );
+	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::RESPONSE_TIME );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl=cADMetric::tierErrorsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::ERRS_PER_MIN );
+	$sMetricUrl=cADMetricPaths::tierErrorsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::ERRS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl = cADMetric::InfrastructureCpuBusy($oTier->name);
+	$sMetricUrl = cADMetricPaths::InfrastructureCpuBusy($oTier->name);
 	$aMetrics[] = [
 		cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl
 	];
@@ -91,7 +91,7 @@ function sort_by_metricpath($a,$b){
 	return strcasecmp($a->metricPath, $b->metricPath);
 }
 
-$sMetricpath = cADMetric::transResponseTimes($oTier->name, "*");
+$sMetricpath = cADMetricPaths::transResponseTimes($oTier->name, "*");
 $oTimes = cRender::get_times();
 $aStats = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
 uasort($aStats,"sort_by_metricpath" );
@@ -109,7 +109,7 @@ foreach ($aStats as $oTrans){
 	$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $sTrName);
 	$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
 		
-	$sMetric = cADMetric::transMetric($oTier->name, $sTrName)."|$gsMetric";
+	$sMetric = cADMetricPaths::transMetric($oTier->name, $sTrName)."|$gsMetric";
 	$aMetrics[] = [
 		cChart::LABEL=>"$sTrName - $gsMetric", cChart::METRIC=>$sMetric, cChart::HIDEIFNODATA=>1,
 		cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"

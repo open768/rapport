@@ -30,7 +30,7 @@ $node= cHeader::get(cRender::NODE_QS);
 $gsAppQs=cRenderQS::get_base_app_QS($oApp);
 $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
 $gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
-if ($gsMetricType==null) $gsMetricType = cADMetric::METRIC_TYPE_ACTIVITY;
+if ($gsMetricType==null) $gsMetricType = cADMetricPaths::METRIC_TYPE_ACTIVITY;
 
 $gsBaseUrl = cHttp::build_url("tiertransgraph.php", $gsTierQs );
 if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
@@ -64,7 +64,7 @@ function render_tier_transactions($poApp, $poTier){
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 
-	$sMetricpath = cADMetric::transResponseTimes($poTier->name, "*");
+	$sMetricpath = cADMetricPaths::transResponseTimes($poTier->name, "*");
 	$aStats = $poApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	uasort($aStats,"sort_by_metricpath" );
 
@@ -88,23 +88,23 @@ function render_tier_transactions($poApp, $poTier){
 		
 		if ($node) $sLink = cHttp::build_url($sLink,cRender::NODE_QS,$node);
 		
-		$sMetricUrl=cADMetric::transCallsPerMin($poTier->name, $sTrName, $node);
+		$sMetricUrl=cADMetricPaths::transCallsPerMin($poTier->name, $sTrName, $node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Calls ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
 		];
 		
-		$sMetricUrl=cADMetric::transResponseTimes($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetricPaths::transResponseTimes($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Response ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
 
-		$sMetricUrl=cADMetric::transErrors($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetricPaths::transErrors($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Errors ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
 
-		$sMetricUrl=cADMetric::transCpuUsed($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetricPaths::transCpuUsed($poTier->name, $sTrName,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"CPU ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
@@ -165,28 +165,28 @@ cRenderCards::body_start();
 	$sBaseUrl = cHttp::build_url("alltiertrans.php",$gsTierQs);
 	
 	$aMetrics=[];
-	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::CALLS_PER_MIN );
+	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::CALLS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::RESPONSE_TIME );
+	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::RESPONSE_TIME );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl=cADMetric::tierErrorsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetric::ERRS_PER_MIN );
+	$sMetricUrl=cADMetricPaths::tierErrorsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::ERRS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl = cADMetric::InfrastructureCpuBusy($oTier->name);
+	$sMetricUrl = cADMetricPaths::InfrastructureCpuBusy($oTier->name);
 	$aMetrics[] = [
 		cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl
 	];
@@ -209,9 +209,9 @@ if ($node){
 	cRenderCards::card_start("Stats for ($node) Server");
 	cRenderCards::body_start();
 		$aMetrics=[];
-		$sMetricUrl=cADMetric::tierNodeCallsPerMin($oTier->name, $node);
+		$sMetricUrl=cADMetricPaths::tierNodeCallsPerMin($oTier->name, $node);
 		$aMetrics[] = [cChart::LABEL=>"Overall  Calls per min ($node) server", cChart::METRIC=>$sMetricUrl];
-		$sMetricUrl=cADMetric::tierNodeResponseTimes($oTier->name, $node);
+		$sMetricUrl=cADMetricPaths::tierNodeResponseTimes($oTier->name, $node);
 		$aMetrics[] = [cChart::LABEL=>"Overall  response times (ms) ($node) server", cChart::METRIC=>$sMetricUrl];
 		cChart::metrics_table($oApp,$aMetrics,2,cRender::getRowClass());
 	cRenderCards::body_end();

@@ -1,3 +1,4 @@
+'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //#
@@ -91,7 +92,23 @@ var cRender={
 	 NAME_TIER : 2,
 	 NAME_EXT : 3,
 	 NAME_TRANS : 4,
-	 NAME_OTHER : 99
+	 NAME_OTHER : 99,
+	 
+	//**************************************************************************
+	 messagebox: function(psMsg){
+		return "<div class='w3-panel w3-blue w3-round-large w3-padding-16 w3-leftbar'>"+psMsg+"</div>";
+	 },
+	 
+	//**************************************************************************
+	 put_in_wbrs:function(psInput, piInterval=20){
+		if (psInput.indexOf(" ") > 0)
+			return psInput;
+		else{
+			var aSplit = psInput.split(piInterval);
+			var sJoined = aSplit.join("<wbr>");
+			return sJoined;
+		}
+	}
 };
 
 var cRenderW3={
@@ -100,4 +117,34 @@ var cRenderW3={
 	tag:function(psTag, psColour="w3-light-grey"){
 		return  "<span class='w3-tag "+ psColour + " w3-round w3-border ' style='text-align:left'>"+psTag+"</span> ";
 	}
+};
+
+var cRenderMDL={
+	cardID:0,
+	
+	//**********************************************************
+	title:function(psTitle){
+		return "<div class='mdl-card__title'><font class='card_title'>"+psTitle+"</font></div>";
+	},
+	
+	//**********************************************************
+	card_start:function(psTitle=null){
+		this.cardID++;
+		var sClass = "class='mdl-card mdl-shadow--2dp rapport-card'";
+		
+		var sHTML = "<div "+ sClass + " id='CARDID_" + this.cardID + "'>";
+		if (psTitle !== null)	sHTML += this.title(psTitle);
+		return sHTML;	
+	},
+	
+	//**************************************************************************
+	action_start:function(){
+		return "<div class='mdl-card__actions mdl-card--border'>";
+	},
+
+	//**************************************************************************
+	body_start:function(){
+		return "<div class='mdl-card__supporting-text'>";
+	},
+
 };

@@ -1,3 +1,4 @@
+'use strict';
 var DEBUG_ON = false;
 
 function cRemoteData(){

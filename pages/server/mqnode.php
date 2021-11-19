@@ -37,7 +37,7 @@ if (!$sNode){
 }
 
 //####################################################################
-$sMetricPath= cADMetric::serverMQManagers($sNode);  
+$sMetricPath= cADMetricPaths::serverMQManagers($sNode);  
 $aData = (cADApp::$server_app)->GET_Metric_heirarchy($sMetricPath, true);
 $iCount = count($aData);
 

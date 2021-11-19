@@ -89,17 +89,17 @@ if (cAD::is_demo()){
 ?>
 <h2>Page Requests</h2>
 <?php
-	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetric::BASE_PAGES, "*");
+	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetricPaths::BASE_PAGES, "*");
 	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
-	render_graphs(cADMetric::BASE_PAGES, $aData);
+	render_graphs(cADMetricPaths::BASE_PAGES, $aData);
 	
 // ############################################################
 ?>
 <h2>Ajax Requests</h2>
 <?php
-	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetric::AJAX_REQ, "*");
+	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetricPaths::AJAX_REQ, "*");
 	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
-	render_graphs(cADMetric::AJAX_REQ, $aData);
+	render_graphs(cADMetricPaths::AJAX_REQ, $aData);
 
 	// ############################################################
 cChart::do_footer();

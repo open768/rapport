@@ -35,11 +35,11 @@ cRender::button("Details for $sDB", "dbdetail.php?".cRender::DB_QS."=$sDB",false
 //####################################################################
 $aMetrics=[];
 
-$sMetric = cADMetric::databaseTimeSpent($sDB);
+$sMetric = cADMetricPaths::databaseTimeSpent($sDB);
 $aMetrics[] = [cChart::LABEL=>"Time spent in Database", cChart::METRIC=>$sMetric];
-$sMetric = cADMetric::databaseCalls($sDB);
+$sMetric = cADMetricPaths::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
-$sMetric = cADMetric::databaseConnections($sDB);
+$sMetric = cADMetricPaths::databaseConnections($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Connections", cChart::METRIC=>$sMetric];
 cChart::metrics_table(cADDB::$db_app,$aMetrics,1,cRender::getRowClass());
 

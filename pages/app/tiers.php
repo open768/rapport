@@ -70,9 +70,9 @@ if (cRender::is_list_mode()){
 		cRenderCards::body_start();
 			?><h4>Overall Activity in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h4><?php
 			$aMetrics = [];
-			$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetric::appCallsPerMin()];
-			$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetric::appResponseTimes()];
-			$aMetrics[] = [cChart::LABEL=>"Overall Errors per min", cChart::METRIC=>cADMetric::appErrorsPerMin()];
+			$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetricPaths::appCallsPerMin()];
+			$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetricPaths::appResponseTimes()];
+			$aMetrics[] = [cChart::LABEL=>"Overall Errors per min", cChart::METRIC=>cADMetricPaths::appErrorsPerMin()];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
 		cRenderCards::body_end();
 		cRenderCards::action_start();
@@ -94,9 +94,9 @@ if (cRender::is_list_mode()){
 		$sTierQs=cRenderQS::get_base_tier_QS($oTier);
 		
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetric::tierCallsPerMin($sTier), cChart::GO_HINT=>"Overview", cChart::GO_URL=>"../tier/tier.php?$sTierQs"];
-		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADMetric::tierResponseTimes($sTier)];
-		$aMetrics[] = [cChart::LABEL=>"Errors per min", cChart::METRIC=>cADMetric::tierErrorsPerMin($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetricPaths::tierCallsPerMin($sTier), cChart::GO_HINT=>"Overview", cChart::GO_URL=>"../tier/tier.php?$sTierQs"];
+		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADMetricPaths::tierResponseTimes($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Errors per min", cChart::METRIC=>cADMetricPaths::tierErrorsPerMin($sTier)];
 		cRenderCards::card_start();
 			cRenderCards::body_start();
 				cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			

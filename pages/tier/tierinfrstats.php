@@ -112,15 +112,15 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 <?php
 
 	$aMetrics = [];
-	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_ACTIVITY);
+	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
+	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Activity for all nodes in Tier:$oTier->name"
 	];
 	
-	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_RESPONSE_TIMES);
+	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
+	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$oTier->name"

@@ -21,6 +21,7 @@ require_once "$root/inc/charts.php";
 
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
+$gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 
 //####################################################################
@@ -35,6 +36,25 @@ function render_pojo_item($poItem){
 		default:
 			cCommon::messagebox("unknown type: $sType");
 			cDebug::vardump($poItem->definition);
+	}
+	if (count($poItem->methodDataGathererConfigs) > 0){
+		echo "<p>Getters:<ul>";
+		foreach ($poItem->methodDataGathererConfigs as $oItem){
+			$sLine = cRenderW3::tag($oItem->name);
+			if ($oItem->returnValue)
+				$sLine .= " - use return value";
+			else{
+				$sLine .= ", Parameter($oItem->position)";
+				$oTransformer = $oItem->objectDataTransformer;
+				if ($oTransformer->useToString)
+					$sLine .= ".toString()";
+				else
+					foreach ($oTransformer->objectStateGetterMethods as $sGetter)
+						$sLine .= ".$sGetter";
+			}
+			echo "<li>$sLine";
+			cDebug::vardump($oItem);
+		};
 	}
 }
 
@@ -107,6 +127,8 @@ cRenderCards::body_end();
 cRenderCards::action_start();
 	cADCommon::button(cADControllerUI::data_collectors($oApp));
 	cRenderMenus::show_apps_menu("change app","datacollectors.php");
+	$sUrl = cHttp::build_url("$home/pages/trans/apptrans.php", $gsAppQS);
+	cRender::button("transactions", $sUrl);
 cRenderCards::action_end();
 cRenderCards::card_end();		
 

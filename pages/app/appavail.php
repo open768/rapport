@@ -51,8 +51,8 @@ $oResponse =$oApp->GET_Tiers();
 $aMetrics = [];
 foreach ( $oResponse as $oTier){
 	$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>cRender::button_code($oTier->name, cRender::getTierLinkUrl($oApp->name,$oApp->id,$oTier->name,$oTier->id))];	
-	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': Server availability",cChart::METRIC=>cADMetric::InfrastructureMachineAvailability($oTier->name)];
-	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': infrastructure availability",cChart::METRIC=>cADMetric::InfrastructureAgentAvailability($oTier->name)];
+	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': Server availability",cChart::METRIC=>cADMetricPaths::InfrastructureMachineAvailability($oTier->name)];
+	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': infrastructure availability",cChart::METRIC=>cADMetricPaths::InfrastructureAgentAvailability($oTier->name)];
 }
 $sClass = cRender::getRowClass();
 cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/2);

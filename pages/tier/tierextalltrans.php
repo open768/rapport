@@ -33,66 +33,62 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
-$sTitle = "All transactions calling External Service: $sExt";
+$sTitle = "External Service: $sExt";
 cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-cRenderMenus::show_tier_functions();
 $sExtQS = cHttp::build_qs($sAppQS, cRender::BACKEND_QS, $sExt);
 $sUrl = cHttp::build_url("appexttiers.php", $sExtQS);
 
 //####################################################################
-?>
-<!-- ************************************************** -->
-<h2>All Calls from <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> to <?=cRender::show_name(cRender::NAME_EXT,$sExt)?></h2>
-<?php
-$aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"$oTier->name - Calls per min",cChart::METRIC=>cADMetric::tierExtCallsPerMin($oTier->name,$sExt)];
-$aMetrics[] = [cChart::LABEL=>"$oTier->name - Response time in ms", cChart::METRIC=>cADMetric::tierExtResponseTimes($oTier->name,$sExt)];
-cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
+cRenderCards::card_start("All Calls from $oTier->name to $sExt");
+cRenderCards::body_start();
+	$aMetrics = [];
+	$aMetrics[] = [cChart::LABEL=>"$oTier->name - Calls per min",cChart::METRIC=>cADMetricPaths::tierExtCallsPerMin($oTier->name,$sExt)];
+	$aMetrics[] = [cChart::LABEL=>"$oTier->name - Response time in ms", cChart::METRIC=>cADMetricPaths::tierExtResponseTimes($oTier->name,$sExt)];
+	cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());
+cRenderCards::body_end();
+cRenderCards::action_start();
+	cRenderMenus::show_tier_functions();
+cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
-?>
-<p>
-<h2>All Transactions in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> calling <?=cRender::show_name(cRender::NAME_EXT,$sExt)?></h2>
-<?php
-//-----------------------------------------------
-
-
 $aTrans = $oTier->GET_transaction_names();
-
 $aMetrics = [];
-foreach ( $aTrans as $oTrans){
-	$sUrl = cHttp::build_qs($sTierQS, cRender::TRANS_QS, $oTrans->name);
-	$sUrl = cHttp::build_qs($sUrl, cRender::TRANS_ID_QS, $oTrans->id);
-	$sUrl = cHttp::build_url("$home/pages/trans/transdetails.php", $sUrl);
+
+cRenderCards::card_start("Transactions");
+cRenderCards::body_start();
+	foreach ( $aTrans as $oTrans){
+		$sUrl = cHttp::build_qs($sTierQS, cRender::TRANS_QS, $oTrans->name);
+		$sUrl = cHttp::build_qs($sUrl, cRender::TRANS_ID_QS, $oTrans->id);
+		$sUrl = cHttp::build_url("$home/pages/trans/transdetails.php", $sUrl);
+		
+		$aMetrics[] = [
+			cChart::LABEL=>"$oTrans->name to External - Calls per min ",
+			cChart::METRIC=>cADMetricPaths::transExtCalls($oTier->name,$oTrans->name, $sExt),
+			cChart::GO_URL => $sUrl,
+			cChart::GO_HINT => "Transaction",
+			cChart::HIDEIFNODATA=>1
+		];
+		$aMetrics[] = [
+			cChart::LABEL=>"$oTrans->name to External - Response time in ms", 
+			cChart::METRIC=>cADMetricPaths::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
+			cChart::HIDEIFNODATA=>1
+		];
+		$aMetrics[] = [
+			cChart::LABEL=>"$oTrans->name to External - errors", 
+			cChart::METRIC=>cADMetricPaths::transExtErrors($oTier->name,$oTrans->name,$sExt),
+			cChart::HIDEIFNODATA=>1
+		];
+	}
+	cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
+cRenderCards::body_end();
+cRenderCards::card_end();
 	
-	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name - Calls per min from Tier", 
-		cChart::METRIC=>cADMetric::transCallsPerMin($oTier->name,$oTrans->name),
-		cChart::HIDEIFNODATA=>1
-	];
-	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name to External - Calls per min ",
-		cChart::METRIC=>cADMetric::transExtCalls($oTier->name,$oTrans->name, $sExt),
-		cChart::GO_URL => $sUrl,
-		cChart::GO_HINT => "Transaction",
-		cChart::HIDEIFNODATA=>1
-	];
-	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name to External - Response time in ms", 
-		cChart::METRIC=>cADMetric::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
-		cChart::HIDEIFNODATA=>1
-	];
-	$aMetrics[] = [
-		cChart::LABEL=>"$oTrans->name to External - errors", 
-		cChart::METRIC=>cADMetric::transExtErrors($oTier->name,$oTrans->name,$sExt),
-		cChart::HIDEIFNODATA=>1
-	];
-}
-cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
+	
 cChart::do_footer();
 
 cRenderHtml::footer();

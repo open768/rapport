@@ -49,7 +49,7 @@ foreach ($oResponse as $oDetail){
 	
 	cCommon::flushprint ("<h2><a href='$link'>$trans</a></h2>");   
 	
-	$sMetricpath = cADMetric::transCallsPerMin($tier, $trans);
+	$sMetricpath = cADMetricPaths::transCallsPerMin($tier, $trans);
 	$oResponse = $oApp->GET_MetricData( $sMetricpath, $oTimes, "false");
 	
 	$iTotalRows = count($oResponse);

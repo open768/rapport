@@ -48,6 +48,9 @@ cRenderCards::action_start();
 	cADCommon::button(cADControllerUI::businessTransactions($oApp));
 	$sUrl = cHttp::build_url("config.php", $gsAppQS);
 	cRender::button("config", $sUrl);
+	
+	$sUrl = cHttp::build_url("$home/pages/app/datacollectors.php", $gsAppQS);
+	cRender::button("data collectors", $sUrl);
 cRenderCards::action_end();
 cRenderCards::card_end();
 

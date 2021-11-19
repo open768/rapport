@@ -40,11 +40,11 @@ if (cAD::is_demo()){
 //********************************************************************
 
 $aStats = cADDB::GET_Database_ServerStats($sDB);
-$sMetricPrefix = cADMetric::databaseServerStats($sDB);
+$sMetricPrefix = cADMetricPaths::databaseServerStats($sDB);
 //####################################################################
 
 $aMetrics = [];
-$sMetric = cADMetric::databaseCalls($sDB);
+$sMetric = cADMetricPaths::databaseCalls($sDB);
 $aMetrics[] = [cChart::LABEL=>"Database Calls", cChart::METRIC=>$sMetric];
 cChart::metrics_table(cADDB::$db_app,$aMetrics,1,cRender::getRowClass());
 

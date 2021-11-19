@@ -61,7 +61,7 @@ if (count($oResponse) > 0){
 	foreach ( $oResponse as $oDB){
 		$class=cRender::getRowClass();
 		$sDB=$oDB->name;
-		$sMetric = cADMetric::databaseTimeSpent($sDB);
+		$sMetric = cADMetricPaths::databaseTimeSpent($sDB);
 
 		$sButton = cRender::button_code($sDB, "db.php?".cRender::DB_QS."=$sDB", false);
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sButton];

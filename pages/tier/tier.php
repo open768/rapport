@@ -49,9 +49,9 @@ cDebug::flush();
 
 //####################################################################
 	$aMetrics = [];
-	$sMetricUrl=cADMetric::appCallsPerMin();
+	$sMetricUrl=cADMetricPaths::appCallsPerMin();
 	$aMetrics[]= [	cChart::LABEL=>"Overall Calls per min ($oApp->name) application", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),	];
-	$sMetricUrl=cADMetric::appResponseTimes();
+	$sMetricUrl=cADMetricPaths::appResponseTimes();
 	$aMetrics[]= [cChart::LABEL=>"Overall response time in ms ($oApp->name) application", cChart::METRIC=>$sMetricUrl];
 	cRenderCards::card_start("Activity for $oApp->name");
 		cRenderCards::body_start();
@@ -74,15 +74,15 @@ cDebug::flush();
 //####################################################################
 ?><h2>Activity for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
 	$aMetrics = [];
-	$sMetricUrl=cADMetric::tierCallsPerMin($oTier->name);	
-	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_ACTIVITY);
+	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);	
+	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	
-	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_RESPONSE_TIMES);
-	$sMetricUrl=cADMetric::tierResponseTimes($oTier->name);
+	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
+	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
@@ -94,48 +94,48 @@ cDebug::flush();
 <?php
 	//####################################################################
 	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADMetric::tierSlowCalls($oTier->name),cChart::STYLE=>cRender::getRowClass()];
-	$aMetrics[] = [cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADMetric::tierVerySlowCalls($oTier->name)];
+	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADMetricPaths::tierSlowCalls($oTier->name),cChart::STYLE=>cRender::getRowClass()];
+	$aMetrics[] = [cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADMetricPaths::tierVerySlowCalls($oTier->name)];
 
 	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_CPU_BUSY);
 	$aMetrics[] = [
-		cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADMetric::InfrastructureCpuBusy($oTier->name), cChart::HIDEIFNODATA=>1,
+		cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADMetricPaths::InfrastructureCpuBusy($oTier->name), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	
 	$aMetrics[] = [
-		cChart::LABEL=>"Disk Free", cChart::METRIC=>cADMetric::InfrastructureDiskFree($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Disk Free", cChart::METRIC=>cADMetricPaths::InfrastructureDiskFree($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
 	];
 	
-	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_ERRORS);
+	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ERRORS);
 	$aMetrics[] = [
-		cChart::LABEL=>"Errors Per Min", cChart::METRIC=>cADMetric::tierErrorsPerMin($oTier->name), cChart::HIDEIFNODATA=>1,
+		cChart::LABEL=>"Errors Per Min", cChart::METRIC=>cADMetricPaths::tierErrorsPerMin($oTier->name), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	
 	$aMetrics[] = [
-		cChart::LABEL=>"Exceptions Per Min", cChart::METRIC=>cADMetric::tierExceptionsPerMin($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Exceptions Per Min", cChart::METRIC=>cADMetricPaths::tierExceptionsPerMin($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	
 	$sQs = cHttp::build_qs($sTierQS, cRender::METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_JAVA_HEAP_USED);
 	$aMetrics[] = [
-		cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADMetric::InfrastructureJavaHeapUsed($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1,
+		cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADMetricPaths::InfrastructureJavaHeapUsed($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>".Net Heap used", cChart::METRIC=>cADMetric::InfrastructureDotnetHeapUsed($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>".Net Heap used", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetHeapUsed($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Network In", cChart::METRIC=>cADMetric::InfrastructureNetworkIncoming($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Network In", cChart::METRIC=>cADMetricPaths::InfrastructureNetworkIncoming($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Network Out", cChart::METRIC=>cADMetric::InfrastructureNetworkOutgoing($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Network Out", cChart::METRIC=>cADMetricPaths::InfrastructureNetworkOutgoing($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Machine Availability", cChart::METRIC=>cADMetric::InfrastructureMachineAvailability($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Machine Availability", cChart::METRIC=>cADMetricPaths::InfrastructureMachineAvailability($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Agent Availability", cChart::METRIC=>cADMetric::InfrastructureAgentAvailability($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Agent Availability", cChart::METRIC=>cADMetricPaths::InfrastructureAgentAvailability($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 		
 	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);

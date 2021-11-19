@@ -63,8 +63,8 @@ cDebug::flush();
 cRendercards::card_start("Overall statistics for $oApp->name");
 cRendercards::body_start();
 	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetric::appCallsPerMin()];
-	$aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cADMetric::appResponseTimes()];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetricPaths::appCallsPerMin()];
+	$aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cADMetricPaths::appResponseTimes()];
 	cChart::metrics_table($oApp, $aMetrics,2,null);
 echo "</div>";
 cRendercards::action_start();
@@ -90,9 +90,9 @@ cRendercards::body_start();
 		$sUrl=cHttp::build_url("appexttiers.php", $sUrl);
 
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>200];
-		$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cADMetric::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers", cChart::HIDEIFNODATA=>1];
-		$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cADMetric::backendResponseTimes($sName), cChart::HIDEIFNODATA=>1];
-		$aMetrics[] = [cChart::LABEL=>"Errors ($sName)",cChart::METRIC=>cADMetric::backendErrorsPerMin($sName), cChart::HIDEIFNODATA=>1];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cADMetricPaths::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers", cChart::HIDEIFNODATA=>1];
+		$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cADMetricPaths::backendResponseTimes($sName), cChart::HIDEIFNODATA=>1];
+		$aMetrics[] = [cChart::LABEL=>"Errors ($sName)",cChart::METRIC=>cADMetricPaths::backendErrorsPerMin($sName), cChart::HIDEIFNODATA=>1];
 	}
 	cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 echo "</div>";

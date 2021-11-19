@@ -20,20 +20,20 @@ require_once "$root/inc/charts.php";
 
 $sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
 switch($sMetricType){
-	case cADMetric::METRIC_TYPE_RUMCALLS:
-	case cADMetric::METRIC_TYPE_RUMRESPONSE:
+	case cADMetricPaths::METRIC_TYPE_RUMCALLS:
+	case cADMetricPaths::METRIC_TYPE_RUMRESPONSE:
 		$sTitle1 = "Web Browser Page Requests";
 		$sMetric1 = cADWebRumMetric::CallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
 		$sMetric2 = cADWebRumMetric::ResponseTimes();
 		break;
-	case cADMetric::METRIC_TYPE_RESPONSE_TIMES:
-	case cADMetric::METRIC_TYPE_ACTIVITY:
+	case cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES:
+	case cADMetricPaths::METRIC_TYPE_ACTIVITY:
 	default:
 		$sTitle1 = "Application Activity";
-		$sMetric1 = cADMetric::appCallsPerMin();
+		$sMetric1 = cADMetricPaths::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
-		$sMetric2 = cADMetric::appResponseTimes();
+		$sMetric2 = cADMetricPaths::appResponseTimes();
 		break;
 }
 

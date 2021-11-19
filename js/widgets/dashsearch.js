@@ -1,3 +1,4 @@
+'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.addashsearch",{
@@ -108,11 +109,14 @@ $.widget( "ck.addashsearch",{
 		var oThis = this;
 		var oElement = this.element;
 		var oConsts = this.consts;
+		var sDash = oElement.attr(cRender.DASH_NAME_QS);
+		
 		if (piCount == 0){
-			oElement.hide();
+			oElement.empty();
+			oElement.append("nothing found in dashboard: "+sDash);
+			setTimeout(	function(){	oElement.hide()}, 500);
 			return;
 		}
-		var sDash = oElement.attr(cRender.DASH_NAME_QS);
 		var iDash = oElement.attr(cRender.DASH_ID_QS);
 		
 		oElement.empty();
@@ -123,6 +127,6 @@ $.widget( "ck.addashsearch",{
 		oElement.append(oButton);
 		
 		oElement.append(" Dashboard: " + sDash + " has " + piCount + " matches " );
-		
 	}
+	
 });

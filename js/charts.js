@@ -1,8 +1,18 @@
+'use strict';
 //###############################################################################
 var cChartConsts={
-	ALL_CSV_URL:"/pages/all_csv.php"
+	ALL_CSV_URL:"/pages/all_csv.php",
+	WIDTH_3ACROSS: 330 ,
+	LETTERBOX_HEIGHT: 125
 }
 
+//###############################################################################
+var cChartItem={
+	label: "",
+	metric: null
+}
+
+//###############################################################################
 var cCharts={
 	queue: new cHttpQueue,
 	show_export_all : true,
@@ -66,7 +76,7 @@ var cCharts={
 		);
 		
 		//complete the form
-		if (iCount >0){
+		if ((iCount >0)  && this.show_export_all){
 			oInput = $("<input>",{type:"hidden",name:cRender.CHART_COUNT_FIELD,value:iCount}	);
 			oForm.append(oInput);
 			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV", class:"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"}	);
@@ -75,15 +85,29 @@ var cCharts={
 		}
 	},
 	
+	//*********************************************************
 	init:function(psHome){
 		var oThis = this;
 		this.home=psHome;
+		this.load_google_charts(function(){oThis.loadCharts()});
+	},
+	
+	//*********************************************************
+	load_google_charts: function( pfnCallback){
 		//load google charts
 		try{
 			google.charts.load('current', {'packages':['corechart']});
 		}
 		catch (e){}
-		google.charts.setOnLoadCallback( function(){oThis.loadCharts()})
+		google.charts.setOnLoadCallback( pfnCallback );
 	},
+	
+	//*********************************************************
+	isGoogleChartsLoaded: function(){
+		if ((typeof google === 'undefined') || (typeof google.visualization === 'undefined')) 
+		   return false;
+		else
+		 return true;
+   	}	
 }
 cCharts.queue.maxTransfers = 5	; 	//dont overload the controller

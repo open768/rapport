@@ -1,3 +1,4 @@
+'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.adappcheckup",{
@@ -26,7 +27,14 @@ $.widget( "ck.adappcheckup",{
 		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
 		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
+		this.pr_queueMe();
+	},
 	
+	//*******************************************************************
+	pr_queueMe: function(){
+		var oThis = this;
+		var oElement = this.element;
+
 		//set behaviour for widget when it becomes visible
 		var oQueue = new cQueueifVisible();
 		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
@@ -105,7 +113,7 @@ $.widget( "ck.adappcheckup",{
 		for (var i=0; i<paData.length; i++){
 			oMsg = paData[i];
 			sClass = (oMsg.is_bad?"bad_row":"good_row");
-			sHTML += "<tr class='"+sClass+"'><td width='200'>"+oMsg.extra+"</td><td width='*'>"+oMsg.message+"</td></tr>";
+			sHTML += "<tr class='"+sClass+"'><td width='200' style='max-width:200px;overflow-wrap:break-word'>"+oMsg.extra+"</td><td width='*'>"+oMsg.message+"</td></tr>";
 		}
 		return sHTML;
 	},
@@ -123,6 +131,7 @@ $.widget( "ck.adappcheckup",{
 		
 
 		sHTML = "<table border='1' cellspacing='0' width='100%'>";
+			sHTML += this.pr_output_data("General", poData.general);
 			sUrl=  sHome + "/app/datacollectors.php?"+ sAid
 			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Data Collectors</a>", poData.DCs);
 			sUrl=  sHome + "/trans/apptrans.php?"+ sAid
@@ -132,7 +141,12 @@ $.widget( "ck.adappcheckup",{
 			sUrl=  sHome + "/app/appext.php?"+ sAid
 			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Backends</a>", poData.backends);
 		sHTML += "</table>";
-		
 		oElement.append(sHTML);
+		
+		oButton = $("<button>");
+		oButton.append("Refresh");
+		oButton.click( function(){oElement.empty(); oElement.append("please Wait"); oThis.pr_queueMe()} );
+		
+		oElement.append(oButton);
 	}
 });

@@ -54,7 +54,7 @@ if (cAD::is_demo()){
 <h2>Overall Disks Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 	$aData = $oTier->GET_DiskMetrics();
-	$sBaseMetric = cADMetric::InfrastructureNodeDisks($oTier->name);
+	$sBaseMetric = cADMetricPaths::InfrastructureNodeDisks($oTier->name);
 	$aMetrics = [];
 	foreach ($aData as $oMetric)
 		$aMetrics[]= [cChart::LABEL=>$oMetric->name, cChart::METRIC=>$oMetric->name];
@@ -63,15 +63,15 @@ if (cAD::is_demo()){
 ?>
 <h2>disks for Node..<?=cRender::show_name(cRender::NAME_OTHER,$sNode)?></h2>
 <?php
-	$sBaseMetric = cADMetric::InfrastructureNodeDisks($oTier->name, $sNode);
+	$sBaseMetric = cADMetricPaths::InfrastructureNodeDisks($oTier->name, $sNode);
 	$aData = $oTier->GET_NodeDisks($sNode);
 	$aMetrics = [];
 	foreach ($aData as $oDisk){
 		$aMetrics[]= [cChart::LABEL=>$oDisk->name, cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>250];
 
-		$sMetric = cADMetric::InfrastructureNodeDiskFree($oTier->name, $sNode, $oDisk->name);
+		$sMetric = cADMetricPaths::InfrastructureNodeDiskFree($oTier->name, $sNode, $oDisk->name);
 		$aMetrics[]= [cChart::LABEL=>$oDisk->name." free", cChart::METRIC=>$oMetric->name];
-		$sMetric = cADMetric::InfrastructureNodeDiskUsed($oTier->name, $sNode, $oDisk->name);
+		$sMetric = cADMetricPaths::InfrastructureNodeDiskUsed($oTier->name, $sNode, $oDisk->name);
 		$aMetrics[]= [cChart::LABEL=>$oDisk->name." used", cChart::METRIC=>$oMetric->name];
 	}
 	cChart::metrics_table($oApp, $aMetrics, 3, cRender::getRowClass());

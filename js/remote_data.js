@@ -1,3 +1,4 @@
+'use strict';
 //the callback 
 function remotedata_jsonCallBack( poJson){
 	var iErrors, iMax, iAvg, sID;

@@ -38,7 +38,7 @@ const BLANK_WIDTH=200;
 const TIERCOL_WIDTH=300;
 const TOTALCOL_WIDTH=150;
 
-$moApps = cADApp::GET_Applications();
+$moApps = cADController::GET_all_Applications();
 if (cAD::is_demo()){
 	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();

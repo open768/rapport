@@ -44,13 +44,13 @@ if (cAD::is_demo()){
 
 
 //####################################################################
-$oApps = cADApp::GET_Applications();
+$oApps = cADController::GET_all_Applications();
 ?>
 
 
 <h2><?=$title?></h2>
 <div class="maintable"><ul><?php
-	$aBackends = cADController::GET_allBackends();
+	$aBackends = cADController::GET_all_Backends();
 	$iBackID = 0;
 	foreach ($aBackends as $sBackend=>$aApps){
 		$iBackID++;
@@ -71,9 +71,9 @@ $oApps = cADApp::GET_Applications();
 				?><h4><?=cRender::show_name(cRender::NAME_APP,$oApp)?></h4><?php
 				
 				$aMetrics = [];
-				$sMetricUrl = cADMetric::backendCallsPerMin($sBackend);
+				$sMetricUrl = cADMetricPaths::backendCallsPerMin($sBackend);
 				$aMetrics[] = [cChart::LABEL=>"Calls Per minute: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
-				$sMetricUrl = cADMetric::backendResponseTimes($sBackend);
+				$sMetricUrl = cADMetricPaths::backendResponseTimes($sBackend);
 				$aMetrics[] = [cChart::LABEL=>"Response Times: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
 				cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 

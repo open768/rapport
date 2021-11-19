@@ -50,9 +50,9 @@ cDebug::flush();
 <H2>Service End Point <?=cRender::show_name(cRender::NAME_OTHER,$sService)?></h2>
 <?php
 	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetric::endPointCallsPerMin($oTier->name, $sService)];
-	$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cADMetric::endPointResponseTimes($oTier->name, $sService)];
-	$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cADMetric::endPointErrorsPerMin($oTier->name, $sService), cChart::HIDEIFNODATA=>true];
+	$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetricPaths::endPointCallsPerMin($oTier->name, $sService)];
+	$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cADMetricPaths::endPointResponseTimes($oTier->name, $sService)];
+	$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cADMetricPaths::endPointErrorsPerMin($oTier->name, $sService), cChart::HIDEIFNODATA=>true];
 	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX);
 
 	

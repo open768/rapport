@@ -121,6 +121,7 @@ class cRender{
 	const NAME_TRANS = 4;
 	const NAME_OTHER = 99;
 	public static $MAX_ITEMS_PER_PAGE = 20;
+	public static $FORCE_FILTERBOX_DISPLAY = false;
 	
 	//**************************************************************************
 	public static function get_times(){
@@ -225,7 +226,7 @@ class cRender{
 	
 	//**************************************************************************
 	public static function add_filter_box($psSelector,$psAttr,$psParentSelector, $psCaption = "Filter"){
-		if 	(self::is_list_mode()) return;
+		if 	(self::is_list_mode() && !self::$FORCE_FILTERBOX_DISPLAY) return;
 
 		?><form action="#">
 			<div class="mdl-textfield mdl-js-textfield">

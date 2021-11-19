@@ -99,7 +99,7 @@ class cRenderMenus{
 
 		cDebug::enter();
 		try{
-			$aApps = cADApp::GET_Applications();
+			$aApps = cADController::GET_all_Applications();
 		}
 		catch (Exception $e)
 		{
@@ -122,7 +122,7 @@ class cRenderMenus{
 
 		cDebug::enter();
 		try{
-			$aApps = cADApp::GET_Applications();
+			$aApps = cADController::GET_all_Applications();
 		}
 		catch (Exception $e)
 		{

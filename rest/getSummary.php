@@ -28,13 +28,13 @@ $index = cHeader::get("id"); //id of HTML div
 $aResult = array( "id"=>$index);
 
 $oTimes = cRender::get_times();
-$sMetricpath = cADMetric::transResponseTimes($tier, $trans);
+$sMetricpath = cADMetricPaths::transResponseTimes($tier, $trans);
 $aStats = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
 
 
 if ($aStats){
 	$aResult["max"] = $aStats[0];
-	$sMetricpath = cADMetric::transErrors($tier, $trans);
+	$sMetricpath = cADMetricPaths::transErrors($tier, $trans);
 	$aErrors = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	
 	if ($aErrors)		$aResult["transErrors"] = $aErrors[0];

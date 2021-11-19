@@ -105,7 +105,7 @@ class cMetricGetter{
 		$oOutput->app = $poApp->name;
 		$aData = null;
 		
-		if (strstr($psMetric, cADMetric::USAGE_METRIC)){
+		if (strstr($psMetric, cADMetricPaths::USAGE_METRIC)){
 			//license usage metrics are special
 			$aParams = explode("/",$psMetric);
 			$sModule = $aParams[1];

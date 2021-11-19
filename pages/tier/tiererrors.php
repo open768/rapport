@@ -106,7 +106,7 @@ if (cAD::is_demo()){
 <h2>Errors for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
 <?php
 	cDebug::flush();
-	$sMetricpath = cADMetric::Errors($oTier->name, "*");
+	$sMetricpath = cADMetricPaths::Errors($oTier->name, "*");
 	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
 	render_table($aData);
 	cRenderHtml::footer();

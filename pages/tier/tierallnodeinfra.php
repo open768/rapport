@@ -79,7 +79,7 @@ if (cAD::is_demo()){
 	?>
 	</optgroup>
 	<optgroup label="Other Statistics">
-		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cADMetric::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
+		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
 
 	</optgroup>
 </select>
