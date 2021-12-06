@@ -23,8 +23,7 @@ cRenderHtml::header("External tier calls");
 cRender::force_login();
 
 //display the results
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
+$oTier = cRenderObjs::get_current_tier();
 $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 $title =  "Graphs for transaction calls per minute for transactions for $tier in $oApp->name";
@@ -42,18 +41,18 @@ $oResponse =cAD::GET_Tier_transactions($oApp->name, $tier);
 $sBaseUrl = cHttp::build_url("transdetails.php", $gsTierQS;) 
 $oTimes = cRender::get_times();
 foreach ($oResponse as $oDetail){
-    $trans = $oDetail->name;
-	$trid = $oDetail->id;
-	$sLink = cHttp::build_url($sBaseUrl, cRender::TRANS_QS, $trans);
-	$sLink = cHttp::build_url($sLink, cRender::TRANS_ID_QS, $trid);
+    $sTrans = $oDetail->name;
+	$sTrid = $oDetail->id;
+	$oTrans = new cADTRans($oTier, $sTrans, $sTrid)
+	$sLink = cHttp::build_url($sBaseUrl, cRender::TRANS_QS, $sTrans);
+	$sLink = cHttp::build_url($sLink, cRender::TRANS_ID_QS, $sTrid);
+	cCommon::flushprint ("<h2><a href='$link'>$sTrans</a></h2>");   
 	
-	cCommon::flushprint ("<h2><a href='$link'>$trans</a></h2>");   
-	
-	$sMetricpath = cADMetricPaths::transCallsPerMin($tier, $trans);
-	$oResponse = $oApp->GET_MetricData( $sMetricpath, $oTimes, "false");
+	$sMetricpath = cADMetricPaths::transCallsPerMin($oTrans);
+	$oResponse = $oApp->GET_MetricData( $sMetricpath, $oTimes, false);
 	
 	$iTotalRows = count($oResponse);
-    $charturl = generate_chart("ttc", "call per min $trans",  $oResponse);
+    $charturl = generate_chart("ttc", "call per min $sTrans",  $oResponse);
 	echo "<img src='$charturl'>";
 }
 

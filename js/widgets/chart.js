@@ -77,6 +77,15 @@ $.widget( "ck.adchart",{
 		
 		
 		//wait for widget to become visible
+		this.pr__queue_element();
+	},
+	
+	//*******************************************************************
+	pr__queue_element: function(){
+		var oThis, oElement;
+		oThis = this;
+		oElement = oThis.element;
+		
 		var oQueue = new cQueueifVisible();
 		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
 		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
@@ -129,7 +138,7 @@ $.widget( "ck.adchart",{
 		oElement.append("There was an error getting chart data for "+ oOptions.title);
 		var btnForce = $("<button>").append("load");
 		oElement.append(btnForce);
-		btnForce.click( 		function(){oThis.onInView(true);}		);
+		btnForce.click( 		function(){oThis.pr__queue_element();}		);
 		oElement.height(oConsts.SHORT_NO_DATA_HEIGHT);
 	},
 

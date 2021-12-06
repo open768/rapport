@@ -107,6 +107,7 @@ class cMetricGetter{
 		
 		if (strstr($psMetric, cADMetricPaths::USAGE_METRIC)){
 			//license usage metrics are special
+			cDebug::extra_debug("license metrics - special case");
 			$aParams = explode("/",$psMetric);
 			$sModule = $aParams[1];
 			$iDuration = $aParams[2];
@@ -126,6 +127,7 @@ class cMetricGetter{
 					$oOutput->add($sDate,$oItem->value);
 				}
 		}else{
+			cDebug::extra_debug("normal  metrics");
 			//normal metrics
 			$oTime= cRender::get_times();
 			$epochTo = $oTime->end;
@@ -146,6 +148,7 @@ class cMetricGetter{
 				if (cAD::is_demo()){
 					$aData = cADDemo::GET_MetricData($poApp, $psMetric, $oTime, false);
 				}else{
+					cDebug::vardump($oTime);
 					$aData = $poApp->GET_MetricData($psMetric, $oTime, false);
 				}
 			}

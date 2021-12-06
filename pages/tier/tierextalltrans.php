@@ -56,7 +56,7 @@ cRenderCards::action_end();
 cRenderCards::card_end();
 
 //####################################################################
-$aTrans = $oTier->GET_transaction_names();
+$aTrans = $oTier->GET_all_transaction_names();
 $aMetrics = [];
 
 cRenderCards::card_start("Transactions");
@@ -68,19 +68,19 @@ cRenderCards::body_start();
 		
 		$aMetrics[] = [
 			cChart::LABEL=>"$oTrans->name to External - Calls per min ",
-			cChart::METRIC=>cADMetricPaths::transExtCalls($oTier->name,$oTrans->name, $sExt),
+			cChart::METRIC=>cADMetricPaths::transExtCalls($oTrans, $sExt),
 			cChart::GO_URL => $sUrl,
 			cChart::GO_HINT => "Transaction",
 			cChart::HIDEIFNODATA=>1
 		];
 		$aMetrics[] = [
 			cChart::LABEL=>"$oTrans->name to External - Response time in ms", 
-			cChart::METRIC=>cADMetricPaths::transExtResponseTimes($oTier->name,$oTrans->name,$sExt),
+			cChart::METRIC=>cADMetricPaths::transExtResponseTimes($oTrans,$sExt),
 			cChart::HIDEIFNODATA=>1
 		];
 		$aMetrics[] = [
 			cChart::LABEL=>"$oTrans->name to External - errors", 
-			cChart::METRIC=>cADMetricPaths::transExtErrors($oTier->name,$oTrans->name,$sExt),
+			cChart::METRIC=>cADMetricPaths::transExtErrors($oTrans,$sExt),
 			cChart::HIDEIFNODATA=>1
 		];
 	}

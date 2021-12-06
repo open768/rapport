@@ -64,8 +64,9 @@ function render_tier_transactions($poApp, $poTier){
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 
-	$sMetricpath = cADMetricPaths::transResponseTimes($poTier->name, "*");
-	$aStats = $poApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
+	$oTrans = new cADTrans( $poTier, "*", null, true);
+	$sMetricpath = cADMetricPaths::transResponseTimes($oTrans);
+	$aStats = $poApp->GET_MetricData( $sMetricpath, $oTimes,true,false,true);
 	uasort($aStats,"sort_by_metricpath" );
 
 	$aMetrics=[];
@@ -80,6 +81,7 @@ function render_tier_transactions($poApp, $poTier){
 			$sTrID = null;
 		}
 		$sLink = null;
+		$oTrans = new cADTRans($oTier, $sTrName, $sTrID);
 		
 		if ($oStats->count == 0)	continue;
 		$iCount ++;
@@ -88,23 +90,23 @@ function render_tier_transactions($poApp, $poTier){
 		
 		if ($node) $sLink = cHttp::build_url($sLink,cRender::NODE_QS,$node);
 		
-		$sMetricUrl=cADMetricPaths::transCallsPerMin($poTier->name, $sTrName, $node);
+		$sMetricUrl=cADMetricPaths::transCallsPerMin($oTrans, $node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Calls ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 			cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"
 		];
 		
-		$sMetricUrl=cADMetricPaths::transResponseTimes($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetricPaths::transResponseTimes($oTrans,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Response ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
 
-		$sMetricUrl=cADMetricPaths::transErrors($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetricPaths::transErrors($oTrans,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"Errors ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];
 
-		$sMetricUrl=cADMetricPaths::transCpuUsed($poTier->name, $sTrName,$node);
+		$sMetricUrl=cADMetricPaths::transCpuUsed($oTrans,$node);
 		$aMetrics[] = [
 			cChart::LABEL=>"CPU ($sTrName)", cChart::METRIC=>$sMetricUrl, 
 		];

@@ -22,16 +22,14 @@ cDebug::check_GET_or_POST();
 
 
 //###################### DATA #############################################
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS) ;
-$trans = cHeader::get(cRender::TRANS_QS) ;
-if ($oApp->name == null)	cDebug::error("App not set");
-if ($tier == null)	cDebug::error("Tier not set");
-if ($trans == null)	cDebug::error("Trans not set");
+$oTrans = cRenderObjs::get_current_trans();
+$oTier = $oTrans->tier;
+$oApp = $oTier->app;
+
 
 //*************************************************************************
-$sMetricPath = cADMetricPaths::transExtNames($tier, $trans);
+$sMetricPath = cADMetricPaths::transExtNames($oTrans);
 $oWalker = new cADTransFlow();
-$oWalker->walk($oApp, $tier, $trans);
+$oWalker->walk($oTrans);
 cCommon::write_json($oWalker);	
 ?>

@@ -91,9 +91,10 @@ function sort_by_metricpath($a,$b){
 	return strcasecmp($a->metricPath, $b->metricPath);
 }
 
-$sMetricpath = cADMetricPaths::transResponseTimes($oTier->name, "*");
+$oTrans = new cADTrans( $oTier, "*", null, true);
+$sMetricpath = cADMetricPaths::transResponseTimes($oTrans);
 $oTimes = cRender::get_times();
-$aStats = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
+$aStats = $oApp->GET_MetricData($sMetricpath, $oTimes,true,false,true);
 uasort($aStats,"sort_by_metricpath" );
 $sBaseUrl = cHttp::build_url("transdetails.php", $gsTierQS);
 
@@ -109,7 +110,7 @@ foreach ($aStats as $oTrans){
 	$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $sTrName);
 	$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
 		
-	$sMetric = cADMetricPaths::transMetric($oTier->name, $sTrName)."|$gsMetric";
+	$sMetric = cADMetricPaths::transaction($oTier->name, $sTrName)."|$gsMetric";
 	$aMetrics[] = [
 		cChart::LABEL=>"$sTrName - $gsMetric", cChart::METRIC=>$sMetric, cChart::HIDEIFNODATA=>1,
 		cChart::GO_URL=>$sLink, cChart::GO_HINT=>"Go"

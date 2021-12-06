@@ -46,7 +46,7 @@ function group_by_tier($paNodes){
 			if (!isset($aTiers[$sTier])) $aTiers[$sTier] = [];
 			$aTiers[$sTier][] = $oNode;
 		}
-		
+	uksort($aTiers,"strcasecmp");
 	return $aTiers;
 }
 
@@ -62,44 +62,74 @@ function count_nodes($paData){
 function render_tier_agents($paNodes){
 	global $oApp;
 	$aTierNodes = group_by_tier($paNodes);
+	
+	//-------------------------------------------------------------------------
+	cRenderCards::card_start("Tiers");
+	cRenderCards::body_start();
+		echo "<div style='column-count:4'>";
+		$sFirstCh = "";
+		foreach ($aTierNodes as $sTier=>$aNodes){
+			if ($sFirstCh !== strtolower($sTier[0])) {
+				echo "<p><font size='+2'><b>".strtoupper($sTier[0])."</b></font><br>";
+				$sFirstCh = strtolower($sTier[0]);
+			}
+			echo "<a href='#$sTier'>$sTier</a><br>";
+			
+		}		
+		echo "</div>";
+	cRenderCards::body_end();
+	cRenderCards::card_end();
+	
+	//-------------------------------------------------------------------------
 	foreach ($aTierNodes as $sTier=>$aNodes){
 		$oTier = cRenderObjs::make_tier_obj($oApp, $sTier, $aNodes[0]->tierId);
-		?><p><?php
-		cRenderMenus::show_tier_functions($oTier);
-		$sTierQS = cRenderQS::get_base_tier_QS($oTier);
-		?><div class="<?=cRender::getRowClass()?>"><table class="maintable">
-			<tr class="tableheader">
-				<th width="250">Machine</th>
-				<th width="120">Agent Type</th>
-				<th width="180">Node</th>
-				<th width="120">IP Address</th>
-				<th width="120">Machine Agent Version</th>
-				<th width="120">App Agent Version</th>
-			</tr>
-			<?php
-				sort ($aNodes);
-				foreach ($aNodes as $oNode){
-					$sMachine = $oNode->machineName;
-					$iMachineID = $oNode->machineId;
-					$sTier = $oNode->tierName;
-					
-					?><tr class="<?=$sClass?>">
-						<td><?php
-							cADCommon::button(cADControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
-						?><td><?=$oNode->agentType?></td>
-						<td align="right"><nobr><?php
-							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
-							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
-							cADCommon::button(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
-						?></nobr></td>
-						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
-						<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
-						<td><?=($oNode->appAgentPresent?cADUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
-					</tr><?php
-				}
-			?>
-		</table></div>
-	<?php
+		
+		cRenderCards::card_start("<a name='$sTier'>&nbsp;</a>");
+		cRenderCards::body_start();
+			if (cRender::is_list_mode()){
+				echo "<div style='column-count:4'>";
+				foreach ($aNodes as $oNode)
+					echo $oNode->machineName."<br>";
+				echo "</div>";
+			}else{
+				$sTierQS = cRenderQS::get_base_tier_QS($oTier);
+				?><div class="<?=cRender::getRowClass()?>"><table class="maintable">
+					<tr class="tableheader">
+						<th width="250">Machine</th>
+						<th width="120">Agent Type</th>
+						<th width="180">Node</th>
+						<th width="120">IP Address</th>
+						<th width="120">Machine Agent Version</th>
+						<th width="120">App Agent Version</th>
+					</tr>
+					<?php
+						sort ($aNodes);
+						foreach ($aNodes as $oNode){
+							$sMachine = $oNode->machineName;
+							$iMachineID = $oNode->machineId;
+							$sTier = $oNode->tierName;
+							
+							?><tr class="<?=$sClass?>">
+								<td><?php
+									cADCommon::button(cADControllerUI::machineDetails($oNode->machineId), $oNode->machineName)
+								?><td><?=$oNode->agentType?></td>
+								<td align="right"><nobr><?php
+									$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
+									cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
+									cADCommon::button(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
+								?></nobr></td>
+								<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
+								<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
+								<td><?=($oNode->appAgentPresent?cADUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
+							</tr><?php
+						}
+				?></table></div><?php
+			}
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_tier_functions($oTier);
+		cRenderCards::action_end();
+		cRenderCards::card_end();
 	}
 }
 
@@ -146,7 +176,7 @@ function render_node_agents($paData){
 							$sNodeUrl = cHttp::build_url("../tier/tierinfrstats.php", $sTierQS);
 							cRender::button($oNode->name,cHttp::build_url($sNodeUrl,cRender::NODE_QS,$oNode->name));
 							cADCommon::button(cADControllerUI::nodeAgent($oApp, $oNode->id),"Go");
-						?></td>
+							?></td>
 						<td><?=($oNode->ipAddresses?$oNode->ipAddresses->ipAddresses[0]:"")?></td>
 						<td><?=($oNode->machineAgentPresent?cADUtil::extract_agent_version($oNode->machineAgentVersion):"none")?></td>
 						<td><?=($oNode->appAgentPresent?cADUtil::extract_agent_version($oNode->appAgentVersion):"none")?></td>
@@ -224,24 +254,27 @@ cRenderCards::action_start();
 	cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
 	
 	//********************************************************************
+	cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 	if ($psAggType===cRender::GROUP_TYPE_NODE){
 		$sUrl = cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_TIER);
 		cRender::button("Group by Tier",$sUrl);
 	}else{
 		$sUrl = cHttp::build_url($sShowBaseUrl, cRender::GROUP_TYPE_QS, cRender::GROUP_TYPE_NODE);
 		cRender::button("Group by Node",$sUrl);
+		
+		$sUrl = cHttp::build_url($sShowBaseUrl,cRender::GROUP_TYPE_QS,$psAggType);
+		if (!cRender::is_list_mode()){
+				$sUrl.= "&".cRender::LIST_MODE_QS;
+				cRender::button("list mode", $sUrl);
+		}else			
+				cRender::button("detail mode", $sUrl);
 	}
-	$oCred = cRenderObjs::get_AD_credentials();
-	$sDetailBaseUrl =  cHttp::build_url("appagentdetail.php",$sAppQS);
 
-	cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 cRenderCards::action_end();
 cRenderCards::card_end();
 
 //####################################################################
 if ($iNodes > 0){
-	cRenderCards::card_start();
-	cRenderCards::body_start();
 	switch($psAggType){
 		case cRender::GROUP_TYPE_TIER:
 			render_tier_agents($aData);
@@ -253,8 +286,6 @@ if ($iNodes > 0){
 		default:
 			cCommon::errorbox("unknown groupp mode");
 	}
-	cRenderCards::body_end();
-	cRenderCards::card_end();
 }
 
 cRenderHtml::footer();

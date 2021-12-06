@@ -1,12 +1,12 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adappcheckup",{
+$.widget( "ck.adcomparestats",{
 	//#################################################################
 	//# Definition
 	//#################################################################
 	consts:{
-		REST_API:"/rest/appcheckup.php"
+		REST_API:"/rest/appcomparestats.php"
 	},
 
 	//#################################################################
@@ -23,25 +23,22 @@ $.widget( "ck.adappcheckup",{
 		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
-		//check for required options
+		//check for required options		
+		if (!oElement.attr(cRender.LABEL_QS))		$.error("Label missing!");			
+		if (!oElement.attr(cRender.METRIC_QS))		$.error("metric missing!");			
+		if (!oElement.attr(cRender.TIME_START_QS))	$.error("start time missing!");		
+		if (!oElement.attr(cRender.TIME_END_QS))	$.error("end time missing!");		
 		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
 		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
 					
-		this.pr_queueMe();
-	},
 	
-	//*******************************************************************
-	pr_queueMe: function(){
-		var oThis = this;
-		var oElement = this.element;
-
 		//set behaviour for widget when it becomes visible
 		var oQueue = new cQueueifVisible();
 		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
 		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
 		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
 		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_appcheckup_url());
+		oQueue.go(oElement, this.get_widget_url());
 	},
 
 
@@ -50,16 +47,16 @@ $.widget( "ck.adappcheckup",{
 		var oElement = this.element;
 		oElement.empty();
 		oElement.append("status: " +psMessage);
-		},
+	},
 	
 	//*******************************************************************
-	onError: function(poHttp){
+	onError: function(poHttp, psMessage){
 		var oThis = this;
 		var oElement = this.element;
 				
 		oElement.empty();
 		oElement.addClass("ui-state-error");
-			oElement.append("There was an error  getting data  ");
+			oElement.append("<td colspan='7'>There was an error  getting data  </td>");
 	},
 
 //*******************************************************************
@@ -71,7 +68,7 @@ $.widget( "ck.adappcheckup",{
 		
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading: ");
+		oElement.append(oLoader).append("<td colspan='7'>Loading: </td>");
 	},
 	
 	//*******************************************************************
@@ -84,72 +81,50 @@ $.widget( "ck.adappcheckup",{
 		
 		var aResponse = poHttp.response;
 		if (aResponse.length == 0 )
-			oElement.append("<i>no errors found</i>");
+			oElement.append("<td colspan='7'><i>no data found</i></td>");
 		else
-			this.render_checkup(poHttp.response);
+			this.render_widget(poHttp.response);
 	},
 
 	
 	//#################################################################
 	//# functions
 	//#################################################################`
-	get_appcheckup_url: function (){
+	get_widget_url: function (){
 		var sUrl;
 		var oConsts = this.consts;
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
 		
-		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		oParams[cRender.METRIC_QS] = oElement.attr(cRender.METRIC_QS);
+		oParams[cRender.TIME_START_QS] = oElement.attr(cRender.TIME_START_QS);
+		oParams[cRender.TIME_END_QS] = oElement.attr(cRender.TIME_END_QS);
+		oParams[cRender.APP_ID_QS] = oElement.attr(cRender.APP_ID_QS);
+
+		var sBaseUrl = oElement.attr(cRender.HOME_QS)+oConsts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
 	
 	//*******************************************************************
-	pr_output_data: function( psTitle, paData){
-		var sHTML = "<tr><th colspan='2'>" + psTitle + "</th></tr>";
-		var oMsg, sClass, sHTML;
-		for (var i=0; i<paData.length; i++){
-			oMsg = paData[i];
-			sClass = (oMsg.is_bad?"bad_row":"good_row");
-			sHTML += "<tr class='"+sClass+"'><td width='200' style='max-width:200px;overflow-wrap:break-word'>"+oMsg.extra+"</td><td width='*'>"+oMsg.message+"</td></tr>";
-		}
-		return sHTML;
-	},
-	
-	//*******************************************************************
-	render_checkup: function(poData){
+	render_widget: function(poData){
 		var oThis = this;
 		var oElement = this.element;
-		var oConsts = this.consts;
-		var sClass, i, oMsg, sHome, sAid;
 		
 		oElement.empty();
-		sHome = oElement.attr(cRender.HOME_QS)+"/pages";
-		sAid = cRender.APP_ID_QS +"="+oElement.attr(cRender.APP_ID_QS);
-		
-		var sHTML, sUrl, oButton;
-		sHTML = "<table border='1' cellspacing='0' width='100%'>";
-			sHTML += this.pr_output_data("General", poData.general);
-			sUrl=  sHome + "/app/datacollectors.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Data Collectors</a>", poData.DCs);
-			sUrl=  sHome + "/trans/apptrans.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Transactions</a>", poData.BTs);
-			sUrl=  sHome + "/app/tiers.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Tiers</a>", poData.tiers);
-			sUrl=  sHome + "/app/appext.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Backends</a>", poData.backends);
-			sUrl=  sHome + "/service/services.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Service End Points</a>", poData.sendpoints);
-		sHTML += "</table>";
-		oElement.append(sHTML);
-		
-		oButton = $("<button>");
-		oButton.append("Refresh");
-		oButton.click( function(){oElement.empty(); oElement.append("please Wait"); oThis.pr_queueMe()} );
-		
-		oElement.append(oButton);
+		oElement.append("<td align='right'>"+ oElement.attr(cRender.LABEL_QS)+ "</td>");
+		if (poData.error !== null){
+			var dDate = new Date(  parseInt(oElement.attr(cRender.TIME_START_QS)));
+			oElement.append("<td align='right'>"+ dDate.toLocaleString()+ "</td>");
+			oElement.append("<td colspan='5'>Error: " + poData.error + "</td>");
+		}else{
+			oElement.append("<td align='right'>"+ poData.start_date+ "</td>");
+			oElement.append("<td align='right'>"+ cRender.format_number(poData.sum_calls)+"</td>");
+			oElement.append("<td align='right'>"+ cRender.format_number(poData.calls_per_min)+"</td>");
+			oElement.append("<td align='right'>"+ cRender.format_number(poData.avg_response_time)+" ms</td>");
+			oElement.append("<td align='right'>"+ cRender.format_number(poData.max_response_time)+" ms</td>");
+			oElement.append("<td align='right'>"+ poData.sum_errors +"</td>");
+		}
 	}
 });

@@ -12,11 +12,22 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-$home="..";
+//####################################################################
+//####################################################################
+$home="../..";
 require_once "$home/inc/common.php";
 
+
 $oTier = cRenderObjs::get_current_tier();
-$oTimes = cRender::get_times();
-$oData = $oTier->GET_all_transaction_times($oTimes);
-cCommon::write_json($oData);	
+$oApp = $oTier->app;
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$sBaseMetric = cADMetricPaths::tier($oTier->name);
+$sCaption = "Tier: $oTier->name";
+
+$sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
+$sUrl = cHttp::build_url($sUrl,cRender::METRIC_QS, $sBaseMetric );
+$sUrl = cHttp::build_url($sUrl,cRender::TITLE_QS, $sCaption );
+
+cHeader::redirect($sUrl);
+
 ?>

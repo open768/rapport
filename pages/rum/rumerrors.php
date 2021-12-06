@@ -107,7 +107,7 @@ if (cAD::is_demo()){
 <h2>Pages With Javascript Errors</h2>
 <?php
 	$sMetricpath = cADWebRumMetric::PageJavaScriptErrors(cADMetricPaths::BASE_PAGES, "*");
-	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
+	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,true,false,true);
 	render_table(cADMetricPaths::BASE_PAGES, $aData);
 	
 	// ############################################################

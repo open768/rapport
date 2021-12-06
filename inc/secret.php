@@ -1,5 +1,4 @@
 <?php
-
 /**************************************************************************
 Copyright (C) Chicken Katsu 2018
 
@@ -11,9 +10,8 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-
 class cSecret{
-	const GOOGLE_TAG_ID = "GTM-PFLM8J";
+	const GOOGLE_TAG_ID = "UA-51550338-2";
 	
 	const LICENSED_TO = "Chicken Katsu";
 	const LICENSE_COMMENT = "** For Demonstration Purposes only **";
@@ -21,5 +19,10 @@ class cSecret{
 	
 	const LINKEDIN_CLIENTID = "78y5i1whb7s9ve";
 	const LINKEDIN_SECRET = "A3qzKko0pAIbcOHA";
+	
+	static $NR_DEV ;
+	static $NR_PROD ;
 }
+cSecret::$NR_DEV = new cNewRelicEUMAccount("3356962","322543097","NRJS-f66e15d6a38a9fd5f21", "322543097" );
+cSecret::$NR_PROD = new cNewRelicEUMAccount("3356962","322543097","NRJS-f66e15d6a38a9fd5f21", "322543097" );
 ?>

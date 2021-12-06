@@ -93,6 +93,7 @@ class cRender{
 	const HEALTH_ID_QS ="hi";
 	
 	const HOME_QS = "home";
+	const LABEL_QS = "lbl";
 	
 	//**************************************************************************
 	const RUM_DETAILS_QS ="rmd";
@@ -113,33 +114,63 @@ class cRender{
 	const SEARCH_QS = "srch";
 	const SERVER_MQ_MANAGER_QS = "mqm";
 	
-	
 	//**************************************************************************
 	const NAME_APP = 1;
 	const NAME_TIER = 2;
 	const NAME_EXT = 3;
 	const NAME_TRANS = 4;
 	const NAME_OTHER = 99;
+	
+	//**************************************************************************
+	const TIME_START_QS = "tsta";
+	const TIME_END_QS = "tend";
+	const TIME_DURATION_QS = "tdur";
+	const LAST_YEAR_QS = "lyq";
+	
+	//**************************************************************************
 	public static $MAX_ITEMS_PER_PAGE = 20;
 	public static $FORCE_FILTERBOX_DISPLAY = false;
 	
 	//**************************************************************************
 	public static function get_times(){
-		$sTime = cCommon::get_session(cADCommon::TIME_SESS_KEY);
-		if ($sTime == cADCommon::TIME_CUSTOM){
-			$epochFrom = cCommon::get_session(cADCommon::TIME_CUSTOM_FROM_KEY);
-			$epochTo = cCommon::get_session(cADCommon::TIME_CUSTOM_TO_KEY);
-		}else{
-			if ($sTime == "") $sTime=60;
-			
-			$epochTo = time() *1000;
-			$epochFrom = $epochTo - ((60 * $sTime)*1000);
-		}
-		
+		//cDebug::enter();
 		$oTimes = new cADTimes();
-		$oTimes->start = $epochFrom;
-		$oTimes->end = $epochTo;
+		if (cHeader::get(self::TIME_START_QS)){
+			if (!cHeader::get(self::TIME_DURATION_QS))
+				cDebug::error("must specify both ".self::TIME_START_QS." and ".self::TIME_DURATION_QS. " query string");
+
+			$sDate = cHeader::get(self::TIME_START_QS);
+			$iTime = strtotime($sDate);
+			if (!$iTime)
+				cDebug::error("invalid date string '$sDate' supplied in ".self::TIME_START_QS." query string param");
+			
+			$sDuration = cHeader::get(self::TIME_DURATION_QS);
+			if (!is_numeric($sDuration))
+				cDebug::error("non numeric duration  '$sDuration' supplied in ".self::TIME_DURATION_QS." query string param");
 		
+			$oTimes->time_type = cADTimes::BETWEEN;
+			$oTimes->start = $iTime * 1000;
+			$oTimes->set_duration($sDuration);
+		}else{
+			$sTime = cCommon::get_session(cADCommon::TIME_SESS_KEY);
+			//cDebug::extra_debug("Time selector: $sTime");
+			//cDebug::extra_debug("time is ".time());
+			if ($sTime == cADCommon::TIME_CUSTOM){
+				$epochFrom = cCommon::get_session(cADCommon::TIME_CUSTOM_FROM_KEY);
+				$epochTo = cCommon::get_session(cADCommon::TIME_CUSTOM_TO_KEY);
+			}else{
+				if ($sTime == "") $sTime=60;
+				
+				$epochTo = time() * 1000;
+				$epochFrom = $epochTo - ((60 * $sTime)*1000);
+			}
+			
+			$oTimes->start = $epochFrom;
+			$oTimes->end = $epochTo;
+			$oTimes->duration = $sTime;
+		}	
+		//cDebug::vardump($oTimes);
+		//cDebug::leave();
 		return $oTimes;
 	}
 	
@@ -330,7 +361,9 @@ class cRender{
 				$sOnClick = "window.open(\"$psUrl\",\"$psTarget\")";
 			else
 				$sOnClick = "window.open(\"$psUrl\")";
-		}else
+		}elseif(strpos($psUrl,"document.") === 0)
+			$sOnClick = $psUrl;
+		else
 			$sOnClick = "document.location.href=\"$psUrl\"";
 		
 		if ($paParams !== null){

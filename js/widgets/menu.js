@@ -306,18 +306,25 @@ $.widget( "ck.admenu",{
 			var oOption = $("<option>",{selected:1,disabled:1}).append(sTier);
 			oSelect.append(oOption);
 			
-			this.pr__addToGroup(oSelect, "Overview", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tier.php"));
-			if (sThisTier)
-				this.pr__addToGroup(oSelect, "Back to ("+sApp+")", this.pr__get_base_app_QS(sAppPrefixUrl+"/tiers.php"));
+			var oGroup = $("<optgroup>",{label:"Show..."});
+				this.pr__addToGroup(oGroup, "Overview", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tier.php"));
+				this.pr__addToGroup(oGroup, "Backends", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierbackends.php"));
+				this.pr__addToGroup(oGroup, "Errors", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tiererrors.php"));
+				this.pr__addToGroup(oGroup, "External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextgraph.php"));
+				this.pr__addToGroup(oGroup, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextcalls.php"));
+				this.pr__addToGroup(oGroup, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierinfrstats.php"));
+				this.pr__addToGroup(oGroup, "Service End Points", this.pr__get_base_tier_QS(sSrvPrefixUrl+"/services.php"));
+				this.pr__addToGroup(oGroup, "Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl+"/apptrans.php"));
+				oSelect.append(oGroup);
 						
 			//--------------------------------------------------------------------
-			this.pr__addToGroup(oSelect, "Backends", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierbackends.php"));
-			this.pr__addToGroup(oSelect, "Errors", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tiererrors.php"));
-			this.pr__addToGroup(oSelect, "External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextgraph.php"));
-			this.pr__addToGroup(oSelect, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierextcalls.php"));
-			this.pr__addToGroup(oSelect, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl+"/tierinfrstats.php"));
-			this.pr__addToGroup(oSelect, "Service End Points", this.pr__get_base_tier_QS(sSrvPrefixUrl+"/services.php"));
-			this.pr__addToGroup(oSelect, "Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl+"/apptrans.php"));
+			oGroup = $("<optgroup>",{label:"Misc..."});
+				if (sThisTier)
+					this.pr__addToGroup(oGroup, "Back to ("+sApp+")", this.pr__get_base_app_QS(sAppPrefixUrl+"/tiers.php"));
+				var sUrl = this.pr__get_base_tier_QS(sTierPrefixUrl+"/comparestats.php");
+				this.pr__addToGroup(oGroup, "Compare", sUrl);
+				oSelect.append(oGroup);
+			
 		//add and make the menu a selectmenu
 		var oThis = this;		
 		oSelect.selectmenu({select:	function(poEvent, poTarget){oThis.onSelectItem(poTarget.item.element)}}	);
@@ -334,7 +341,7 @@ $.widget( "ck.admenu",{
 	
 	//****************************************************************
 	pr__get_base_tier_QS: function(psBaseUrl){
-		oElement = this.element;
+		var oElement = this.element;
 		var oParams = {};
 		
 		oParams[cRender.APP_QS]= cBrowser.data[cRender.APP_QS];
@@ -365,6 +372,7 @@ $.widget( "ck.admenu",{
 	//#################################################################
 	//# events
 	//#################################################################`
+	//todo open a window for some urls
 	onSelectItem: function(poTarget){
 		var sUrl = poTarget.attr("value");
 		if (sUrl){

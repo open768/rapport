@@ -16,7 +16,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 
 
 //####################################################################
@@ -26,7 +25,7 @@ require_once "$root/inc/charts.php";
 $oApp = cRenderObjs::get_current_app();
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
-cRenderHtml::header("Transactions for $oApp->name");
+cRenderHtml::header("All Other Transactions for $oApp->name");
 cRender::force_login();
 
 //********************************************************************
@@ -36,28 +35,21 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
-?><script language="javascript" src="<?=$home?>/js/widgets/tiertrans.js"></script><?php
+?><script language="javascript" src="<?=$home?>/js/widgets/tierothertrans.js"></script><?php
 
-
+//********************************************************************
 cRenderCards::card_start();
 cRenderCards::body_start();
 	cRender::add_filter_box("span[type=tiertrans]","name",".mdl-card");
 cRenderCards::body_end();
 cRenderCards::action_start();
-	cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
-	cADCommon::button(cADControllerUI::businessTransactions($oApp));
-	$sUrl = cHttp::build_url("config.php", $gsAppQS);
-	cRender::button("config", $sUrl);
-	
-	$sUrl = cHttp::build_url("$home/pages/app/datacollectors.php", $gsAppQS);
-	cRender::button("data collectors", $sUrl);
-	
-	$sUrl = cHttp::build_url("allother.php", $gsAppQS);
-	cRender::button("All Other Transactions", $sUrl);
+	$sUrl = cHttp::build_url("apptrans.php", $gsAppQS);
+	cRender::button("back to transactions", $sUrl);
+	cRenderMenus::show_apps_menu("Change Application", "allother.php");
 cRenderCards::action_end();
 cRenderCards::card_end();
 
-//####################################################################
+//********************************************************************
 $aTiers =$oApp->GET_Tiers();
 foreach ( $aTiers as $oTier){
 	$oTier->app = $oApp;
@@ -65,33 +57,31 @@ foreach ( $aTiers as $oTier){
 	//get the transaction names for the Tier
 	cRenderCards::card_start();
 		cRenderCards::body_start();
-			?><div 
-				type="adtiertrans" 
+			?><span type='tiertrans' name='$oTier->name'></span>
+			<div 
+				type="adtierothertrans" 
 				home="<?=$home?>" 
 				<?=cRender::APP_ID_QS?>="<?=$oApp->id?>" 
-				<?=cRender::TIER_ID_QS?>="<?=$oTier->id?>">please wait...</div><?php
+				<?=cRender::TIER_ID_QS?>="<?=$oTier->id?>">
+					please wait...
+			</div><?php
 		cRenderCards::body_end();
 		cRenderCards::action_start();
-		cRenderMenus::show_tier_functions($oTier);
-			echo "<span type='tiertrans' name='$oTier->name'></span>";
-			$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
-			$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oTier->name);
-			$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
-			cRender::button("show transaction graphs", $sUrl);
+			cRenderMenus::show_tier_functions($oTier);
 		cRenderCards::action_end();
 	cRenderCards::card_end();
 }
-?>
 
+?>
 <script language="javascript">
 	function init_widget(piIndex, poElement){
-		$(poElement).adtiertrans();
+		$(poElement).adtierothertrans();
 	}
-	$("div[type=adtiertrans]").each( init_widget);
+	$("div[type=adtierothertrans]").each( init_widget);
 </script>
-
 <?php
-				
 
+
+//********************************************************************
 cRenderHtml::footer();
 ?>

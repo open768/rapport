@@ -53,11 +53,10 @@ foreach ($aTiers as $oTier){
 	//TODO make this asynchronous as this will crash when there are hundreds of  tiers
 	
 	//****************************************************************************************
-	$aEndPoints = cADRestUI::GET_service_end_points($oTier);
+	$aEndPoints = $oTier->GET_ServiceEndPoints();
 	cRenderCards::card_start("<span tier='$oTier->name'>$oTier->name</span>");
 	cRenderCards::body_start();
 	
-		//$aEndPoints = $oTier->GET_ServiceEndPoints();
 	if (count($aEndPoints) == 0)
 		cCommon::messagebox("no Service endpoints found for $oTier->name");
 	else{

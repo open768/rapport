@@ -147,8 +147,8 @@ $.widget( "ck.adallapps",{
 	convert_charts_to_widgets: function(poApp){
 		var oElement = this.element;
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = poApp.name;
-		oParams[ cRender.APP_QS ] = poApp.id;
+		oParams[ cRender.APP_ID_QS ] = poApp.id;
+		oParams[ cRender.APP_QS ] = poApp.name;
 		var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
 		var sHome = oElement.attr(cRender.HOME_QS);
 		

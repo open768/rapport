@@ -69,11 +69,11 @@ foreach ($aNodes as $oNode){
 	$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
 	$sUrl = "transdetails.php?$sNodeQs";
 					
-	$sMetricUrl=cADMetricPaths::transCallsPerMin($oTier->name, $oTrans->name, $sNodeName);
+	$sMetricUrl=cADMetricPaths::transCallsPerMin($oTrans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Calls  ($sNodeName)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>$oNode->name];
-	$sMetricUrl=cADMetricPaths::transResponseTimes($oTier->name, $oTrans->name, $sNodeName);
+	$sMetricUrl=cADMetricPaths::transResponseTimes($oTrans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"response ($sNodeName)", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cADMetricPaths::transErrors($oTier->name, $oTrans->name, $sNodeName);
+	$sMetricUrl=cADMetricPaths::transErrors($oTrans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
 }
 $sClass = cRender::getRowClass();

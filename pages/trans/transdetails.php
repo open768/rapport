@@ -113,6 +113,12 @@ cRenderCards::card_start("Contents");
 		cRenderMenus::show_tier_functions();
 		cRender::button("Transaction details for all nodes", "transallnodes.php?$sTransQS");
 		cRender::button("Search Snapshots", "searchsnaps.php?$sTransQS");
+		$sBaseMetric = cADMetricPaths::Transaction($oTier->name, $oTrans->name);
+		$sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
+		$sUrl = cHttp::build_url($sUrl,cRender::METRIC_QS, $sBaseMetric );
+		$sUrl = cHttp::build_url($sUrl,cRender::TITLE_QS, "Transaction: $oApp->name - $oTier->name - $oTrans->name" );
+		cRender::button("compare statistics", $sUrl,true);
+		echo "<hr>";
 		show_nodes($node);
 	cRenderCards::action_end();
 cRenderCards::card_end();
@@ -122,10 +128,10 @@ cRenderCards::card_end();
 cRenderCards::card_start("<a name='1'>Data</a> for $oTrans->name $oTier->name");
 	cRenderCards::body_start();
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTier->name, $oTrans->name)];
-		$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cADMetricPaths::transResponseTimes($oTier->name, $oTrans->name)];
-		$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cADMetricPaths::transErrors($oTier->name, $oTrans->name)];
-		$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cADMetricPaths::transCpuUsed($oTier->name, $oTrans->name)];
+		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTrans)];
+		$aMetrics[] = [cChart::LABEL=>"trans Response:", cChart::METRIC=>cADMetricPaths::transResponseTimes($oTrans)];
+		$aMetrics[] = [cChart::LABEL=>"trans errors:", cChart::METRIC=>cADMetricPaths::transErrors($oTrans)];
+		$aMetrics[] = [cChart::LABEL=>"trans cpu used:", cChart::METRIC=>cADMetricPaths::transCpuUsed($oTrans)];
 		cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	cRenderCards::body_end();
 cRenderCards::card_end();
@@ -157,10 +163,10 @@ if ($node){
 	cRenderCards::card_start("<a name='3'>Data</a> for Transaction: $oTrans->name for node $node)");
 		cRenderCards::body_start();
 			$aMetrics = [];
-			$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTier->name, $oTrans->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cADMetricPaths::transResponseTimes($oTier->name, $oTrans->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cADMetricPaths::transErrors($oTier->name, $oTrans->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cADMetricPaths::transCpuUsed($oTier->name, $oTrans->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTrans, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Response:", cChart::METRIC=>cADMetricPaths::transResponseTimes($oTrans, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans Errors:", cChart::METRIC=>cADMetricPaths::transErrors($oTrans, $node)];
+			$aMetrics[] = [cChart::LABEL=>"server trans cpu used:", cChart::METRIC=>cADMetricPaths::transCpuUsed($oTrans, $node)];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		cRenderCards::body_end();
 	cRenderCards::card_end();
@@ -187,14 +193,14 @@ cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oT
 		if ($oData){
 			$aMetrics = [];
 			foreach ( $oData as $oItem){
-				$other = $oItem->name;
+				$sExt = $oItem->name;
 				$sClass = cRender::getRowClass();
 				
-					$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>"<DIV style='max-width:200px;overflow-wrap:break-word'>$other</div>"];
-					$sMetricUrl=cADMetricPaths::transExtCalls($oTier->name, $oTrans->name, $other);
-					$aMetrics[] = [cChart::LABEL=>"Calls per min to: $other", cChart::METRIC=>$sMetricUrl];
-					$sMetricUrl=cADMetricPaths::transExtResponseTimes($oTier->name, $oTrans->name, $other);
-					$aMetrics[] = [cChart::LABEL=>"response times: $other", cChart::METRIC=>$sMetricUrl];
+					$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>"<DIV style='max-width:200px;overflow-wrap:break-word'>$sExt</div>"];
+					$sMetricUrl=cADMetricPaths::transExtCalls($oTrans, $sExt);
+					$aMetrics[] = [cChart::LABEL=>"Calls per min to: $sExt", cChart::METRIC=>$sMetricUrl];
+					$sMetricUrl=cADMetricPaths::transExtResponseTimes($oTrans, $sExt);
+					$aMetrics[] = [cChart::LABEL=>"response times: $sExt", cChart::METRIC=>$sMetricUrl];
 			}
 			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
 		}else

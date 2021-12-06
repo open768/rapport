@@ -20,22 +20,20 @@ set_time_limit(200); // huge time limit as this could takes a long time
 
 
 //###################### DATA #############################################################
-$oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
-$trans = cHeader::get(cRender::TRANS_QS);
+$oTrans = cRenderObjs::get_current_trans()
 $index = cHeader::get("id"); //id of HTML div
 
 $aResult = array( "id"=>$index);
 
 $oTimes = cRender::get_times();
-$sMetricpath = cADMetricPaths::transResponseTimes($tier, $trans);
-$aStats = $oApp->GET_MetricData($sMetricpath, $oTimes,"true",false,true);
+$sMetricpath = cADMetricPaths::transResponseTimes($oTrans);
+$aStats = $oApp->GET_MetricData($sMetricpath, $oTimes,true,false,true);
 
 
 if ($aStats){
 	$aResult["max"] = $aStats[0];
-	$sMetricpath = cADMetricPaths::transErrors($tier, $trans);
-	$aErrors = $oApp->GET_MetricData( $sMetricpath, $oTimes,"true",false,true);
+	$sMetricpath = cADMetricPaths::transErrors($oTrans);
+	$aErrors = $oApp->GET_MetricData( $sMetricpath, $oTimes,true,false,true);
 	
 	if ($aErrors)		$aResult["transErrors"] = $aErrors[0];
 }else{

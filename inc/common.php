@@ -10,7 +10,8 @@ require_once("$phpinc/ckinc/http.php");
 require_once("$phpinc/ckinc/header.php");
 require_once("$phpinc/ckinc/rendercards.php");
 require_once("$phpinc/ckinc/renderw3.php");
-	
+require_once("$phpinc/ckinc/google.php");
+require_once("$phpinc/ckinc/newrelic.php");
 
 //####################################################################
 require_once("$ADlib/AD.php");
@@ -20,5 +21,4 @@ require_once("$ADlib/metrics.php");
 require_once("$root/inc/secret.php");
 require_once("$root/inc/render.php");
 require_once("$root/inc/metrics.php");
-
 ?>

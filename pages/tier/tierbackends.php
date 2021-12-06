@@ -22,7 +22,6 @@ require_once "$root/inc/charts.php";
 //display the results
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 cRenderHtml::header("Backends resolving to tier: $oTier->name");

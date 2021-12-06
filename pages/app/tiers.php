@@ -29,8 +29,8 @@ cChart::do_header();
 
 
 $sPage = "tiers.php";
-$sBaseQS = cRenderQS::get_base_app_QS($oApp);
-$sUrl = $sPage."?".$sBaseQS;
+$sAppQS = cRenderQS::get_base_app_QS($oApp);
+$sUrl = $sPage."?".$sAppQS;
 if (cRender::is_list_mode()){
 }else{
 }
@@ -66,9 +66,8 @@ if (cRender::is_list_mode()){
 	
 }else{
 	//####################################################################
-	cRenderCards::card_start();
+	cRenderCards::card_start("Overall Activity in $oApp->name");
 		cRenderCards::body_start();
-			?><h4>Overall Activity in <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h4><?php
 			$aMetrics = [];
 			$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetricPaths::appCallsPerMin()];
 			$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetricPaths::appResponseTimes()];
@@ -81,6 +80,13 @@ if (cRender::is_list_mode()){
 			cADCommon::button(cADControllerUI::app_slow_transactions($oApp), "Slow Transactions");
 			$sUrl.= "&".cRender::LIST_MODE_QS;
 			cRender::button("show as list", $sUrl);
+			
+			$sBaseMetric = cADMetricPaths::app();
+			$sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
+			$sUrl = cHttp::build_url($sUrl,cRender::METRIC_QS, $sBaseMetric );
+			$sUrl = cHttp::build_url($sUrl,cRender::TITLE_QS, "Application: $oApp->name" );
+			cRender::button("compare statistics", $sUrl,true);
+			
 			cRender::add_filter_box("select[menu=tierfunctions]","tier",".mdl-card");
 		cRenderCards::action_end();
 	cRenderCards::card_end();

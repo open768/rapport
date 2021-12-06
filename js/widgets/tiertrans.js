@@ -115,7 +115,7 @@ $.widget( "ck.adtiertrans",{
 			cRender.TIER_ID_QS+"="+oElement.attr(cRender.TIER_ID_QS) ;
 			
 		if (poData.active.length>0){
-			oTable = $("<table>", {border:1,cellspacing:0,width:"100%"});
+			var oTable = $("<table>", {border:1,cellspacing:0,width:"100%"});
 			oTable.append("<tr><th width='40'></th><th width='*'>Name</th><th width='50'>count</th><th width='50'>avg</th><th width='50'>max</th></tr>");
 			for (var i=0; i<poData.active.length; i++){
 				var oRow = $("<TR>");

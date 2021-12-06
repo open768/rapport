@@ -15,8 +15,26 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 $home="..";
 require_once "$home/inc/common.php";
 
+class cOutput{
+	public $trans;
+	public $names;
+}
+
 $oTier = cRenderObjs::get_current_tier();
 $oTimes = cRender::get_times();
-$oData = $oTier->GET_all_transaction_times($oTimes);
-cCommon::write_json($oData);	
+
+$oTrans = new cADTrans($oTier, cADMetricPaths::ALL_OTHER, null, true);
+$oTrans->populate_ID($oTimes);
+
+$oOut = new cOutput;
+$oOut->trans = $oTrans;
+
+if ($oTrans->id){
+	//get the transaction names that could be promoted
+	$aTraffic = $oTier->GET_dropped_overflow_traffic($oTimes);
+	$oOut->names = (array) $aTraffic;
+}
+
+//***********************************************************
+cCommon::write_json($oOut);	
 ?>

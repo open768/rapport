@@ -36,8 +36,7 @@ class cRenderHtml{
 		
 		//-------------------------------------------------------------
 		cDebug::extra_debug("displaying page");
-		?>
-		<!DOCTYPE html>
+		?><!DOCTYPE html>
 		<html>
 		<head>
 			<title><?=$psTitle?></title>
@@ -64,15 +63,11 @@ class cRenderHtml{
 			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-			<!-- Global site tag (gtag.js) - Google Analytics -->
-			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-51550338-2"></script>
-			<script>
-			  window.dataLayer = window.dataLayer || [];
-			  function gtag(){dataLayer.push(arguments);}
-			  gtag('js', new Date());
-
-			  gtag('config', 'UA-51550338-2');
-			</script>			
+			<!-- analytics tags -->
+			<?php
+				cGoogleAnalytics::browser_agent("UA-51550338-2");
+				cNewRelic::browser_agent();
+			?>
 			<!-- End Google Tag Manager -->
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 			

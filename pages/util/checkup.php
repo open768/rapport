@@ -19,34 +19,32 @@ require_once "$home/inc/common.php";
 cRenderHtml::header("One Click Checkup");
 cRender::force_login();
 
+$aResponse = cADController::GET_all_Applications();
+
 //####################################################################
 ?><script language="javascript" src="<?=$home?>/js/widgets/appcheckup.js"></script><?php
 
-function output_row($pbBad, $psCaption, $psContent, $psAction=null){
-	$sClass = ($pbBad?"bad_row":"good_row");
-	?><tr class="<?=$sClass?>">
-		<th align='left' width='400'><?=$psCaption?>: </th>
-		<td><?=$psContent?></td>
-		<?php
-			if ($psAction !== null){
-				echo "<td>";
-				cRender::button('<span class="material-icons-outlined">arrow_circle_right</span>', $psAction);
-				echo "</td>";
-			}
-		?>
-	</tr><?php
-}
 cRenderCards::card_start("Checkup");
 cRenderCards::body_start();
+	$sPrevious = "";
+	echo "<div style='column-count:4'>";
+		foreach ( $aResponse as $oApp){
+			$sChar = strtolower(($oApp->name)[0]);
+			if ($sChar !== $sPrevious){
+				echo "<h3>".strtoupper($sChar)."</h3>";
+				$sPrevious = $sChar;
+			}
+			echo "<a href='#$oApp->id'>$oApp->name</a><br>";
+		}
+	echo "</div>";	
 	cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
 cRenderCards::body_end();
 cRenderCards::card_end();
 
 //####################################################################
 //this needs to be asynchronous as when there are a lot of applications that page times out
-$aResponse = cADController::GET_all_Applications();
 foreach ( $aResponse as $oApp){
-	cRenderCards::card_start();
+	cRenderCards::card_start("<a name='$oApp->id'>$oApp->name</a>");
 	cRenderCards::body_start();
 	?><div 
 			type="appcheckup" 
