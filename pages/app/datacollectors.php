@@ -126,7 +126,7 @@ cRenderCards::body_start();
 cRenderCards::body_end();
 cRenderCards::action_start();
 	cADCommon::button(cADControllerUI::data_collectors($oApp));
-	cRenderMenus::show_apps_menu("change app","datacollectors.php");
+	cRenderMenus::show_apps_menu("change app");
 	$sUrl = cHttp::build_url("$home/pages/trans/apptrans.php", $gsAppQS);
 	cRender::button("transactions", $sUrl);
 cRenderCards::action_end();

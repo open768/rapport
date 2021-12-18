@@ -28,6 +28,7 @@ const USER_ID="3";
 $sAccount = cHeader::get(ACCOUNT_ID);
 $sHost = cHeader::get(HOST_ID);
 $sUser = cHeader::get(USER_ID);
+$sPage = cCommon::filename();
 
 ?>
 <h2>Audit</h2>
@@ -37,7 +38,7 @@ if ($sAccount){
 	$oAccount->account = $sAccount;
 	$oAccount->host = $sHost;
 	if ($sUser == null){
-		$sBaseUrl = cHttp::build_url("audit.php", ACCOUNT_ID, $oAccount->account );
+		$sBaseUrl = cHttp::build_url($sPage, ACCOUNT_ID, $oAccount->account );
 		$sBaseUrl = cHttp::build_url($sBaseUrl, HOST_ID, $oAccount->host );
 		$aUsers = cADAudit::get_known_users($oAccount);
 		?><ul><?php
@@ -67,7 +68,7 @@ if ($sAccount){
 	}else{
 		?><ul><?php
 			foreach ($aAccounts as $oAccount){
-				$sUrl = cHttp::build_url("audit.php", ACCOUNT_ID, $oAccount->account );
+				$sUrl = cHttp::build_url($sPage, ACCOUNT_ID, $oAccount->account );
 				$sUrl = cHttp::build_url($sUrl, HOST_ID, $oAccount->host );
 				?><li><a href="<?=$sUrl?>"><?=$oAccount->account?></a><?php
 			}

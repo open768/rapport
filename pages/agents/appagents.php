@@ -36,20 +36,6 @@ function pr__sort_nodes($a,$b){
 	}
 }
 
-
-function group_by_tier($paNodes){
-	$aTiers = [];
-	
-	foreach ($paNodes as $aNodes)
-		foreach ($aNodes as $oNode){
-			$sTier = $oNode->tierName;
-			if (!isset($aTiers[$sTier])) $aTiers[$sTier] = [];
-			$aTiers[$sTier][] = $oNode;
-		}
-	uksort($aTiers,"strcasecmp");
-	return $aTiers;
-}
-
 function count_nodes($paData){
 	$iCount = 0;
 	foreach ($paData as $aNodes)
@@ -61,9 +47,9 @@ function count_nodes($paData){
 //***********************************************************************
 function render_tier_agents($paNodes){
 	global $oApp;
-	$aTierNodes = group_by_tier($paNodes);
+	$aTierNodes = cADAnalysis::group_nodes_by_tier($paNodes);
 	
-	//-------------------------------------------------------------------------
+	//----list all tiers--------------------------------------------------------
 	cRenderCards::card_start("Tiers");
 	cRenderCards::body_start();
 		echo "<div style='column-count:4'>";
@@ -227,13 +213,13 @@ if (cAD::is_demo()){
 $oApp = cRenderObjs::get_current_app();
 $psAggType = 	cHeader::get(cRender::GROUP_TYPE_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
-$sShowBaseUrl = cHttp::build_url("appagents.php",$sAppQS);
+$sShowBaseUrl = cHttp::build_url(cCommon::filename(),$sAppQS);
 $aMetrics = cADInfraMetric::getInfrastructureMetricTypes();
 if ($psAggType == null) $psAggType = cRender::GROUP_TYPE_NODE;
 
 //####################################################################
-$aData = $oApp->GET_Nodes();
-$iNodes = count_nodes($aData);	
+$aNodes = $oApp->GET_Nodes();
+$iNodes = count_nodes($aNodes);	
 
 //####################################################################
 cRenderCards::card_start();
@@ -242,7 +228,7 @@ cRenderCards::body_start();
 		cCommon::messagebox("no Agents found");
 	else{
 		echo "There are $iNodes Nodes in total";
-		$oCounts = cADAnalysis::analyse_agent_versions($aData);
+		$oCounts = cADAnalysis::analyse_agent_versions($aNodes);
 		$aMacCounts = $oCounts->machineAgents;
 		render_agent_counts("machine", $aMacCounts);
 		$aAppCounts = $oCounts->appAgents;
@@ -251,7 +237,7 @@ cRenderCards::body_start();
 cRenderCards::body_end();
 cRenderCards::action_start();
 	cRenderMenus::show_app_agent_menu();
-	cRenderMenus::show_apps_menu("Show Agents for...", "appagents.php");
+	cRenderMenus::show_apps_menu("Show Agents for...");
 	
 	//********************************************************************
 	cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
@@ -277,11 +263,11 @@ cRenderCards::card_end();
 if ($iNodes > 0){
 	switch($psAggType){
 		case cRender::GROUP_TYPE_TIER:
-			render_tier_agents($aData);
+			render_tier_agents($aNodes);
 			break;
 		case cRender::GROUP_TYPE_NODE:
-			uasort($aData, "pr__sort_nodes");
-			render_node_agents($aData);
+			uasort($aNodes, "pr__sort_nodes");
+			render_node_agents($aNodes);
 			break;
 		default:
 			cCommon::errorbox("unknown groupp mode");

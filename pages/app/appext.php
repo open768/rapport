@@ -71,7 +71,7 @@ cRendercards::action_start();
 	if ($oCred->restricted_login == null){ 
 		//********************************************************************
 		show_tier_menu();
-		cRenderMenus::show_apps_menu("External Calls", "appext.php");
+		cRenderMenus::show_apps_menu("External Calls");
 	}
 echo "</div>";
 echo "</div><p>";

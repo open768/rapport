@@ -33,7 +33,7 @@ cChart::do_header();
 $title ="$oApp->name&gt;Overview";
 
 //####################################################################
-cRenderMenus::show_apps_menu("Show Overview for:","appoverview.php");
+cRenderMenus::show_apps_menu("Show Overview for:");
 cADCommon::button(cADControllerUI::application($oApp));
 
 //####################################################################

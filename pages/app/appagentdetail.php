@@ -72,13 +72,13 @@ $sTitle  = $oMetric->caption;
 //####################################################################
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
-$sDetailRootQS = cHttp::build_url("appagentdetail.php", $sAppQS);
+$sDetailRootQS = cHttp::build_url(cCommon::filename(), $sAppQS);
 
 //####################################################################
 
 cRenderMenus::show_app_agent_menu();
 
-cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url("appagentdetail.php",cRender::METRIC_TYPE_QS,$gsMetricType));
+cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRender::METRIC_TYPE_QS,$gsMetricType));
 
 cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 //####################################################################

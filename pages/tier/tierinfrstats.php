@@ -45,7 +45,7 @@ $title = "$oApp->name&gt;$oTier->name&gt;Infrastructure";
 
 $sAppQs = cRenderQS::get_base_app_QS($oApp);
 $sTierQs = cRenderQS::get_base_tier_QS($oTier);
-$sTierInfraUrl = cHttp::build_url("tierinfrstats.php",$sTierQs);
+$sTierInfraUrl = cHttp::build_url(cCommon::filename(),$sTierQs);
 $sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
 $oApp = cRenderObjs::get_current_app();
 

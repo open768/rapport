@@ -29,7 +29,7 @@ cChart::do_header();
 
 $title ="$oApp->name&gt;Web Real User Monitoring";
 
-cRenderMenus::show_apps_menu("Show Web RUM for:", "apprum.php");
+cRenderMenus::show_apps_menu("Show Web RUM for:");
 cADCommon::button(cADControllerUI::webrum($oApp));
 
 //********************************************************************

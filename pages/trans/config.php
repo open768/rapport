@@ -220,7 +220,7 @@ cRenderCards::body_start();
 	cCommon::messagebox("work in progress");
 cRenderCards::body_end();
 cRenderCards::action_start();
-	cRenderMenus::show_apps_menu("Change Application", "config.php");
+	cRenderMenus::show_apps_menu("Change Application");
 	cADCommon::button(cADControllerUI::app_BT_config($oApp));
 	$sUrl = cHttp::build_url("apptrans.php", $gsAppQS);
 	cRender::button("Back to transactions", $sUrl);

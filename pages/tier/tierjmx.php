@@ -55,7 +55,7 @@ if (!$gsMetric){
 //stuff for later
 $sBaseQS = cRenderQS::get_base_tier_QS($oTier);
 $sBaseQS = cHttp::build_qs($sBaseQS, cRender::METRIC_TYPE_QS, $gsMetric);
-$sBaseUrl = cHttp::build_url("tierjmx.php", $sBaseQS);
+$sBaseUrl = cHttp::build_url(cCommon::filename(), $sBaseQS);
 
 
 //####################################################################

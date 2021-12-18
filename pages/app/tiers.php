@@ -75,7 +75,7 @@ if (cRender::is_list_mode()){
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
 		cRenderCards::body_end();
 		cRenderCards::action_start();
-			cRenderMenus::show_apps_menu("Application Tier Activity for:","tiers.php");
+			cRenderMenus::show_apps_menu("Application Tier Activity for:");
 			cADCommon::button(cADControllerUI::application($oApp));
 			cADCommon::button(cADControllerUI::app_slow_transactions($oApp), "Slow Transactions");
 			$sUrl.= "&".cRender::LIST_MODE_QS;

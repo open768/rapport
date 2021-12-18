@@ -35,7 +35,7 @@ cRenderCards::card_start();
 		cRender::add_filter_box("span[tier]","tier",".mdl-card");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRenderMenus::show_apps_menu("Show Service EndPoints for", "services.php");
+		cRenderMenus::show_apps_menu("Show Service EndPoints for");
 		cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
 	cRenderCards::action_end();
 cRenderCards::card_end();

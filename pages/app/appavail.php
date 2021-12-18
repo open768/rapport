@@ -38,7 +38,7 @@ $oApp = cRenderObjs::get_current_app();
 
 $title= "$oApp->name&gt;Availability";
 
-cRenderMenus::show_apps_menu("Availability", "appavail.php");
+cRenderMenus::show_apps_menu("Availability");
 
 //####################################################################
 //retrieve tiers

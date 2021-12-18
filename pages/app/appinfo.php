@@ -32,7 +32,7 @@ $oApp = cRenderObjs::get_current_app();
 
 $title= "$oApp->name&gt;Information Points";
 
-cRenderMenus::show_apps_menu("Information Points for", "appinfo.php");
+cRenderMenus::show_apps_menu("Information Points for");
 
 
 //####################################################################

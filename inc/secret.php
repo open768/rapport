@@ -20,9 +20,12 @@ class cSecret{
 	const LINKEDIN_CLIENTID = "78y5i1whb7s9ve";
 	const LINKEDIN_SECRET = "A3qzKko0pAIbcOHA";
 	
+	const ENABLE_NR_MONITORING = true;
 	static $NR_DEV ;
 	static $NR_PROD ;
 }
-cSecret::$NR_DEV = new cNewRelicEUMAccount("3356962","322543097","NRJS-f66e15d6a38a9fd5f21", "322543097" );
-cSecret::$NR_PROD = new cNewRelicEUMAccount("3356962","322543097","NRJS-f66e15d6a38a9fd5f21", "322543097" );
+if (cSecret::ENABLE_NR_MONITORING){
+	cSecret::$NR_DEV = new cNewRelicEUMAccount("3356962","322543097","NRJS-f66e15d6a38a9fd5f21", "322543097" );
+	cSecret::$NR_PROD = new cNewRelicEUMAccount("3356962","322543097","NRJS-f66e15d6a38a9fd5f21", "322543097" );
+}
 ?>

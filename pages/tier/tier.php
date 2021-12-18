@@ -65,7 +65,7 @@ cDebug::flush();
 				cRenderMenus::show_tier_functions();
 				cDebug::flush();
 				
-				cRenderMenus::show_tier_menu("Change Tier", "tier.php");
+				cRenderMenus::show_tier_menu("Change Tier", cCommon::filename());
 				cDebug::flush();
 			}
 		cRenderCards::action_end();

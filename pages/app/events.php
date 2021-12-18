@@ -88,7 +88,7 @@ cRenderCards::card_start("Summary");
 		cADCommon::button(cADControllerUI::app_health_rules($oApp), "Health Rules");
 		cADCommon::button(cADControllerUI::app_health_policies($oApp), "Health Policies");
 		cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
-		cRenderMenus::show_apps_menu("Events", "events.php");
+		cRenderMenus::show_apps_menu("Events");
 	cRenderCards::action_end();
 cRenderCards::card_end();
 

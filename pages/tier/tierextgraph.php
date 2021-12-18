@@ -61,9 +61,9 @@ cRenderCards::action_start();
 	if ($oCred->restricted_login == null){
 		cRenderMenus::show_app_functions();
 		cRenderMenus::show_tier_functions();
-		cRenderMenus::show_tier_menu("Change Tier to", "tierextgraph.php");
+		cRenderMenus::show_tier_menu("Change Tier to", cCommon::filename());
 	}
-	cRender::button("show as table", "tierextcalls.php?$gsTierQs");
+	cRender::button("show as table", cCommon::filename()."?$gsTierQs");
 	cADCommon::button(cADControllerUI::tier_slow_remote($oApp, $oTier),"Slow Remote Calls");
 cRenderCards::action_end();
 cRenderCards::card_end();

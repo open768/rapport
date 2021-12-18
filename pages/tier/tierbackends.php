@@ -57,7 +57,7 @@ cRenderCards::card_start();
 	cRenderCards::action_start();
 		if ($oCred->restricted_login == null){
 			cRenderMenus::show_tier_functions();
-			cRenderMenus::show_tier_menu("Change Tier", "tierbackends.php");
+			cRenderMenus::show_tier_menu("Change Tier", cCommon::filename());
 			cDebug::flush();
 		}
 		cRenderCards::action_end();

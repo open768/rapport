@@ -112,7 +112,7 @@ $.widget( "ck.adtierothertrans",{
 		oElement.empty();
 		if (poData.trans.id == null || poData.names.length == 0){
 			oElement.append(cRender.messagebox("no overflow transaction found"));
-			setTimeout( function(){oElement.closest(".mdl-card").remove();}, 500);
+			cRenderMDL.fade_element_and_hide_card(oElement);
 		}else{
 			oElement.append("<b>The following transactions are in 'All Other Traffic' for this tier</b><br>");
 			var sHTML = "<table border='1' cellspacing='0' cellpadding='3'>";

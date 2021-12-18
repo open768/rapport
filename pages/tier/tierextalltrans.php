@@ -40,7 +40,6 @@ cChart::do_header();
 
 //####################################################################
 $sExtQS = cHttp::build_qs($sAppQS, cRender::BACKEND_QS, $sExt);
-$sUrl = cHttp::build_url("appexttiers.php", $sExtQS);
 
 //####################################################################
 cRenderCards::card_start("All Calls from $oTier->name to $sExt");

@@ -70,6 +70,7 @@ class cRender{
 	//************************************************************
 	const IGNORE_REF_QS = "igr";
 	const LIST_MODE_QS = "list";
+	const TOTALS_QS = "totl";
 	
 	//************************************************************
 	const LOCATION_QS="loc";
@@ -127,6 +128,7 @@ class cRender{
 	const TIME_DURATION_QS = "tdur";
 	const LAST_YEAR_QS = "lyq";
 	
+	const TYPE_QS  = "typ";
 	//**************************************************************************
 	public static $MAX_ITEMS_PER_PAGE = 20;
 	public static $FORCE_FILTERBOX_DISPLAY = false;

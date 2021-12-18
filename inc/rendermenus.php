@@ -43,7 +43,7 @@ class cRenderMenus{
 	}
 
 	//******************************************************************************************
-	public static function show_apps_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	public static function show_apps_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;
 	
 		cDebug::enter();
@@ -55,6 +55,8 @@ class cRenderMenus{
 		}
 		
 		$sApps_fragment = self::get_apps_fragment();
+		if ($psURLFragment == null)
+			$psURLFragment=cCommon::filename();
 
 		//TODO change to a DIV - widget can replace with a select menu
 		?>

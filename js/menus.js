@@ -88,7 +88,8 @@ var cTopMenu={
 			this.pr__add_to_expansion(oContentDiv, "Search", sHome +"/pages/dash/search.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Agents");
-			this.pr__add_to_expansion(oContentDiv, "Installed", sAllPrefixUrl+"/allagentversions.php");
+			this.pr__add_to_expansion(oContentDiv, "All Agents", sHome+"/pages/agents/allagentversions.php");
+			this.pr__add_to_expansion(oContentDiv, "Count By Application", sHome+"/pages/agents/countagents.php");
 			this.pr__add_to_expansion(oContentDiv, "Downloads", sUtilPrefixUrl+"/appdversions.php");
 
 		oContentDiv = this.pr__add_expansion(poDiv, "Servers");

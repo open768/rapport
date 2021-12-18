@@ -80,7 +80,7 @@ $oCred = cRenderObjs::get_AD_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_app_functions();
 	cRenderMenus::show_tier_functions();
-	cRenderMenus::show_tier_menu("Change Tier to", "tierextcalls.php");
+	cRenderMenus::show_tier_menu("Change Tier to", cCommon::filename());
 }
 
 

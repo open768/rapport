@@ -44,6 +44,7 @@ var cRender={
 	//************************************************************
 	IGNORE_REF_QS : "igr",
 	LIST_MODE_QS : "list",
+	TOTALS_QS : "totl",
 	
 	//************************************************************
 	LOCATION_QS:"loc",
@@ -99,6 +100,7 @@ var cRender={
 	TIME_START_QS : "tsta",
 	TIME_END_QS : "tend",
 	TIME_DURATION_QS : "tdur",
+	TYPE_QS: "typ",
 
 
 	//**************************************************************************
@@ -121,6 +123,11 @@ var cRender={
 		var sLocale = navigator.language;
 		var oFormatter = new Intl.NumberFormat(sLocale);
 		return oFormatter.format(piNum);
+	},
+	
+	//**************************************************************************
+	fade_element: function(poEl){
+		poEl.fadeOut(1000,function(){poEl.remove();});
 	}
 };
 
@@ -159,5 +166,10 @@ var cRenderMDL={
 	body_start:function(){
 		return "<div class='mdl-card__supporting-text'>";
 	},
+	
+	//**************************************************************************
+	fade_element_and_hide_card(poEl){
+		poEl.fadeOut(1000,function(){poEl.closest(".mdl-card").remove();});
+	}
 
 };

@@ -44,7 +44,7 @@ cRenderCards::body_start();
 	cRender::add_filter_box("span[type=tiertrans]","name",".mdl-card");
 cRenderCards::body_end();
 cRenderCards::action_start();
-	cRenderMenus::show_apps_menu("Change Application", "apptrans.php");
+	cRenderMenus::show_apps_menu("Change Application");
 	cADCommon::button(cADControllerUI::businessTransactions($oApp));
 	$sUrl = cHttp::build_url("config.php", $gsAppQS);
 	cRender::button("config", $sUrl);

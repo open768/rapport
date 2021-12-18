@@ -70,7 +70,7 @@ if (cAD::is_demo()){
 		All <?=$oMetricDetails->short?> data for <?=cRender::show_name(cRender::NAME_APP,$oApp)?> Application</option>
 	<optgroup label="Show details of ..">
 	<?php
-		$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQS);
+		$sAllInfraUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
 		foreach ( $aMetrics as $oType){
 			$sType = $oType->type;
 			$sUrl = cHttp::build_url($sAllInfraUrl, cRender::METRIC_TYPE_QS, $sType);

@@ -95,6 +95,7 @@ $.widget( "ck.admenu",{
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
 		var sSrvPrefixUrl = oOptions.home+"/pages/service";
 		var sRumPrefixUrl = oOptions.home+"/pages/rum";
+		var sAgentPrefixUrl = oOptions.home+"/pages/agents";
 		
 		var oSelect ;
 		oSelect = $("<select>");
@@ -104,7 +105,7 @@ $.widget( "ck.admenu",{
 				var oOption = $("<option>",{selected:1,disabled:1}).append(sAppname);
 				oGroup.append(oOption);		
 				
-				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
+				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAgentPrefixUrl+"/appagents.php", oParams));
 				this.pr__addToGroup(oGroup, "Data collectors", cBrowser.buildUrl(sAppPrefixUrl+"/datacollectors.php", oParams));
 				this.pr__addToGroup(oGroup, "Flow Map", cBrowser.buildUrl(sAppPrefixUrl+"/appflowmap.php", oParams));
 				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams));

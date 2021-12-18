@@ -60,9 +60,9 @@ cRenderCards::body_start();
 cRenderCards::body_end();
 cRenderCards::action_start();
 	$sADUrl = cADControllerUI::app_health_rules($oApp);
-	$sBaseUrl = cHttp::build_url("healthrules.php", cRenderQS::get_base_app_QS($oApp));
+	$sBaseUrl = cHttp::build_url(cCommon::filename(), cRenderQS::get_base_app_QS($oApp));
 	cADCommon::button($sADUrl);
-	cRenderMenus::show_apps_menu("Health rules for:","healthrules.php");
+	cRenderMenus::show_apps_menu("Health rules for:");
 	cRender::button("back to events", cHttp::build_url("events.php", cRender::APP_QS, $oApp->name));
 	if (cRender::is_list_mode())
 		cRender::button("show details", $sBaseUrl);

@@ -51,7 +51,7 @@ cRenderCards::card_start();
 	cRenderCards::action_start();
 		cRender::button("Back to MQ nodes", "mq.php");	
 		cRender::button("Back to $sNode", cHttp::build_url("mqnode.php",cRender::NODE_QS, $sNode));	
-		$sUrl = cHttp::build_url("mqqueues.php", cRender::NODE_QS, $sNode);
+		$sUrl = cHttp::build_url(cCommon::filename(), cRender::NODE_QS, $sNode);
 		$sUrl = cHttp::build_qs($sUrl, cRender::SERVER_MQ_MANAGER_QS, $sQManager);
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", $sUrl);
