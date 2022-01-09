@@ -21,6 +21,11 @@ require_once "$home/inc/common.php";
 //*************************************************************************
 cDebug::write("getting details");
 $sType = cHeader::GET(cRender::TYPE_QS);
+$oApp = null;
+try{
+	$oApp = cRenderObjs::get_current_app();
+}catch (Exception $e){}
+
 $aAgents = [];
 
 class cResults{
@@ -35,8 +40,9 @@ class cAgentCount{
 }
 
 class cAgentLine{
-	public $app;
-	public $node;
+	public $tier = null;
+	public $app = null;
+	public $node = null;
 	public $type;
 	public $version;
 	public $hostname;
@@ -50,10 +56,8 @@ function get_application_from_id($psID){
 	global $gaAppIds;
 	if (isset($gaAppIds[$psID]))
 		return $gaAppIds[$psID];
-	elseif ($psID == "")
-		return "<i>No Application</i>";
 	else
-		return "<i>Unknown Application: $psID</i>";
+		return null;
 }
 
 //*************************************************************
@@ -66,7 +70,28 @@ function parse_BuildDate($psInput){
 }
 
 //*************************************************************
-function count_agents($paAgents){
+function count_agent_versions($paAgents){
+	$aCount = [];
+	
+	foreach ($paAgents as $oAgent){
+		$sAgent = $oAgent->type . " - " . $oAgent->version;
+		@$aCount[$sAgent ] ++;		//hide warning with @
+	}
+	
+	ksort($aCount );
+	$aOut = [];
+	foreach ($aCount as $sKey=>$iCount){
+		$oObj = new cAgentCount;
+		$oObj->name = $sKey;
+		$oObj->count = $iCount;
+		$aOut[] = $oObj;
+	}
+	
+	return $aOut;
+}
+
+//*************************************************************
+function count_agent_totals($paAgents){
 	$aCount = [];
 	foreach ($paAgents as $oAgent){
 		$sVer = $oAgent->version;
@@ -87,12 +112,22 @@ function count_agents($paAgents){
 
 //*************************************************************
 function reduce_size($paAgents){
+	global $oApp;
+	
 	$aOut = [];
+	$sLowerApp = null;
+	if ($oApp) $sLowerApp = strtolower($oApp->name);
+	
 	foreach ($paAgents as $oAgent){
 		$sRaw = null;
-		if (property_exists($oAgent,"agentDetails"))
+		if (property_exists($oAgent,"agentDetails")){
+			$oDetails = $oAgent->agentDetails;
+			if ($oDetails->disable || $oDetails->disableMonitoring)
+				continue;
+			
 			if (property_exists($oAgent->agentDetails,"agentVersion"))
 				$sRaw = $oAgent->agentDetails->agentVersion;
+		}
 		
 		if (!$sRaw)		$sRaw = $oAgent->version;
 		$sVer = cADUtil::extract_agent_version($sRaw);
@@ -103,19 +138,32 @@ function reduce_size($paAgents){
 		
 		if (property_exists($oAgent,"agentDetails")){
 			$oDetails = $oAgent->agentDetails;
-			if (property_exists($oAgent, "applicationId"))
-				$oObj->app = new cAdApp($oAgent->applicationName, $oAgent->applicationId);
-			else
-				$oObj->app = ($oAgent->applicationIds==null?"no application":get_application_from_id($oAgent->applicationIds[0]));
+			
+			try{
+				if (property_exists($oAgent, "applicationId"))
+					$oObj->app = new cAdApp($oAgent->applicationName, $oAgent->applicationId);
+				elseif ($oAgent->applicationIds)
+					$oObj->app = new cAdApp(null,$oAgent->applicationIds[0]);
+			}catch (Exception $e){
+				cDebug::extra_debug_warning("unable to create app object: ".$e->getMessage());
+			}
 
 			if (property_exists($oAgent,"applicationComponentNodeName"))
 				$oObj->node = $oAgent->applicationComponentNodeName;
-			else
-				$oObj->node = "unknown node";
+			
 			
 			$oObj->type = $oDetails->type;
 			$oObj->runtime = $oDetails->latestAgentRuntime;
 		}
+		
+		$oObj->tier = @$oAgent->applicationComponentName;
+		
+		if ($oApp)
+			if (!$oObj->app)
+				continue;
+			elseif (strtolower($oObj->app->name) !== $sLowerApp) 
+				continue;
+			
 		$aOut[] = $oObj;
 	}
 	
@@ -140,9 +188,12 @@ cDebug::vardump($aAgents[0]);
 $aReduced = reduce_size($aAgents);
 $oOut = new cResults;
 $oOut->type = $sType;
-if ( ! cHeader::GET(cRender::TOTALS_QS))
+$oOut->counts = count_agent_totals($aReduced);
+if ( cHeader::GET(cRender::TOTALS_QS))
+	$oOut->detail = count_agent_versions($aReduced);
+else
 	$oOut->detail = $aReduced;
-$oOut->counts = count_agents($aReduced);
+
 
 //*************************************************************************
 //* output

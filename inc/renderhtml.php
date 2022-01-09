@@ -160,7 +160,7 @@ class cRenderHtml{
 								</script>
 							</div>
 							<span>
-								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrabout" onclick="document.location.href='<?=$home?>/pages/about.php';return false">About</button>
+								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrabout" onclick="document.location.href='<?=$home?>/pages/about/about.php';return false">About</button>
 							</span>
 							<span>
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
@@ -249,6 +249,17 @@ class cRenderHtml{
 													><span class="material-icons mdl-list__item-icon">launch</span>
 												</a>
 												<span>flowtype</span>
+												<span class="mdl-list__item-sub-title">
+													licensed under the MIT License
+												</span>
+											</span>
+										</li>
+										<li class="mdl-list__item mdl-list__item--three-line">
+											<span class="mdl-list__item-primary-content">
+												<a target="new" href="https://github.com/SheetJS/"
+													><span class="material-icons mdl-list__item-icon">launch</span>
+												</a>
+												<span>SheetJS</span>
 												<span class="mdl-list__item-sub-title">
 													licensed under the MIT License
 												</span>

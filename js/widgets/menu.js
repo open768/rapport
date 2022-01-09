@@ -156,6 +156,7 @@ $.widget( "ck.admenu",{
 
 		//build the params
 		var sAppPrefixUrl = oOptions.home+"/pages/app";
+		var sAgentPrefixUrl = oOptions.home+"/pages/agent";
 		cJquery.setTopZindex(oElement);
 
 		//build the select menu
@@ -166,14 +167,10 @@ $.widget( "ck.admenu",{
 			var oParams = {};
 			oParams[cRender.APP_QS] = sAppname;
 			oParams[cRender.APP_ID_QS] = sAppid;
-			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl(sAppPrefixUrl+"/appagents.php", oParams));
+			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl(sAgentPrefixUrl+"/appagents.php", oParams));
 
 			oParams[cRender.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL;
-			this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl(sAppPrefixUrl+"/appagentdetail.php", oParams));
-			
-			
-			
-			//<option value="<?=$sAgentStatsUrl?>">Activity</option>
+			this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl(sAgentPrefixUrl+"/appagentdetail.php", oParams));
 		
 		//add and make the menu a selectmenu
 		var oThis = this;		

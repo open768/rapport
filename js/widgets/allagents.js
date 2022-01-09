@@ -109,13 +109,18 @@ $.widget( "ck.adallagents",{
 						"id='"+poApp.id+"agents' "+
 						cRender.APP_ID_QS+"='"+poApp.id+"' "+
 						cRender.APP_QS+"='"+poApp.name+"' "+
-						cRender.HOME_QS +"='" + oElement.attr(cRender.HOME_QS) + "' "
-						"' >Please wait..</div>";
-				sHTML += "</DIV>";
+						cRender.HOME_QS +"='" + oElement.attr(cRender.HOME_QS) + "'>" + 
+							"Please wait.." + 
+					"</div>";
+				sHTML += "</div>";
 				sHTML += cRenderMDL.action_start();
-					sHTML += "<div type='admenus' menu='appfunctions' home='"+sHome+"' appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+poApp.id+"menu' style='position: relative;'>"+poApp.name+" .. please wait</div>";
-				sHTML += "</DIV>";				
-			sHTML += "</DIV><p>";
+					sHTML += "<div " + 
+						"type='admenus' menu='appfunctions' home='"+sHome+"' " + 
+						"appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+poApp.id+"menu' style='position: relative;'>"+
+							poApp.name+" .. please wait" + 
+					"</div>";
+				sHTML += "</div>";				
+			sHTML += "</div><p>";
 			oElement.append(sHTML);
 			
 			//- - - render the menus

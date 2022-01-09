@@ -15,15 +15,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //TODO make asynchronous - separate calls for machine/db/app agents
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 
 
 cRenderHtml::header("All Agent Versions");
 cRender::force_login();
-const TIER_WIDTH=150;
-const ID_WIDTH=30;
-const NAME_WIDTH=150;
-const AGENT_WIDTH=150;
 
 
 
@@ -35,11 +30,12 @@ if (cAD::is_demo()){
 }
 
 ?>
-	<script language="javascript" src="<?=$home?>/js/widgets/allagentversions.js"></script>
 	<style>
 		table {table-layout:fixed;}
 		table td {word-wrap:break-word;font-size:10px}
-   </style>
+	</style>
+	<script language="javascript" src="<?=$home?>/js/widgets/allagentversions.js"></script>
+	
 <?php
 
 function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){

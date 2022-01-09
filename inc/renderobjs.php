@@ -59,7 +59,11 @@ class cRenderObjs{
 		cDebug::enter();
 		$sApp = cHeader::get(cRender::APP_QS);
 		$sAID = cHeader::get(cRender::APP_ID_QS);
-		$oApp = self::make_app_obj($sApp, $sAID);
+		$oApp = null;
+		if (!$sApp && !$sAID)
+			cDebug::extra_debug_warning("no current app");
+		else
+			$oApp = self::make_app_obj($sApp, $sAID);
 		cDebug::leave();
 		
 		return $oApp;
@@ -67,10 +71,16 @@ class cRenderObjs{
 
 	public static function get_current_tier(){
 		cDebug::enter();
+		$oObj = null;
 		$oApp = self::get_current_app();
-		$sTier = cHeader::get(cRender::TIER_QS);
-		$sTID = cHeader::get(cRender::TIER_ID_QS);
-		$oObj = self::make_tier_obj($oApp, $sTier, $sTID);
+		if ($oApp){
+			$sTier = cHeader::get(cRender::TIER_QS);
+			$sTID = cHeader::get(cRender::TIER_ID_QS);
+			if (!$sTier && !$sTID)
+				cDebug::extra_debug_warning("no current tier");
+			else
+				$oObj = self::make_tier_obj($oApp, $sTier, $sTID);
+		}
 		cDebug::leave();
 		return $oObj;
 	}

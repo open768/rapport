@@ -84,6 +84,7 @@ $.widget( "ck.adallagentversions",{
 	get_url: function (){
 		var oElement = this.element;
 		var oParams = {};
+		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
 		oParams[ cRender.TYPE_QS ] = oElement.attr(cRender.TYPE_QS);
 		oParams[ cRender.TOTALS_QS ] = oElement.attr(cRender.TOTALS_QS);
 		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
@@ -98,7 +99,7 @@ $.widget( "ck.adallagentversions",{
 		oElement.empty();
 		//-----------------------------------------------------------------------------------
 		var aCounts = poData.counts;
-		if (aCounts==null){
+		if (aCounts==null || aCounts.length==0){
 			oElement.append(cRender.messagebox("<i>no agents found</i>"));
 			return;
 		}
@@ -117,41 +118,96 @@ $.widget( "ck.adallagentversions",{
 		oElement.append( sHTML );
 		
 		//-----------------------------------------------------------------------------------
-		if (!oElement.attr(cRender.TOTALS_QS)){
-			oElement.append($("<div>",{class:"note"}).append("click on table headings to sort"));
-			
-			//-----------------------------------------------------------------------------------
-			var sID = oElement.attr("id") + "T";
-			sHTML = "<table border='1' class='maintable' cellspacing='0' id='"+ sID +"' width='100%'>";
-				iTot = 0;
-				sHTML += "<thead><TR><th width='200'>Application</th><th width='100'>Node</th><th width='100'>hostname</th><th width='100'>Version</th><th width='*'>Runtime</th></tr></thead>";
-				sHTML += "<tbody>";
-				var aItems = poData.detail;
-				for (var i=0; i<aItems.length; i++){
-					var oItem = aItems[i];
-					var sApp ;
-					if (!oItem.app)
-						sApp = "no Application";
-					else if (typeof oItem.app === "string")
-						sApp = oItem.app;
-					else
-						sApp = oItem.app.name;
-					
-					sHTML += "<TR>" +
-						"<td>" + sApp + "</td>" + 
-						"<td>" + oItem.node + "</td>" + 
-						"<td>" + oItem.hostname + "</td>" + 
-						"<td>" + oItem.version + "</td>" + 
-						"<td>" + oItem.runtime + "</td>" + 
-					"</tr>";
-					iTot += oItem.count;
-				}
-			sHTML += "</tbody></table>";
-			oElement.append( sHTML );
-			
+		if (oElement.attr(cRender.TOTALS_QS))
+			this.render_agent_totals(poData.detail);
+		else
+			this.render_details(poData.detail);
+	},
+
+	//*******************************************************************
+	render_agent_totals: function(paDetails){
+		var oElement = this.element;
+		var oThis = this;
 		
-			$("#"+sID).tablesorter();
+		var sHTML = "<p>&nbsp;<p>Agent Counts:<div style='border-style:solid;column-count:3' >";
+
+		//-----------------------------------------------------------------------------------
+		for (var i=0; i<paDetails.length; i++){
+			var oItem = paDetails[i];
+			sHTML += cRenderW3.tag(oItem.name +" ("+ oItem.count + ")") + " ";
 		}
+		sHTML += "</div>";
+		oElement.append( sHTML );
+	},
+
+	
+	//*******************************************************************
+	render_details: function(paDetails){
+		var oElement = this.element;
+		var oThis = this;
 		
-	}
+		//-----------------------------------------------------------------------------------
+		var sID = oElement.attr("id") + "T";
+		var oNote = $("<div>",{class:"note"});
+		oNote.append("click on table headings to sort   ");
+		
+		var oBtn = $("<button>");
+		oBtn.append("copy table to clipboard");
+		oBtn.click(
+			function(){
+				cBrowser.copy_to_clipboard(sID);
+			}
+		);
+		oNote.append(oBtn);
+		
+		oElement.append(oNote);
+		
+		//-----------------------------------------------------------------------------------
+		var sHTML = "<table border='1' class='maintable' cellspacing='0' id='"+ sID +"' width='100%'>";
+			var iTot = 0;
+			sHTML += "<thead><TR>" + 
+				"<th width='120'>Agent Type</th>" + 
+				"<th width='100'>Application</th>" + 
+				"<th width='100'>Tier</th>" + 
+				"<th width='150'>Node</th>" + 
+				"<th width='100'>Hostname</th>" + 
+				"<th width='100'>Version</th>" + 
+				"<th width='*'  >Runtime</th>" + 
+			"</tr></thead>";
+			sHTML += "<tbody>";
+			for (var i=0; i<paDetails.length; i++){
+				var oItem = paDetails[i];
+				var sApp;
+				if (!oItem.app)
+					sApp = "";
+				else if (typeof oItem.app === "string")
+					sApp = oItem.app;
+				else
+					sApp = oItem.app.name;
+				
+				var sTier = "";
+				if (oItem.tier) sTier = oItem.tier;
+				
+				var sNode = "";
+				if (oItem.node) sNode = oItem.node;
+				
+				sHTML += "<TR>" +
+					"<td>" + oItem.type + "</td>" + 
+					"<td>" + sApp + "</td>" + 
+					"<td>" + sTier + "</td>" + 
+					"<td>" + sNode + "</td>" + 
+					"<td>" + oItem.hostname + "</td>" + 
+					"<td>" + oItem.version + "</td>" + 
+					"<td>" + oItem.runtime + "</td>" + 
+				"</tr>";
+				iTot += oItem.count;
+			}
+		sHTML += "</tbody></table>";
+		oElement.append( sHTML );
+		
+	
+		$("#"+sID).tablesorter();
+	},
+	
+	
 });
