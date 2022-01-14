@@ -5,15 +5,11 @@ Desktop.ini
 
 # project files
 \[cache\]/
-\[docs\]/
-\[db\]/
 \[sessions\]/
 css/jquery-ui
 css/app.cs
-static/
 images/src
 inc/inc-secret.php
 css/app-ap.css
 css/app.css
-*.db
-[db]/objstore.db
+\[db\]/objstore.db
