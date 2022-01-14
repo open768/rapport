@@ -6,12 +6,14 @@ Desktop.ini
 # project files
 \[cache\]/
 \[docs\]/
+\[db\]/
 \[sessions\]/
 css/jquery-ui
 css/app.cs
 static/
 images/src
-inc/inc-secret AP.php
 inc/inc-secret.php
 css/app-ap.css
 css/app.css
+*.db
+[db]/objstore.db

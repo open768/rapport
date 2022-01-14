@@ -21,7 +21,6 @@ cRenderHtml::header("All Agent Versions");
 cRender::force_login();
 
 
-
 //********************************************************************
 if (cAD::is_demo()){
 	cCommon::errorbox("function not supported for Demo");
@@ -35,7 +34,6 @@ if (cAD::is_demo()){
 		table td {word-wrap:break-word;font-size:10px}
 	</style>
 	<script language="javascript" src="<?=$home?>/js/widgets/allagentversions.js"></script>
-	
 <?php
 
 function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
@@ -63,7 +61,7 @@ function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
 //####################################################################
 cRenderCards::card_start("Contents");
 	cRenderCards::body_start();
-		cCommon::messagebox("may show disabled nodes - please confirm in controller");
+		cCommon::messagebox("may show disabled nodes - please confirm in controller. This page uses cached data");
 		?>
 		<ul>
 			<li><a href="#m">Machine Agents</a>
@@ -75,10 +73,10 @@ cRenderCards::card_start("Contents");
 		<?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRender::button("Back to Agents", "countagents.php");	
-		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
 		cRender::button("latest AppDynamics versions", "../util/appdversions.php");	
+		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
 		cADCommon::button(cADControllerUI::agents(), "Agent Settings");
+		cRender::button("Agents per App", "countagents.php");	
 		if (cHeader::GET(cRender::TOTALS_QS))
 			cRender::button("show details", cCommon::filename());
 		else
@@ -106,4 +104,3 @@ add_card("Database Agents", "d", "db", "../db/alldb.php");
 //####################################################################
 cRenderHtml::footer();
 ?>
- 

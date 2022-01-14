@@ -64,7 +64,7 @@ function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
 //************************************************************************************
 cRenderCards::card_start("Contents");
 	cRenderCards::body_start();
-		cCommon::messagebox("may show disabled nodes - please confirm in controller");
+		cCommon::messagebox("may show disabled nodes - please confirm in controller. Page uses cacheing");		
 		?>
 		<ul>
 			<li><a href="#m">Machine Agents</a>

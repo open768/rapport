@@ -45,8 +45,11 @@ class cAgentLine{
 	public $node = null;
 	public $type;
 	public $version;
+	public $raw_version;
 	public $hostname;
 	public $runtime;
+	public $id;
+	public $installDir;
 }
 
 $gaAppIds = cADUtil::get_application_ids();
@@ -113,6 +116,7 @@ function count_agent_totals($paAgents){
 //*************************************************************
 function reduce_size($paAgents){
 	global $oApp;
+	global $sType;
 	
 	$aOut = [];
 	$sLowerApp = null;
@@ -134,10 +138,13 @@ function reduce_size($paAgents){
 		
 		$oObj = new cAgentLine;
 		$oObj->version = $sVer;
+		$oObj->raw_version = $sRaw;
 		$oObj->hostname = $oAgent->hostName;
 		
 		if (property_exists($oAgent,"agentDetails")){
 			$oDetails = $oAgent->agentDetails;
+			$oObj->id = $oDetails->id;
+			$oObj->installDir = $oDetails->installDir;
 			
 			try{
 				if (property_exists($oAgent, "applicationId"))
@@ -154,6 +161,9 @@ function reduce_size($paAgents){
 			
 			$oObj->type = $oDetails->type;
 			$oObj->runtime = $oDetails->latestAgentRuntime;
+		}elseif ($sType === "db"){
+			$oObj->type = "DB_AGENT";
+			$oObj->id = $oAgent->id;
 		}
 		
 		$oObj->tier = @$oAgent->applicationComponentName;
