@@ -11,6 +11,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
+$js_extra = "$jsinc/extra";
 
 //#######################################################################
 //#######################################################################
@@ -22,11 +23,9 @@ class cRenderHtml{
 
 	//**************************************************************************
 	public static function header ($psTitle){
-		global $jsinc, $home;
+		global $jsinc, $js_extra, $home;
 		cDebug::enter();
 		$bLoggedin = true;
-
-
 
 		//-------------------------------------------------------------
 		//getting credentials to pre-fill the form
@@ -49,9 +48,9 @@ class cRenderHtml{
 					return;				
 				}
 			?>
-			<link rel="stylesheet" href="<?=$jsinc?>/jquery-spinner/css/gspinner.min.css">			
-			<link rel="stylesheet" href="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.css">			
-			<link rel="stylesheet" href="<?=$jsinc?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-spinner/css/gspinner.min.css">			
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
 			
 			<!-- google fonts fonts.googleapis.com -->			
 			<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
@@ -71,17 +70,17 @@ class cRenderHtml{
 			<!-- End Google Tag Manager -->
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 			
-			<script src="<?=$jsinc?>/ck-inc/debug.js"></script>
-			<script src="<?=$jsinc?>/jquery/jquery-3.2.1.min.js"></script>
-			<script src="<?=$jsinc?>/jquery-ui/jquery-ui.min.js"></script>
-			<script src="<?=$jsinc?>/tablesorter/jquery.tablesorter.min.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/jquery-inview/jquery.inview.min.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/jquery-visible/jquery.visible.min.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/jquery-spinner/g-spinner.min.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/jquery-qtip/jquery.qtip.min.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/jquery-flowtype/flowtype.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery/jquery-3.2.1.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-ui/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/tablesorter/jquery.tablesorter.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-inview/jquery.inview.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-visible/jquery.visible.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-spinner/g-spinner.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-flowtype/flowtype.js"></script>
+			<script type="text/javascript" src="<?=$js_extra?>/bean/bean.js"></script>
 
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/common.js"></script>
