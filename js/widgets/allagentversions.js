@@ -147,7 +147,7 @@ $.widget( "ck.adallagentversions",{
 		var oThis = this;
 		
 		//-----------------------------------------------------------------------------------
-		var sID = oElement.attr("id") + "T";
+		var sTableID = oElement.attr("id") + "T";
 		var oNote = $("<div>",{class:"note"});
 		oNote.append("click on table headings to sort   ");
 		
@@ -155,7 +155,7 @@ $.widget( "ck.adallagentversions",{
 		oBtn.append("copy table to clipboard");
 		oBtn.click(
 			function(){
-				cBrowser.copy_to_clipboard(sID);
+				cBrowser.copy_to_clipboard(sTableID);
 			}
 		);
 		oNote.append(oBtn);
@@ -163,20 +163,23 @@ $.widget( "ck.adallagentversions",{
 		oElement.append(oNote);
 		
 		//-----------------------------------------------------------------------------------
-		var sHTML = "<table border='1' class='maintable' cellspacing='0' id='"+ sID +"' width='100%'>";
+		var sHTML = "<TABLE border='1' class='maintable' cellspacing='0' id='"+ sTableID +"' width='100%'>";
 			var iTot = 0;
-			sHTML += "<thead><TR>" + 
-				"<th width='120'>Agent Type</th>" + 
+			sHTML += "<THEAD><TR>" + 
+				"<th width='50'>Agent Type</th>" + 
 				"<th width='100'>Application</th>" + 
 				"<th width='100'>Tier</th>" + 
-				"<th width='150'>Node</th>" + 
+				"<th width='100'>Node</th>" + 
 				"<th width='100'>Hostname</th>" + 
-				"<th width='100'>Version</th>" + 
+				"<th width='70'>Version</th>" + 
 				"<th width='*'  >Runtime</th>" + 
-			"</tr></thead>";
+			"</TR></THEAD>";
 			sHTML += "<tbody>";
 			for (var i=0; i<paDetails.length; i++){
+				
 				var oItem = paDetails[i];
+				
+				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 				var sApp;
 				if (!oItem.app)
 					sApp = "";
@@ -191,22 +194,31 @@ $.widget( "ck.adallagentversions",{
 				var sNode = "";
 				if (oItem.node) sNode = oItem.node;
 				
+				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 				sHTML += "<TR>" +
-					"<td>" + oItem.type + "</td>" + 
+					"<td><p class='w3-tooltip' style='font-size:10px'>" + 
+						oItem.type + 
+						"<span class='w3-text w3-tag' style='position:absolute;left:0;bottom:18px'>" + oItem.installDir + "</span>" +
+					"</p></td>" + 
 					"<td>" + sApp + "</td>" + 
 					"<td>" + sTier + "</td>" + 
 					"<td>" + sNode + "</td>" + 
 					"<td>" + oItem.hostname + "</td>" + 
-					"<td>" + oItem.version + "</td>" + 
+					"<td><p class='w3-tooltip' style='font-size:10px'>" + 
+						oItem.version + 
+						"<span class='w3-text w3-tag' style='position:absolute;left:0;bottom:18px'>" + oItem.raw_version + "</span>" +
+					"</p></td>" + 
 					"<td>" + oItem.runtime + "</td>" + 
 				"</tr>";
+				
+				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 				iTot += oItem.count;
 			}
 		sHTML += "</tbody></table>";
 		oElement.append( sHTML );
 		
 	
-		$("#"+sID).tablesorter();
+		$("#"+sTableID).tablesorter();
 	},
 	
 	
