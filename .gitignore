@@ -1,15 +1,14 @@
 # Windows files
 Thumbs.db
-ehthumbs.db
 Desktop.ini
 
 # project files
 \[cache\]/
+\[db\]/
 \[sessions\]/
+/vendor/
 css/jquery-ui
-css/app.cs
 images/src
-inc/inc-secret.php
-css/app-ap.css
-css/app.css
-\[db\]/objstore.db
+composer.lock
+secret.php
+objstore.db
