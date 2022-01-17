@@ -1,0 +1,21 @@
+{
+    "name": "open768/rapport",
+    "description": "Rapport application - focussed seful at a glance information about your appdynamics controller",
+    "type": "project",
+    "license": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License",
+    "authors": [
+        {
+            "name": "sunil",
+            "email": "cluck@chickenkatsu.co.uk"
+        }
+    ],
+    "require": {
+        "oomphinc/composer-installers-extender": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "oomphinc/composer-installers-extender": true
+        }
+    }
+}
