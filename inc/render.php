@@ -52,6 +52,7 @@ class cRender{
 	const NODE_QS = "nd";
 	const FILTER_NODE_QS = "fnqs";
 	const NODE_ID_QS = "ndid";
+	const NODE_IDS_QS = "ndids";
 	
 	const TITLE_QS = "tit";
 	const METRIC_QS = "met";
@@ -71,6 +72,8 @@ class cRender{
 	const IGNORE_REF_QS = "igr";
 	const LIST_MODE_QS = "list";
 	const TOTALS_QS = "totl";
+	const DONT_SHOW_TOTAL_QS = "dstot";
+	const DONT_CLOSE_CARD_QS = "dclcr"; 
 	
 	//************************************************************
 	const LOCATION_QS="loc";
@@ -79,6 +82,7 @@ class cRender{
 	const DASH_ID_QS ="dai";
 	const DASH_NAME_QS ="dan";
 	const DASH_URL_TEMPLATE = "dut";
+	
 	//************************************************************
 	const GROUP_TYPE_QS ="gtq";
 	const GROUP_TYPE_NODE ="n";
@@ -92,7 +96,6 @@ class cRender{
 	
 	//************************************************************
 	const HEALTH_ID_QS ="hi";
-	
 	const HOME_QS = "home";
 	const LABEL_QS = "lbl";
 	
