@@ -1,4 +1,5 @@
 'use strict';
+'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //#
@@ -26,6 +27,7 @@ var cRender={
 	NODE_QS : "nd",
 	FILTER_NODE_QS : "fnqs",
 	NODE_ID_QS : "ndid",
+	NODE_IDS_QS : "ndids",
 	
 	TITLE_QS : "tit",
 	METRIC_QS : "met",
@@ -45,6 +47,8 @@ var cRender={
 	IGNORE_REF_QS : "igr",
 	LIST_MODE_QS : "list",
 	TOTALS_QS : "totl",
+	DONT_SHOW_TOTAL_QS : "dstot",
+	DONT_CLOSE_CARD_QS : "dclcr", 
 	
 	//************************************************************
 	LOCATION_QS:"loc",
@@ -53,6 +57,7 @@ var cRender={
 	DASH_ID_QS :"dai",
 	DASH_NAME_QS :"dan",
 	DASH_URL_TEMPLATE : "dut",
+	
 	//************************************************************
 	GROUP_TYPE_QS :"gtq",
 	GROUP_TYPE_NODE :"n",
@@ -66,7 +71,6 @@ var cRender={
 	
 	//************************************************************
 	HEALTH_ID_QS :"hi",
-	
 	HOME_QS : "home",
 	LABEL_QS : "lbl",
 	
@@ -100,6 +104,7 @@ var cRender={
 	TIME_START_QS : "tsta",
 	TIME_END_QS : "tend",
 	TIME_DURATION_QS : "tdur",
+	LAST_YEAR_QS:"lyq",
 	TYPE_QS: "typ",
 
 
@@ -108,6 +113,19 @@ var cRender={
 		return "<div class='w3-panel w3-blue w3-round-large w3-padding-16 w3-leftbar'>"+psMsg+"</div>";
 	 },
 	 
+	//**************************************************************************
+	button: function(psCaption, psUrl){
+		var sClass = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect";
+		var sHTML = 
+			"<button "+
+				"class='" + sClass + "' " +
+				"onclick='window.stop();document.location=\"" +psUrl + "\";return false;'>" + 
+					psCaption +
+			"</button>";
+		return sHTML;
+	},
+		
+	
 	//**************************************************************************
 	 put_in_wbrs:function(psInput, piInterval=20){
 		if (psInput.indexOf(" ") > 0)
