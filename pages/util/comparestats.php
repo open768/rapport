@@ -41,7 +41,7 @@ if (cAD::is_demo()){
 
 ?>
 <LINK rel="stylesheet" type="text/css" href="<?=$jsinc?>/jquery-datetimepicker/jquery.datetimepicker.min.css" >
-<script language="javascript" src="<?=$home?>/js/widgets/comparestats.js"></script>
+<script language="javascript" src="<?=$jsWidgets?>/comparestats.js"></script>
 <script language="javascript" src="<?=$jsinc?>/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
 <?php
 

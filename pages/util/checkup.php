@@ -22,7 +22,7 @@ cRender::force_login();
 $aResponse = cADController::GET_all_Applications();
 
 //####################################################################
-?><script language="javascript" src="<?=$home?>/js/widgets/appcheckup.js"></script><?php
+?><script language="javascript" src="<?=$jsWidgets?>/appcheckup.js"></script><?php
 
 cRenderCards::card_start("Checkup");
 cRenderCards::body_start();

@@ -50,7 +50,7 @@ if (cAD::is_demo()){
 ?><h2>Synthetics for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
 
 <script src="<?=$jsinc?>/uri-parser/parse.js"></script>
-<script src="<?=$home?>/js/widgets/synthetics.js"></script>
+<script src="<?=$jsWidgets?>/synthetics.js"></script>
 <div id="container">Loading Synthetic data...</div>
 <script>
 $( function(){

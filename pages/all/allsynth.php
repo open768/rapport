@@ -40,7 +40,7 @@ if (cAD::is_demo()){
 
 //####################################################################
 ?><h2>All Synthetics</h2>
-<script src="<?=$home?>/js/widgets/synthetics.js"></script>
+<script src="<?=$jsWidgets?>/synthetics.js"></script>
 <div id="container">
 <?php
 	$aResponse = cADController::GET_all_Applications();

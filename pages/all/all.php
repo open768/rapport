@@ -51,7 +51,7 @@ switch($sMetricType){
 cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
 cChart::do_header();
-?><script language="javascript" src="<?=$home?>/js/widgets/allapps.js"></script><?php
+?><script language="javascript" src="<?=$jsWidgets?>/allapps.js"></script><?php
 
 //####################################################################
 cRenderCards::card_start();

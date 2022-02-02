@@ -35,7 +35,7 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
-?><script language="javascript" src="<?=$home?>/js/widgets/tierothertrans.js"></script><?php
+?><script language="javascript" src="<?=$jsWidgets?>/tierothertrans.js"></script><?php
 
 //********************************************************************
 cRenderCards::card_start();
