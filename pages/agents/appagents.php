@@ -32,7 +32,7 @@ if (cAD::is_demo()){
 		table {table-layout:fixed;}
 		table td {word-wrap:break-word;font-size:10px}
 	</style>
-	<script language="javascript" src="<?=$home?>/js/widgets/allagentversions.js"></script>
+	<script language="javascript" src="<?=$jsWidgets?>/allagentversions.js"></script>
 	
 <?php
 
@@ -43,19 +43,30 @@ function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
 	
 	cRenderCards::card_start("<a name='$psAnchor'>$psCaption</a>");
 	cRenderCards::body_start();
-	?>
-		<div 
+		if ($psType == "app"){
+			$sUrl = cHttp::build_url("check_historical.php", cRender::APP_ID_QS, $oApp->id);
+			cRender::button("clear historical agents", $sUrl);
+			echo "<p>";
+		}
+		?><div 
 			type="widget" 
 			<?=cRender::APP_ID_QS?>='<?=$oApp->id?>' 
 			<?=cRender::HOME_QS?>='<?=$home?>' 
 			<?=cRender::TYPE_QS?>='<?=$psType?>'
 			<?=cRender::TOTALS_QS?>='<?=cHeader::GET(cRender::TOTALS_QS)?>'
-				>Please Wait...</div>
-	<?php
+				>Please Wait...
+		</div><?php
 	cRenderCards::body_end();
-	if ($psGoUrl){
+	$bShowActions = false;
+	if ($psGoUrl || $psType == "app") $bShowActions = true;
+		
+	if ($bShowActions){
 		cRenderCards::action_start();
-			cRender::button($psCaption, $psGoUrl);	
+			if($psGoUrl) cRender::button($psCaption, $psGoUrl);	
+			if ($psType == "app"){
+				$sUrl = cHttp::build_url("check_historical.php", cRender::APP_ID_QS, $oApp->id);
+				cRender::button("clear historical agents", $sUrl);
+			}
 		cRenderCards::action_end();
 	}
 	cRenderCards::card_end();

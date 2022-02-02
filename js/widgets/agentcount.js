@@ -82,10 +82,11 @@ $.widget( "ck.adagentcount",{
 		var aResponse = poHttp.response;
 		if (aResponse.length == 0 ){
 			oElement.append(cRender.messagebox("<i>no agents found</i>"));
-			if (oElement.attr(cRender.TOTALS_QS))
-				cRender.fade_element(oElement);
-			else
-				cRenderMDL.fade_element_and_hide_card(oElement);
+			if (!oElement.attr(cRender.DONT_CLOSE_CARD_QS))
+				if (oElement.attr(cRender.TOTALS_QS))
+					cRender.fade_element(oElement);
+				else
+					cRenderMDL.fade_element_and_hide_card(oElement);
 		}else{
 			oElement.empty();
 			var sTotals = oElement.attr(cRender.TOTALS_QS);
@@ -105,6 +106,7 @@ $.widget( "ck.adagentcount",{
 		
 		var oParams = {};
 		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
 		oParams[ cRender.TOTALS_QS ] = oElement.attr(cRender.TOTALS_QS);
 		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
 		var sUrl = cBrowser.buildUrl(sBaseUrl, oParams);		
@@ -125,7 +127,10 @@ $.widget( "ck.adagentcount",{
 					sHTML += "<TR>";
 						var sTier = poItem.tier;
 						var sApp = oElement.attr(cRender.APP_QS);
-						if (sTier === "Totals") sTier = "<b>Totals for "+ sApp +" application</b>";
+						if (sTier === "Totals"){
+							if (oElement.attr(cRender.DONT_SHOW_TOTAL_QS)) return;
+							sTier = "<b>Totals for "+ sApp +" application</b>";
+						}
 						sHTML += "<TD align='right' width='400'>" + sTier + "</TD>";
 						sHTML += "<TD width='*'>";
 							poItem.counts.forEach(
@@ -149,20 +154,22 @@ $.widget( "ck.adagentcount",{
 		oElement.empty();
 		var sHTML = "";
 		paData.forEach(
-				function(poItem){
-						var sTier = poItem.tier;
-						var sApp = oElement.attr(cRender.APP_QS);
-						if (sTier === "Totals") sTier = sApp;
-						sHTML += "<TD align='right' width='400'>" + sTier + "</TD>";
-						sHTML += "<TD width='*'>";
-							poItem.counts.forEach(
-								function (poCount){
-									sHTML += cRenderW3.tag(poCount.type +":"+ poCount.count);
-								}
-							);
-						sHTML += "</TD>";
-				}
-			);
+			function(poItem){
+				var sApp = oElement.attr(cRender.APP_QS);
+				var oParams = {};
+				oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+				var sUrl = cBrowser.buildUrl("appagents.php", oParams);
+				
+				sHTML += "<TD align='right' width='400'><a href='" + sUrl + "'>" + sApp + "</a></TD>";
+				sHTML += "<TD width='*'>";
+					poItem.counts.forEach(
+						function (poCount){
+							sHTML += cRenderW3.tag(poCount.type +":"+ poCount.count);
+						}
+					);
+				sHTML += "</TD>";
+			}
+		);
 		
 		oElement.append(sHTML);
 	}	

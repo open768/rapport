@@ -163,14 +163,14 @@ $.widget( "ck.adallagentversions",{
 		oElement.append(oNote);
 		
 		//-----------------------------------------------------------------------------------
-		var sHTML = "<TABLE border='1' class='maintable' cellspacing='0' id='"+ sTableID +"' width='100%'>";
+		var sHTML = "<TABLE border='1' cellpadding='2' cellspacing='0' id='"+ sTableID +"' width='100%'  style='font-size:10px'>";
 			var iTot = 0;
 			sHTML += "<THEAD><TR>" + 
-				"<th width='50'>Agent Type</th>" + 
+				"<th width='100'>Agent Type</th>" + 
 				"<th width='100'>Application</th>" + 
 				"<th width='100'>Tier</th>" + 
-				"<th width='100'>Node</th>" + 
-				"<th width='100'>Hostname</th>" + 
+				"<th width='150'>Node</th>" + 
+				"<th width='150'>Hostname</th>" + 
 				"<th width='70'>Version</th>" + 
 				"<th width='*'  >Runtime</th>" + 
 			"</TR></THEAD>";
@@ -196,10 +196,7 @@ $.widget( "ck.adallagentversions",{
 				
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 				sHTML += "<TR>" +
-					"<td><p class='w3-tooltip' style='font-size:10px'>" + 
-						oItem.type + 
-						"<span class='w3-text w3-tag' style='position:absolute;left:0;bottom:18px'>" + oItem.installDir + "</span>" +
-					"</p></td>" + 
+					"<td>" + oItem.type + "</td>" + 
 					"<td>" + sApp + "</td>" + 
 					"<td>" + sTier + "</td>" + 
 					"<td>" + sNode + "</td>" + 
@@ -208,7 +205,10 @@ $.widget( "ck.adallagentversions",{
 						oItem.version + 
 						"<span class='w3-text w3-tag' style='position:absolute;left:0;bottom:18px'>" + oItem.raw_version + "</span>" +
 					"</p></td>" + 
-					"<td>" + oItem.runtime + "</td>" + 
+					"<td><p class='w3-tooltip' style='font-size:10px'>" +
+						oItem.runtime + 
+						"<span class='w3-text w3-tag' style='position:absolute;left:0;bottom:18px'>" + oItem.installDir + "</span>" +
+					"</p></td>" + 
 				"</tr>";
 				
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

@@ -119,6 +119,16 @@ $.widget( "ck.adallagents",{
 						"appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+poApp.id+"menu' style='position: relative;'>"+
 							poApp.name+" .. please wait" + 
 					"</div>";
+					
+					var oParams = {};
+					oParams[ cRender.APP_ID_QS ] = poApp.id;
+					var sUrl = cBrowser.buildUrl("check_historical.php", oParams);
+					var sButton = cRender.button("historical agents", sUrl);
+					sHTML += sButton;
+					
+					sUrl = cBrowser.buildUrl("appagents.php", oParams);
+					sButton = cRender.button("agent versions", sUrl);
+					sHTML += sButton;
 				sHTML += "</div>";				
 			sHTML += "</div><p>";
 			oElement.append(sHTML);
@@ -139,7 +149,7 @@ $.widget( "ck.adallagents",{
 		var sHTML = cRenderMDL.card_start("Controller Totals:");		
 			sHTML += cRenderMDL.body_start();
 				sHTML += "<table border=1 cellspacing='0' cellpadding='3' width='100%'>";
-					sHTML += "<thead><tr><th width='400'>Tier</th><th width='*'>counts</th></tr></thead><tbody>";
+					sHTML += "<thead><tr><th width='400'>App</th><th width='*'>counts</th></tr></thead><tbody>";
 					paData.forEach( function(poApp){
 						sHTML += "<TR "+
 							"type='countwidget' " +
@@ -157,7 +167,7 @@ $.widget( "ck.adallagents",{
 		oElement.append( sHTML);
 		
 		//- - - make into widgets
-		$("TR[type=countwidget]").each( function (pi,po){$(po).adagentcount()})
+		$("TR[type=countwidget]").each( function (pi,pEl){$(pEl).adagentcount()})
 	}	
 
 });

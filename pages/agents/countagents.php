@@ -20,22 +20,9 @@ cRenderHtml::header("Agent Counts");
 cRender::force_login();
 
 ?>
-	<script language="javascript" src="<?=$home?>/js/widgets/allagents.js"></script>
-	<script language="javascript" src="<?=$home?>/js/widgets/agentcount.js"></script>
+	<script language="javascript" src="<?=$jsWidgets?>/allagents.js"></script>
+	<script language="javascript" src="<?=$jsWidgets?>/agentcount.js"></script>
 <?php
-
-//********************************************************************************
-class cAgentTotals {
-	public $total=0;
-	public $machine=0;
-	public $appserver=0;
-	
-	public function add($poAgentTotals){
-		$this->total += $poAgentTotals->total;
-		$this->machine += $poAgentTotals->machine;
-		$this->appserver += $poAgentTotals->appserver;
-	}
-}
 
 
 //********************************************************************************

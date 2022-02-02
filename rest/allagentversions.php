@@ -39,18 +39,6 @@ class cAgentCount{
 	public $count;
 }
 
-class cAgentLine{
-	public $tier = null;
-	public $app = null;
-	public $node = null;
-	public $type;
-	public $version;
-	public $raw_version;
-	public $hostname;
-	public $runtime;
-	public $id;
-	public $installDir;
-}
 
 $gaAppIds = cADUtil::get_application_ids();
 
@@ -97,11 +85,11 @@ function count_agent_versions($paAgents){
 function count_agent_totals($paAgents){
 	$aCount = [];
 	foreach ($paAgents as $oAgent){
-		$sVer = $oAgent->version;
+		$sVer = $oAgent->type . " - ". $oAgent->version;
 		@$aCount[$sVer ] ++;		//hide warning with @
 	}
 	
-	ksort($aCount, SORT_NUMERIC );
+	ksort($aCount);
 	$aOut = [];
 	foreach ($aCount as $sKey=>$iCount){
 		$oObj = new cAgentCount;
@@ -118,64 +106,21 @@ function reduce_size($paAgents){
 	global $oApp;
 	global $sType;
 	
+	$aAgents = cADAnalysis::analyse_agents($paAgents, $sType);
 	$aOut = [];
-	$sLowerApp = null;
-	if ($oApp) $sLowerApp = strtolower($oApp->name);
 	
-	foreach ($paAgents as $oAgent){
-		$sRaw = null;
-		if (property_exists($oAgent,"agentDetails")){
-			$oDetails = $oAgent->agentDetails;
-			if ($oDetails->disable || $oDetails->disableMonitoring)
+	
+	if ($oApp){
+		$sLowerApp = strtolower($oApp->name);
+		foreach ($aAgents as $oAgent){
+			if (!$oAgent->app)
 				continue;
-			
-			if (property_exists($oAgent->agentDetails,"agentVersion"))
-				$sRaw = $oAgent->agentDetails->agentVersion;
+			elseif (strtolower($oAgent->app->name) !== $sLowerApp) 
+				continue;
+			$aOut[] = $oAgent;
 		}
-		
-		if (!$sRaw)		$sRaw = $oAgent->version;
-		$sVer = cADUtil::extract_agent_version($sRaw);
-		
-		$oObj = new cAgentLine;
-		$oObj->version = $sVer;
-		$oObj->raw_version = $sRaw;
-		$oObj->hostname = $oAgent->hostName;
-		
-		if (property_exists($oAgent,"agentDetails")){
-			$oDetails = $oAgent->agentDetails;
-			$oObj->id = $oDetails->id;
-			$oObj->installDir = $oDetails->installDir;
-			
-			try{
-				if (property_exists($oAgent, "applicationId"))
-					$oObj->app = new cAdApp($oAgent->applicationName, $oAgent->applicationId);
-				elseif ($oAgent->applicationIds)
-					$oObj->app = new cAdApp(null,$oAgent->applicationIds[0]);
-			}catch (Exception $e){
-				cDebug::extra_debug_warning("unable to create app object: ".$e->getMessage());
-			}
-
-			if (property_exists($oAgent,"applicationComponentNodeName"))
-				$oObj->node = $oAgent->applicationComponentNodeName;
-			
-			
-			$oObj->type = $oDetails->type;
-			$oObj->runtime = $oDetails->latestAgentRuntime;
-		}elseif ($sType === "db"){
-			$oObj->type = "DB_AGENT";
-			$oObj->id = $oAgent->id;
-		}
-		
-		$oObj->tier = @$oAgent->applicationComponentName;
-		
-		if ($oApp)
-			if (!$oObj->app)
-				continue;
-			elseif (strtolower($oObj->app->name) !== $sLowerApp) 
-				continue;
-			
-		$aOut[] = $oObj;
-	}
+	}else
+		$aOut = $aAgents;
 	
 	return $aOut;
 }

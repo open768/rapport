@@ -33,7 +33,7 @@ if (cAD::is_demo()){
 		table {table-layout:fixed;}
 		table td {word-wrap:break-word;font-size:10px}
 	</style>
-	<script language="javascript" src="<?=$home?>/js/widgets/allagentversions.js"></script>
+	<script language="javascript" src="<?=$jsWidgets?>/allagentversions.js"></script>
 <?php
 
 function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){

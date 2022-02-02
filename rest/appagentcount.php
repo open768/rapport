@@ -22,6 +22,11 @@ class cTierAgentCount{
 
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
+$oTier = null;
+try{
+	$oTier = cRenderObjs::get_current_tier();
+}catch (Exception $e){}
+
 $sTotals = cHeader::GET(cRender::TOTALS_QS);
 
 //*************************************************************************
@@ -35,18 +40,22 @@ $aOut = [];
 $aTotals = [];
 $iTotal = 0;
 foreach ($aTierNodes as $sTier=>$aNodes){
-	$aCounts = cADAnalysis::count_agent_types($aNodes);
-	if (!$sTotals){
-		$oItem = new cTierAgentCount;
-		$oItem->tier = $sTier;
-		$oItem->counts = $aCounts;
-		$aOut[] = $oItem; 
-	}
-	
-	//- - - -  add to totals
-	foreach ($aCounts as $oCount){
-		cCommon::add_count_to_array($aTotals, $oCount->type, $oCount->count);
-		$iTotal+=$oCount->count;
+	if ($oTier && $oTier->name !== $sTier)
+		continue;
+	else{
+		$aCounts = cADAnalysis::count_agent_types($aNodes);
+		if (!$sTotals){
+			$oItem = new cTierAgentCount;
+			$oItem->tier = $sTier;
+			$oItem->counts = $aCounts;
+			$aOut[] = $oItem; 
+		}
+		
+		//- - - -  add to totals
+		foreach ($aCounts as $oCount){
+			cCommon::add_count_to_array($aTotals, $oCount->type, $oCount->count);
+			$iTotal+=$oCount->count;
+		}
 	}
 }
 
