@@ -11,5 +11,3 @@ css/jquery-ui
 images/src
 composer.lock
 secret.php
-objstore.db
-*.db
