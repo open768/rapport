@@ -53,7 +53,7 @@ foreach ($aTierNodes as $sTier=>$aNodes){
 		
 		//- - - -  add to totals
 		foreach ($aCounts as $oCount){
-			cCommon::add_count_to_array($aTotals, $oCount->type, $oCount->count);
+			cArrayUtil::add_count_to_array($aTotals, $oCount->type, $oCount->count);
 			$iTotal+=$oCount->count;
 		}
 	}

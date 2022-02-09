@@ -66,12 +66,14 @@ if (!cArrayUtil::array_is_empty($aAvailData)){
 	
 	if ($iCount == 0)
 		$oOutput->status = "no inactive app agents found";
-	else{
+	else
 		$oOutput->status = "inactive app agents found";
-		$aOutput[] = $oTierOut;
 	}
 	
-	//check list of nodes against data to see if nodes are missing - add these nodes to the list
+	//cross reference with nodes  showing as no metrics uploaded
+	//TBD
+	
+	//check list of nodes for tier against this list of nodes from above to see if nodes are missing
 	//TBD
 }else{
 	// no app agents found, but you would expect that each node has at least one app agent
