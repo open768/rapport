@@ -39,18 +39,22 @@ class cRenderHtml{
 		<html>
 		<head>
 			<title><?=$psTitle?></title>
-			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >
-			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
-			<link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">			
 			<?php 		
 				if (cDebug::is_debugging()) {
 					echo "</head><body>";
 					return;				
 				}
 			?>
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-spinner/css/gspinner.min.css">			
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
+			<!-- analytics tags -->
+			<?php
+				if (cSecret::ENABLE_GOOGLE_ANALYTICS) 
+					cGoogleAnalytics::browser_agent( cSecret::$GOOGLE_TAG_ID);
+				if (cSecret::ENABLE_NR_EUM)
+					cNewRelic::browser_agent();// TBD pass secret data
+			?>
+			
+			<!-- W3schools widgets -->
+			<link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">			
 			
 			<!-- google fonts fonts.googleapis.com -->			
 			<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
@@ -62,41 +66,46 @@ class cRenderHtml{
 			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-			<!-- analytics tags -->
-			<?php
-				cGoogleAnalytics::browser_agent("UA-51550338-2");
-				cNewRelic::browser_agent();
-			?>
-			<!-- End Google Tag Manager -->
+			<!-- Google charts -->
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 			
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
+			<!-- jquery -->
+			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
 			<script type="text/javascript" src="<?=$js_extra?>/jquery/jquery-3.2.1.min.js"></script>
 			<script type="text/javascript" src="<?=$js_extra?>/jquery-ui/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="<?=$js_extra?>/tablesorter/jquery.tablesorter.min.js"></script>
 			<script type="text/javascript" src="<?=$js_extra?>/jquery-inview/jquery.inview.min.js"></script>
 			<script type="text/javascript" src="<?=$js_extra?>/jquery-visible/jquery.visible.min.js"></script>
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-spinner/g-spinner.min.js"></script>
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
 			<script type="text/javascript" src="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.js"></script>
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
 			<script type="text/javascript" src="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
 			<script type="text/javascript" src="<?=$js_extra?>/jquery-flowtype/flowtype.js"></script>
+			
+			<script type="text/javascript" src="<?=$js_extra?>/jquery-spinner/g-spinner.min.js"></script>
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-spinner/css/gspinner.min.css">			
+			
+			<!-- bean -->
 			<script type="text/javascript" src="<?=$js_extra?>/bean/bean.js"></script>
 
+			<!-- common JS  -->
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/common.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/http.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
 			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
+			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
 			
-			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
-			<script src="<?=$home?>/js/menus.js"></script>
-			<script src="<?=$home?>/js/common.js"></script>
-			<script src="<?=$home?>/js/render.js"></script>
-			<script src="<?=$home?>/js/qtip-init.js"></script>
-			<script src="<?=$home?>/js/dialog-init.js"></script>
-
-			<!-- common widgets  -->
-			<script src="<?=$home?>/js/widgets/menu.js"></script>
+			<!-- Rapport JS  -->
+			<script type="text/javascript" src="<?=$home?>/js/menus.js"></script>
+			<script type="text/javascript" src="<?=$home?>/js/common.js"></script>
+			<script type="text/javascript" src="<?=$home?>/js/render.js"></script>
+			<script type="text/javascript" src="<?=$home?>/js/qtip-init.js"></script>
+			<script type="text/javascript" src="<?=$home?>/js/dialog-init.js"></script>
+			<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
+			
+			<!-- rapport CSS  -->
+			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >			
 		</head>
 		<BODY>
 			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">

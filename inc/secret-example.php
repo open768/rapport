@@ -10,20 +10,36 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-require_once("$phpinc/ckinc/newrelic.php");
-
 class cSecret{
-	const GOOGLE_TAG_ID = "";
+	const ENABLE_GOOGLE_ANALYTICS = false;
+	static $GOOGLE_TAG_ID;
 	
-	const LICENSED_TO = "Not Licensed";
-	const LICENSE_COMMENT = "** contact cluck@chickenkatsu.co.uk for licenses";
-	const ENCRYPTION_KEY = "";
+	const LICENSED_TO = "Licensed for non commercial use only";
+	const LICENSE_COMMENT = "** contact cluck@chickenkatsu.co.uk for commercial licenses";
+	const LICENSE_ENCRYPTION_KEY = "";
 	
-	const LINKEDIN_CLIENTID = "";
-	const LINKEDIN_SECRET = "";
-	
-	const ENABLE_NR_MONITORING = false;
+	const ENABLE_NR_EUM = false;
 	static $NR_DEV = "";
 	static $NR_PROD = "";
+	
+	const ENABLE_APPD_EUM = false;
+	static $APPD_DEV ;
+	static $APPD_PROD ;
+}
+
+if (cSecret::ENABLE_APPD_EUM){
+	//if using new Appd EUM monitoring provide the correct values below
+	//TBD - create a demo account
+}
+
+if (cSecret::ENABLE_NR_EUM){
+	//if using new relic EUM monitoring provide the correct values below
+	cSecret::$NR_DEV = new cNewRelicEUMAccount("AccountID","AgentID","LicenseKey","ApplicationID");
+	cSecret::$NR_PROD = new cNewRelicEUMAccount("AccountID","AgentID","LicenseKey","ApplicationID");
+}
+
+if (cSecret::ENABLE_GOOGLE_ANALYTICS){
+	//if using new Google analytics provide the correct values below
+	cSecret::$GOOGLE_TAG_ID = "UA-XXXXXXX";
 }
 ?>
