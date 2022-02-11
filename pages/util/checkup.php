@@ -48,9 +48,9 @@ foreach ( $aResponse as $oApp){
 	cRenderCards::body_start();
 	?><div 
 			type="appcheckup" 
-			<?=cRender::APP_QS?>="<?=$oApp->name?>"
-			<?=cRender::APP_ID_QS?>="<?=$oApp->id?>"
-			<?=cRender::HOME_QS?>="<?=$home?>">
+			<?=cRenderQS::APP_QS?>="<?=$oApp->name?>"
+			<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>"
+			<?=cRenderQS::HOME_QS?>="<?=$home?>">
 			loading...
 	</div><?php
 	cRenderCards::body_end();

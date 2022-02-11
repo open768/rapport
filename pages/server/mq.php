@@ -47,7 +47,7 @@ cRenderCards::card_start(($iCount==0?"MQ Nodes":"Pick a Node"));
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", cCommon::filename());
 		else
-			cRender::button("show as list", cCommon::filename()."?".cRender::LIST_MODE_QS);
+			cRender::button("show as list", cCommon::filename()."?".cRenderQS::LIST_MODE_QS);
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
@@ -73,7 +73,7 @@ if ($iCount >= 0){
 				cRenderCards::card_start($sChar);
 				cRenderCards::body_start();
 			}
-			$sUrl=cHttp::build_url("mqnode.php", cRender::NODE_QS, $sNode);
+			$sUrl=cHttp::build_url("mqnode.php", cRenderQS::NODE_QS, $sNode);
 			cRender::button($sNode, $sUrl);	
 			$sPrevious = $sChar;
 		}

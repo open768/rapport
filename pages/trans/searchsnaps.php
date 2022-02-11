@@ -33,8 +33,8 @@ cRender::force_login();
 //display the results
 
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
-$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
-$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS,$oTrans->name);
+$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS,$oTrans->id);
 
 
 //********************************************************************
@@ -120,24 +120,24 @@ cRenderCards::card_start("Search $oTrans->name");
 						var oItem = aResponse[i];
 						var oTrans = oItem.trans;
 						var oParams = {
-							<?=cRender::TRANS_QS?>:oTrans.name,
-							<?=cRender::TIER_ID_QS?>:oTrans.tier.id,
-							<?=cRender::APP_ID_QS?>:oTrans.tier.app.id,
-							<?=cRender::TRANS_ID_QS?>:oTrans.id,
-							<?=cRender::SNAP_TIME_QS?>:oItem.startTime,
-							<?=cRender::SNAP_GUID_QS?>:oItem.guuid
+							<?=cRenderQS::TRANS_QS?>:oTrans.name,
+							<?=cRenderQS::TIER_ID_QS?>:oTrans.tier.id,
+							<?=cRenderQS::APP_ID_QS?>:oTrans.tier.app.id,
+							<?=cRenderQS::TRANS_ID_QS?>:oTrans.id,
+							<?=cRenderQS::SNAP_TIME_QS?>:oItem.startTime,
+							<?=cRenderQS::SNAP_GUID_QS?>:oItem.guuid
 						};
 						var sUrl = cBrowser.buildUrl("snapdetails.php", oParams);
 						var sDiv = 
 							"<div type='searchsnap'" +
-								" <?=cRender::HOME_QS?>='<?=$home?>'" +
-								" <?=cRender::APP_ID_QS?>='<?=$oApp->id?>'" +
-								" <?=cRender::TIER_ID_QS?>='<?=$oTier->id?>'" +
-								" <?=cRender::TRANS_QS?>='<?=$oTrans->name?>'" +
-								" <?=cRender::TRANS_ID_QS?>='<?=$oTrans->id?>'" +
-								" <?=cRender::SNAP_TIME_QS?>='" + oItem.startTime +"'" +
-								" <?=cRender::SNAP_GUID_QS?>='" + oItem.guuid +"'" +
-								" <?=cRender::SEARCH_QS?>='" + sSearch +"'" +
+								" <?=cRenderQS::HOME_QS?>='<?=$home?>'" +
+								" <?=cRenderQS::APP_ID_QS?>='<?=$oApp->id?>'" +
+								" <?=cRenderQS::TIER_ID_QS?>='<?=$oTier->id?>'" +
+								" <?=cRenderQS::TRANS_QS?>='<?=$oTrans->name?>'" +
+								" <?=cRenderQS::TRANS_ID_QS?>='<?=$oTrans->id?>'" +
+								" <?=cRenderQS::SNAP_TIME_QS?>='" + oItem.startTime +"'" +
+								" <?=cRenderQS::SNAP_GUID_QS?>='" + oItem.guuid +"'" +
+								" <?=cRenderQS::SEARCH_QS?>='" + sSearch +"'" +
 							">Searching ... please Wait ...</div>";
 								
 						var sFragment = "<tr>";

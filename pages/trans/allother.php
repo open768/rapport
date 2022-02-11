@@ -61,8 +61,8 @@ foreach ( $aTiers as $oTier){
 			<div 
 				type="adtierothertrans" 
 				home="<?=$home?>" 
-				<?=cRender::APP_ID_QS?>="<?=$oApp->id?>" 
-				<?=cRender::TIER_ID_QS?>="<?=$oTier->id?>">
+				<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>" 
+				<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>">
 					please wait...
 			</div><?php
 		cRenderCards::body_end();

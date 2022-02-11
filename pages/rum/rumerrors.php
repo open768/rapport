@@ -57,7 +57,7 @@ function render_table($psType, $paData){
 		<tbody><?php
 			$sClass= cRender::getRowClass();
 			$iRows = 0;
-			$sBaseQS = cHttp::build_QS($gsAppQS, cRender::RUM_TYPE_QS,$psType);
+			$sBaseQS = cHttp::build_QS($gsAppQS, cRenderQS::RUM_TYPE_QS,$psType);
 				
 			foreach ($paData as $oItem){
 				if ($oItem == null ) continue;
@@ -68,8 +68,8 @@ function render_table($psType, $paData){
 				$iRows++;
 				$sName = cADUtil::extract_RUM_name($psType, $oItem->metricPath);
 				$sRumId = cADUtil::extract_RUM_id($psType, $oItem->metricName);
-				$sDetailQS = cHttp::build_QS($sBaseQS, cRender::RUM_PAGE_QS,$sName);
-				$sDetailQS = cHttp::build_QS($sDetailQS, cRender::RUM_PAGE_ID_QS,$sRumId);
+				$sDetailQS = cHttp::build_QS($sBaseQS, cRenderQS::RUM_PAGE_QS,$sName);
+				$sDetailQS = cHttp::build_QS($sDetailQS, cRenderQS::RUM_PAGE_ID_QS,$sRumId);
 
 				?><tr class="<?=$sClass?>">
 					<td align="right"><a href="rumpage.php?<?=$sDetailQS?>"><?=$sName?></a></td>

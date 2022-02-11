@@ -22,11 +22,11 @@ set_time_limit(200); // huge time limit as this could takes a long time
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "no application set";
-$psMetric = cHeader::get(cRender::METRIC_QS);
-$psDiv = cHeader::get(cRender::DIV_QS); 
-$psCSV=cHeader::get(cRender::CSV_QS);
-$psPrevious = cHeader::get(cRender::PREVIOUS_QS);
-$psHeirarchy = cHeader::get(cRender::METRIC_HEIRARCHY_QS);
+$psMetric = cHeader::get(cRenderQS::METRIC_QS);
+$psDiv = cHeader::get(cRenderQS::DIV_QS); 
+$psCSV=cHeader::get(cRenderQS::CSV_QS);
+$psPrevious = cHeader::get(cRenderQS::PREVIOUS_QS);
+$psHeirarchy = cHeader::get(cRenderQS::METRIC_HEIRARCHY_QS);
 
 //*************************************************************************
 cDebug::write("getting metric - $psMetric");

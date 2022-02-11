@@ -49,7 +49,7 @@ foreach ($aData as $oSource){
 			if ($oConfig->pathExtractedFieldsGrok)
 				echo "grok: $oConfig->pathExtractedFieldsGrok";
 			?><div type="logsource" 
-					<?=cRender::LOG_ID_QS?>="<?=$oSource->id?>" 
+					<?=cRenderQS::LOG_ID_QS?>="<?=$oSource->id?>" 
 					home="<?=$home?>">
 				loading extractions...
 			</div><?php

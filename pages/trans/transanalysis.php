@@ -30,8 +30,8 @@ $oTier = $oTrans->tier;
 $oApp = $oTier->app;
 
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
-$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
-$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS,$oTrans->name);
+$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS,$oTrans->id);
 
 $oTimes = cRender::get_times();
 
@@ -95,9 +95,9 @@ if ($bProceed){
 				
 				$sAppdUrl = cADControllerUI::snapshot($oSnapshot);
 				$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
-				$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->guuid);
-				$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $oSnapshot->url);
-				$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->starttime);
+				$sSnapQS = cHttp::build_QS($sTransQS, cRenderQS::SNAP_GUID_QS, $oSnapshot->guuid);
+				$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_URL_QS, $oSnapshot->url);
+				$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_TIME_QS, $oSnapshot->starttime);
 				
 				?>
 				<tr>
@@ -171,9 +171,9 @@ if ($bProceed){
 					
 
 					$oSnapshot = $oTable->get_col_info($sSnapshot);
-					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->guuid);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $oSnapshot->url);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->starttime);
+					$sSnapQS = cHttp::build_QS($sTransQS, cRenderQS::SNAP_GUID_QS, $oSnapshot->guuid);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_URL_QS, $oSnapshot->url);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_TIME_QS, $oSnapshot->starttime);
 					?><td><div style="max-width:200px;overflow-wrap:break-word;">
 						<a href="snapdetails.php?<?=$sSnapQS?>" target="_blank"><?=$sOriginalUrl?></a>
 					</div></td>

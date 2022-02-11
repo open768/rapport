@@ -80,7 +80,7 @@ cRenderCards::body_start();
 	foreach ($oResponse as $oExt){
 	
 		$sTierTo = $oExt->name;
-		$sUrl = cHttp::build_url($linkUrl, cRender::BACKEND_QS, $sTierTo);
+		$sUrl = cHttp::build_url($linkUrl, cRenderQS::BACKEND_QS, $sTierTo);
 		$sLabel = "<span tier='$sTierTo'>$sTierTo</span>";
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sLabel, cChart::WIDTH=>200];
 		$sMetric=cADMetricPaths::tierExtCallsPerMin($oTier->name, $sTierTo);

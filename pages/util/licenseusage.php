@@ -22,7 +22,7 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-$sUsage = cHeader::get(cRender::USAGE_QS);
+$sUsage = cHeader::get(cRenderQS::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 
 //********************************************************************
@@ -53,7 +53,7 @@ catch (Exception $e){
 		foreach ([1,2,3,4,5,6,12] as $iOption ){
 			$sDisabled = ($sUsage == $iOption?"disabled":"");
 			?>
-				<option <?=$sDisabled?> value="<?=cHttp::build_url("usage.php",cRender::USAGE_QS,$iOption)?>"><?=$iOption?> Months</option>
+				<option <?=$sDisabled?> value="<?=cHttp::build_url("usage.php",cRenderQS::USAGE_QS,$iOption)?>"><?=$iOption?> Months</option>
 			<?php
 		}
 	?></optgroup>

@@ -62,7 +62,7 @@ cRenderCards::body_start();
 				<td><span type="filter" value="<?=$oDash->modifiedBy?>"><?=$oDash->modifiedBy?></span></td>
 				<td><?=date("d-m-Y H:i", $oDash->modifiedOn/1000)?></td>
 				<td align="middle"`>
-					<div type="dashdetail" <?=cRender::HOME_QS?>="<?=$home?>" <?=cRender::DASH_ID_QS?>="<?=$oDash->id?>">
+					<div type="dashdetail" <?=cRenderQS::HOME_QS?>="<?=$home?>" <?=cRenderQS::DASH_ID_QS?>="<?=$oDash->id?>">
 						wait...
 					</div>
 				</td>

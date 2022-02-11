@@ -34,7 +34,7 @@ if (cAD::is_demo()){
 	cRenderCards::action_start();
 		cRender::add_filter_box("a[type=tier]","name",".mdl-card");
 		cRenderMenus::show_apps_menu("Change App");
-		$sUrl = cHttp::build_url("appagents.php", cRender::APP_ID_QS, $oApp->id);
+		$sUrl = cHttp::build_url("appagents.php", cRenderQS::APP_ID_QS, $oApp->id);
 		cRender::button("All Agents for: $oApp->name", $sUrl);
 		cRender::button("Agents for all Apps", "countagents.php");
 		
@@ -42,8 +42,8 @@ if (cAD::is_demo()){
 	cRenderCards::card_end();
 	?>
 		<div id="tiers" type="widget" 
-			<?=cRender::APP_ID_QS?>='<?=$oApp->id?>' 
-			<?=cRender::HOME_QS?>='<?=$home?>'>
+			<?=cRenderQS::APP_ID_QS?>='<?=$oApp->id?>' 
+			<?=cRenderQS::HOME_QS?>='<?=$home?>'>
 			loading...
 		</div>
 	<?

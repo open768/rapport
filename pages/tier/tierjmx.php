@@ -36,8 +36,8 @@ cChart::$width=cChart::CHART_WIDTH_LARGE;
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$node = cHeader::get(cRender::NODE_QS);
-$gsMetric = cHeader::get(cRender::METRIC_TYPE_QS);
+$node = cHeader::get(cRenderQS::NODE_QS);
+$gsMetric = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 
 // show time options
 $title = "$oApp->name&gt;$oTier->name&gt;Infrastructure&gt;JMX";
@@ -54,7 +54,7 @@ if (!$gsMetric){
 
 //stuff for later
 $sBaseQS = cRenderQS::get_base_tier_QS($oTier);
-$sBaseQS = cHttp::build_qs($sBaseQS, cRender::METRIC_TYPE_QS, $gsMetric);
+$sBaseQS = cHttp::build_qs($sBaseQS, cRenderQS::METRIC_TYPE_QS, $gsMetric);
 $sBaseUrl = cHttp::build_url(cCommon::filename(), $sBaseQS);
 
 
@@ -70,13 +70,13 @@ $aNodes = $oTier->GET_Nodes();
 	<optgroup label="tiers"><?php
 		$aTiers = $oApp->GET_Tiers();
 		$sBaseTierQS = cRenderQS::get_base_app_QS($oApp);
-		$sBaseTierQS = cHttp::build_qs($sBaseTierQS, cRender::METRIC_TYPE_QS, $gsMetric);
+		$sBaseTierQS = cHttp::build_qs($sBaseTierQS, cRenderQS::METRIC_TYPE_QS, $gsMetric);
 		$sBaseTierUrl = cHttp::build_url("tierjmx.php", $sBaseTierQS);
 		
 		foreach ($aTiers as $oTier){
-			$sTierUrl = cHttp::build_url($sBaseTierUrl, cRender::METRIC_TYPE_QS, $gsMetric);
-			$sTierUrl = cHttp::build_url($sTierUrl, cRender::TIER_QS, $oTier->name);
-			$sTierUrl = cHttp::build_url($sTierUrl, cRender::TIER_ID_QS, $oTier->id);
+			$sTierUrl = cHttp::build_url($sBaseTierUrl, cRenderQS::METRIC_TYPE_QS, $gsMetric);
+			$sTierUrl = cHttp::build_url($sTierUrl, cRenderQS::TIER_QS, $oTier->name);
+			$sTierUrl = cHttp::build_url($sTierUrl, cRenderQS::TIER_ID_QS, $oTier->id);
 			
 			$bDisabled = (($oTier->name == $oTier->name) && ($node==null));
 			$sDisabled = ($bDisabled?"disabled":"");
@@ -86,7 +86,7 @@ $aNodes = $oTier->GET_Nodes();
 	<optgroup label="Individual Servers"><?php
 		foreach ($aNodes as $oNode){
 			$sNode = $oNode->name;
-			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sBaseUrl, cRender::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
+			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sBaseUrl, cRenderQS::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
 		}
 	?></optgroup>
 </select>

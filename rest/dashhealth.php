@@ -17,7 +17,7 @@ require_once "$home/inc/common.php";
 
 
 //###################### DATA #############################################
-$sDashID = cHeader::get(cRender::DASH_ID_QS);
+$sDashID = cHeader::get(cRenderQS::DASH_ID_QS);
 
 //*************************************************************************
 cDebug::write("getting dash_health  - $sDashID");

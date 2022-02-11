@@ -31,12 +31,12 @@ cChart::do_header();
 $oTrans = cRenderObjs::get_current_trans();
 $oTier = $oTrans->tier;
 $oApp = $oTier->app;
-$node= cHeader::get(cRender::NODE_QS);
+$node= cHeader::get(cRenderQS::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
 
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
-$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
-$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS,$oTrans->name);
+$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS,$oTrans->id);
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -66,7 +66,7 @@ cRender::button("Back to Transaction", "transdetails.php?$sTransQS");
 $aMetrics = [];
 foreach ($aNodes as $oNode){ 
 	$sNodeName = $oNode->name;
-	$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
+	$sNodeQs = cHttp::build_QS($sTransQS, cRenderQS::NODE_QS, $oNode->name);
 	$sUrl = "transdetails.php?$sNodeQs";
 					
 	$sMetricUrl=cADMetricPaths::transCallsPerMin($oTrans, $sNodeName);

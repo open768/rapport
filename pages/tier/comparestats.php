@@ -25,8 +25,8 @@ $sBaseMetric = cADMetricPaths::tier($oTier->name);
 $sCaption = "Tier: $oTier->name";
 
 $sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
-$sUrl = cHttp::build_url($sUrl,cRender::METRIC_QS, $sBaseMetric );
-$sUrl = cHttp::build_url($sUrl,cRender::TITLE_QS, $sCaption );
+$sUrl = cHttp::build_url($sUrl,cRenderQS::METRIC_QS, $sBaseMetric );
+$sUrl = cHttp::build_url($sUrl,cRenderQS::TITLE_QS, $sCaption );
 
 cHeader::redirect($sUrl);
 

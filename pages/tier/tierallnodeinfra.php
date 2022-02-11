@@ -32,7 +32,7 @@ cChart::do_header();
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
-$sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
+$sMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 $oMetricDetails = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 
 $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
@@ -50,7 +50,7 @@ $aMetrics = cADInfraMetric::getInfrastructureMetricDetails($oTier);
 $oCred = cRenderObjs::get_AD_credentials();
 if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 $sAllNodeUrl = cHttp::build_url("appagentdetail.php",$sAppQS);
-$sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+$sAllNodeUrl = cHttp::build_url($sAllNodeUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -73,13 +73,13 @@ if (cAD::is_demo()){
 		$sAllInfraUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
 		foreach ( $aMetrics as $oType){
 			$sType = $oType->type;
-			$sUrl = cHttp::build_url($sAllInfraUrl, cRender::METRIC_TYPE_QS, $sType);
+			$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::METRIC_TYPE_QS, $sType);
 			?><option <?=($sType==$sMetricType?"disabled":"")?> value="<?=$sUrl?>"><?=$oType->metric->short?></option><?php
 		}
 	?>
 	</optgroup>
 	<optgroup label="Other Statistics">
-		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
+		<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
 
 	</optgroup>
 </select>
@@ -114,7 +114,7 @@ $aMetricTypes = cADInfraMetric::getInfrastructureMetricTypes();
 		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$sNode, $sMetricType);
-		$sUrl = cHttp::build_url($sNodeUrl, cRender::NODE_QS, $sNode);
+		$sUrl = cHttp::build_url($sNodeUrl, cRenderQS::NODE_QS, $sNode);
 		$aMetrics[]= [cChart::LABEL=>$sNode." - ".$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"all metrics ($sNode)", cChart::HIDEIFNODATA=>1];
 	}
 	$sClass = cRender::getRowClass();			

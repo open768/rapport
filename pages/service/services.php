@@ -70,8 +70,8 @@ foreach ($aTiers as $oTier){
 		$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
 		$aMetrics = [];
 		foreach ($aEndPoints as $oEndPoint){
-			$sUrl = cHttp::build_qs($sTierQS, cRender::SERVICE_QS, $oEndPoint->name);
-			$sUrl = cHttp::build_qs($sUrl, cRender::SERVICE_ID_QS, $oEndPoint->id);
+			$sUrl = cHttp::build_qs($sTierQS, cRenderQS::SERVICE_QS, $oEndPoint->name);
+			$sUrl = cHttp::build_qs($sUrl, cRenderQS::SERVICE_ID_QS, $oEndPoint->id);
 			$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
 
 			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];

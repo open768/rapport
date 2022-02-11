@@ -44,16 +44,16 @@ function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
 	cRenderCards::card_start("<a name='$psAnchor'>$psCaption</a>");
 	cRenderCards::body_start();
 		if ($psType == "app"){
-			$sUrl = cHttp::build_url("check_historical.php", cRender::APP_ID_QS, $oApp->id);
+			$sUrl = cHttp::build_url("check_historical.php", cRenderQS::APP_ID_QS, $oApp->id);
 			cRender::button("clear historical agents", $sUrl);
 			echo "<p>";
 		}
 		?><div 
 			type="widget" 
-			<?=cRender::APP_ID_QS?>='<?=$oApp->id?>' 
-			<?=cRender::HOME_QS?>='<?=$home?>' 
-			<?=cRender::TYPE_QS?>='<?=$psType?>'
-			<?=cRender::TOTALS_QS?>='<?=cHeader::GET(cRender::TOTALS_QS)?>'
+			<?=cRenderQS::APP_ID_QS?>='<?=$oApp->id?>' 
+			<?=cRenderQS::HOME_QS?>='<?=$home?>' 
+			<?=cRenderQS::TYPE_QS?>='<?=$psType?>'
+			<?=cRenderQS::TOTALS_QS?>='<?=cHeader::GET(cRenderQS::TOTALS_QS)?>'
 				>Please Wait...
 		</div><?php
 	cRenderCards::body_end();
@@ -64,7 +64,7 @@ function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
 		cRenderCards::action_start();
 			if($psGoUrl) cRender::button($psCaption, $psGoUrl);	
 			if ($psType == "app"){
-				$sUrl = cHttp::build_url("check_historical.php", cRender::APP_ID_QS, $oApp->id);
+				$sUrl = cHttp::build_url("check_historical.php", cRenderQS::APP_ID_QS, $oApp->id);
 				cRender::button("clear historical agents", $sUrl);
 			}
 		cRenderCards::action_end();

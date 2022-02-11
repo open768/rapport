@@ -66,7 +66,7 @@ if (cAD::is_demo()){
 $aNodes = $oTier->GET_Nodes();
 $sBaseUrl = cHttp::build_url("tiernodedisks.php",$sTierQS);
 foreach ($aNodes as $oNode){
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::NODE_QS, $oNode->name);
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::NODE_QS, $oNode->name);
 	cRender::button($oNode->name, $sUrl);
 	echo " ";
 }

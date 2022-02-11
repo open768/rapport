@@ -16,12 +16,12 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-$sMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
+$sMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 switch($sMetricType){
 	case cADMetricPaths::METRIC_TYPE_RUMCALLS:
 	case cADMetricPaths::METRIC_TYPE_RUMRESPONSE:
 		$sOtherTitle = "Application Activity";
-		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
+		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 
 		$sTitle1 = "Web Browser Page Requests";
 		$sMetric1 = cADWebRumMetric::CallsPerMin();
@@ -36,7 +36,7 @@ switch($sMetricType){
 	case cADMetricPaths::METRIC_TYPE_ACTIVITY:
 	default:
 		$sOtherTitle = "Web Browser Activity";
-		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
+		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
 		$sTitle1 = "Application Activity";
 		$sMetric1 = cADMetricPaths::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
@@ -61,9 +61,9 @@ cRenderCards::card_start();
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::apps_home());
 		cRender::button($sOtherTitle,$sOtherUrl);
-		$sUrl = cHttp::build_url(cCommon::filename(),cRender::METRIC_TYPE_QS,$sMetricType);
+		$sUrl = cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$sMetricType);
 		if (!cRender::is_list_mode()){
-			$sUrl.= "&".cRender::LIST_MODE_QS;
+			$sUrl.= "&".cRenderQS::LIST_MODE_QS;
 			cRender::button("list mode", $sUrl);
 		}else			
 			cRender::button("chart mode", $sUrl);
@@ -73,15 +73,15 @@ cRenderCards::card_end();
 //####################################################################
 ?>
 	<div 
-		id='apps' 	type='adWidget' 
-		home='<?=$home?>' <?=cRender::LIST_MODE_QS?>='<?=cRender::is_list_mode()?>' baseUrl = '<?=$sBaseUrl?>'
+		id='allapps' 	type='adWidget' 
+		home='<?=$home?>' <?=cRenderQS::LIST_MODE_QS?>='<?=cRender::is_list_mode()?>' baseUrl = '<?=$sBaseUrl?>'
 		title1='<?=$sTitle1?>' title2='<?=$sTitle2?>' title3='<?=$sTitle3?>'
 		metric1='<?=$sMetric1?>' metric2='<?=$sMetric2?>' metric3='<?=$sMetric3?>'>
 			please wait...
 	</div>
 	<script language="javascript">
 		function init_widget(){
-			$("#apps").adallapps();
+			$("#allapps").adallapps();
 		}
 		
 		$( init_widget);

@@ -20,7 +20,7 @@ require_once "$home/inc/common.php";
 
 //*************************************************************************
 cDebug::write("getting details");
-$sType = cHeader::GET(cRender::TYPE_QS);
+$sType = cHeader::GET(cRenderQS::TYPE_QS);
 $oApp = null;
 try{
 	$oApp = cRenderObjs::get_current_app();
@@ -144,7 +144,7 @@ $aReduced = reduce_size($aAgents);
 $oOut = new cResults;
 $oOut->type = $sType;
 $oOut->counts = count_agent_totals($aReduced);
-if ( cHeader::GET(cRender::TOTALS_QS))
+if ( cHeader::GET(cRenderQS::TOTALS_QS))
 	$oOut->detail = count_agent_versions($aReduced);
 else
 	$oOut->detail = $aReduced;

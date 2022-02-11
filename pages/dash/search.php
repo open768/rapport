@@ -82,9 +82,9 @@ cRenderCards::body_start();
 					var oDash = aResponse[i];
 					var sFragment = 
 						"<div style='border:1px solid black' type='dashsearch'" +
-							" <?=cRender::DASH_NAME_QS?>='" +oDash.name + "'" + 
-							" <?=cRender::DASH_ID_QS?>='" +oDash.id+"'" +
-							" <?=cRender::SEARCH_QS?>='"+ sSearch + "'" +
+							" <?=cRenderQS::DASH_NAME_QS?>='" +oDash.name + "'" + 
+							" <?=cRenderQS::DASH_ID_QS?>='" +oDash.id+"'" +
+							" <?=cRenderQS::SEARCH_QS?>='"+ sSearch + "'" +
 							" <?=cRender::DASH_URL_TEMPLATE?>='<?=$sTemplate?>'" +
 							" home='<?=$home?>'"+ 
 						">" +

@@ -18,13 +18,13 @@ require_once "$home/inc/common.php";
 
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
-$sBaseMetric = cHeader::get(cRender::METRIC_QS);
+$sBaseMetric = cHeader::get(cRenderQS::METRIC_QS);
 
 //*************************************************************************
 cDebug::write("getting stats $oApp->name");
 $oTimes = new cADTimes;
-$oTimes->start = cHeader::get(cRender::TIME_START_QS);
-$oTimes->end = cHeader::get(cRender::TIME_END_QS);
+$oTimes->start = cHeader::get(cRenderQS::TIME_START_QS);
+$oTimes->end = cHeader::get(cRenderQS::TIME_END_QS);
 $oTimes->time_type = cADTimes::BETWEEN;
 
 cDebug::extra_debug($oTimes->toString());

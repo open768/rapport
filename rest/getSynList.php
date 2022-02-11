@@ -27,7 +27,7 @@ if (!$oApp->name) $oApp->name = "no application set";
 $oTimes = cRender::get_times();
 //*************************************************************************
 cDebug::write("getting synthetics list - $oApp->name");
-$sGetDetails = cHeader::get(cRender::SYNTH_DETAILS_QS);
+$sGetDetails = cHeader::get(cRenderQS::SYNTH_DETAILS_QS);
 if ($sGetDetails)
 	$oResult = cADRestUI::GET_Synthetic_jobs($oApp, $oTimes, true);
 else

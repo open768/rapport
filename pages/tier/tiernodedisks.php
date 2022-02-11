@@ -27,7 +27,7 @@ cRender::force_login();
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
-$sNode = cHeader::get(cRender::NODE_QS);
+$sNode = cHeader::get(cRenderQS::NODE_QS);
 
 // show time options
 $title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;disks";

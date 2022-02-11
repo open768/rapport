@@ -17,9 +17,9 @@ require_once("$phpinc/ckinc/http.php");
 require_once("$ADlib/AD.php");
 require_once("$ADlib/core.php");
 require_once("$root/inc/filter.php");
+require_once("$root/inc/renderqs.php");
 require_once("$root/inc/rendermenus.php");
 require_once("$root/inc/renderobjs.php");
-require_once("$root/inc/renderqs.php");
 require_once("$root/inc/renderhtml.php");
 
 
@@ -29,109 +29,8 @@ function sort_by_app_name($a,$b){
 
 //#######################################################################
 //#######################################################################
+
 class cRender{
-	//************************************************************
-	const APP_QS = "app";
-	const APP_ID_QS = "aid";
-	
-	const DB_QS = "db";
-	
-	const TIER_QS = "tier";
-	const FROM_TIER_QS = "from";
-	const TO_TIER_QS = "to";
-	const TIER_ID_QS = "tid";
-	const SERVICE_QS = "srv";
-	const SERVICE_ID_QS= "sid";
-	
-	const TRANS_QS = "trans";
-	const TRANS_ID_QS = "trid";
-	const SNAP_GUID_QS = "snpg";
-	const SNAP_URL_QS = "snpu";
-	const SNAP_TIME_QS = "snpt";
-	
-	const NODE_QS = "nd";
-	const FILTER_NODE_QS = "fnqs";
-	const NODE_ID_QS = "ndid";
-	const NODE_IDS_QS = "ndids";
-	
-	const TITLE_QS = "tit";
-	const METRIC_QS = "met";
-	const METRIC_HEIRARCHY_QS = "meh";
-	const BACKEND_QS = "back";
-	const LICENSE_QS = "lc";
-	
-	const USAGE_QS = "us";
-	const CSV_QS = "csv";
-	const DIV_QS = "div";
-	const METRIC_TYPE_QS ="mt";
-
-	const PREVIOUS_QS="prv";
-	const LOGIN_TOKEN_QS="lt";
-
-	//************************************************************
-	const IGNORE_REF_QS = "igr";
-	const LIST_MODE_QS = "list";
-	const TOTALS_QS = "totl";
-	const DONT_SHOW_TOTAL_QS = "dstot";
-	const DONT_CLOSE_CARD_QS = "dclcr"; 
-	
-	//************************************************************
-	const LOCATION_QS="loc";
-	
-	//************************************************************
-	const DASH_ID_QS ="dai";
-	const DASH_NAME_QS ="dan";
-	const DASH_URL_TEMPLATE = "dut";
-	
-	//************************************************************
-	const GROUP_TYPE_QS ="gtq";
-	const GROUP_TYPE_NODE ="n";
-	const GROUP_TYPE_TIER ="t";
-	const GROUP_TYPE_IP ="i";
-
-	//************************************************************
-	const LOG_ID_QS ="loi";
-	const LOG_VERSION_QS = "lov";
-	const LOG_CREATED_QS = "loc";
-	
-	//************************************************************
-	const HEALTH_ID_QS ="hi";
-	const HOME_QS = "home";
-	const LABEL_QS = "lbl";
-	
-	//**************************************************************************
-	const RUM_DETAILS_QS ="rmd";
-	const RUM_PAGE_QS = "rpg";
-	const RUM_PAGE_ID_QS = "rpid";
-	const RUM_TYPE_QS = "rty";
-	const RUM_DETAILS_ACTIVITY ="rmda";
-	const RUM_DETAILS_RESPONSE ="rmdr";
-	const SYNTH_DETAILS_QS = "syd";
-		
-	//**************************************************************************
-	const CHART_METRIC_FIELD = "cmf";
-	const CHART_TITLE_FIELD = "ctf";
-	const CHART_COUNT_FIELD = "ccf";
-	const CHART_APP_FIELD = "caf";
-	
-	//**************************************************************************
-	const SEARCH_QS = "srch";
-	const SERVER_MQ_MANAGER_QS = "mqm";
-	
-	//**************************************************************************
-	const NAME_APP = 1;
-	const NAME_TIER = 2;
-	const NAME_EXT = 3;
-	const NAME_TRANS = 4;
-	const NAME_OTHER = 99;
-	
-	//**************************************************************************
-	const TIME_START_QS = "tsta";
-	const TIME_END_QS = "tend";
-	const TIME_DURATION_QS = "tdur";
-	const LAST_YEAR_QS = "lyq";
-	
-	const TYPE_QS  = "typ";
 	//**************************************************************************
 	public static $MAX_ITEMS_PER_PAGE = 20;
 	public static $FORCE_FILTERBOX_DISPLAY = false;
@@ -140,18 +39,18 @@ class cRender{
 	public static function get_times(){
 		//cDebug::enter();
 		$oTimes = new cADTimes();
-		if (cHeader::get(self::TIME_START_QS)){
-			if (!cHeader::get(self::TIME_DURATION_QS))
-				cDebug::error("must specify both ".self::TIME_START_QS." and ".self::TIME_DURATION_QS. " query string");
+		if (cHeader::get(cRenderQS::TIME_START_QS)){
+			if (!cHeader::get(cRenderQS::TIME_DURATION_QS))
+				cDebug::error("must specify both ".cRenderQS::TIME_START_QS." and ".cRenderQS::TIME_DURATION_QS. " query string");
 
-			$sDate = cHeader::get(self::TIME_START_QS);
+			$sDate = cHeader::get(cRenderQS::TIME_START_QS);
 			$iTime = strtotime($sDate);
 			if (!$iTime)
-				cDebug::error("invalid date string '$sDate' supplied in ".self::TIME_START_QS." query string param");
+				cDebug::error("invalid date string '$sDate' supplied in ".cRenderQS::TIME_START_QS." query string param");
 			
-			$sDuration = cHeader::get(self::TIME_DURATION_QS);
+			$sDuration = cHeader::get(cRenderQS::TIME_DURATION_QS);
 			if (!is_numeric($sDuration))
-				cDebug::error("non numeric duration  '$sDuration' supplied in ".self::TIME_DURATION_QS." query string param");
+				cDebug::error("non numeric duration  '$sDuration' supplied in ".cRenderQS::TIME_DURATION_QS." query string param");
 		
 			$oTimes->time_type = cADTimes::BETWEEN;
 			$oTimes->start = $iTime * 1000;
@@ -198,7 +97,7 @@ class cRender{
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null || !$oCred->logged_in()){
 			cCommon::errorbox("not logged in in");
-			$sUrl = cHttp::build_url("$home/index.php", cRender::LOCATION_QS, $_SERVER["REQUEST_URI"]);
+			$sUrl = cHttp::build_url("$home/index.php", cRenderQS::LOCATION_QS, $_SERVER["REQUEST_URI"]);
 			self::button("Back to login", "$sUrl", false);
 			cDebug::flush();
 			exit;
@@ -385,7 +284,7 @@ class cRender{
 	
 	//**************************************************************************
 	public static function is_list_mode(){
-		return (cHeader::get(self::LIST_MODE_QS) !== null);
+		return (cHeader::get(cRenderQS::LIST_MODE_QS) !== null);
 	}
 	
 	//**************************************************************************

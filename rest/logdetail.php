@@ -20,7 +20,7 @@ set_time_limit(200); // huge time limit as this could takes a long time
 
 
 //###################### DATA #############################################
-$sLogRuleID = cHeader::get(cRender::LOG_ID_QS);
+$sLogRuleID = cHeader::get(cRenderQS::LOG_ID_QS);
 
 //*************************************************************************
 cDebug::write("getting log rule detail  - $sLogRuleID");

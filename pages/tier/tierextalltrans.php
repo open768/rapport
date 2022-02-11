@@ -28,7 +28,7 @@ if (cAD::is_demo()){
 //-----------------------------------------------
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$sExt = cHeader::get(cRender::BACKEND_QS);
+$sExt = cHeader::get(cRenderQS::BACKEND_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
@@ -39,7 +39,7 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-$sExtQS = cHttp::build_qs($sAppQS, cRender::BACKEND_QS, $sExt);
+$sExtQS = cHttp::build_qs($sAppQS, cRenderQS::BACKEND_QS, $sExt);
 
 //####################################################################
 cRenderCards::card_start("All Calls from $oTier->name to $sExt");
@@ -61,8 +61,8 @@ $aMetrics = [];
 cRenderCards::card_start("Transactions");
 cRenderCards::body_start();
 	foreach ( $aTrans as $oTrans){
-		$sUrl = cHttp::build_qs($sTierQS, cRender::TRANS_QS, $oTrans->name);
-		$sUrl = cHttp::build_qs($sUrl, cRender::TRANS_ID_QS, $oTrans->id);
+		$sUrl = cHttp::build_qs($sTierQS, cRenderQS::TRANS_QS, $oTrans->name);
+		$sUrl = cHttp::build_qs($sUrl, cRenderQS::TRANS_ID_QS, $oTrans->id);
 		$sUrl = cHttp::build_url("$home/pages/trans/transdetails.php", $sUrl);
 		
 		$aMetrics[] = [

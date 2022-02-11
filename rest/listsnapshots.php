@@ -22,8 +22,8 @@ $oTrans = cRenderObjs::get_current_trans();
 $oTier = $oTrans->tier;
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 $oApp = $oTier->app;
-$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
-$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS,$oTrans->name);
+$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS,$oTrans->id);
 
 class oSnapItem {
 	public $startDate,$timetaken,$node,$originalurl,$summary;

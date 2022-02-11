@@ -68,15 +68,15 @@ foreach ( $aTiers as $oTier){
 			?><div 
 				type="adtiertrans" 
 				home="<?=$home?>" 
-				<?=cRender::APP_ID_QS?>="<?=$oApp->id?>" 
-				<?=cRender::TIER_ID_QS?>="<?=$oTier->id?>">please wait...</div><?php
+				<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>" 
+				<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>">please wait...</div><?php
 		cRenderCards::body_end();
 		cRenderCards::action_start();
 		cRenderMenus::show_tier_functions($oTier);
 			echo "<span type='tiertrans' name='$oTier->name'></span>";
 			$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
-			$sUrl = cHttp::build_url($sUrl, cRender::TIER_QS, $oTier->name);
-			$sUrl = cHttp::build_url($sUrl, cRender::TIER_ID_QS, $oTier->id);
+			$sUrl = cHttp::build_url($sUrl, cRenderQS::TIER_QS, $oTier->name);
+			$sUrl = cHttp::build_url($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
 			cRender::button("show transaction graphs", $sUrl);
 		cRenderCards::action_end();
 	cRenderCards::card_end();

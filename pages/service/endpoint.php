@@ -26,8 +26,8 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$sService = cHeader::get( cRender::SERVICE_QS);
-$sServiceID = cHeader::get( cRender::SERVICE_ID_QS);
+$sService = cHeader::get( cRenderQS::SERVICE_QS);
+$sServiceID = cHeader::get( cRenderQS::SERVICE_ID_QS);
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
@@ -85,11 +85,11 @@ if (count($aSnapshots) == 0){
 					$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
 					$sAppdUrl = cADControllerUI::snapshot($oApp, $oSnapshot->businessTransactionId, $oSnapshot->requestGUID, $oTimes);
 					$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
-					$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS, $oSnapshot->businessTransactionName);
-					$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS, $oSnapshot->businessTransactionId);
-					$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->requestGUID);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
-					$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->serverStartTime);
+					$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS, $oSnapshot->businessTransactionName);
+					$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS, $oSnapshot->businessTransactionId);
+					$sSnapQS = cHttp::build_QS($sTransQS, cRenderQS::SNAP_GUID_QS, $oSnapshot->requestGUID);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_URL_QS, $sOriginalUrl);
+					$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_TIME_QS, $oSnapshot->serverStartTime);
 					
 					?>
 					<tr class="<?=cRender::getRowClass()?>">

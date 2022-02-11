@@ -59,7 +59,7 @@ cRenderCards::card_start("Applications");
 		cRender::button("Sort by Backend Name", "allbackendsbyname.php");
 		$sUrl = "allbackends.php";
 		if (!cRender::is_list_mode()){
-			$sUrl.= "?".cRender::LIST_MODE_QS;
+			$sUrl.= "?".cRenderQS::LIST_MODE_QS;
 			cRender::button("list mode", $sUrl);
 		}else			
 			cRender::button("chart mode", $sUrl);
@@ -77,15 +77,15 @@ cRenderCards::card_end();
 foreach ($oApps as $oApp){
 	$sApp = $oApp->name;
 	$sID = $oApp->id;
-	$sUrl = cHttp::build_url("../app/appext.php", cRender::APP_QS, $sApp);
-	$sUrl = cHttp::build_url($sUrl, cRender::APP_ID_QS, $sID);
+	$sUrl = cHttp::build_url("../app/appext.php", cRenderQS::APP_QS, $sApp);
+	$sUrl = cHttp::build_url($sUrl, cRenderQS::APP_ID_QS, $sID);
 	
 	cRenderCards::card_start("<a name='$sID' appname='$sApp'>$sApp</a>");
 	cRenderCards::body_start();
 		echo "<div type='adWidget' home='$home' ".
-				cRender::APP_QS."='$oApp->name' ".
-				cRender::APP_ID_QS."='$oApp->id' ".
-				cRender::LIST_MODE_QS."=".cRender::is_list_mode().">".
+				cRenderQS::APP_QS."='$oApp->name' ".
+				cRenderQS::APP_ID_QS."='$oApp->id' ".
+				cRenderQS::LIST_MODE_QS."=".cRender::is_list_mode().">".
 				"please Wait - loading backend  for app $oApp->name".
 		"</div>";
 	cRenderCards::body_end();

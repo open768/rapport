@@ -26,14 +26,14 @@ require_once("$root/inc/filter.php");
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
-$node= cHeader::get(cRender::NODE_QS);
+$node= cHeader::get(cRenderQS::NODE_QS);
 $gsAppQs=cRenderQS::get_base_app_QS($oApp);
 $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
-$gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
+$gsMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 if ($gsMetricType==null) $gsMetricType = cADMetricPaths::METRIC_TYPE_ACTIVITY;
 
 $gsBaseUrl = cHttp::build_url(cCommon::filename(), $gsTierQs );
-if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRender::NODE_QS, $node );
+if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRenderQS::NODE_QS, $node );
 
 $sExtraCaption = ($node?"($node) node":"");
 $title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transaction graphs";
@@ -85,10 +85,10 @@ function render_tier_transactions($poApp, $poTier){
 		
 		if ($oStats->count == 0)	continue;
 		$iCount ++;
-		$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $sTrName);
-		$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
+		$sLink = cHttp::build_url($sBaseUrl,cRenderQS::TRANS_QS, $sTrName);
+		$sLink = cHttp::build_url($sLink,cRenderQS::TRANS_ID_QS,$sTrID);
 		
-		if ($node) $sLink = cHttp::build_url($sLink,cRender::NODE_QS,$node);
+		if ($node) $sLink = cHttp::build_url($sLink,cRenderQS::NODE_QS,$node);
 		
 		$sMetricUrl=cADMetricPaths::transCallsPerMin($oTrans, $node);
 		$aMetrics[] = [
@@ -143,7 +143,7 @@ function show_node_menu(){
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
 				$sUrl = cHttp::build_url(cCommon::filename(),$gsTierQs);
-				$sUrl = cHttp::build_url($sUrl, cRender::NODE_QS, $oNode->name);
+				$sUrl = cHttp::build_url($sUrl, cRenderQS::NODE_QS, $oNode->name);
 				
 				?>
 					<option <?=$sDisabled?> value="<?=$sUrl?>"><?=$oNode->name?></option>
@@ -168,21 +168,21 @@ cRenderCards::body_start();
 	
 	$aMetrics=[];
 	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::CALLS_PER_MIN );
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::METRIC_QS, cADMetricPaths::CALLS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
 	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::RESPONSE_TIME );
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::METRIC_QS, cADMetricPaths::RESPONSE_TIME );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
 	$sMetricUrl=cADMetricPaths::tierErrorsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::ERRS_PER_MIN );
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::METRIC_QS, cADMetricPaths::ERRS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"

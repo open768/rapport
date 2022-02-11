@@ -57,8 +57,8 @@ function render_tier_ext($poApp, $poTier, $poData){
 				$oTimes = $oDetail->times;
 				
 				if ($oCalls && $oTimes && ($oTimes->max > 0)){
-						$sQs = cHttp::build_qs($sBaseQs, cRender::FROM_TIER_QS, $poTier->name);
-						$sQs = cHttp::build_qs($sQs, cRender::TO_TIER_QS, $other_tier);
+						$sQs = cHttp::build_qs($sBaseQs, cRenderQS::FROM_TIER_QS, $poTier->name);
+						$sQs = cHttp::build_qs($sQs, cRenderQS::TO_TIER_QS, $other_tier);
 						?><tr>
 							<td><a href='tiertotier.php?<?=$sQs?>'><?=$other_tier?></a></td>
 							<td align="middle"><?=$oCalls->max?></td>

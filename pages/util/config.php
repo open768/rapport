@@ -22,7 +22,7 @@ cRenderHtml::header("configuration");
 cRender::force_login();
 
 //####################################################################
-$sUsage = cHeader::get(cRender::USAGE_QS);
+$sUsage = cHeader::get(cRenderQS::USAGE_QS);
 if (!$sUsage) $sUsage = 1;
 
 //####################################################################

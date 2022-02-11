@@ -38,8 +38,8 @@ function show_tier_menu(){
 		<option selected disabled>Show external calls for Tiers...</option>
 		<?php
 			foreach ($aTiers as $oTier){
-				$sUrl = cHttp::build_qs($gsAppQS, cRender::TIER_QS, $oTier->name);
-				$sUrl = cHttp::build_qs($sUrl, cRender::TIER_ID_QS, $oTier->id);
+				$sUrl = cHttp::build_qs($gsAppQS, cRenderQS::TIER_QS, $oTier->name);
+				$sUrl = cHttp::build_qs($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
 				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></option><?php
 			}
 		?>
@@ -86,7 +86,7 @@ cRendercards::body_start();
 		$class=cRender::getRowClass();
 		$sName = $oExtTier->name;
 		
-		$sUrl=cHttp::build_qs($gsAppQS,cRender::BACKEND_QS,$oExtTier->name);
+		$sUrl=cHttp::build_qs($gsAppQS,cRenderQS::BACKEND_QS,$oExtTier->name);
 		$sUrl=cHttp::build_url("appexttiers.php", $sUrl);
 
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>200];

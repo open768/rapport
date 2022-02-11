@@ -17,7 +17,7 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-$sNode = cHeader::get(cRender::NODE_QS);
+$sNode = cHeader::get(cRenderQS::NODE_QS);
 
 //####################################################################
 cRenderHtml::header("pick a Queue Manager on Node $sNode");
@@ -51,11 +51,11 @@ cRenderCards::card_start(($iCount==0?"Queue Managers":"Pick a Queue Manager"));
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cRender::button("Back to nodes", "mq.php");	
-		$sUrl = cHttp::build_url(cCommon::filename(), cRender::NODE_QS, $sNode);
+		$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::NODE_QS, $sNode);
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", $sUrl);
 		else
-			cRender::button("show as list", $sUrl."&".cRender::LIST_MODE_QS);
+			cRender::button("show as list", $sUrl."&".cRenderQS::LIST_MODE_QS);
 	cRenderCards::action_end();
 cRenderCards::card_end();
 		
@@ -85,8 +85,8 @@ if ($iCount > 0){
 					cRenderCards::card_start($sChar);
 					cRenderCards::body_start();
 				}
-				$sUrl=cHttp::build_url("mqqueues.php", cRender::NODE_QS, $sNode);
-				$sUrl=cHttp::build_qs($sUrl, cRender::SERVER_MQ_MANAGER_QS, $oItem->name);
+				$sUrl=cHttp::build_url("mqqueues.php", cRenderQS::NODE_QS, $sNode);
+				$sUrl=cHttp::build_qs($sUrl, cRenderQS::SERVER_MQ_MANAGER_QS, $oItem->name);
 				cRender::button($oItem->name, $sUrl);	
 				$sPrevious = $sChar;
 			}

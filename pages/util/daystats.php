@@ -21,8 +21,8 @@ require_once "$root/inc/charts.php";
 
 //display the results
 $oApp = cRenderObjs::get_current_app();
-$sBaseMetric = cHeader::get(cRender::METRIC_QS);
-$sCaption = cHeader::get(cRender::TITLE_QS);
+$sBaseMetric = cHeader::get(cRenderQS::METRIC_QS);
+$sCaption = cHeader::get(cRenderQS::TITLE_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 
@@ -71,12 +71,12 @@ $oLastWeek = clone $oToday;
 $oLastWeek->start = $oLastWeek->start - (3600*24*7*1000);
 $oLastWeek->end = $oLastWeek->end - (3600*24*7*1000);
 
-$sLastYr = cHeader::get(cRender::LAST_YEAR_QS);
+$sLastYr = cHeader::get(cRenderQS::LAST_YEAR_QS);
 $oLastYear = clone $oToday;
 if ($sLastYr){
 	$iTime = strtotime($sLastYr);
 	$oLastYear->start = $iTime *1000;
-	$oLastYear->set_duration(cHeader::get(cRender::TIME_DURATION_QS));
+	$oLastYear->set_duration(cHeader::get(cRenderQS::TIME_DURATION_QS));
 }else{
 	$oLastYear->start = $oLastYear->start - (3600*24*365*1000);
 	$oLastYear->end = $oLastYear->end - (3600*24*365*1000);
@@ -87,12 +87,12 @@ function add_widget($psLabel, $poTimes){
 	global $oApp, $home, $sBaseMetric;
 	?><tr 
 		type="widget" 
-		<?=cRender::LABEL_QS?>="<?=$psLabel?>"
-		<?=cRender::HOME_QS?>="<?=$home?>"
-		<?=cRender::APP_ID_QS?>="<?=$oApp->id?>"
-		<?=cRender::METRIC_QS?>="<?=$sBaseMetric?>"
-		<?=cRender::TIME_START_QS?>="<?=$poTimes->start?>"
-		<?=cRender::TIME_END_QS?>="<?=$poTimes->end?>">
+		<?=cRenderQS::LABEL_QS?>="<?=$psLabel?>"
+		<?=cRenderQS::HOME_QS?>="<?=$home?>"
+		<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>"
+		<?=cRenderQS::METRIC_QS?>="<?=$sBaseMetric?>"
+		<?=cRenderQS::TIME_START_QS?>="<?=$poTimes->start?>"
+		<?=cRenderQS::TIME_END_QS?>="<?=$poTimes->end?>">
 			<td>Please Wait</td> 
 	</tr><?php
 }
@@ -145,12 +145,12 @@ cRenderCards::card_start("Statistics for the day: $sCaption");
 		$sLastYr = $oLastYear->start_time()->format("d-m-Y");
 		?>
 			<form method="GET">
-				<input type="hidden" name="<?=cRender::APP_ID_QS?>" value="<?=$oApp->id?>">
-				<input type="hidden" name="<?=cRender::TIME_DURATION_QS?>" value="<?=$oToday->duration?>">
-				<input type="hidden" name="<?=cRender::METRIC_QS?>" value="<?=$sBaseMetric?>">
-				<input type="hidden" name="<?=cRender::TITLE_QS?>" value="<?=$sCaption?>">
-				Start date: <input type="text" size="16" id="startdate" name="<?=cRender::TIME_START_QS?>" value="<?=$sStart?>"> -
-				Last year date:	<input type="text" size="16" id="lastyeardate" name="<?=cRender::LAST_YEAR_QS?>" value="<?=$sLastYr?>">
+				<input type="hidden" name="<?=cRenderQS::APP_ID_QS?>" value="<?=$oApp->id?>">
+				<input type="hidden" name="<?=cRenderQS::TIME_DURATION_QS?>" value="<?=$oToday->duration?>">
+				<input type="hidden" name="<?=cRenderQS::METRIC_QS?>" value="<?=$sBaseMetric?>">
+				<input type="hidden" name="<?=cRenderQS::TITLE_QS?>" value="<?=$sCaption?>">
+				Start date: <input type="text" size="16" id="startdate" name="<?=cRenderQS::TIME_START_QS?>" value="<?=$sStart?>"> -
+				Last year date:	<input type="text" size="16" id="lastyeardate" name="<?=cRenderQS::LAST_YEAR_QS?>" value="<?=$sLastYr?>">
 				<input type="submit">
 			</form>
 			<script>

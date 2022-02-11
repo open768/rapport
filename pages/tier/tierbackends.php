@@ -74,7 +74,7 @@ if ($iCount>0 ){
 			</tr>
 			<?php
 				foreach ($aData as $oBackend){
-					$sUrl = cHttp::build_url("../backend/delbackend.php", cRender::BACKEND_QS, $oBackend->id);
+					$sUrl = cHttp::build_url("../backend/delbackend.php", cRenderQS::BACKEND_QS, $oBackend->id);
 					?><tr>
 						<td><?=$oBackend->resolutionInfo->exitPointType?></td>
 						<td><?=$oBackend->displayName?></td>

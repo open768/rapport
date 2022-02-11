@@ -25,10 +25,10 @@ cRender::force_login();
 	?>
 		<FORM method="get" action='<?="$home/rest/getMetric.php"?>'>
 			Application name:<br>
-			<input type="text" name="<?=cRender::APP_QS?>"><p>
+			<input type="text" name="<?=cRenderQS::APP_QS?>"><p>
 			
 			enter the metric below<br>
-			<textarea name="<?=cRender::METRIC_QS?>" rows="5" cols="80" wrap="soft"></textarea>
+			<textarea name="<?=cRenderQS::METRIC_QS?>" rows="5" cols="80" wrap="soft"></textarea>
 			<br>
 			<input type="submit">
 		</form>

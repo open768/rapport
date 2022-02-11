@@ -21,7 +21,7 @@ require_once "$root/inc/charts.php";
 cRenderHtml::header("Application node detail ");
 cRender::force_login();
 $oApp = cRenderObjs::get_current_app();
-$gsMetricType = cHeader::get(cRender::METRIC_TYPE_QS);
+$gsMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
@@ -78,7 +78,7 @@ $sDetailRootQS = cHttp::build_url(cCommon::filename(), $sAppQS);
 
 cRenderMenus::show_app_agent_menu();
 
-cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRender::METRIC_TYPE_QS,$gsMetricType));
+cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
 
 cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 //####################################################################
@@ -120,15 +120,15 @@ if ($iNodes==0){
 				?><hr><?php
 
 				cRenderMenus::show_tier_functions($oTier);
-				$sTierQS = cHttp::build_qs($sAppQS, cRender::TIER_QS, $tier);
-				$sTierQS = cHttp::build_qs($sTierQS , cRender::TIER_ID_QS, $tid);
+				$sTierQS = cHttp::build_qs($sAppQS, cRenderQS::TIER_QS, $tier);
+				$sTierQS = cHttp::build_qs($sTierQS , cRenderQS::TIER_ID_QS, $tid);
 				$sTierRootUrl=cHttp::build_url("tierinfrstats.php",$sTierQS);				
 				$aMetrics = [];
 				foreach ($aTierNodes as $oNode){
 					$sNode = $oNode->name;
 
 					$oMetric = cADInfraMetric::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
-					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRender::NODE_QS,$sNode);
+					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRenderQS::NODE_QS,$sNode);
 					
 					$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
 					$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];

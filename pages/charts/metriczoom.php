@@ -19,10 +19,10 @@ require_once "$root/inc/charts.php";
 
 
 //####################################################################
-$sMetric = cHeader::get(cRender::METRIC_QS);
+$sMetric = cHeader::get(cRenderQS::METRIC_QS);
 $oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "No Application Specified";
-$sTitle = cHeader::get(cRender::TITLE_QS);
+$sTitle = cHeader::get(cRenderQS::TITLE_QS);
 
 //####################################################################
 cRenderHtml::header($sTitle);

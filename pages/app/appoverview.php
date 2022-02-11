@@ -98,7 +98,7 @@ cDebug::flush();
 			$sMetricUrl=cADMetricPaths::backendErrorsPerMin($oBackend->name);
 			$aMetrics[] = [cChart::LABEL=>"Errors Per min", cChart::METRIC=>$sMetricUrl];
 			?><hr><?php
-			cRender::button($oBackend->name, cHttp::build_url($sBackendURL, cRender::BACKEND_QS, $oBackend->name));
+			cRender::button($oBackend->name, cHttp::build_url($sBackendURL, cRenderQS::BACKEND_QS, $oBackend->name));
 			?><br><?php
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 	}
@@ -119,8 +119,8 @@ if (cAD::is_demo()){
 $iHeight=100;
 foreach ($aTiers as $oTier){
 	$sTier = $oTier->name;
-	$sTierQS = cHttp::build_QS($gsAppQs, cRender::TIER_QS, $sTier);
-	$sTierQS = cHttp::build_QS($sTierQS, cRender::TIER_ID_QS, $oTier->id);
+	$sTierQS = cHttp::build_QS($gsAppQs, cRenderQS::TIER_QS, $sTier);
+	$sTierQS = cHttp::build_QS($sTierQS, cRenderQS::TIER_ID_QS, $oTier->id);
 	
 	?><h3><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3><?php
 	$aTransactions = $oTier->GET_all_transaction_names();
@@ -135,7 +135,7 @@ foreach ($aTiers as $oTier){
 		$sClass=cRender::getRowClass();
 		
 		?><DIV class="<?=$sClass?>"><?php
-			$sUrl = cHttp::build_url("../trans/transdetails.php?$sTierQS",cRender::TRANS_QS, $sTrans);
+			$sUrl = cHttp::build_url("../trans/transdetails.php?$sTierQS",cRenderQS::TRANS_QS, $sTrans);
 			cRender::button($oTrans->name, $sUrl);
 			
 			$aMetrics = [];

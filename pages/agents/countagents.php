@@ -41,22 +41,22 @@ if (cAD::is_demo()){
 cRenderCards::card_start();
 	cRenderCards::body_start();
 		cCommon::messagebox("may show disabled nodes - please confirm in controller");
-		if (!cHeader::GET(cRender::TOTALS_QS))
+		if (!cHeader::GET(cRenderQS::TOTALS_QS))
 			cRender::add_filter_box("a[type=app]","name",".mdl-card");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::agents());
 		cRender::button("Show All Agent Versions", "allagentversions.php");	
-		if (cHeader::GET(cRender::TOTALS_QS))
+		if (cHeader::GET(cRenderQS::TOTALS_QS))
 			cRender::button("show details", cCommon::filename());
 		else
-			cRender::button("show totals", cCommon::filename()."?".cRender::TOTALS_QS."=1");
+			cRender::button("show totals", cCommon::filename()."?".cRenderQS::TOTALS_QS."=1");
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
 //####################################################################
 ?>
-	<div id="allagentwidget" <?=cRender::HOME_QS?>='<?=$home?>' <?=cRender::TOTALS_QS?>='<?=cHeader::GET(cRender::TOTALS_QS)?>'>Please Wait...</div>
+	<div id="allagentwidget" <?=cRenderQS::HOME_QS?>='<?=$home?>' <?=cRenderQS::TOTALS_QS?>='<?=cHeader::GET(cRenderQS::TOTALS_QS)?>'>Please Wait...</div>
 	<script language="javascript">
 		function init_widget(){
 			$("#allagentwidget").adallagents();

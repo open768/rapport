@@ -30,10 +30,10 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
-$node= cHeader::get(cRender::NODE_QS);
+$node= cHeader::get(cRenderQS::NODE_QS);
 $gsAppQs=cRenderQS::get_base_app_QS($oApp);
 $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
-$gsMetric = cHeader::get(cRender::METRIC_QS);
+$gsMetric = cHeader::get(cRenderQS::METRIC_QS);
 
 $title= "$oApp->name&gt;$oTier->name&gt;All Transactions";
 
@@ -56,21 +56,21 @@ cRenderMenus::show_tier_functions();
 	$aMetrics=[];
 	
 	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::CALLS_PER_MIN );
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::METRIC_QS, cADMetricPaths::CALLS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall Calls per min ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
 	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::RESPONSE_TIME );
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::METRIC_QS, cADMetricPaths::RESPONSE_TIME );
 	$aMetrics[] = [
 		cChart::LABEL=>"Overall response times (ms) ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
 	$sMetricUrl=cADMetricPaths::tierErrorsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sBaseUrl, cRender::METRIC_QS, cADMetricPaths::ERRS_PER_MIN );
+	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::METRIC_QS, cADMetricPaths::ERRS_PER_MIN );
 	$aMetrics[] = [
 		cChart::LABEL=>"Errors($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
@@ -107,8 +107,8 @@ foreach ($aStats as $oTrans){
 	catch (Exception $e){
 		$sTrID = null;
 	}
-	$sLink = cHttp::build_url($sBaseUrl,cRender::TRANS_QS, $sTrName);
-	$sLink = cHttp::build_url($sLink,cRender::TRANS_ID_QS,$sTrID);
+	$sLink = cHttp::build_url($sBaseUrl,cRenderQS::TRANS_QS, $sTrName);
+	$sLink = cHttp::build_url($sLink,cRenderQS::TRANS_ID_QS,$sTrID);
 		
 	$sMetric = cADMetricPaths::transaction($oTier->name, $sTrName)."|$gsMetric";
 	$aMetrics[] = [

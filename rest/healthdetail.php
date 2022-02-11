@@ -21,7 +21,7 @@ set_time_limit(200); // huge time limit as this could takes a long time
 
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
-$sHeathRuleID = cHeader::get(cRender::HEALTH_ID_QS);
+$sHeathRuleID = cHeader::get(cRenderQS::HEALTH_ID_QS);
 
 //*************************************************************************
 cDebug::write("getting health rule detail  - $sHeathRuleID");

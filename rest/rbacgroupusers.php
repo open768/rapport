@@ -17,16 +17,24 @@ require_once "$home/inc/common.php";
 
 
 //###################### DATA #############################################
-$sNodes = cHeader::GET(cRenderQS::NODE_IDS_QS);
-if ($sNodes == null || $sNodes=="")
-	cDebug::error("missing node IDs");
-$aNodes= json_decode($sNodes);
+$oGroup =  new cAD_RBAC_Group();
+$oGroup->name = cHeader::GET(cRenderQS::GROUP_NAME_QS);
+$oGroup->id = cHeader::GET(cRenderQS::GROUP_ID_QS);
 
-cADController::Mark_historical_nodes($aNodes);
+//*************************************************************************
+cDebug::write("getting group info for $oGroup->name");
+$oGroup->get_security_provider_type();
+
+
+cDebug::write("getting users for group $oGroup->name");
+$oGroup->get_users();
+
 
 //*************************************************************************
 //* output
 //*************************************************************************
 
+cDebug::write("outputting json");
+cCommon::write_json($oGroup);	
 return;
 ?>

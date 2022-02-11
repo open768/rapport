@@ -26,7 +26,7 @@ cRender::force_login();
 
 $sToken = cADCredentials::get_login_token();
 $sURL = cHeader::get_server().dirname($_SERVER["SCRIPT_NAME"])."/$home/index.php";
-$sURL = cHttp::build_URL($sURL,cRender::LOGIN_TOKEN_QS, $sToken);
+$sURL = cHttp::build_URL($sURL,cRenderQS::LOGIN_TOKEN_QS, $sToken);
 ?>
 
 <p>

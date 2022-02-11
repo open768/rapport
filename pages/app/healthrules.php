@@ -63,11 +63,11 @@ cRenderCards::action_start();
 	$sBaseUrl = cHttp::build_url(cCommon::filename(), cRenderQS::get_base_app_QS($oApp));
 	cADCommon::button($sADUrl);
 	cRenderMenus::show_apps_menu("Health rules for:");
-	cRender::button("back to events", cHttp::build_url("events.php", cRender::APP_QS, $oApp->name));
+	cRender::button("back to events", cHttp::build_url("events.php", cRenderQS::APP_QS, $oApp->name));
 	if (cRender::is_list_mode())
 		cRender::button("show details", $sBaseUrl);
 	else
-		cRender::button("show as list", $sBaseUrl."&".cRender::LIST_MODE_QS);
+		cRender::button("show as list", $sBaseUrl."&".cRenderQS::LIST_MODE_QS);
 cRenderCards::action_end();
 cRenderCards::card_end();
 
@@ -98,9 +98,9 @@ if (cRender::is_list_mode()){
 				//display widgets for health rules
 				//they will be asynchronously fetched by the javascript using a http queue;
 				echo "<div type='adhealthrule' home='$home' ".
-						cRender::APP_QS."='$oApp->name' ".
-						cRender::APP_ID_QS."='$oApp->id' ".
-						cRender::HEALTH_ID_QS."='$oRule->id'>".
+						cRenderQS::APP_QS."='$oApp->name' ".
+						cRenderQS::APP_ID_QS."='$oApp->id' ".
+						cRenderQS::HEALTH_ID_QS."='$oRule->id'>".
 							"please Wait - loading details for rule $oRule->name".
 					"</div>";
 			cRenderCards::body_end();

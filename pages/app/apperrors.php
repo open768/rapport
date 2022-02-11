@@ -62,8 +62,8 @@ function render_tier_errors($poTier){
 	cRenderCards::card_start("<span type=\"tiername\" tiername=\"$poTier->name\">$poTier->name</span>");
 	cRenderCards::body_start();
 		?><div type="tiererrors" home="<?=$home?>" 
-				<?=cRender::TIER_QS?>="<?=$poTier->name?>"
-				<?=cRender::APP_ID_QS?>="<?=$oApp->id?>">
+				<?=cRenderQS::TIER_QS?>="<?=$poTier->name?>"
+				<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>">
 					Loading Errors for: <?=$poTier->name?>
 		</div><?php
 	cRenderCards::body_end();

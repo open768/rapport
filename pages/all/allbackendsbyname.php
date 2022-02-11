@@ -77,9 +77,9 @@ $oApps = cADController::GET_all_Applications();
 				$aMetrics[] = [cChart::LABEL=>"Response Times: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
 				cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
 
-				$sGoUrl = cHttp::build_url("backcalls.php", cRender::APP_QS, $oApp->name);
-				$sGoUrl = cHttp::build_url($sGoUrl, cRender::APP_ID_QS, $oApp->id);
-				$sGoUrl = cHttp::build_url($sGoUrl, cRender::BACKEND_QS, $sBackend);
+				$sGoUrl = cHttp::build_url("backcalls.php", cRenderQS::APP_QS, $oApp->name);
+				$sGoUrl = cHttp::build_url($sGoUrl, cRenderQS::APP_ID_QS, $oApp->id);
+				$sGoUrl = cHttp::build_url($sGoUrl, cRenderQS::BACKEND_QS, $sBackend);
 				cRender::button("Go", $sGoUrl);
 			}
 	}

@@ -45,7 +45,7 @@ if ($a->eventTime == $b->eventTime) {
 $aEvents = $oApp->GET_Events($oTimes);
 if (count($aEvents) == 0){
 	cCommon::messagebox("No Events found");
-	cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
+	cRender::button("health rules", cHttp::build_url("healthrules.php", cRenderQS::APP_QS, $oApp->name));
 	cRenderHtml::footer();
 	exit;
 }
@@ -87,7 +87,7 @@ cRenderCards::card_start("Summary");
 		cADCommon::button(cADControllerUI::events($oApp), "Events");
 		cADCommon::button(cADControllerUI::app_health_rules($oApp), "Health Rules");
 		cADCommon::button(cADControllerUI::app_health_policies($oApp), "Health Policies");
-		cRender::button("health rules", cHttp::build_url("healthrules.php", cRender::APP_QS, $oApp->name));
+		cRender::button("health rules", cHttp::build_url("healthrules.php", cRenderQS::APP_QS, $oApp->name));
 		cRenderMenus::show_apps_menu("Events");
 	cRenderCards::action_end();
 cRenderCards::card_end();

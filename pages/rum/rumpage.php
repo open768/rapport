@@ -21,9 +21,9 @@ require_once "$root/inc/charts.php";
 
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
-$rum_page = cHeader::get(cRender::RUM_PAGE_QS);
-$rum_page_id = cHeader::get(cRender::RUM_PAGE_ID_QS);
-$rum_type = cHeader::get(cRender::RUM_TYPE_QS);
+$rum_page = cHeader::get(cRenderQS::RUM_PAGE_QS);
+$rum_page_id = cHeader::get(cRenderQS::RUM_PAGE_ID_QS);
+$rum_type = cHeader::get(cRenderQS::RUM_TYPE_QS);
 $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################

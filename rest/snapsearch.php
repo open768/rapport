@@ -19,8 +19,8 @@ require_once "$home/inc/common.php";
 //###################### DATA #############################################
 $oTrans = cRenderObjs::get_current_trans();
 
-$sDashID = cHeader::get(cRender::DASH_ID_QS);
-$sSearch = cHeader::get(cRender::SEARCH_QS);
+$sDashID = cHeader::get(cRenderQS::DASH_ID_QS);
+$sSearch = cHeader::get(cRenderQS::SEARCH_QS);
 
 //*************************************************************************
 cDebug::write("getting dash board  - $sDashID");

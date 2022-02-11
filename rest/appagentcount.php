@@ -27,7 +27,7 @@ try{
 	$oTier = cRenderObjs::get_current_tier();
 }catch (Exception $e){}
 
-$sTotals = cHeader::GET(cRender::TOTALS_QS);
+$sTotals = cHeader::GET(cRenderQS::TOTALS_QS);
 
 //*************************************************************************
 cDebug::write("getting nodes for $oApp->name");

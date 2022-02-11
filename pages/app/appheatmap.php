@@ -32,7 +32,7 @@ set_time_limit(200);
 
 //get passed in values
 $oApp = cRenderObjs::get_current_app();
-$tier = cHeader::get(cRender::TIER_QS);
+$tier = cHeader::get(cRenderQS::TIER_QS);
 
 
 

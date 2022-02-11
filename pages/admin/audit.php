@@ -15,35 +15,35 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
+require_once "$phpinc/ckinc/audit.php";
+
 //####################################################################
 cRenderHtml::header("Admin Auditing");
 cRender::force_login();
 
 
 //####################################################################
-const HOST_ID="5";
-const ACCOUNT_ID="2";
-const USER_ID="3";
-
-$sAccount = cHeader::get(ACCOUNT_ID);
-$sHost = cHeader::get(HOST_ID);
-$sUser = cHeader::get(USER_ID);
+$sAccount = cHeader::get(cRenderQS::AUDIT_ACCOUNT_QS);
+$sHost = cHeader::get(cRenderQS::AUDIT_HOST_QS);
+$sUser = cHeader::get(cRenderQS::AUDIT_USER_QS);
 $sPage = cCommon::filename();
 
+// Auditing is used purely for the application, this is not the same as auditing AD
 ?>
-<h2>Audit</h2>
+<h2>Audit users of this application</h2>
 <?php
+cCommon::messagebox("work in progress");
 if ($sAccount){
-	$oAccount = new cADAuditAccount;
+	$oAccount = new cAuditAccount;
 	$oAccount->account = $sAccount;
 	$oAccount->host = $sHost;
 	if ($sUser == null){
-		$sBaseUrl = cHttp::build_url($sPage, ACCOUNT_ID, $oAccount->account );
-		$sBaseUrl = cHttp::build_url($sBaseUrl, HOST_ID, $oAccount->host );
-		$aUsers = cADAudit::get_known_users($oAccount);
+		$sBaseUrl = cHttp::build_url($sPage, cRenderQS::AUDIT_ACCOUNT_QS, $oAccount->account );
+		$sBaseUrl = cHttp::build_url($sBaseUrl, cRenderQS::AUDIT_HOST_QS, $oAccount->host );
+		$aUsers = cAudit::get_known_users($oAccount);
 		?><ul><?php
 		foreach ($aUsers as $oUser){
-			$sUrl = cHttp::build_url($sBaseUrl, USER_ID, $oUser->user );
+			$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::AUDIT_USER_QS, $oUser->user );
 			?><li><a href="<?=$sUrl?>"><?=$oUser->user?></a><?php
 		}
 		?></ul><?php
@@ -53,7 +53,7 @@ if ($sAccount){
 			<li>Account: <?=$oAccount->account?>
 			<li>User: <?=$oAccount->user?><br>
 			<ul><?php
-				$aEntries = cADAudit::get_user_entries($oAccount);
+				$aEntries = cAudit::get_user_entries($oAccount);
 				foreach ($aEntries as $oEntry){
 					?><li><?=$oEntry->timstamp?><?php
 				}
@@ -62,14 +62,14 @@ if ($sAccount){
 		<?php
 	}
 }else{
-	$aAccounts = cADAudit::get_audited_accounts();
+	$aAccounts = cAudit::get_audited_accounts();
 	if ($aAccounts == null){
 		cCommon::messagebox("no Accounts found");
 	}else{
 		?><ul><?php
 			foreach ($aAccounts as $oAccount){
-				$sUrl = cHttp::build_url($sPage, ACCOUNT_ID, $oAccount->account );
-				$sUrl = cHttp::build_url($sUrl, HOST_ID, $oAccount->host );
+				$sUrl = cHttp::build_url($sPage, cRenderQS::AUDIT_ACCOUNT_QS, $oAccount->account );
+				$sUrl = cHttp::build_url($sUrl, cRenderQS::AUDIT_HOST_QS, $oAccount->host );
 				?><li><a href="<?=$sUrl?>"><?=$oAccount->account?></a><?php
 			}
 		?></ul><?php

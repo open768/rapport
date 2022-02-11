@@ -55,8 +55,8 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	
 	//---------- where are we going
 	$sReferrer = cHeader::get(cLogin::KEY_REFERRER);
-	$sIgnoreReferrer = cHeader::get(cRender::IGNORE_REF_QS);
-	$sLocation = cHeader::get(cRender::LOCATION_QS);
+	$sIgnoreReferrer = cHeader::get(cRenderQS::IGNORE_REF_QS);
+	$sLocation = cHeader::get(cRenderQS::LOCATION_QS);
 	if (!$sLocation)
 		$sLocation = "$home/pages/all/all.php";
 
@@ -72,10 +72,10 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	//----------- redirect
 	cHeader::redirect($sLocation);
 	exit();
-}else if (cHeader::get(cRender::LOGIN_TOKEN_QS)){
+}else if (cHeader::get(cRenderQS::LOGIN_TOKEN_QS)){
 	cDebug::extra_debug("token found ");
 	try{
-		$sToken = cHeader::get(cRender::LOGIN_TOKEN_QS);
+		$sToken = cHeader::get(cRenderQS::LOGIN_TOKEN_QS);
 		cADCredentials::login_with_token($sToken);
 	}	
 	catch (Exception $e)
@@ -135,7 +135,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 						</select>
 						<label class="mdl-textfield__label" for="<?=cLogin::KEY_HTTPS?>">use https:</label>
 					</div>
-					<input type="hidden" name="<?=cRender::LOCATION_QS?>" value="<?=cHeader::get(cRender::LOCATION_QS)?>">
+					<input type="hidden" name="<?=cRenderQS::LOCATION_QS?>" value="<?=cHeader::get(cRenderQS::LOCATION_QS)?>">
 
 					<?php
 						if (cDebug::is_debugging()){

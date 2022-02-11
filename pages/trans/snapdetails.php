@@ -42,7 +42,7 @@ cRender::force_login();
 
 //####################################################
 //display the results
-$sSnapURL = cHeader::get(cRender::SNAP_URL_QS);
+$sSnapURL = cHeader::get(cRenderQS::SNAP_URL_QS);
 
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
@@ -82,8 +82,8 @@ cRenderCards::body_start();
 cRenderCards::body_end();
 cRenderCards::action_start();
 	cADCommon::button($sAppdUrl);
-	$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
-	$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+	$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS,$oTrans->name);
+	$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS,$oTrans->id);
 	cRender::button("back to transaction: $oTrans->name", "transdetails.php?$sTransQS");
 cRenderCards::action_end();
 cRenderCards::card_end();

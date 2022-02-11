@@ -30,7 +30,7 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
-$iBackend = cHeader::get(cRender::BACKEND_QS);
+$iBackend = cHeader::get(cRenderQS::BACKEND_QS);
 
 
 //####################################################################

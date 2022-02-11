@@ -18,12 +18,12 @@ require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 
-$sNode = cHeader::get(cRender::NODE_QS);
+$sNode = cHeader::get(cRenderQS::NODE_QS);
 if (!$sNode){
 	cCommon::errorbox("no Node specified");
 	exit;
 }
-$sQManager = cHeader::get(cRender::SERVER_MQ_MANAGER_QS);
+$sQManager = cHeader::get(cRenderQS::SERVER_MQ_MANAGER_QS);
 if (!$sQManager){
 	cCommon::errorbox("no Queue Manager specified");
 	exit;
@@ -50,13 +50,13 @@ if (cAD::is_demo()){
 cRenderCards::card_start();
 	cRenderCards::action_start();
 		cRender::button("Back to MQ nodes", "mq.php");	
-		cRender::button("Back to $sNode", cHttp::build_url("mqnode.php",cRender::NODE_QS, $sNode));	
-		$sUrl = cHttp::build_url(cCommon::filename(), cRender::NODE_QS, $sNode);
-		$sUrl = cHttp::build_qs($sUrl, cRender::SERVER_MQ_MANAGER_QS, $sQManager);
+		cRender::button("Back to $sNode", cHttp::build_url("mqnode.php",cRenderQS::NODE_QS, $sNode));	
+		$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::NODE_QS, $sNode);
+		$sUrl = cHttp::build_qs($sUrl, cRenderQS::SERVER_MQ_MANAGER_QS, $sQManager);
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", $sUrl);
 		else
-			cRender::button("show as list", $sUrl."&".cRender::LIST_MODE_QS);
+			cRender::button("show as list", $sUrl."&".cRenderQS::LIST_MODE_QS);
 	cRenderCards::action_end();
 cRenderCards::card_end();
 

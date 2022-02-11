@@ -44,8 +44,8 @@ foreach ($oResponse as $oDetail){
     $sTrans = $oDetail->name;
 	$sTrid = $oDetail->id;
 	$oTrans = new cADTRans($oTier, $sTrans, $sTrid)
-	$sLink = cHttp::build_url($sBaseUrl, cRender::TRANS_QS, $sTrans);
-	$sLink = cHttp::build_url($sLink, cRender::TRANS_ID_QS, $sTrid);
+	$sLink = cHttp::build_url($sBaseUrl, cRenderQS::TRANS_QS, $sTrans);
+	$sLink = cHttp::build_url($sLink, cRenderQS::TRANS_ID_QS, $sTrid);
 	cCommon::flushprint ("<h2><a href='$link'>$sTrans</a></h2>");   
 	
 	$sMetricpath = cADMetricPaths::transCallsPerMin($oTrans);

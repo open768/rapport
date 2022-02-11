@@ -18,7 +18,7 @@ require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 
-$sDB = cHeader::get(cRender::DB_QS);
+$sDB = cHeader::get(cRenderQS::DB_QS);
 
 
 //####################################################################
@@ -29,7 +29,7 @@ cChart::do_header();
 //####################################################################
 
 cRender::button("back to all databases", "alldb.php",false);
-cRender::button("Back to Summary", "db.php?".cRender::DB_QS."=$sDB",false);
+cRender::button("Back to Summary", "db.php?".cRenderQS::DB_QS."=$sDB",false);
 
 //********************************************************************
 if (cAD::is_demo()){

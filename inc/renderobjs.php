@@ -57,8 +57,8 @@ class cRenderObjs{
 	//***************************************************************************
 	public static function get_current_app(){
 		cDebug::enter();
-		$sApp = cHeader::get(cRender::APP_QS);
-		$sAID = cHeader::get(cRender::APP_ID_QS);
+		$sApp = cHeader::get(cRenderQS::APP_QS);
+		$sAID = cHeader::get(cRenderQS::APP_ID_QS);
 		$oApp = null;
 		if (!$sApp && !$sAID)
 			cDebug::extra_debug_warning("no current app");
@@ -74,8 +74,8 @@ class cRenderObjs{
 		$oObj = null;
 		$oApp = self::get_current_app();
 		if ($oApp){
-			$sTier = cHeader::get(cRender::TIER_QS);
-			$sTID = cHeader::get(cRender::TIER_ID_QS);
+			$sTier = cHeader::get(cRenderQS::TIER_QS);
+			$sTID = cHeader::get(cRenderQS::TIER_ID_QS);
 			if (!$sTier && !$sTID)
 				cDebug::extra_debug_warning("no current tier");
 			else
@@ -87,15 +87,15 @@ class cRenderObjs{
 	
 	public static function get_current_trans(){
 		$oTier = self::get_current_tier();
-		$sTrans = cHeader::get(cRender::TRANS_QS);
-		$sTrid = cHeader::get(cRender::TRANS_ID_QS);
+		$sTrans = cHeader::get(cRenderQS::TRANS_QS);
+		$sTrid = cHeader::get(cRenderQS::TRANS_ID_QS);
 		return new cADTrans($oTier, $sTrans, $sTrid);
 	}
 	
 	public static function get_current_snapshot(){
 		$oTrans = self::get_current_trans();
-		$sGuuid = cHeader::get(cRender::SNAP_GUID_QS);
-		$sStartTime = cHeader::get(cRender::SNAP_TIME_QS);
+		$sGuuid = cHeader::get(cRenderQS::SNAP_GUID_QS);
+		$sStartTime = cHeader::get(cRenderQS::SNAP_TIME_QS);
 		return new cADSnapshot($oTrans, $sGuuid, $sStartTime);
 	}
 }

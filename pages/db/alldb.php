@@ -63,7 +63,7 @@ if (count($oResponse) > 0){
 		$sDB=$oDB->name;
 		$sMetric = cADMetricPaths::databaseTimeSpent($sDB);
 
-		$sButton = cRender::button_code($sDB, "db.php?".cRender::DB_QS."=$sDB", false);
+		$sButton = cRender::button_code($sDB, "db.php?".cRenderQS::DB_QS."=$sDB", false);
 		$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$sButton];
 		$aMetrics[] = [cChart::LABEL=>$sDB, cChart::METRIC=>$sMetric, cChart::APP=>cADCore::DATABASE_APPLICATION];
 	}

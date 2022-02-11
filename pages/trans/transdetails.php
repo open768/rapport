@@ -37,14 +37,14 @@ $oTrans = cRenderObjs::get_current_trans();
 $oTier = $oTrans->tier;
 $oApp = $oTier->app;
 
-$node= cHeader::get(cRender::NODE_QS);
+$node= cHeader::get(cRenderQS::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
 
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
-$sTransQS = cHttp::build_QS($sTierQS, cRender::TRANS_QS,$oTrans->name);
-$sTransQS = cHttp::build_QS($sTransQS, cRender::TRANS_ID_QS,$oTrans->id);
+$sTransQS = cHttp::build_QS($sTierQS, cRenderQS::TRANS_QS,$oTrans->name);
+$sTransQS = cHttp::build_QS($sTransQS, cRenderQS::TRANS_ID_QS,$oTrans->id);
 
 
 //********************************************************************
@@ -68,7 +68,7 @@ function show_nodes($psNode){
 				<?php
 					if ($node){
 						?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
-						$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $psNode);
+						$sNodeQs = cHttp::build_QS($sTransQS, cRenderQS::NODE_QS, $psNode);
 						?><option value="tiertransgraph.php?<?=$sNodeQs?>">
 							(<?=($node)?>) server
 						</option><?php 
@@ -79,7 +79,7 @@ function show_nodes($psNode){
 			<?php
 				foreach ($aNodes as $oNode){
 					$sDisabled = ($oNode->name==$node?"disabled":"");
-					$sNodeQs = cHttp::build_QS($sTransQS, cRender::NODE_QS, $oNode->name);
+					$sNodeQs = cHttp::build_QS($sTransQS, cRenderQS::NODE_QS, $oNode->name);
 					$sUrl = "transdetails.php?$sNodeQs";
 					?>
 						<option <?=$sDisabled?> value="<?=$sUrl?>"><?=$oNode->name?></option>
@@ -115,8 +115,8 @@ cRenderCards::card_start("Contents");
 		cRender::button("Search Snapshots", "searchsnaps.php?$sTransQS");
 		$sBaseMetric = cADMetricPaths::Transaction($oTier->name, $oTrans->name);
 		$sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
-		$sUrl = cHttp::build_url($sUrl,cRender::METRIC_QS, $sBaseMetric );
-		$sUrl = cHttp::build_url($sUrl,cRender::TITLE_QS, "Transaction: $oApp->name - $oTier->name - $oTrans->name" );
+		$sUrl = cHttp::build_url($sUrl,cRenderQS::METRIC_QS, $sBaseMetric );
+		$sUrl = cHttp::build_url($sUrl,cRenderQS::TITLE_QS, "Transaction: $oApp->name - $oTier->name - $oTrans->name" );
 		cRender::button("compare statistics", $sUrl,true);
 		echo "<hr>";
 		show_nodes($node);
@@ -148,9 +148,9 @@ cRenderCards::card_start("<a name='2'>Transaction map</a>");
 		function load_trans_flow(){
 			var oLoader = new cTransFlow("<?=FLOW_ID?>");
 			oLoader.home="<?=$home?>";
-			oLoader.APP_QS="<?=cRender::APP_QS?>";
-			oLoader.TIER_QS="<?=cRender::TIER_QS?>";
-			oLoader.TRANS_QS="<?=cRender::TRANS_QS?>";
+			oLoader.APP_QS="<?=cRenderQS::APP_QS?>";
+			oLoader.TIER_QS="<?=cRenderQS::TIER_QS?>";
+			oLoader.TRANS_QS="<?=cRenderQS::TRANS_QS?>";
 			oLoader.load("<?=$oApp->name?>", "<?=$oTier->name?>", "<?=$oTrans->name?>");
 		}
 		$(load_trans_flow);	
@@ -243,9 +243,9 @@ cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
 						$sDate = date(cCommon::ENGLISH_DATE_FORMAT, $iEpoch);
 						$sAppdUrl = cADControllerUI::snapshot( $oSnapshot);
 						$sImgUrl = cRender::get_trans_speed_colour($oSnapshot->timeTakenInMilliSecs);
-						$sSnapQS = cHttp::build_QS($sTransQS, cRender::SNAP_GUID_QS, $oSnapshot->guuid);
-						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_URL_QS, $sOriginalUrl);
-						$sSnapQS = cHttp::build_QS($sSnapQS, cRender::SNAP_TIME_QS, $oSnapshot->starttime);
+						$sSnapQS = cHttp::build_QS($sTransQS, cRenderQS::SNAP_GUID_QS, $oSnapshot->guuid);
+						$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_URL_QS, $sOriginalUrl);
+						$sSnapQS = cHttp::build_QS($sSnapQS, cRenderQS::SNAP_TIME_QS, $oSnapshot->starttime);
 						
 						?><tr class="<?=cRender::getRowClass()?>">
 							<td><?=$sDate?></td>

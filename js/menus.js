@@ -103,10 +103,12 @@ var cTopMenu={
 			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Databases", sHome +"/pages/db/alldb.php");
+			this.pr__add_to_expansion(oContentDiv, "Groups", sAllPrefixUrl+"/allgroups.php");
 			this.pr__add_to_expansion(oContentDiv, "Health", sAllPrefixUrl+"/health.php");
 			this.pr__add_to_expansion(oContentDiv, "Remote Services", sAllPrefixUrl+"/allbackends.php");
 			this.pr__add_to_expansion(oContentDiv, "Synthetics", sAllPrefixUrl+"/allsynth.php");
 			this.pr__add_to_expansion(oContentDiv, "Tiers", sAllPrefixUrl+"/alltier.php");
+			this.pr__add_to_expansion(oContentDiv, "Users", sAllPrefixUrl+"/allusers.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Overviews");
 			var sApp, sAppid;

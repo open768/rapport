@@ -26,7 +26,7 @@ if (cAD::is_demo()){
 
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
-$sExt = cHeader::get(cRender::BACKEND_QS);
+$sExt = cHeader::get(cRenderQS::BACKEND_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
@@ -50,7 +50,7 @@ if ($sMatched == null){
 	cCommon::errorbox("unable to find a matching external call: $sExt");
 	exit;
 }
-$sExtQS = cHttp::build_qs($sAppQS, cRender::BACKEND_QS, $sMatched);
+$sExtQS = cHttp::build_qs($sAppQS, cRenderQS::BACKEND_QS, $sMatched);
 
 $aMetrics = [];
 
@@ -58,8 +58,8 @@ $aMetrics = [];
 foreach ( $oResponse as $oTier){
 	$sTier=$oTier->name;
 	
-	$sUrl = cHttp::build_qs($sExtQS, cRender::TIER_QS, $oTier->name);
-	$sUrl = cHttp::build_qs($sUrl, cRender::TIER_ID_QS, $oTier->id);
+	$sUrl = cHttp::build_qs($sExtQS, cRenderQS::TIER_QS, $oTier->name);
+	$sUrl = cHttp::build_qs($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
 	$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
 	
 	$aMetrics[] = [cChart::LABEL=>$sTier,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];

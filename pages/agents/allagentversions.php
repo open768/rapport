@@ -44,9 +44,9 @@ function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
 	?>
 		<div 
 			type="widget" 
-			<?=cRender::HOME_QS?>='<?=$home?>' 
-			<?=cRender::TYPE_QS?>='<?=$psType?>'
-			<?=cRender::TOTALS_QS?>='<?=cHeader::GET(cRender::TOTALS_QS)?>'
+			<?=cRenderQS::HOME_QS?>='<?=$home?>' 
+			<?=cRenderQS::TYPE_QS?>='<?=$psType?>'
+			<?=cRenderQS::TOTALS_QS?>='<?=cHeader::GET(cRenderQS::TOTALS_QS)?>'
 				>Please Wait...</div>
 	<?php
 	cRenderCards::body_end();
@@ -77,10 +77,10 @@ cRenderCards::card_start("Contents");
 		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
 		cADCommon::button(cADControllerUI::agents(), "Agent Settings");
 		cRender::button("Agents per App", "countagents.php");	
-		if (cHeader::GET(cRender::TOTALS_QS))
+		if (cHeader::GET(cRenderQS::TOTALS_QS))
 			cRender::button("show details", cCommon::filename());
 		else
-			cRender::button("show totals", cCommon::filename()."?".cRender::TOTALS_QS."=1");
+			cRender::button("show totals", cCommon::filename()."?".cRenderQS::TOTALS_QS."=1");
 	cRenderCards::action_end();
 cRenderCards::card_end();
 

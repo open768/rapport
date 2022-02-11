@@ -78,13 +78,13 @@ if (cRender::is_list_mode()){
 			cRenderMenus::show_apps_menu("Application Tier Activity for:");
 			cADCommon::button(cADControllerUI::application($oApp));
 			cADCommon::button(cADControllerUI::app_slow_transactions($oApp), "Slow Transactions");
-			$sUrl.= "&".cRender::LIST_MODE_QS;
+			$sUrl.= "&".cRenderQS::LIST_MODE_QS;
 			cRender::button("show as list", $sUrl);
 			
 			$sBaseMetric = cADMetricPaths::app();
 			$sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
-			$sUrl = cHttp::build_url($sUrl,cRender::METRIC_QS, $sBaseMetric );
-			$sUrl = cHttp::build_url($sUrl,cRender::TITLE_QS, "Application: $oApp->name" );
+			$sUrl = cHttp::build_url($sUrl,cRenderQS::METRIC_QS, $sBaseMetric );
+			$sUrl = cHttp::build_url($sUrl,cRenderQS::TITLE_QS, "Application: $oApp->name" );
 			cRender::button("compare statistics", $sUrl,true);
 			
 			cRender::add_filter_box("select[menu=tierfunctions]","tier",".mdl-card");

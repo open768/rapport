@@ -36,7 +36,7 @@ set_time_limit(200);
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
-$node = cHeader::get(cRender::NODE_QS);
+$node = cHeader::get(cRenderQS::NODE_QS);
 	
 
 $title = "$oApp->name&gt;$oTier->name&gt;Infrastructure";
@@ -80,7 +80,7 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 	<optgroup label="Individual Servers"><?php
 		foreach ($aNodes as $oNode){
 			$sNode = $oNode->name;
-			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sTierInfraUrl, cRender::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
+			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sTierInfraUrl, cRenderQS::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
 		}
 	?></optgroup>
 </select>
@@ -113,14 +113,14 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
 	$aMetrics = [];
 	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
+	$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Activity for all nodes in Tier:$oTier->name"
 	];
 	
 	$sMetricUrl=cADMetricPaths::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
+	$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$oTier->name"
@@ -139,7 +139,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::HIDEIFNODATA=>true,
@@ -157,7 +157,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::HIDEIFNODATA=>true,
@@ -175,7 +175,7 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::HIDEIFNODATA=>true,

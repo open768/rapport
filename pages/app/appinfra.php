@@ -50,7 +50,7 @@ foreach ($aTiers as $oTier){
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRender::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[] = [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers",
