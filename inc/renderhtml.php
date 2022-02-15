@@ -110,7 +110,7 @@ class cRenderHtml{
 		<BODY>
 			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
 				<div class="mdl-layout__drawer">
-					<span class="mdl-layout__title">Reporter</span>
+					<span class="mdl-layout__title">Rapport</span>
 					<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
 				</div>
 				<header class="mdl-layout__header">
@@ -187,7 +187,7 @@ class cRenderHtml{
 							<span>
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrinfo">Information</button>
 								<div style="display:none" class="dialog" for="ftrinfo" title="Information">
-									We're on <a href="https://github.com/open768/appdynamics-reporter">Github</a><br>
+									We're on <a href="https://github.com/open768/rapport">Github</a><br>
 									No passwords are stored by this application.<br>
 									Appdynamics is a trademark of Appdynamics LLC which is part of Cisco. This site is not affiliated with either Appdynamics or Cisco.
 								</div>

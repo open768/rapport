@@ -14,7 +14,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 
 cRenderHtml::header("Agent Counts");
 cRender::force_login();
@@ -26,11 +25,7 @@ cRender::force_login();
 
 
 //********************************************************************************
-const BLANK_WIDTH=200;
-const TIERCOL_WIDTH=300;
-const TOTALCOL_WIDTH=150;
 
-$moApps = cADController::GET_all_Applications();
 if (cAD::is_demo()){
 	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
@@ -38,7 +33,7 @@ if (cAD::is_demo()){
 }
 
 //#############################################################
-cRenderCards::card_start();
+cRenderCards::card_start("Agent Counts reported by the controller");
 	cRenderCards::body_start();
 		cCommon::messagebox("may show disabled nodes - please confirm in controller");
 		if (!cHeader::GET(cRenderQS::TOTALS_QS))
@@ -47,6 +42,7 @@ cRenderCards::card_start();
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::agents());
 		cRender::button("Show All Agent Versions", "allagentversions.php");	
+		cRender::button("Count Actual Agents", "countactualagents.php");	
 		if (cHeader::GET(cRenderQS::TOTALS_QS))
 			cRender::button("show details", cCommon::filename());
 		else
@@ -56,7 +52,13 @@ cRenderCards::card_end();
 
 //####################################################################
 ?>
-	<div id="allagentwidget" <?=cRenderQS::HOME_QS?>='<?=$home?>' <?=cRenderQS::TOTALS_QS?>='<?=cHeader::GET(cRenderQS::TOTALS_QS)?>'>Please Wait...</div>
+	<div 
+		id="allagentwidget" 
+		<?=cRenderQS::HOME_QS?>='<?=$home?>' 
+		<?=cRenderQS::TOTALS_QS?>='<?=cHeader::GET(cRenderQS::TOTALS_QS)?>'
+		<?=cRenderQS::AGENT_COUNT_TYPE_QS?>='<?=cRenderQS::COUNT_TYPE_APPD?>' >
+			Please Wait...
+	</div>
 	<script language="javascript">
 		function init_widget(){
 			$("#allagentwidget").adallagents();

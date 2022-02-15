@@ -63,66 +63,56 @@ var cTopMenu={
 		var sUtilPrefixUrl = sHome+"/pages/util";
 		var sRumPrefixUrl = sHome+"/pages/rum";
 		var sSrvPrefixUrl = sHome+"/pages/server";
+		var sAgentPrefix = sHome+"/pages/agents"
 		var sAnalyticsPrefixUrl = sHome+"/pages/analytics";
 		
 		
 		//add the sections
 		var oContentDiv;
-		oContentDiv = this.pr__add_expansion(poDiv, "General", true);
-			var oParams = {};
-			oParams[cRender.IGNORE_REF_QS] = 1;
-			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
-			this.pr__add_to_expansion(oContentDiv, "Login Token", sHome +"/pages/authtoken.php");
-			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
-			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
-			this.pr__add_to_expansion(oContentDiv, "API tester", sHome +"/pages/api/api.php");
-		
+		oContentDiv = this.pr__add_expansion(poDiv, "Agents AND licenses");
+			this.pr__add_to_expansion(oContentDiv, "Agent Downloads", sAgentPrefix+"/appdversions.php");
+			this.pr__add_to_expansion(oContentDiv, "Agent Licenses", sAgentPrefix+"/agentlicense.php");
+			this.pr__add_to_expansion(oContentDiv, "Agent Versions", sAgentPrefix + "/allagentversions.php");
+			this.pr__add_to_expansion(oContentDiv, "Count Agents by application", sAgentPrefix + "/countappagents.php");
+			this.pr__add_to_expansion(oContentDiv, "License Usage Summary", sAgentPrefix+"/licenseusage.php");
+			
+
+		oContentDiv = this.pr__add_expansion(poDiv, "All");
+			oParams = {};
+			oParams[cRenderQS.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
+			this.pr__add_to_expansion(oContentDiv, "Analytics", sAnalyticsPrefixUrl+"/analytics.php");
+			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Databases", sHome +"/pages/db/alldb.php");
+			this.pr__add_to_expansion(oContentDiv, "Health", sAllPrefixUrl+"/health.php");
+			this.pr__add_to_expansion(oContentDiv, "Remote Services", sAllPrefixUrl+"/allbackends.php");
+			this.pr__add_to_expansion(oContentDiv, "Synthetics", sAllPrefixUrl+"/allsynth.php");
+			this.pr__add_to_expansion(oContentDiv, "Tiers", sAllPrefixUrl+"/alltier.php");
+			
 		oContentDiv = this.pr__add_expansion(poDiv, "Check");
+			this.pr__add_to_expansion(oContentDiv, "Audit Logs", sHome +"/pages/audit/audit.php");
 			this.pr__add_to_expansion(oContentDiv, "Configuration", sUtilPrefixUrl+"/config.php");
-			this.pr__add_to_expansion(oContentDiv, "License Usage", sUtilPrefixUrl+"/licenseusage.php");
-			this.pr__add_to_expansion(oContentDiv, "Agent Licenses", sUtilPrefixUrl+"/agentlicense.php");
 			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sUtilPrefixUrl+"/checkup.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Dashboards");
 			this.pr__add_to_expansion(oContentDiv, "Check", sHome +"/pages/dash/check.php");
 			this.pr__add_to_expansion(oContentDiv, "Search", sHome +"/pages/dash/search.php");
 			
-		oContentDiv = this.pr__add_expansion(poDiv, "Agents");
-			this.pr__add_to_expansion(oContentDiv, "All Agents", sHome+"/pages/agents/allagentversions.php");
-			this.pr__add_to_expansion(oContentDiv, "Count By Application", sHome+"/pages/agents/countagents.php");
-			this.pr__add_to_expansion(oContentDiv, "Downloads", sUtilPrefixUrl+"/appdversions.php");
-
+		oContentDiv = this.pr__add_expansion(poDiv, "General", true);
+			var oParams = {};
+			oParams[cRenderQS.IGNORE_REF_QS] = 1;
+			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Login Token", sHome +"/pages/authtoken.php");
+			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
+			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
+			this.pr__add_to_expansion(oContentDiv, "API tester", sHome +"/pages/api/api.php");
+		
 		oContentDiv = this.pr__add_expansion(poDiv, "Servers");
 			this.pr__add_to_expansion(oContentDiv, "Server Visibility", sSrvPrefixUrl+"/servers.php");
 			this.pr__add_to_expansion(oContentDiv, "MQ Dashboard", sSrvPrefixUrl+"/mq.php");
 
-		oContentDiv = this.pr__add_expansion(poDiv, "All");
-			oParams = {};
-			oParams[cRender.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_ACTIVITY;
-			this.pr__add_to_expansion(oContentDiv, "Analytics", sAnalyticsPrefixUrl+"/analytics.php");
-			this.pr__add_to_expansion(oContentDiv, "Application Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
-			this.pr__add_to_expansion(oContentDiv, "Browser RUM Activity", cBrowser.buildUrl(sAllPrefixUrl+"/all.php", oParams));
-			this.pr__add_to_expansion(oContentDiv, "Databases", sHome +"/pages/db/alldb.php");
+		oContentDiv = this.pr__add_expansion(poDiv, "Users and Groups");
 			this.pr__add_to_expansion(oContentDiv, "Groups", sAllPrefixUrl+"/allgroups.php");
-			this.pr__add_to_expansion(oContentDiv, "Health", sAllPrefixUrl+"/health.php");
-			this.pr__add_to_expansion(oContentDiv, "Remote Services", sAllPrefixUrl+"/allbackends.php");
-			this.pr__add_to_expansion(oContentDiv, "Synthetics", sAllPrefixUrl+"/allsynth.php");
-			this.pr__add_to_expansion(oContentDiv, "Tiers", sAllPrefixUrl+"/alltier.php");
 			this.pr__add_to_expansion(oContentDiv, "Users", sAllPrefixUrl+"/allusers.php");
-			
-		oContentDiv = this.pr__add_expansion(poDiv, "Overviews");
-			var sApp, sAppid;
-			var iCount = 1;
-			while (true){
-				sApp = poDiv.attr("appname."+iCount);
-				if (!sApp) break;
-				sAppid = poDiv.attr("appid."+iCount);
-				
-				oParams = {};
-				oParams[cRender.APP_QS] = sApp;
-				oParams[cRender.APP_ID_QS] = sAppid;
-				this.pr__add_to_expansion(oContentDiv, sApp, cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
-				iCount++;
-			}
 	}
 }

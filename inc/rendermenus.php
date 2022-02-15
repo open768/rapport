@@ -95,30 +95,7 @@ class cRenderMenus{
 		cDebug::leave();
 	}
 
-	//******************************************************************************************
-	//******************************************************************************************
-	public static function get_apps_attr(){
 
-		cDebug::enter();
-		try{
-			$aApps = cADController::GET_all_Applications();
-		}
-		catch (Exception $e)
-		{
-			return null;
-		}
-		uasort($aApps,"sort_by_app_name" );
-		$iCount=0;
-		$sfragment = "";
-		foreach ($aApps as $oApp){
-			$iCount++;
-			if ($iCount > 1)$sfragment.=",";
-			$sfragment.= "'appname.$iCount':\"".$oApp->name."\",'appid.$iCount':\"$oApp->id\"";
-		}
-		
-		cDebug::leave();
-		return $sfragment;
-	}
 	//******************************************************************************************
 	public static function get_apps_fragment(){
 
@@ -155,9 +132,6 @@ class cRenderMenus{
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null) return;
 
-		$sApps_attr = self::get_apps_attr();
-		if ($sApps_attr== null) return;
-
 		?>
 			<script>
 				function init_top_menu(){
@@ -166,7 +140,6 @@ class cRenderMenus{
 						home:"<?=$home?>",
 						controller:"<?=$oCred->host?>",
 						restricted:"<?=$oCred->restricted_login?>",
-						<?=$sApps_attr?>
 					})
 										
 					//now trigger the rendering of the top menu

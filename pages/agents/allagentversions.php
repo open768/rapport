@@ -73,10 +73,11 @@ cRenderCards::card_start("Contents");
 		<?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRender::button("latest AppDynamics versions", "../util/appdversions.php");	
+		cRender::button("latest AppDynamics versions", "appdversions.php");	
 		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
 		cADCommon::button(cADControllerUI::agents(), "Agent Settings");
-		cRender::button("Agents per App", "countagents.php");	
+		cRender::button("Agents per App", "countappagents.php");	
+		cRender::button("Count Actual Agents", "countactualagents.php");	
 		if (cHeader::GET(cRenderQS::TOTALS_QS))
 			cRender::button("show details", cCommon::filename());
 		else

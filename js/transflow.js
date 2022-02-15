@@ -15,9 +15,6 @@ function cTransFlow( psDivID){
 	this.div_id = psDivID;
 	this.data_url = "rest/getTransFlow.php";
 	this.home = ".";
-	this.APP_QS = "";
-	this.TIER_QS = "";
-	this.TRANS_QS = "";
 	
 	//**********************************************************************
 	this.OnJSON = function(poResult){
@@ -52,9 +49,9 @@ function cTransFlow( psDivID){
 	this.load = function(psApp, psTier, psTrans) {
 		var oParent = this;
 		var oOptions = {};
-			oOptions[this.APP_QS] = psApp;
-			oOptions[this.TIER_QS] = psTier;
-			oOptions[this.TRANS_QS]= psTrans;
+			oOptions[cRenderQS.APP_QS] = psApp;
+			oOptions[cRenderQS.TIER_QS] = psTier;
+			oOptions[cRenderQS.TRANS_QS]= psTrans;
 		var sUrl = this.home + "/" + this.data_url + "?" + $.param(oOptions);
 		$("#"+this.div_id).html("loading transaction flow")
 		write_console("transaction flow url: "+ sUrl);

@@ -36,9 +36,11 @@ class cChartItem{
 	public function write_html(){
 		$iWidth = round($this->width);
 		$iHeight=round($this->height);
+		$sApp = ($this->app ? $this->app->name : cADApp::NO_APP);
 		?><DIV
 			type="adchart" 
-			appName="<?=$this->app->name?>" previous="<?=cChart::$showPreviousPeriod?>"
+			appName="<?=$sApp?>" 
+			previous="<?=cChart::$showPreviousPeriod?>"
 			width="<?=$iWidth?>" height="<?=$iHeight?>" 
 			style="position:relative;max-width:<?=$iWidth?>px;width:<?=$iWidth?>px;height=<?=$iHeight?>px;overflow-wrap:break-all"
 			showZoom="<?=cChart::$show_zoom?>"

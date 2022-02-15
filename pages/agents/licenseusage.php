@@ -45,35 +45,43 @@ catch (Exception $e){
 	exit;	
 }
 
-?>
-<p>
-<select id="menuTime">
-	<option selected disabled>Show Licenses for</option>
-	<?php
-		foreach ([1,2,3,4,5,6,12] as $iOption ){
-			$sDisabled = ($sUsage == $iOption?"disabled":"");
-			?>
-				<option <?=$sDisabled?> value="<?=cHttp::build_url("usage.php",cRenderQS::USAGE_QS,$iOption)?>"><?=$iOption?> Months</option>
+cRenderCards::card_start("Licences");
+	cRenderCards::action_start();
+		cADCommon::button(cADControllerUI::licenses());
+		?><p>
+		<select id="menuTime">
+			<option selected disabled>Show Licenses for</option>
 			<?php
-		}
-	?></optgroup>
-</select>
+				foreach ([1,2,3,4,5,6,12] as $iOption ){
+					$sDisabled = ($sUsage == $iOption?"disabled":"");
+					?>
+						<option <?=$sDisabled?> value="<?=cHttp::build_url("licenseusage.php",cRenderQS::USAGE_QS,$iOption)?>"><?=$iOption?> Months</option>
+					<?php
+				}
+			?></optgroup>
+		</select>
 
-<script language="javascript">
-$(  function(){
-		$("#menuTime").selectmenu({change:common_onListChange,width:300});
-} );
-</script><?php
+		<script language="javascript">
+		$(  function(){
+				$("#menuTime").selectmenu({change:common_onListChange,width:300});
+		} );
+		</script><?php
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
 
 $aMods = $oMods->modules;
 sort ($aMods);
 $aMetrics = [];
-foreach ($aMods as $oModule)
-	$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cADMetricPaths::moduleUsage($oModule->name, $sUsage)];
+cRenderCards::card_start();
+	cRenderCards::body_start();
+		foreach ($aMods as $oModule)
+			$aMetrics[] = [cChart::LABEL=>$oModule->name, cChart::METRIC=>cADMetricPaths::moduleUsage($oModule->name, $sUsage)];
 
-cChart::render_metrics(null, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cChart::render_metrics(null, $aMetrics,300);
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
 cChart::do_footer();
 cRenderHtml::footer();

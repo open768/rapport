@@ -18,9 +18,9 @@ require_once "$root/inc/charts.php";
 
 cRenderHtml::header("AppDynamics Latest  Versions");
 
-cRenderCards::card_start();
+cRenderCards::card_start("Latest Agent Versions");
 	cRenderCards::action_start();
-		cRender::button("Back to Agent Versions", "../all/allagentversions.php");	
+		cRender::button("Agent Versions", "allagentversions.php");	
 		cRender::button("AppDynamics Downloads", "https://download.appdynamics.com/download/");	
 		cADCommon::button(cADControllerUI::agents(), "Agent Settings");
 	cRenderCards::action_end();
