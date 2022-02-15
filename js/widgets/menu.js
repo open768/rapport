@@ -86,8 +86,8 @@ $.widget( "ck.admenu",{
 		
 		//build the params
 		var oParams = {};
-		oParams[cRender.APP_QS] = sAppname;
-		oParams[cRender.APP_ID_QS] = sAppid;
+		oParams[cRenderQS.APP_QS] = sAppname;
+		oParams[cRenderQS.APP_ID_QS] = sAppid;
 		
 		
 		//build the menu
@@ -165,11 +165,11 @@ $.widget( "ck.admenu",{
 			oSelect.append(oOption);
 
 			var oParams = {};
-			oParams[cRender.APP_QS] = sAppname;
-			oParams[cRender.APP_ID_QS] = sAppid;
+			oParams[cRenderQS.APP_QS] = sAppname;
+			oParams[cRenderQS.APP_ID_QS] = sAppid;
 			this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl(sAgentPrefixUrl+"/appagents.php", oParams));
 
-			oParams[cRender.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL;
+			oParams[cRenderQS.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL;
 			this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl(sAgentPrefixUrl+"/appagentdetail.php", oParams));
 		
 		//add and make the menu a selectmenu
@@ -198,7 +198,7 @@ $.widget( "ck.admenu",{
 				if (!sNode) break;
 				
 				var oParams = {};
-				oParams[cRender.NODE_QS] = sNode;
+				oParams[cRenderQS.NODE_QS] = sNode;
 				this.pr__addToGroup(oSelect, sNode, cBrowser.buildUrl(sThisBaseUrl, oParams));
 				iCount++;
 			}
@@ -214,7 +214,7 @@ $.widget( "ck.admenu",{
 		oOptions = this.options;
 		oElement = this.element;
 		
-		var sThisID = cBrowser.data[cRender.APP_ID_QS];
+		var sThisID = cBrowser.data[cRenderQS.APP_ID_QS];
 		var sUrl = oElement.attr("url") + oElement.attr("extra");
 		cJquery.setTopZindex(oElement);
 		
@@ -231,8 +231,8 @@ $.widget( "ck.admenu",{
 				sAppid = oElement.attr("appid."+iCount);
 				
 				oParams = {};
-				oParams[cRender.APP_QS] = sApp;
-				oParams[cRender.APP_ID_QS] = sAppid;
+				oParams[cRenderQS.APP_QS] = sApp;
+				oParams[cRenderQS.APP_ID_QS] = sAppid;
 					
 				oOption = this.pr__addToGroup(oSelect, sApp, cBrowser.buildUrl(sUrl, oParams));
 				if (sAppid == sThisID)	oOption.attr("disabled",1);
@@ -249,7 +249,7 @@ $.widget( "ck.admenu",{
 		oOptions = this.options;
 		oElement = this.element;
 		
-		var sThisTierID = cBrowser.data[cRender.TIER_ID_QS];
+		var sThisTierID = cBrowser.data[cRenderQS.TIER_ID_QS];
 		var sUrl = oElement.attr("url")+ oElement.attr("extra");
 		var sBaseUrl = this.pr__get_base_app_QS(sUrl);
 		var sCaption = oElement.attr("caption");
@@ -266,8 +266,8 @@ $.widget( "ck.admenu",{
 				sTid = oElement.attr("tid."+iCount);
 
 				var oParams = {};
-				oParams[cRender.TIER_QS] = sTier;
-				oParams[cRender.TIER_ID_QS] = sTid;
+				oParams[cRenderQS.TIER_QS] = sTier;
+				oParams[cRenderQS.TIER_ID_QS] = sTid;
 				var sOptUrl = cBrowser.buildUrl(sBaseUrl,oParams);
 				
 				var oOption = this.pr__addToGroup(oSelect, sTier, sOptUrl);
@@ -287,8 +287,8 @@ $.widget( "ck.admenu",{
 		oOptions = this.options;
 		oElement = this.element;
 		
-		var sApp = cBrowser.data[cRender.APP_QS];
-		var sThisTier = cBrowser.data[cRender.TIER_QS];
+		var sApp = cBrowser.data[cRenderQS.APP_QS];
+		var sThisTier = cBrowser.data[cRenderQS.TIER_QS];
 		var sTier = oElement.attr("tier");
 		if (!sTier) sTier = sThisTier;
 		
@@ -342,18 +342,18 @@ $.widget( "ck.admenu",{
 		var oElement = this.element;
 		var oParams = {};
 		
-		oParams[cRender.APP_QS]= cBrowser.data[cRender.APP_QS];
-		oParams[cRender.APP_ID_QS]= cBrowser.data[cRender.APP_ID_QS];
+		oParams[cRenderQS.APP_QS]= cBrowser.data[cRenderQS.APP_QS];
+		oParams[cRenderQS.APP_ID_QS]= cBrowser.data[cRenderQS.APP_ID_QS];
 		
 		var sTier, sTid, sNode;
 		sTier = oElement.attr("tier");
 		sTid = oElement.attr("tid");
 		sNode = oElement.attr("node");
-		if (!sNode) sNode = cBrowser.data[cRender.NODE_QS];
+		if (!sNode) sNode = cBrowser.data[cRenderQS.NODE_QS];
 		
-		oParams[cRender.TIER_ID_QS]= (sTid?sTid:cBrowser.data[cRender.TIER_ID_QS]);
-		oParams[cRender.TIER_QS]= (sTier?sTier:cBrowser.data[cRender.TIER_QS]);
-		if (sNode)	oParams[cRender.NODE_QS]= sNode;
+		oParams[cRenderQS.TIER_ID_QS]= (sTid?sTid:cBrowser.data[cRenderQS.TIER_ID_QS]);
+		oParams[cRenderQS.TIER_QS]= (sTier?sTier:cBrowser.data[cRenderQS.TIER_QS]);
+		if (sNode)	oParams[cRenderQS.NODE_QS]= sNode;
 		
 		return cBrowser.buildUrl(psBaseUrl,oParams);
 	},
@@ -361,8 +361,8 @@ $.widget( "ck.admenu",{
 	//****************************************************************
 	pr__get_base_app_QS: function(psBaseUrl){
 		var oParams = {};
-		oParams[cRender.APP_QS]= cBrowser.data[cRender.APP_QS];
-		oParams[cRender.APP_ID_QS]= cBrowser.data[cRender.APP_ID_QS];
+		oParams[cRenderQS.APP_QS]= cBrowser.data[cRenderQS.APP_QS];
+		oParams[cRenderQS.APP_ID_QS]= cBrowser.data[cRenderQS.APP_ID_QS];
 		
 		return cBrowser.buildUrl(psBaseUrl,oParams);
 	},

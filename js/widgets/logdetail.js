@@ -24,8 +24,8 @@ $.widget( "ck.adlogdetail",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.LOG_ID_QS))		$.error("log rule ID  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.LOG_ID_QS))		$.error("log rule ID  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -92,10 +92,10 @@ $.widget( "ck.adlogdetail",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.LOG_ID_QS ] = oElement.attr(cRender.LOG_ID_QS);
+		oParams[ cRenderQS.LOG_ID_QS ] = oElement.attr(cRenderQS.LOG_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.DETAIL_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.DETAIL_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},

@@ -25,8 +25,8 @@ $.widget( "ck.adallagentversions",{
 		if (!oElement.tablesorter)		$.error("tablesorter widget is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home attr missing!");			
-		if (!oElement.attr(cRender.TYPE_QS))		$.error("type attr missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home attr missing!");			
+		if (!oElement.attr(cRenderQS.TYPE_QS))		$.error("type attr missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -84,10 +84,10 @@ $.widget( "ck.adallagentversions",{
 	get_url: function (){
 		var oElement = this.element;
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
-		oParams[ cRender.TYPE_QS ] = oElement.attr(cRender.TYPE_QS);
-		oParams[ cRender.TOTALS_QS ] = oElement.attr(cRender.TOTALS_QS);
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		oParams[ cRenderQS.TYPE_QS ] = oElement.attr(cRenderQS.TYPE_QS);
+		oParams[ cRenderQS.TOTALS_QS ] = oElement.attr(cRenderQS.TOTALS_QS);
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		return cBrowser.buildUrl(sBaseUrl, oParams);
 	},
 	
@@ -118,7 +118,7 @@ $.widget( "ck.adallagentversions",{
 		oElement.append( sHTML );
 		
 		//-----------------------------------------------------------------------------------
-		if (oElement.attr(cRender.TOTALS_QS))
+		if (oElement.attr(cRenderQS.TOTALS_QS))
 			this.render_agent_totals(poData.detail);
 		else
 			this.render_details(poData.detail);

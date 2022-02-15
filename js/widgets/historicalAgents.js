@@ -25,8 +25,8 @@ $.widget( "ck.adhistagentstiers",{
 		if (!oElement.adagentcount)		$.error("missing adagentcount widget! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -90,10 +90,10 @@ $.widget( "ck.adhistagentstiers",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -120,9 +120,9 @@ $.widget( "ck.adhistagentstiers",{
 			sHTML += cRenderMDL.body_start();
 				sHTML += "<div "+
 					"id='" + sID + "' " +
-					cRender.APP_ID_QS+"='"+oElement.attr(cRender.APP_ID_QS)+"' "+
-					cRender.APP_QS+"='"+ paTiers[0].app.name +"' "+
-					cRender.HOME_QS +"='" + oElement.attr(cRender.HOME_QS) + "' " + 
+					cRenderQS.APP_ID_QS+"='"+oElement.attr(cRenderQS.APP_ID_QS)+"' "+
+					cRenderQS.APP_QS+"='"+ paTiers[0].app.name +"' "+
+					cRenderQS.HOME_QS +"='" + oElement.attr(cRenderQS.HOME_QS) + "' " + 
 					", Please wait.." + 
 				"</div>";
 			sHTML += "</div>";
@@ -161,10 +161,10 @@ $.widget( "ck.adhistagentstiers",{
 						sHTML += 
 							"<div " + 
 								"type='histwidget' " +
-								cRender.APP_ID_QS + "='" + poTier.app.id +"' " +
-								cRender.APP_QS + "='" + poTier.app.name +"' " +
-								cRender.HOME_QS + "='" + oElement.attr(cRender.HOME_QS) +"' " +
-								cRender.TIER_ID_QS + "='" + poTier.id +"' >" +
+								cRenderQS.APP_ID_QS + "='" + poTier.app.id +"' " +
+								cRenderQS.APP_QS + "='" + poTier.app.name +"' " +
+								cRenderQS.HOME_QS + "='" + oElement.attr(cRenderQS.HOME_QS) +"' " +
+								cRenderQS.TIER_ID_QS + "='" + poTier.id +"' >" +
 									"Please wait" +
 							"</div>";
 						sHTML += "</div>";
@@ -172,7 +172,7 @@ $.widget( "ck.adhistagentstiers",{
 							sHTML += 
 								"<SELECT " + 
 									"type='admenus' menu='tierfunctions' " +
-									"home='" + oElement.attr(cRender.HOME_QS) + "' " +
+									"home='" + oElement.attr(cRenderQS.HOME_QS) + "' " +
 									"tier='" + poTier.name + "' " +
 									"tid='" + poTier.id + "'> " +
 										"<option selected>" + poTier.name + " - please wait" +
@@ -219,9 +219,9 @@ $.widget( "ck.adhistagent",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app  missing!");			
-		if (!oElement.attr(cRender.TIER_ID_QS))		$.error("tier  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!");			
+		if (!oElement.attr(cRenderQS.TIER_ID_QS))		$.error("tier  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 		this.init();
 	},
@@ -290,10 +290,10 @@ $.widget( "ck.adhistagent",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
-		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS);
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -307,12 +307,12 @@ $.widget( "ck.adhistagent",{
 		var sID = oElement.attr("id") + "_Count"
 		var sHTML = "<div "+
 			"id='" + sID + "' " +
-			cRender.APP_ID_QS+"='"+oElement.attr(cRender.APP_ID_QS)+"' "+
-			cRender.APP_QS+"='"+oElement.attr(cRender.APP_QS)+"' "+
-			cRender.TIER_ID_QS+"='"+oElement.attr(cRender.TIER_ID_QS)+"' "+
-			cRender.HOME_QS +"='" + oElement.attr(cRender.HOME_QS) + "' " + 
-			cRender.DONT_SHOW_TOTAL_QS + "='1' " +
-			cRender.DONT_CLOSE_CARD_QS + "='1'>" +
+			cRenderQS.APP_ID_QS+"='"+oElement.attr(cRenderQS.APP_ID_QS)+"' "+
+			cRenderQS.APP_QS+"='"+oElement.attr(cRenderQS.APP_QS)+"' "+
+			cRenderQS.TIER_ID_QS+"='"+oElement.attr(cRenderQS.TIER_ID_QS)+"' "+
+			cRenderQS.HOME_QS +"='" + oElement.attr(cRenderQS.HOME_QS) + "' " + 
+			cRenderQS.DONT_SHOW_TOTAL_QS + "='1' " +
+			cRenderQS.DONT_CLOSE_CARD_QS + "='1'>" +
 			"number of nodes counted: " + poData.node_count + ", Please wait.." + 
 		"</div>";
 		oElement.append(sHTML);
@@ -347,8 +347,8 @@ $.widget( "ck.adhistagent",{
 			);
 			
 			var oParams = {};
-			oParams[cRender.NODE_IDS_QS] = JSON.stringify(aNodes);
-			var sAPI = oElement.attr(cRender.HOME_QS) + this.consts.MARK_API;
+			oParams[cRenderQS.NODE_IDS_QS] = JSON.stringify(aNodes);
+			var sAPI = oElement.attr(cRenderQS.HOME_QS) + this.consts.MARK_API;
 			var sUrl = cBrowser.buildUrl(sAPI, oParams);
 			$.get(sUrl);
 			

@@ -4,8 +4,7 @@
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //#
 //###############################################################################
-var cRender={
-	//************************************************************
+var cRenderQS={
 	APP_QS : "app",
 	APP_ID_QS : "aid",
 
@@ -43,6 +42,26 @@ var cRender={
 	PREVIOUS_QS:"prv",
 	LOGIN_TOKEN_QS:"lt",
 
+	//************************************************************
+	AUDIT_TYPE_QS : "aut",
+	AUDIT_TYPE_LIST_ACTIONS : "als",
+	AUDIT_TYPE_ACTION : "ala",
+	AUDIT_FILTER : "auf",
+	AUDIT_FILTER_LOGIN : "LOGIN",
+	AUDIT_FILTER_LOGIN_FAILED : "LOGIN_FAILED",
+	AUDIT_FILTER_LOGOUT : "LOGOUT",
+	AUDIT_FILTER_OBJECT	 : "OBJECT_UPDATED",
+	
+	//************************************************************
+	AGENT_COUNT_TYPE_QS : "act",
+	COUNT_TYPE_APPD : "ctap",
+	COUNT_TYPE_ACTUAL : "ctac",
+	
+	//************************************************************
+	AGENT_COUNT_TYPE_QS : "act",
+	COUNT_TYPE_APPD : "ctap",
+	COUNT_TYPE_ACTUAL : "ctac",
+	
 	//************************************************************
 	IGNORE_REF_QS : "igr",
 	LIST_MODE_QS : "list",
@@ -112,8 +131,10 @@ var cRender={
 	TIME_END_QS : "tend",
 	TIME_DURATION_QS : "tdur",
 	LAST_YEAR_QS:"lyq",
-	TYPE_QS: "typ",
+	TYPE_QS: "typ"
+}
 
+var cRender={
 
 	//**************************************************************************
 	 messagebox: function(psMsg){

@@ -480,11 +480,11 @@ $.widget( "ck.adhealthdetail",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
-		oParams[ cRender.HEALTH_ID_QS ] = oElement.attr(cRender.HEALTH_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		oParams[ cRenderQS.HEALTH_ID_QS ] = oElement.attr(cRenderQS.HEALTH_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.HEALTH_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.HEALTH_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},

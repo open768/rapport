@@ -25,7 +25,8 @@ $.widget( "ck.adallagents",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))					$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.AGENT_COUNT_TYPE_QS))		$.error("count type missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -43,7 +44,7 @@ $.widget( "ck.adallagents",{
 		var oElement = this.element;
 		oElement.empty();
 		oElement.append("status: " +psMessage);
-	},
+		},
 	
 	//*******************************************************************
 	onError: function(poHttp, psMessage){
@@ -77,12 +78,24 @@ $.widget( "ck.adallagents",{
 		if (aResponse.length == 0 )
 			oElement.append(cRender.messagebox("<i>no applications found</i>"));
 		else{
-			var sTotals = oElement.attr(cRender.TOTALS_QS);
 			oElement.empty();
-			if (sTotals)
-				this.render_totals(poHttp.response);
-			else
-				this.render(poHttp.response);
+			var sCountType = oElement.attr(cRenderQS.AGENT_COUNT_TYPE_QS);
+			switch (sCountType){
+				case cRenderQS.COUNT_TYPE_APPD:
+					var sTotals = oElement.attr(cRenderQS.TOTALS_QS);
+					if (sTotals)
+						this.render_appd_totals(poHttp.response);
+					else
+						this.render_appd(poHttp.response);
+					break;
+					
+				case cRenderQS.COUNT_TYPE_ACTUAL:
+					this.render_actual(poHttp.response);
+					break;
+					
+				default:
+					oElement.append(cRender.messagebox("<i>unknown count type</i>"));
+			}
 		}
 	},
 
@@ -93,23 +106,47 @@ $.widget( "ck.adallagents",{
 	get_url: function (){
 		var oElement = this.element;
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var oParams = {};
+		oParams[ cRenderQS.AGENT_COUNT_TYPE_QS ] = oElement.attr(cRenderQS.AGENT_COUNT_TYPE_QS);
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
+		var sUrl = cBrowser.buildUrl(sBaseUrl, oParams);		
 		return sBaseUrl;
 	},
 	
 	//*******************************************************************
-	render: function(paData){
+	render_actual: function(paData){
+		var oElement = this.element;
+		
+		//add a summary box that will receive events
+		var sHTML = cRenderMDL.card_start("summary");		
+			sHTML += cRenderMDL.body_start();
+				sHTML += cRender.messagebox("WIP")	;	
+			sHTML += "</div>";
+		sHTML += "</div><p>";
+		oElement.append(sHTML);
+		
+		//add a Card that will get the agent count for nodes in each app and tier
+		var sHTML = cRenderMDL.card_start("details");		
+			sHTML += cRenderMDL.body_start();
+				sHTML += cRender.messagebox("WIP")	;	
+			sHTML += "</div>";
+		sHTML += "</div><p>";
+		oElement.append(sHTML);
+	},
+	
+	//*******************************************************************
+	render_appd: function(paData){
 		var oElement = this.element;
 		var oThis = this;
-		var sHome = oElement.attr(cRender.HOME_QS);
+		var sHome = oElement.attr(cRenderQS.HOME_QS);
 		paData.forEach( function(poApp){
 			var sHTML = cRenderMDL.card_start("<a type='app' name='"+poApp.name+"'>"+poApp.name+"</a>");		
 				sHTML += cRenderMDL.body_start();
 					sHTML += "<div "+
 						"id='"+poApp.id+"agents' "+
-						cRender.APP_ID_QS+"='"+poApp.id+"' "+
-						cRender.APP_QS+"='"+poApp.name+"' "+
-						cRender.HOME_QS +"='" + oElement.attr(cRender.HOME_QS) + "'>" + 
+						cRenderQS.APP_ID_QS+"='"+poApp.id+"' "+
+						cRenderQS.APP_QS+"='"+poApp.name+"' "+
+						cRenderQS.HOME_QS +"='" + oElement.attr(cRenderQS.HOME_QS) + "'>" + 
 							"Please wait.." + 
 					"</div>";
 				sHTML += "</div>";
@@ -121,7 +158,7 @@ $.widget( "ck.adallagents",{
 					"</div>";
 					
 					var oParams = {};
-					oParams[ cRender.APP_ID_QS ] = poApp.id;
+					oParams[ cRenderQS.APP_ID_QS ] = poApp.id;
 					var sUrl = cBrowser.buildUrl("check_historical.php", oParams);
 					var sButton = cRender.button("historical agents", sUrl);
 					sHTML += sButton;
@@ -141,10 +178,10 @@ $.widget( "ck.adallagents",{
 	},
 	
 	//*******************************************************************
-	render_totals: function(paData){
+	render_appd_totals: function(paData){
 		var oElement = this.element;
 		var oThis = this;
-		var sHome = oElement.attr(cRender.HOME_QS);
+		var sHome = oElement.attr(cRenderQS.HOME_QS);
 		
 		var sHTML = cRenderMDL.card_start("Controller Totals:");		
 			sHTML += cRenderMDL.body_start();
@@ -154,10 +191,10 @@ $.widget( "ck.adallagents",{
 						sHTML += "<TR "+
 							"type='countwidget' " +
 							"id='"+poApp.id+"agents' "+
-							cRender.APP_ID_QS+"='"+poApp.id+"' "+
-							cRender.APP_QS+"='"+poApp.name+"' "+
-							cRender.HOME_QS +"='" + oElement.attr(cRender.HOME_QS) + "' " +
-							cRender.TOTALS_QS +"='" + oElement.attr(cRender.TOTALS_QS) + "'>" +
+							cRenderQS.APP_ID_QS+"='"+poApp.id+"' "+
+							cRenderQS.APP_QS+"='"+poApp.name+"' "+
+							cRenderQS.HOME_QS +"='" + oElement.attr(cRenderQS.HOME_QS) + "' " +
+							cRenderQS.TOTALS_QS +"='" + oElement.attr(cRenderQS.TOTALS_QS) + "'>" +
 							"<td colspan='2'>Please wait..</td>" +
 						"</TR>";
 					});

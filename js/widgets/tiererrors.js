@@ -24,9 +24,9 @@ $.widget( "ck.adtiererrors",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.TIER_QS))		$.error("tier ID  missing!");			
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.TIER_QS))		$.error("tier ID  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -93,11 +93,11 @@ $.widget( "ck.adtiererrors",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.TIER_QS ] = oElement.attr(cRender.TIER_QS);
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRenderQS.TIER_QS ] = oElement.attr(cRenderQS.TIER_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+oConsts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+oConsts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},

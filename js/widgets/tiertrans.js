@@ -24,9 +24,9 @@ $.widget( "ck.adtiertrans",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.TIER_ID_QS))		$.error("tier ID  missing!");			
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.TIER_ID_QS))		$.error("tier ID  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -93,11 +93,11 @@ $.widget( "ck.adtiertrans",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
-		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -111,8 +111,8 @@ $.widget( "ck.adtiertrans",{
 		oElement.empty();
 		
 		var sTransUrlBase = "transdetails.php?"+
-			cRender.APP_ID_QS+"="+oElement.attr(cRender.APP_ID_QS) + "&" +
-			cRender.TIER_ID_QS+"="+oElement.attr(cRender.TIER_ID_QS) ;
+			cRenderQS.APP_ID_QS+"="+oElement.attr(cRenderQS.APP_ID_QS) + "&" +
+			cRenderQS.TIER_ID_QS+"="+oElement.attr(cRenderQS.TIER_ID_QS) ;
 			
 		if (poData.active.length>0){
 			var oTable = $("<table>", {border:1,cellspacing:0,width:"100%"});
@@ -129,8 +129,8 @@ $.widget( "ck.adtiertrans",{
 				oRow.append("<td>"+ sFragment+ "</td>");
 				
 				var sTransUrl = sTransUrlBase + 
-					"&" + cRender.TRANS_ID_QS + "=" + oItem.id +
-					"&" + cRender.TRANS_QS + "=" + oItem.name;
+					"&" + cRenderQS.TRANS_ID_QS + "=" + oItem.id +
+					"&" + cRenderQS.TRANS_QS + "=" + oItem.name;
 				oRow.append("<td><a href='"+sTransUrl+"'>"+oItem.name+"</a></td>");
 				oRow.append("<td>"+oItem.count+"</td>");
 				oRow.append("<td>"+oItem.avg+"</td>");

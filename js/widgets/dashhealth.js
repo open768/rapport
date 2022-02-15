@@ -24,8 +24,8 @@ $.widget( "ck.addashhealth",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.DASH_ID_QS))		$.error("dash ID  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.DASH_ID_QS))		$.error("dash ID  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -92,10 +92,10 @@ $.widget( "ck.addashhealth",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.DASH_ID_QS ] = oElement.attr(cRender.DASH_ID_QS);
+		oParams[ cRenderQS.DASH_ID_QS ] = oElement.attr(cRenderQS.DASH_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},

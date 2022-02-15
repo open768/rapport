@@ -30,13 +30,13 @@ $.widget( "ck.adallapps",{
 				
 		//check for necessary classes
 		if (!oElement.admenu)			$.error("admenu widget is missing! check includes");	
-		if (!oElement.attr(cRender.LIST_MODE_QS) && !oElement.adchart)
+		if (!oElement.attr(cRenderQS.LIST_MODE_QS) && !oElement.adchart)
 			$.error("charts widget is missing! check includes");	
 		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -89,7 +89,7 @@ $.widget( "ck.adallapps",{
 			oElement.append(cRender.messagebox("<i>no applications found</i>"));
 		else{
 			oElement.empty();
-			if (oElement.attr(cRender.LIST_MODE_QS))
+			if (oElement.attr(cRenderQS.LIST_MODE_QS))
 				this.render_list(poHttp.response);
 			else
 				this.render_charts(poHttp.response);
@@ -103,7 +103,7 @@ $.widget( "ck.adallapps",{
 	get_url: function (){
 		var oElement = this.element;
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		return sBaseUrl;
 	},
 	
@@ -111,13 +111,13 @@ $.widget( "ck.adallapps",{
 	render_charts: function(paData){
 		var oElement = this.element;
 		var sStyle = 'type="adchart" style="position: relative; max-width: 341px; width: 341px; height: 125px;" class="chart_widget"';
-		var sHome = oElement.attr(cRender.HOME_QS);
+		var sHome = oElement.attr(cRenderQS.HOME_QS);
 		var oThis = this;
 		
 		paData.forEach( function(poApp){
 			var oParams = {};
-			oParams[ cRender.APP_ID_QS ] = poApp.name;
-			oParams[ cRender.APP_QS ] = poApp.id;
+			oParams[ cRenderQS.APP_ID_QS ] = poApp.name;
+			oParams[ cRenderQS.APP_QS ] = poApp.id;
 			
 			var sHTML = cRenderMDL.card_start();		
 				sHTML += cRenderMDL.body_start();
@@ -147,10 +147,10 @@ $.widget( "ck.adallapps",{
 	convert_charts_to_widgets: function(poApp){
 		var oElement = this.element;
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = poApp.id;
-		oParams[ cRender.APP_QS ] = poApp.name;
+		oParams[ cRenderQS.APP_ID_QS ] = poApp.id;
+		oParams[ cRenderQS.APP_QS ] = poApp.name;
 		var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
-		var sHome = oElement.attr(cRender.HOME_QS);
+		var sHome = oElement.attr(cRenderQS.HOME_QS);
 		
 		$("#"+poApp.id+"1").adchart({
 			home:sHome,
@@ -185,8 +185,8 @@ $.widget( "ck.adallapps",{
 			var sLastCh = null;
 			paData.forEach( function(poApp){
 				var oParams = {};
-				oParams[ cRender.APP_ID_QS ] = poApp.name;
-				oParams[ cRender.APP_QS ] = poApp.id;
+				oParams[ cRenderQS.APP_ID_QS ] = poApp.name;
+				oParams[ cRenderQS.APP_QS ] = poApp.id;
 				
 				var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
 				var sCh = poApp.name[0];

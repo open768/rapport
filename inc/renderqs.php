@@ -54,6 +54,21 @@ class cRenderQS{
 	const LOGIN_TOKEN_QS="lt";
 
 	//************************************************************
+	const AUDIT_TYPE_QS = "aut";
+	const AUDIT_TYPE_LIST_ACTIONS = "als";
+	const AUDIT_TYPE_ACTION = "ala";
+	const AUDIT_FILTER = "auf";
+	const AUDIT_FILTER_LOGIN = "LOGIN";
+	const AUDIT_FILTER_LOGIN_FAILED = "LOGIN_FAILED";
+	const AUDIT_FILTER_LOGOUT = "LOGOUT";
+	const AUDIT_FILTER_OBJECT = "OBJECT_UPDATED";
+
+	//************************************************************
+	const AGENT_COUNT_TYPE_QS = "act";
+	const COUNT_TYPE_APPD = "ctap";
+	const COUNT_TYPE_ACTUAL = "ctac";
+	
+	//************************************************************
 	const AUDIT_HOST_QS = "auh";
 	const AUDIT_ACCOUNT_QS = "aah";
 	const AUDIT_USER_QS = "auh";

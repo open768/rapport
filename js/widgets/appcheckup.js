@@ -24,8 +24,8 @@ $.widget( "ck.adappcheckup",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 		this.pr_queueMe();
 	},
@@ -99,10 +99,10 @@ $.widget( "ck.adappcheckup",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -127,8 +127,8 @@ $.widget( "ck.adappcheckup",{
 		var sClass, i, oMsg, sHome, sAid;
 		
 		oElement.empty();
-		sHome = oElement.attr(cRender.HOME_QS)+"/pages";
-		sAid = cRender.APP_ID_QS +"="+oElement.attr(cRender.APP_ID_QS);
+		sHome = oElement.attr(cRenderQS.HOME_QS)+"/pages";
+		sAid = cRenderQS.APP_ID_QS +"="+oElement.attr(cRenderQS.APP_ID_QS);
 		
 		var sHTML, sUrl, oButton;
 		sHTML = "<table border='1' cellspacing='0' width='100%'>";

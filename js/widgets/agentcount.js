@@ -24,9 +24,9 @@ $.widget( "ck.adagentcount",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.HOME_QS))	$.error("home param missing!");			
-		if (!oElement.attr(cRender.APP_ID_QS))	$.error("app id param  missing!");			
-		if (!oElement.attr(cRender.APP_QS))		$.error("app param  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))	$.error("home param missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))	$.error("app id param  missing!");			
+		if (!oElement.attr(cRenderQS.APP_QS))		$.error("app param  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -42,7 +42,7 @@ $.widget( "ck.adagentcount",{
 	//*******************************************************************
 	onStatus: function(psMessage){
 		var oElement = this.element;
-		var sTotals = oElement.attr(cRender.TOTALS_QS);
+		var sTotals = oElement.attr(cRenderQS.TOTALS_QS);
 		
 		oElement.empty();
 		if (sTotals)
@@ -82,14 +82,14 @@ $.widget( "ck.adagentcount",{
 		var aResponse = poHttp.response;
 		if (aResponse.length == 0 ){
 			oElement.append(cRender.messagebox("<i>no agents found</i>"));
-			if (!oElement.attr(cRender.DONT_CLOSE_CARD_QS))
-				if (oElement.attr(cRender.TOTALS_QS))
+			if (!oElement.attr(cRenderQS.DONT_CLOSE_CARD_QS))
+				if (oElement.attr(cRenderQS.TOTALS_QS))
 					cRender.fade_element(oElement);
 				else
 					cRenderMDL.fade_element_and_hide_card(oElement);
 		}else{
 			oElement.empty();
-			var sTotals = oElement.attr(cRender.TOTALS_QS);
+			var sTotals = oElement.attr(cRenderQS.TOTALS_QS);
 			if (sTotals)
 				this.render_totals(poHttp.response);
 			else
@@ -105,10 +105,10 @@ $.widget( "ck.adagentcount",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
-		oParams[ cRender.TIER_ID_QS ] = oElement.attr(cRender.TIER_ID_QS);
-		oParams[ cRender.TOTALS_QS ] = oElement.attr(cRender.TOTALS_QS);
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS);
+		oParams[ cRenderQS.TOTALS_QS ] = oElement.attr(cRenderQS.TOTALS_QS);
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		var sUrl = cBrowser.buildUrl(sBaseUrl, oParams);		
 		return sUrl;
 	},
@@ -126,9 +126,9 @@ $.widget( "ck.adagentcount",{
 				function(poItem){
 					sHTML += "<TR>";
 						var sTier = poItem.tier;
-						var sApp = oElement.attr(cRender.APP_QS);
+						var sApp = oElement.attr(cRenderQS.APP_QS);
 						if (sTier === "Totals"){
-							if (oElement.attr(cRender.DONT_SHOW_TOTAL_QS)) return;
+							if (oElement.attr(cRenderQS.DONT_SHOW_TOTAL_QS)) return;
 							sTier = "<b>Totals for "+ sApp +" application</b>";
 						}
 						sHTML += "<TD align='right' width='400'>" + sTier + "</TD>";
@@ -155,9 +155,9 @@ $.widget( "ck.adagentcount",{
 		var sHTML = "";
 		paData.forEach(
 			function(poItem){
-				var sApp = oElement.attr(cRender.APP_QS);
+				var sApp = oElement.attr(cRenderQS.APP_QS);
 				var oParams = {};
-				oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+				oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
 				var sUrl = cBrowser.buildUrl("appagents.php", oParams);
 				
 				sHTML += "<TD align='right' width='400'><a href='" + sUrl + "'>" + sApp + "</a></TD>";

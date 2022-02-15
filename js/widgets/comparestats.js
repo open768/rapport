@@ -24,12 +24,12 @@ $.widget( "ck.adcomparestats",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options		
-		if (!oElement.attr(cRender.LABEL_QS))		$.error("Label missing!");			
-		if (!oElement.attr(cRender.METRIC_QS))		$.error("metric missing!");			
-		if (!oElement.attr(cRender.TIME_START_QS))	$.error("start time missing!");		
-		if (!oElement.attr(cRender.TIME_END_QS))	$.error("end time missing!");		
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.LABEL_QS))		$.error("Label missing!");			
+		if (!oElement.attr(cRenderQS.METRIC_QS))		$.error("metric missing!");			
+		if (!oElement.attr(cRenderQS.TIME_START_QS))	$.error("start time missing!");		
+		if (!oElement.attr(cRenderQS.TIME_END_QS))	$.error("end time missing!");		
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app ID  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -97,12 +97,12 @@ $.widget( "ck.adcomparestats",{
 		
 		var oParams = {};
 		
-		oParams[cRender.METRIC_QS] = oElement.attr(cRender.METRIC_QS);
-		oParams[cRender.TIME_START_QS] = oElement.attr(cRender.TIME_START_QS);
-		oParams[cRender.TIME_END_QS] = oElement.attr(cRender.TIME_END_QS);
-		oParams[cRender.APP_ID_QS] = oElement.attr(cRender.APP_ID_QS);
+		oParams[cRenderQS.METRIC_QS] = oElement.attr(cRenderQS.METRIC_QS);
+		oParams[cRenderQS.TIME_START_QS] = oElement.attr(cRenderQS.TIME_START_QS);
+		oParams[cRenderQS.TIME_END_QS] = oElement.attr(cRenderQS.TIME_END_QS);
+		oParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS);
 
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+oConsts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+oConsts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -113,9 +113,9 @@ $.widget( "ck.adcomparestats",{
 		var oElement = this.element;
 		
 		oElement.empty();
-		oElement.append("<td align='right'>"+ oElement.attr(cRender.LABEL_QS)+ "</td>");
+		oElement.append("<td align='right'>"+ oElement.attr(cRenderQS.LABEL_QS)+ "</td>");
 		if (poData.error !== null){
-			var dDate = new Date(  parseInt(oElement.attr(cRender.TIME_START_QS)));
+			var dDate = new Date(  parseInt(oElement.attr(cRenderQS.TIME_START_QS)));
 			oElement.append("<td align='right'>"+ dDate.toLocaleString()+ "</td>");
 			oElement.append("<td colspan='5'>Error: " + poData.error + "</td>");
 		}else{

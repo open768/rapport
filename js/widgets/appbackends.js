@@ -25,9 +25,9 @@ $.widget( "ck.adappbackend",{
 		if (!bean)						$.error("bean class is missing! check includes");	
 		
 		//check for required options
-		if (!oElement.attr(cRender.APP_ID_QS))		$.error("app  missing!");			
-		if (!oElement.attr(cRender.APP_QS))			$.error("appname  missing!");			
-		if (!oElement.attr(cRender.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!");			
+		if (!oElement.attr(cRenderQS.APP_QS))			$.error("appname  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
 	
 		//set behaviour for widget when it becomes visible
@@ -94,10 +94,10 @@ $.widget( "ck.adappbackend",{
 		var oElement = this.element;
 		
 		var oParams = {};
-		oParams[ cRender.APP_ID_QS ] = oElement.attr(cRender.APP_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
 		
 		
-		var sBaseUrl = oElement.attr(cRender.HOME_QS)+this.consts.REST_API;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
 		return sUrl;
 	},
@@ -107,7 +107,7 @@ $.widget( "ck.adappbackend",{
 		var oElement = this.element;
 		
 		oElement.empty();
-		if (oElement.attr(cRender.LIST_MODE_QS))
+		if (oElement.attr(cRenderQS.LIST_MODE_QS))
 			this.pr_render_list(paData);
 		else
 			this.pr_render_charts(paData);
@@ -125,8 +125,8 @@ $.widget( "ck.adappbackend",{
 			oDiv.append("please wait loading chart");
 			oElement.append(oDiv);
 			$("#"+sID).adchart({
-				home:oElement.attr(cRender.HOME_QS),
-				appName:oElement.attr(cRender.APP_QS),
+				home:oElement.attr(cRenderQS.HOME_QS),
+				appName:oElement.attr(cRenderQS.APP_QS),
 				title:poItem.name,
 				metric:poItem.metric,
 				width:341,
