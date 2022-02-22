@@ -15,24 +15,30 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 $home="../..";
 require_once "$home/inc/common.php";
 
+function display_name_sort_fn($po1, $po2){
+	return strcasecmp ($po1->display_name, $po2->display_name);
+}
+
 //####################################################################
 cRenderHtml::header("Account Users");
 cRender::force_login();
 
 //####################################################################
-$aUsers = cAD_RBAC::get_all_users();
-cDebug::vardump($aUsers);
-
-function display_name_sort_fn($po1, $po2){
-	return strcasecmp ($po1->display_name, $po2->display_name);
+try{
+	$aUsers = cAD_RBAC::get_all_users();
+}catch(Exception $e){
+	cCommon::errorbox("unable to get users.");
+	cRenderHtml::footer();
+	return;
 }
-
-uasort($aUsers,"display_name_sort_fn");
 
 if (cArrayUtil::array_is_empty($aUsers)){
 	cCommon::errorbox("no users found");
+	cRenderHtml::footer();
+	return;
 }
 
+uasort($aUsers,"display_name_sort_fn");
 
 //####################################################################
 cRenderCards::card_start("Users");

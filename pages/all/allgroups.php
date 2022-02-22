@@ -20,11 +20,18 @@ cRenderHtml::header("Account Groups");
 cRender::force_login();
 
 //####################################################################
-$aGroups = cAD_RBAC::get_all_groups();
-cDebug::vardump($aGroups);
+try{
+	$aGroups = cAD_RBAC::get_all_groups();
+}catch(Exception $e){
+	cCommon::errorbox("unable to get groups.");
+	cRenderHtml::footer();
+	return;
+}
 
 if (cArrayUtil::array_is_empty($aGroups)){
 	cCommon::errorbox("no groups found");
+	cRenderHtml::footer();
+	return;
 }
 ?><script language="javascript" src="<?=$jsWidgets?>/rbac_group_user.js"></script><?php
 
