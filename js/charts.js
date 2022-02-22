@@ -65,11 +65,11 @@ var cCharts={
 				//-------------build the form
 				if(oThis.show_export_all){
 					iCount++;
-					oInput = $("<input>",{type:"hidden",name:cRender.CHART_METRIC_FIELD+"."+iCount,value:sMetric}	);
+					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_METRIC_FIELD+"."+iCount,value:sMetric}	);
 					oForm.append(oInput);
-					oInput = $("<input>",{type:"hidden",name:cRender.CHART_TITLE_FIELD+"."+iCount,value:sTitle}	);
+					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_TITLE_FIELD+"."+iCount,value:sTitle}	);
 					oForm.append(oInput);
-					oInput = $("<input>",{type:"hidden",name:cRender.CHART_APP_FIELD+"."+iCount,value:sAppName}	);
+					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_APP_FIELD+"."+iCount,value:sAppName}	);
 					oForm.append(oInput);
 				}
 			}
@@ -77,7 +77,7 @@ var cCharts={
 		
 		//complete the form
 		if ((iCount >0)  && this.show_export_all){
-			oInput = $("<input>",{type:"hidden",name:cRender.CHART_COUNT_FIELD,value:iCount}	);
+			oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_COUNT_FIELD,value:iCount}	);
 			oForm.append(oInput);
 			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV", class:"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"}	);
 			oForm.append(oInput);
