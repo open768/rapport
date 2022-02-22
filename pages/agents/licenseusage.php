@@ -33,9 +33,6 @@ if (cAD::is_demo()){
 }
 //********************************************************************
 
-?>
-<h2>License Usage</h2>
-<?php
 try{
 	$oMods=cADAccount::GET_license_modules();
 }
@@ -45,7 +42,7 @@ catch (Exception $e){
 	exit;	
 }
 
-cRenderCards::card_start("Licences");
+cRenderCards::card_start("Licence Usage for last $sUsage Months");
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::licenses());
 		?><p>

@@ -50,25 +50,23 @@ if (!$psCSV){ //got something
 	cDebug::write("outputting json");
 	cCommon::write_json($oResult);	
 	return;
-}
+}else{
+	//***CSV*******************************************************************
+	$sFilename = str_replace("/","_",$psMetric);
+	cHeader::set_download_filename("$sFilename.csv");
 
-//*************************************************************************
-//* CSV
-//*************************************************************************
-$sFilename = str_replace("/","_",$psMetric);
-cHeader::set_download_filename("$sFilename.csv");
+	cCommon::do_echo("controller,". cADCore::GET_controller());
+	cCommon::do_echo("Application,$oApp->name");
+	cCommon::do_echo("Date now,".date(DateTime::W3C,time()));
+	cCommon::do_echo("metric,$psMetric");
+	cCommon::do_echo("");
 
-cCommon::do_echo("controller,". cADCore::GET_controller());
-cCommon::do_echo("Application,$oApp->name");
-cCommon::do_echo("Date now,".date(DateTime::W3C,time()));
-cCommon::do_echo("metric,$psMetric");
-cCommon::do_echo("");
-
-cCommon::do_echo("Date,Average Value, Max");
-foreach ($oResult->data as $oItem){
-	//reformat the date
-	$oDate = DateTime::createFromFormat(DateTime::W3C, $oItem->date);
-	$sDate = $oDate->format(cCommon::EXCEL_DATE_FORMAT);
-	cCommon::do_echo("$sDate,$oItem->value,$oItem->max");
+	cCommon::do_echo("Date,Average Value, Max");
+	foreach ($oResult->data as $oItem){
+		//reformat the date
+		$oDate = DateTime::createFromFormat(DateTime::W3C, $oItem->date);
+		$sDate = $oDate->format(cCommon::EXCEL_DATE_FORMAT);
+		cCommon::do_echo("$sDate,$oItem->value,$oItem->max");
+	}
 }
 ?>
