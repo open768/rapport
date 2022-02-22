@@ -23,10 +23,18 @@ require_once "$root/inc/charts.php";
 // common functions
 //####################################################################
 //get passed in values
-$oApp = cRenderObjs::get_current_app();
-$gsAppQS = cRenderQS::get_base_app_QS($oApp);
+try{
+	$moTier = cRenderObjs::get_current_tier();
+	$moApp = $oTier->app;
+}catch (Exception e){
+	$moTier = null;
+	$moApp = cRenderObjs::get_current_app();
+}
 
-cRenderHtml::header("Transactions for $oApp->name");
+$gsAppQS = cRenderQS::get_base_app_QS($moApp);
+
+
+cRenderHtml::header("Transactions for $moApp->name");
 cRender::force_login();
 
 //********************************************************************
@@ -45,7 +53,7 @@ cRenderCards::body_start();
 cRenderCards::body_end();
 cRenderCards::action_start();
 	cRenderMenus::show_apps_menu("Change Application");
-	cADCommon::button(cADControllerUI::businessTransactions($oApp));
+	cADCommon::button(cADControllerUI::businessTransactions($moApp));
 	$sUrl = cHttp::build_url("config.php", $gsAppQS);
 	cRender::button("config", $sUrl);
 	
@@ -58,17 +66,15 @@ cRenderCards::action_end();
 cRenderCards::card_end();
 
 //####################################################################
-$aTiers =$oApp->GET_Tiers();
-foreach ( $aTiers as $oTier){
-	$oTier->app = $oApp;
-	
+function tier_card($poTier){
+	global $moApp;
 	//get the transaction names for the Tier
 	cRenderCards::card_start();
 		cRenderCards::body_start();
 			?><div 
 				type="adtiertrans" 
 				home="<?=$home?>" 
-				<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>" 
+				<?=cRenderQS::APP_ID_QS?>="<?=$moApp->id?>" 
 				<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>">please wait...</div><?php
 		cRenderCards::body_end();
 		cRenderCards::action_start();
@@ -81,6 +87,17 @@ foreach ( $aTiers as $oTier){
 		cRenderCards::action_end();
 	cRenderCards::card_end();
 }
+
+if ($moTier){
+	tier_card($moTier);
+}else{
+	$aTiers =$moApp->GET_Tiers();
+	foreach ( $aTiers as $oTier){
+		$oTier->app = $moApp;
+		tier_card($oTier);
+	}
+}
+
 ?>
 
 <script language="javascript">
