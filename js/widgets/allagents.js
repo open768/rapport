@@ -151,11 +151,7 @@ $.widget( "ck.adallagents",{
 					"</div>";
 				sHTML += "</div>";
 				sHTML += cRenderMDL.action_start();
-					sHTML += "<div " + 
-						"type='admenus' menu='appfunctions' home='"+sHome+"' " + 
-						"appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+poApp.id+"menu' style='position: relative;'>"+
-							poApp.name+" .. please wait" + 
-					"</div>";
+					sHTML += cMenusCode.appfunctions( poApp, sHome, poApp.id+"menu");
 					
 					var oParams = {};
 					oParams[ cRenderQS.APP_ID_QS ] = poApp.id;

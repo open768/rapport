@@ -56,6 +56,7 @@ $sPage = $oLinkData->page;
 <p>
 <h2>Link to page</h2>
 <table class="maintable"><TR><TD>
+	<!-- TBD AUTOMATICALLY COPY LINK TO CLIPBOARD -->
 	Copy the following link:
 	<p>
 	<input type="text" value="<?=$sUrl?>" class="clipbox">

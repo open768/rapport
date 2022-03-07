@@ -20,6 +20,34 @@ var cMenus={
 				oElement.admenu(); //see widgets
 			}
 		);
+	},
+}
+		
+//####################################################################################
+//#
+//####################################################################################
+var cMenusCode={
+	appfunctions: function(poApp, psHome, psDivID){
+		var sHTML = 
+			"<div " + 
+				" type='admenus' menu='appfunctions' home='"+psHome+"'" +
+				" appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+ psDivID + "'"+
+				" style='position: relative;'>"+
+					poApp.name+" .. please wait" + 
+			"</div>";
+		return sHTML;
+	},
+	
+	tierfunctions: function(poTier, psHome){
+		var sHTML = 
+			"<SELECT " + 
+				"type='admenus' menu='tierfunctions' " +
+				"home='" + psHome + "' " +
+				"tier='" + poTier.name + "' " +
+				"tid='" + poTier.id + "'> " +
+					"<option selected>" + poTier.name + " - please wait" +
+			"</SELECT>";	
+		return sHTML;
 	}
 }
 

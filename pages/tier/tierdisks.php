@@ -50,7 +50,7 @@ if (cAD::is_demo()){
 	
 //####################################################################
 ?>
-<h2>Overall Disks Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
+<h2>Overall Disks Metrics for <?=$oTier->name?></h2>
 <?php
 	$aData = $oTier->GET_DiskMetrics();
 	$sBaseMetric = cADMetricPaths::InfrastructureNodeDisks($oTier->name);

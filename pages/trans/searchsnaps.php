@@ -45,7 +45,7 @@ if (cAD::is_demo()){
 }
 //********************************************************************
 
-//TODO make this a widget
+//TBD make this a widget
 $oCred = cRenderObjs::get_AD_credentials();
 
 

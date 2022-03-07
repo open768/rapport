@@ -48,6 +48,7 @@ $oCred = cRenderObjs::get_AD_credentials();
 cDebug::flush();
 
 //####################################################################
+//overall stats
 	$aMetrics = [];
 	$sMetricUrl=cADMetricPaths::appCallsPerMin();
 	$aMetrics[]= [	cChart::LABEL=>"Overall Calls per min ($oApp->name) application", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),	];
@@ -55,7 +56,7 @@ cDebug::flush();
 	$aMetrics[]= [cChart::LABEL=>"Overall response time in ms ($oApp->name) application", cChart::METRIC=>$sMetricUrl];
 	cRenderCards::card_start("Activity for $oApp->name");
 		cRenderCards::body_start();
-			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
+			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		cRenderCards::body_end();
 		cRenderCards::action_start();
 			cADCommon::button(cADControllerUI::tier($oApp, $oTier));
@@ -72,7 +73,7 @@ cDebug::flush();
 	cRenderCards::card_end();
 
 //####################################################################
-?><h2>Activity for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
+//Tier Statistics
 	$aMetrics = [];
 	$sMetricUrl=cADMetricPaths::tierCallsPerMin($oTier->name);	
 	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
@@ -87,12 +88,14 @@ cDebug::flush();
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
-	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/2);
-	cDebug::flush();
-?>
-<h2>Key Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
-<?php
-	//####################################################################
+	cRenderCards::card_start("Activity for $oTier->name");
+		cRenderCards::body_start();
+			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cRenderCards::body_end();
+	cRenderCards::card_end();
+
+//####################################################################
+//Tier Statistics
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADMetricPaths::tierSlowCalls($oTier->name),cChart::STYLE=>cRender::getRowClass()];
 	$aMetrics[] = [cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADMetricPaths::tierVerySlowCalls($oTier->name)];
@@ -138,7 +141,11 @@ cDebug::flush();
 		cChart::LABEL=>"Agent Availability", cChart::METRIC=>cADMetricPaths::InfrastructureAgentAvailability($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 		
-	cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+	cRenderCards::card_start("Key Metrics for $oTier->name");
+		cRenderCards::body_start();
+			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
+		cRenderCards::body_end();
+	cRenderCards::card_end();
 
 //####################################################################
 cChart::do_footer();

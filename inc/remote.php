@@ -51,11 +51,9 @@ class cRemote{
 	public static function do_header(){
 		global $jsinc;
 	?>
-		<script type="text/javascript" src="<?=$jsinc?>/rgraph/libraries/RGraph.common.core.js"></script>
-		<script type="text/javascript" src="<?=$jsinc?>/rgraph/libraries/RGraph.common.dynamic.js"></script>
-		<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
-		<script type="text/javascript" src="js/remote.js"></script>
-		<script type="text/javascript" src="js/remote_data.js"></script>
+		<script type="text/javascript" src="<?=$jsinc?>/extra/rgraph/libraries/RGraph.common.core.js"></script>
+		<script type="text/javascript" src="<?=$jsinc?>/extra/rgraph/libraries/RGraph.common.dynamic.js"></script>
+		<script type="text/javascript" src="<?=$jsinc?>/extra/bean/bean.js"></script>
 	<?php
 	}
 }

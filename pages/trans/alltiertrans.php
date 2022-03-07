@@ -50,7 +50,7 @@ cRenderMenus::show_tier_functions();
 
 //###############################################
 ?>
-<h2>Overall Stats for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
+<h2>Overall Stats for <?=$oTier->name?></h2>
 <?php
 	$sBaseUrl = cHttp::build_url(cCommon::filename(),$gsTierQs);
 	$aMetrics=[];

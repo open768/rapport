@@ -14,37 +14,37 @@ $.widget( "ck.adallapps",{
 	//#################################################################`
 	_create: function(){
 		var oThis = this;
-		
+
 		//set basic stuff
 		var oElement = this.element;
 		oElement.uniqueId();
-		
+
 		//check for necessary attributes
-		if (!oElement.attr("metric1"))	$.error("metric1 attr is missing!");	
-		if (!oElement.attr("metric2"))	$.error("metric2 attr is missing!");	
+		if (!oElement.attr("metric1"))	$.error("metric1 attr is missing!");
+		if (!oElement.attr("metric2"))	$.error("metric2 attr is missing!");
 		if (!oElement.attr("metric3"))	$.error("metric3 attr is missing!");
-		if (!oElement.attr("title1"))	$.error("title1 attr is missing!");	
-		if (!oElement.attr("title2"))	$.error("title2 attr is missing!");	
+		if (!oElement.attr("title1"))	$.error("title1 attr is missing!");
+		if (!oElement.attr("title2"))	$.error("title2 attr is missing!");
 		if (!oElement.attr("title3"))	$.error("title3 attr is missing!");
 		if (!oElement.attr("baseurl"))	$.error("baseurl attr is missing!");
-				
+
 		//check for necessary classes
-		if (!oElement.admenu)			$.error("admenu widget is missing! check includes");	
+		if (!oElement.admenu)			$.error("admenu widget is missing! check includes");
 		if (!oElement.attr(cRenderQS.LIST_MODE_QS) && !oElement.adchart)
-			$.error("charts widget is missing! check includes");	
-		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
-		if (!bean)						$.error("bean class is missing! check includes");	
-		
+			$.error("charts widget is missing! check includes");
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");
+		if (!bean)						$.error("bean class is missing! check includes");
+
 		//check for required options
-		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
-					
-	
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");
+
+
 		//set behaviour for widget when it becomes visible
 		var oQueue = new cQueueifVisible();
-		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
-		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
-		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);
+		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);
 		oQueue.go(oElement, this.get_url());
 	},
 
@@ -55,11 +55,11 @@ $.widget( "ck.adallapps",{
 		oElement.empty();
 		oElement.append("status: " +psMessage);
 	},
-	
+
 	//*******************************************************************
 	onError: function(poHttp, psMessage){
 		var oElement = this.element;
-				
+
 		oElement.empty();
 		oElement.addClass("ui-state-error");
 			oElement.append("There was an error  getting data  ");
@@ -71,19 +71,19 @@ $.widget( "ck.adallapps",{
 
 		oElement.empty();
 		oElement.removeClass();
-		
+
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: 0.25});
 		oElement.append(oLoader).append("Loading: ");
 	},
-	
+
 	//*******************************************************************
 	onResponse: function(poHttp){
 		var oElement = this.element;
-		
+
 		oElement.empty();
 		oElement.removeClass();
-		
+
 		var aResponse = poHttp.response;
 		if (aResponse.length == 0 )
 			oElement.append(cRender.messagebox("<i>no applications found</i>"));
@@ -96,53 +96,77 @@ $.widget( "ck.adallapps",{
 		}
 	},
 
-	
+
 	//#################################################################
 	//# functions
 	//#################################################################`
 	get_url: function (){
 		var oElement = this.element;
-		
+
 		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		return sBaseUrl;
 	},
-	
+
 	//*******************************************************************
 	render_charts: function(paData){
 		var oElement = this.element;
-		var sStyle = 'type="adchart" style="position: relative; max-width: 341px; width: 341px; height: 125px;" class="chart_widget"';
 		var sHome = oElement.attr(cRenderQS.HOME_QS);
 		var oThis = this;
-		
+
 		paData.forEach( function(poApp){
-			var oParams = {};
-			oParams[ cRenderQS.APP_ID_QS ] = poApp.name;
-			oParams[ cRenderQS.APP_QS ] = poApp.id;
+			var oUrlParams = {};
 			
-			var sHTML = cRenderMDL.card_start();		
+			if (i==1){
+				oGoParams[ cRenderQS.APP_QS ] = poApp.name;
+				oGoParams[ cRenderQS.APP_ID_QS ] = poApp.id;
+				var sGoUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oGoParams);
+			}
+
+			var sHTML = cRenderMDL.card_start();
 				sHTML += cRenderMDL.body_start();
-					sHTML += "<div id='"+poApp.id+"1' "+sStyle+">Please wait..</div>";
-					sHTML += "<div id='"+poApp.id+"2' "+sStyle+">Please wait..</div>";					sHTML += "<div id='"+poApp.id+"3' "+sStyle+">Please wait..</div>";
+
+					for (var i=1; i<=3; i++){
+						var oChartParams = {
+							type:"adchart",
+							style:"position: relative; max-width: 341px; width: 341px; height: 125px;",
+							class:"chart_widget",
+							id:"a"+poApp.id+"i"+i ,
+						};
+						oChartParams[cRenderQS.HOME_QS] =  sHome ;
+						oChartParams[cRenderQS.APP_ID_QS] =  poApp.id;
+						oChartParams[cChartConsts.ATTR_TITLE + "0"] = oElement.attr("title"+i) ;
+						oChartParams[cRenderQS.METRIC_QS + "0"] = oElement.attr("metric"+i);
+						oChartParams[cChartConsts.ATTR_SHOW_ZOOM] =1;
+						oChartParams[cChartConsts.ATTR_SHOW_COMPARE] = 1;
+						oChartParams[cChartConsts.ATTR_PREVIOUS] = 0;
+						oChartParams[cChartConsts.ATTR_WIDTH] = cChartConsts.WIDTH_3ACROSS;
+						oChartParams[cChartConsts.ATTR_HEIGHT] = cChartConsts.LETTERBOX_HEIGHT;
+
+						if (i==1) oChartParams[cChartConsts.ATTR_GO_URL] =  sGoUrl ;
+						var oDiv = $("<DIV>", oChartParams).append("please Wait");
+
+						sHTML += oDiv[0].outerHTML;
+					}
 				sHTML += "</DIV>";
 				sHTML += cRenderMDL.action_start();
-					sHTML += "<div type='admenus' menu='appfunctions' home='"+sHome+"' appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+poApp.id+"menu' style='position: relative;'>"+poApp.name+" .. please wait</div>";
-				sHTML += "</DIV>";				
+					sHTML += cMenusCode.appfunctions( poApp, sHome, poApp.id+"menu");
+				sHTML += "</DIV>";
 			sHTML += "</DIV><p>";
 			oElement.append(sHTML);
-			
-			
+
+
 			//- - - - -convert chart to Widgets
 			if (cCharts.isGoogleChartsLoaded())
-				convert_charts_to_widgets(poApp)
+				oThis.convert_charts_to_widgets(poApp)
 			else
 				cCharts.load_google_charts(function(){oThis.convert_charts_to_widgets(poApp);});
-			
+
 			//- - - render the menus
-			$("#"+poApp.id+"menu").admenu(); 
+			$("#"+poApp.id+"menu").admenu();
 
 		});
 	},
-	
+
 	//*******************************************************************
 	convert_charts_to_widgets: function(poApp){
 		var oElement = this.element;
@@ -151,33 +175,15 @@ $.widget( "ck.adallapps",{
 		oParams[ cRenderQS.APP_QS ] = poApp.name;
 		var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
 		var sHome = oElement.attr(cRenderQS.HOME_QS);
-		
-		$("#"+poApp.id+"1").adchart({
-			home:sHome,
-			appName:poApp.name,
-			title:oElement.attr("title1"),	metric:oElement.attr("metric1"), goUrl:sUrl,
-			width:cChartConsts.WIDTH_3ACROSS,height:cChartConsts.LETTERBOX_HEIGHT,showZoom:1,showCompare:1,previous_period:0
-		});
-		$("#"+poApp.id+"2").adchart({
-			home:sHome,
-			appName:poApp.name,
-			title:oElement.attr("title2"),
-			metric:oElement.attr("metric2"),
-			width:cChartConsts.WIDTH_3ACROSS,height:cChartConsts.LETTERBOX_HEIGHT,showZoom:1,showCompare:1,previous_period:0
-		});
-		$("#"+poApp.id+"3").adchart({
-			home:sHome,
-			appName:poApp.name,
-			title:oElement.attr("title3"),
-			metric:oElement.attr("metric3"),
-			width:cChartConsts.WIDTH_3ACROSS,height:cChartConsts.LETTERBOX_HEIGHT,showZoom:1,showCompare:1,previous_period:0
-		});
+
+		for (var i=1; i<=3; i++)
+			$("#a"+poApp.id+"i"+i).adchart();
 	},
-	
+
 	//*******************************************************************
 	render_list: function(paData){
 		var oElement = this.element;
-		
+
 		var sHTML = cRenderMDL.card_start();
 		sHTML += cRenderMDL.body_start();
 		sHTML += "<DIV style='column-count:3'>";
@@ -187,7 +193,7 @@ $.widget( "ck.adallapps",{
 				var oParams = {};
 				oParams[ cRenderQS.APP_ID_QS ] = poApp.name;
 				oParams[ cRenderQS.APP_QS ] = poApp.id;
-				
+
 				var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
 				var sCh = poApp.name[0];
 				if (sCh !== sLastCh){
@@ -198,7 +204,7 @@ $.widget( "ck.adallapps",{
 				});
 		sHTML += "</div></div></div>";
 		oElement.append(sHTML);
-	},
-	
+		},
+
 
 });

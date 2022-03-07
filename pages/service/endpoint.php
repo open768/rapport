@@ -47,7 +47,7 @@ cADCommon::button(cADControllerUI::serviceEndPoint($oTier,$sServiceID));
 cDebug::flush();
 
 ?>
-<H2>Service End Point <?=cRender::show_name(cRender::NAME_OTHER,$sService)?></h2>
+<H2>Service End Point <?=$sService?></h2>
 <?php
 	$aMetrics = [];
 	$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetricPaths::endPointCallsPerMin($oTier->name, $sService)];

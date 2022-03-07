@@ -102,7 +102,7 @@ function show_nodes($psNode){
 cRenderCards::card_start("Contents");
 	cRenderCards::body_start();
 	?><ul>
-		<li><a href="#1">Data for <?=cRender::show_name(cRender::NAME_TRANS,$oTrans->name)?> in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></a>
+		<li><a href="#1">Data for <?=$oTrans->name?> in <?=$oTier->name?></a>
 		<li><a href="#2">Transaction Map</a>
 		<li><a href="#4">Remote Services</a>
 		<li><a href="#5">Transaction Snapshots</a>
@@ -137,7 +137,7 @@ cRenderCards::card_start("<a name='1'>Data</a> for $oTrans->name $oTier->name");
 cRenderCards::card_end();
 
 //#####################################################################################################
-//TODO make this a widget
+//TBD make this a widget
 cRenderCards::card_start("<a name='2'>Transaction map</a>");
 	cRenderCards::body_start();
 	
@@ -185,7 +185,7 @@ if ($node){
 }
 
 // ################################################################################
-//TODO make this a widget
+//TBD make this a widget
 cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oTrans->name in Tier: $oTier->name");
 	cRenderCards::body_start();
 		//******get the external tiers used by this transaction
@@ -209,7 +209,7 @@ cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oT
 cRenderCards::card_end();
 
 // ################################################################################
-//TODO make this a widget
+//TBD make this a widget
 $oTimes = cRender::get_times();
 $sAppdUrl = cADControllerUI::transaction_snapshots($oTrans, $oTimes);
 $aSnapshots = $oTrans->GET_snapshots($oTimes);

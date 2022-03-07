@@ -169,14 +169,7 @@ $.widget( "ck.adhistagentstiers",{
 							"</div>";
 						sHTML += "</div>";
 						sHTML += cRenderMDL.action_start();
-							sHTML += 
-								"<SELECT " + 
-									"type='admenus' menu='tierfunctions' " +
-									"home='" + oElement.attr(cRenderQS.HOME_QS) + "' " +
-									"tier='" + poTier.name + "' " +
-									"tid='" + poTier.id + "'> " +
-										"<option selected>" + poTier.name + " - please wait" +
-								"</SELECT>";
+							sHTML += cMenusCode.tierfunctions(poTier, oElement.attr(cRenderQS.HOME_QS));
 						sHTML += "</div>";
 					}
 				sHTML += "</div></div><p>";

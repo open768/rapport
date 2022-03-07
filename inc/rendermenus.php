@@ -54,11 +54,11 @@ class cRenderMenus{
 			return;
 		}
 		
-		$sApps_fragment = self::get_apps_fragment();
+		$sApps_fragment = self::pr__get_apps_fragment();
 		if ($psURLFragment == null)
 			$psURLFragment=cCommon::filename();
 
-		//TODO change to a DIV - widget can replace with a select menu
+		//TBD change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT
 				type="admenus" menu="appsmenu" 
@@ -84,7 +84,7 @@ class cRenderMenus{
 		}
 		
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
-		//TODO change to a DIV - widget can replace with a select menu
+		//TBD change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
 				type="admenus" menu="appagents" 				
@@ -97,7 +97,7 @@ class cRenderMenus{
 
 
 	//******************************************************************************************
-	public static function get_apps_fragment(){
+	private static function pr__get_apps_fragment(){
 
 		cDebug::enter();
 		try{
@@ -168,7 +168,7 @@ class cRenderMenus{
 		if ($poTier == null){
 			$poTier = cRenderObjs::get_current_tier();
 		}
-		//TODO change to a DIV - widget can replace with a select menu
+		//TBD change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
 				type="admenus" menu="tierfunctions"  
@@ -181,7 +181,7 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_tier_menu($psCaption, $psURLFragment, $psExtraQS=""){
+	public static function show_tier_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;
 		
 		cDebug::enter();
@@ -192,25 +192,11 @@ class cRenderMenus{
 		}
 
 		$oApp = cRenderObjs::get_current_app();
+		$sFragment = self::pr__get_tiers_fragment($oApp);
+		if ($psURLFragment == null)
+			$psURLFragment=cCommon::filename();
 		
-		try{
-			$oTiers = $oApp->GET_Tiers();
-		}
-		catch (Exception $e)
-		{
-			cCommon::errorbox("Oops unable to get tier data from controller");
-			cDebug::leave();
-			exit;
-		}
-		
-		$sFragment = "";
-		$iCount = 1;
-		foreach ($oTiers as $oTier){
-			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";
-			$iCount++;
-		}
-		
-		//TODO change to a DIV - widget can replace with a select menu
+		//TBD change to a DIV - widget can replace with a select menu
 		?>
 			<SELECT 
 				type="admenus" menu="tierchangemenu" 
@@ -222,5 +208,31 @@ class cRenderMenus{
 		<?php
 		cDebug::leave();
 	}	
+	//******************************************************************************************
+	private static function pr__get_tiers_fragment($poApp){
+
+		cDebug::enter();
+		try{
+			$aTiers = $poApp->GET_Tiers();
+		}
+		catch (Exception $e)
+		{
+			cCommon::errorbox("Oops unable to get tier data from controller");
+			cDebug::leave();
+			exit;
+		}
+		
+		uasort($aTiers,"sort_by_app_name" );
+		$iCount=0;
+		$sFragment = "";
+		foreach ($aTiers as $oTier){
+			$iCount++;
+			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";		
+		}
+		
+		cDebug::leave();
+		return $sFragment;
+	}
+
 }
 ?>

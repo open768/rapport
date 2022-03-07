@@ -74,7 +74,7 @@ cRenderCards::body_start();
 	$sDate = cADTime::timestamp_to_date($oSnap->starttime);
 
 	?><table border="1" cellspacing="0">
-		<tr><th align="right">Business Transaction:</th><td><?=cRender::show_name(cRender::NAME_TRANS,$oSegments->btName)?></td></tr>
+		<tr><th align="right">Business Transaction:</th><td><?=$oSegments->btName?></td></tr>
 		<tr><th align="right">URL:</th><td><?=$sSnapURL?></td></tr>
 		<tr><th align="right">Timestamp:</th><td><?=$sDate?></td></tr>
 		<tr><th align="right">Number of Segments:</th><td><?=$oSegments->segmentCount?></td></tr>

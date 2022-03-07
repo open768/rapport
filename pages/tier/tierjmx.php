@@ -80,7 +80,7 @@ $aNodes = $oTier->GET_Nodes();
 			
 			$bDisabled = (($oTier->name == $oTier->name) && ($node==null));
 			$sDisabled = ($bDisabled?"disabled":"");
-			?><option <?=$sDisabled?> value="<?=$sTierUrl?>"><?=cRender::show_name(cRender::NAME_TIER,$oTier)?> tier</option><?php
+			?><option <?=$sDisabled?> value="<?=$sTierUrl?>"><?=$oTier->name?> tier</option><?php
 		}
 	?></optgroup>
 	<optgroup label="Individual Servers"><?php
@@ -107,7 +107,7 @@ $aPools = $oTier->GET_JDBC_Pools($node);
 if (count($aPools) == 0)
 	cCommon::messagebox("No JDBC Pools Found");
 else{
-	?><h2>JDBC Pools for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
+	?><h2>JDBC Pools for <?=$oTier->name?></h2><?php
 	if ($node){
 		?><h3>(<?=$node?>) Node</h3><?php
 	}

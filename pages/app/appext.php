@@ -40,7 +40,7 @@ function show_tier_menu(){
 			foreach ($aTiers as $oTier){
 				$sUrl = cHttp::build_qs($gsAppQS, cRenderQS::TIER_QS, $oTier->name);
 				$sUrl = cHttp::build_qs($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
-				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></option><?php
+				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=$oTier->name?></option><?php
 			}
 		?>
 	</select>

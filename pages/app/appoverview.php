@@ -38,7 +38,7 @@ cADCommon::button(cADControllerUI::application($oApp));
 
 //####################################################################
 ?>
-<h2>Overview for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
+<h2>Overview for <?=$oApp->name?></h2>
 <ul>
 	<li><a href="#app">Application Overview</a>
 	<li><a href="#backend">Backends</a>
@@ -122,7 +122,7 @@ foreach ($aTiers as $oTier){
 	$sTierQS = cHttp::build_QS($gsAppQs, cRenderQS::TIER_QS, $sTier);
 	$sTierQS = cHttp::build_QS($sTierQS, cRenderQS::TIER_ID_QS, $oTier->id);
 	
-	?><h3><?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h3><?php
+	?><h3><?=$oTier->name?></h3><?php
 	$aTransactions = $oTier->GET_all_transaction_names();
 	if ($aTransactions==null) {
 		cCommon::errorbox("unable to get transaction names");

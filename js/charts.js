@@ -3,7 +3,17 @@
 var cChartConsts={
 	ALL_CSV_URL:"/pages/all_csv.php",
 	WIDTH_3ACROSS: 330 ,
-	LETTERBOX_HEIGHT: 125
+	LETTERBOX_HEIGHT: 125,
+	ATTR_TITLE : "ati",
+	ATTR_WIDTH : "awi",
+	ATTR_HEIGHT : "ahe",
+	ATTR_PREVIOUS : "apr",
+	ATTR_SHOW_ZOOM : "asz",
+	ATTR_SHOW_COMPARE : "asc",
+	ATTR_HIDE_IF_NO_DATA : "ahn",
+	ATTR_HIDE_GROUP_IF_NO_DATA : "ahgn",
+	ATTR_GO_URL : "agu",
+	ATTR_GO_LABEL : "agl"
 }
 
 //###############################################################################
@@ -37,30 +47,11 @@ var cCharts={
 			function(pIndex, pElement){
 				var oElement = $(pElement);
 				
-				var sAppName = oElement.attr("appName");
-				var sMetric = oElement.attr("metric0");
-				var sTitle = oElement.attr("title0");
-				var iPrevious = 0;
-				try {
-					var sPrevious = oElement.attr("previous");
-					iPrevious = parseInt(sPrevious);
-				} catch (e){}
+				var sAppName = oElement.attr(cRenderQS.APP_QS);
+				var sMetric = oElement.attr(cRenderQS.METRIC_QS +"0");
+				var sTitle = oElement.attr(cRenderQS.TITLE_QS+"0");
 								
-				oElement.adchart({
-					appName:sAppName,
-					home:oThis.home,
-					title:sTitle,
-					metric:sMetric,
-					goUrl:oElement.attr("goUrl"),
-					goCaption:oElement.attr("goLabel"),
-					previous_period:iPrevious,
-					width:oElement.attr("width"),
-					height:oElement.attr("height"),
-					showZoom:oElement.attr("showZoom"),
-					showCompare:oElement.attr("showCompare"),
-					hideIfNoData:oElement.attr("hideIfNoData"),
-					hideGroupIfNoData:oElement.attr("hideGroupIfNoData")
-				});
+				oElement.adchart();
 					
 				//-------------build the form
 				if(oThis.show_export_all){

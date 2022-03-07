@@ -47,7 +47,7 @@ $aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetricP
 $aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetricPaths::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
-?><h2>Browser Stats for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
+?><h2>Browser Stats for <?=$oApp->name?></h2><?php
 cRender::button("Show Page Statistics", "../rum/rumstats.php?$sAppQS");
 $aMetrics = [];
 $aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cADWebRumMetric::CallsPerMin()];

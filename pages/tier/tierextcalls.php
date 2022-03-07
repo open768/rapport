@@ -20,6 +20,7 @@ require_once "$root/inc/charts.php";
 
 
 set_time_limit(200); // huge time limit as this takes a long time
+//TBD TBD make asynchornous
 
 //display the results
 $oApp = cRenderObjs::get_current_app();
@@ -97,7 +98,7 @@ cCommon::flushprint ("<br>");
 $oTimes = cRender::get_times();
 $oResponse =$oTier->GET_ext_details($oTimes);
 cRender::button("show as graphs", "tierextgraph.php?$gsTierQs");
-?><h2>External calls in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2><?php
+?><h2>External calls in <?=$oTier->name?>)</h2><?php
 render_tier_ext($oApp, $oTier, $oResponse);
 
 cRenderHtml::footer();

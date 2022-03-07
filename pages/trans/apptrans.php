@@ -25,8 +25,8 @@ require_once "$root/inc/charts.php";
 //get passed in values
 try{
 	$moTier = cRenderObjs::get_current_tier();
-	$moApp = $oTier->app;
-}catch (Exception e){
+	$moApp = $moTier->app;
+}catch (Exception $e){
 	$moTier = null;
 	$moApp = cRenderObjs::get_current_app();
 }
@@ -67,7 +67,8 @@ cRenderCards::card_end();
 
 //####################################################################
 function tier_card($poTier){
-	global $moApp;
+	global $moApp, $gsAppQS, $home;
+	
 	//get the transaction names for the Tier
 	cRenderCards::card_start();
 		cRenderCards::body_start();
@@ -75,14 +76,14 @@ function tier_card($poTier){
 				type="adtiertrans" 
 				home="<?=$home?>" 
 				<?=cRenderQS::APP_ID_QS?>="<?=$moApp->id?>" 
-				<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>">please wait...</div><?php
+				<?=cRenderQS::TIER_ID_QS?>="<?=$poTier->id?>">please wait...</div><?php
 		cRenderCards::body_end();
 		cRenderCards::action_start();
-		cRenderMenus::show_tier_functions($oTier);
-			echo "<span type='tiertrans' name='$oTier->name'></span>";
+		cRenderMenus::show_tier_functions($poTier);
+			echo "<span type='tiertrans' name='$poTier->name'></span>";
 			$sUrl = cHttp::build_url("tiertransgraph.php", $gsAppQS);
-			$sUrl = cHttp::build_url($sUrl, cRenderQS::TIER_QS, $oTier->name);
-			$sUrl = cHttp::build_url($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
+			$sUrl = cHttp::build_url($sUrl, cRenderQS::TIER_QS, $poTier->name);
+			$sUrl = cHttp::build_url($sUrl, cRenderQS::TIER_ID_QS, $poTier->id);
 			cRender::button("show transaction graphs", $sUrl);
 		cRenderCards::action_end();
 	cRenderCards::card_end();

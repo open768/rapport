@@ -24,6 +24,9 @@ set_time_limit(200);
 cRenderHtml::header("Service End Points");
 cRender::force_login();
 cChart::do_header();
+?>
+	<script language="javascript" src="<?=$jsWidgets?>/tierserviceendpoints.js"></script>
+<?php
 
 //####################################################################
 //get passed in values
@@ -31,58 +34,73 @@ $oApp = cRenderObjs::get_current_app();
 $oTimes = cRender::get_times();
 
 cRenderCards::card_start();
-	cRenderCards::body_start();
-		cRender::add_filter_box("span[tier]","tier",".mdl-card");
-	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRenderMenus::show_apps_menu("Show Service EndPoints for");
 		cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
+		if (cHeader::get(cRenderQS::TIER_ID_QS)){
+			$sAppQS = cRenderQS::get_base_app_QS($oApp);
+			$sUrl = cHttp::build_url(cCommon::filename(), $sAppQS);
+			cRender::button("Service End points for App: $oApp->name", $sUrl);
+			cRenderMenus::show_tier_menu("Show Service EndPoints for");
+		}else
+			cRenderMenus::show_apps_menu("Show Service EndPoints for");
+
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
 //####################################################################
-//retrieve tiers
+//TBD add a list mode - show the avg and max response times of each SEP
+
 //********************************************************************
-$aTiers = $oApp->GET_Tiers();
-
-function pr__sort_endpoints($a,$b){
-	return strcmp($a->name, $b->name);
-}
-
-foreach ($aTiers as $oTier){
-	//TODO make this asynchronous as this will crash when there are hundreds of  tiers
-	
-	//****************************************************************************************
-	$aEndPoints = $oTier->GET_ServiceEndPoints();
-	cRenderCards::card_start("<span tier='$oTier->name'>$oTier->name</span>");
-	cRenderCards::body_start();
-	
-	if (count($aEndPoints) == 0)
-		cCommon::messagebox("no Service endpoints found for $oTier->name");
-	else{
+if (cHeader::get(cRenderQS::TIER_ID_QS)){
+	$oTier = cRenderObjs::get_current_tier();
+	cRenderCards::card_start("$oTier->name");
+		cRenderCards::body_start();
+			?>
+				<div 
+					type="widget" 
+					<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>" 
+					<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>" 
+					<?=cRenderQS::TIER_QS?>="<?=$oTier->name?>" 
+					<?=cRenderQS::HOME_QS?>="<?=$home?>" 
+				>
+					Please Wait..
+				</div>
+				<script language="javascript">
+				function init_widget(){
+					$("DIV[type=widget]").adserviceendpoints();
+				}
+				
+				$( init_widget);
+				</script>
+			<?php
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_tier_functions($oTier);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}else{
+	//TBD make these widgets that hide  tiers that dont have service end points 
+	$aTiers = $oApp->GET_Tiers();
+	cRenderCards::card_start("Select a Tier");
+		cRenderCards::body_start();
+		?><DIV style="column-count:3"><?php
+		$sLastCh = "";
 		
-		uasort($aEndPoints, "pr__sort_endpoints");
-		$sTierQS = cRenderQS::get_base_tier_QS($oTier);
-
-		//****************************************************************************************
-		?><p><?php
-		cRenderMenus::show_tier_functions($oTier);
-		$aHeaders = ["End Point","Activity","Response Times in ms","Errors per minute"];
-		$aMetrics = [];
-		foreach ($aEndPoints as $oEndPoint){
-			$sUrl = cHttp::build_qs($sTierQS, cRenderQS::SERVICE_QS, $oEndPoint->name);
-			$sUrl = cHttp::build_qs($sUrl, cRenderQS::SERVICE_ID_QS, $oEndPoint->id);
-			$sUrl = cHttp::build_url("$home/pages/service/endpoint.php", $sUrl);
-
-			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oEndPoint->name, cChart::WIDTH=>150];
-			$aMetrics[] = [cChart::LABEL=>"Calls", cChart::METRIC=>cADMetricPaths::endPointCallsPerMin($oTier->name, $oEndPoint->name), cChart::GO_URL=>$sUrl];
-			$aMetrics[] = [cChart::LABEL=>"Response", cChart::METRIC=>cADMetricPaths::endPointResponseTimes($oTier->name, $oEndPoint->name)];
-			$aMetrics[] = [cChart::LABEL=>"Errors", cChart::METRIC=>cADMetricPaths::endPointErrorsPerMin($oTier->name, $oEndPoint->name)];
-		}
-		$sClass = cRender::getRowClass();
-		cChart::metrics_table($oApp,$aMetrics,4,$sClass,null,(cChart::CHART_WIDTH_LETTERBOX-150)/3, $aHeaders);
-	}
-	cRenderCards::body_end();
+		foreach ($aTiers as $oTier){
+			$sTier = $oTier->name;
+			$sCh = strtoupper($sTier[0]);
+			if ($sCh !== $sLastCh){
+				echo "<h3>$sCh</h3>";
+				$sLastCh = $sCh;
+			}
+			
+			$sTierQS = cRenderQS::get_base_tier_QS($oTier);
+			$sUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
+			cRender::button($oTier->name, $sUrl);
+			echo "<br>";
+		}	
+		?></DIV><?php
+		cRenderCards::body_end();
 	cRenderCards::card_end();
 }
 

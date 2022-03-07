@@ -47,12 +47,10 @@ if ($aData == null || count($aData) ==0)
 else
 	$iCount = count($aData);
 
-cRenderCards::card_start();
+cRenderCards::card_start("Backends for Tier: $oTier->name");
 	cRenderCards::body_start();
 		if ($iCount ==0)
-			echo("<font color='red'>no backends found</font>");
-		else
-			echo "there are $iCount backends that resolve to this tier";
+			cCommon::messagebox("no backends found");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		if ($oCred->restricted_login == null){
@@ -64,31 +62,35 @@ cRenderCards::card_start();
 cRenderCards::card_end();
 	
 if ($iCount>0 ){
-	//cDebug::vardump($aData[0]);
-	?>
-		<table class="maintable" cellpadding="4" border=1>
-			<tr class="tableheader">
-				<th>Type</th>
-				<th>name</th>
-				<th>Action</th>
-			</tr>
-			<?php
-				foreach ($aData as $oBackend){
-					$sUrl = cHttp::build_url("../backend/delbackend.php", cRenderQS::BACKEND_QS, $oBackend->id);
-					?><tr>
-						<td><?=$oBackend->resolutionInfo->exitPointType?></td>
-						<td><?=$oBackend->displayName?></td>
-						<td><?php
-							cRender::button(
-								'<span class="material-icons-outlined">delete</span>', 
-								$sUrl, true,null,"delback"
-							);
-						?></td>
-					</tr><?php
-				}
+	cRenderCards::card_start();
+		cRenderCards::body_start();
+			echo "There are $iCount backends that resolve to this tier<p>";
 			?>
-		</table>
-	<?php
+				<table class="maintable" cellpadding="4" border=1>
+					<tr class="tableheader">
+						<th>Type</th>
+						<th>name</th>
+						<th>Action</th>
+					</tr>
+					<?php
+						foreach ($aData as $oBackend){
+							$sUrl = cHttp::build_url("../backend/delbackend.php", cRenderQS::BACKEND_QS, $oBackend->id);
+							?><tr>
+								<td><?=$oBackend->resolutionInfo->exitPointType?></td>
+								<td><?=$oBackend->displayName?></td>
+								<td><?php
+									cRender::button(
+										'<span class="material-icons-outlined">delete</span>', 
+										$sUrl, true,null,"delback"
+									);
+								?></td>
+							</tr><?php
+						}
+					?>
+				</table>
+			<?php
+		cRenderCards::body_end();
+	cRenderCards::card_end();
 }	
 
 //####################################################################

@@ -131,7 +131,7 @@ function show_node_menu(){
 	?>
 	<select id="nodesMenu">
 		<option selected disabled>Show...</option>
-		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for <?=cRender::show_name(cRender::NAME_APP,$oApp)?> application</option>
+		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for <?=$oApp->name?> application</option>
 		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$oTier->name?></option>
 		
 		<optgroup label="Servers">

@@ -103,7 +103,7 @@ if (cAD::is_demo()){
 //#############################################################
 //get the page metrics
 ?>
-<h2>Errors for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
+<h2>Errors for <?=$oTier->name?></h2>
 <?php
 	cDebug::flush();
 	$sMetricpath = cADMetricPaths::Errors($oTier->name, "*");

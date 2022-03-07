@@ -38,9 +38,9 @@ if (cAD::is_demo()){
 	exit;
 }
 ?>
-<LINK rel="stylesheet" type="text/css" href="<?=$jsinc?>/jquery-datetimepicker/jquery.datetimepicker.min.css" >
+<LINK rel="stylesheet" type="text/css" href="<?=$jsinc?>/extra/jquery-datetimepicker/jquery.datetimepicker.min.css" >
 <script language="javascript" src="<?=$jsWidgets?>/comparestats.js"></script>
-<script language="javascript" src="<?=$jsinc?>/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
+<script language="javascript" src="<?=$jsinc?>/extra/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
 <?php
 
 //********************************************************************
@@ -101,13 +101,18 @@ function add_widget($psLabel, $poTimes){
 function set_hour($poTimes, $piHr1, $piHr2){
 	$dStart = $poTimes->start_time();
 	$sStart = $dStart->format("d-m-Y");
-	$sStart .= " ".str_pad($piHr1,2,"0",STR_PAD_LEFT).":00";
+	$sStart .= " ".pad_hr($piHr1).":00";
 	//cDebug::extra_debug("setting start time: ".$sStart);
 	$poTimes->start = strtotime($sStart)*1000;
 	
 	$sEnd = $poTimes->end_time()->format("d-m-Y");
-	$sEnd .= " ".str_pad($piHr2,2,"0",STR_PAD_LEFT).":00";
+	$sEnd .= " ".pad_hr($piHr2).":00";
 	$poTimes->end = strtotime($sEnd)*1000;
+}
+
+//**********************************************************************
+function pad_hr($piHr){
+	return str_pad($piHr,2,"0",STR_PAD_LEFT);
 }
 
 //**********************************************************************
@@ -115,7 +120,7 @@ function show_hourly_card($piHr){
 	global $oToday, $oYesterday, $oLastWeek, $oLastYear;
 	
 	//change the time on the dates to on the hr
-	$sPadded = str_pad($piHr,2,"0",STR_PAD_LEFT);
+	$sPadded = pad_hr($piHr);
 	
 	cRenderCards::card_start($sPadded);
 		cRenderCards::body_start();
@@ -139,7 +144,7 @@ function show_hourly_card($piHr){
 }
 
 //####################################################################
-cRenderCards::card_start("Statistics for the day: $sCaption");
+cRenderCards::card_start("Statistics for the day: $sBaseMetric");
 	cRenderCards::body_start();
 		$sStart = $oToday->start_time()->format("d-m-Y");
 		$sLastYr = $oLastYear->start_time()->format("d-m-Y");
@@ -165,7 +170,7 @@ cRenderCards::card_start("Statistics for the day: $sCaption");
 		cRenderCards::body_end();
 		cRenderCards::action_start();
 			for ($iHr=1; $iHr<=24; $iHr++)
-				cRender::button("".($iHr-1).":00 to $iHr:00", "document.location.hash=\"hr_$iHr\"");
+				cRender::button("".pad_hr($iHr-1).":00 to $iHr:00", "document.location.hash=\"hr_$iHr\"");
 			cRender::button("daily 00:00 to 24:00", "document.location.hash=\"daily\"");
 			echo "<p>";
 			cRenderMenus::show_app_functions($oApp);
@@ -178,7 +183,7 @@ for ($iHr=1; $iHr<=24; $iHr++){
 	set_hour($oYesterday, $iHr-1, $iHr);
 	set_hour($oLastWeek,  $iHr-1, $iHr);
 	set_hour($oLastYear,  $iHr-1, $iHr);
-	show_hourly_card("<a name='hr_$iHr'>".($iHr-1)." to $iHr</a>");
+	show_hourly_card("<a name='hr_$iHr'>".pad_hr($iHr-1).":00 to ".pad_hr($iHr).":00</a>");
 }
 
 set_hour($oToday, 0, 24);

@@ -40,7 +40,7 @@ $title =  "$oApp->name&gt;$oTier->name&gt; to tier $totier";
 cRenderMenus::show_tier_functions($oTier);
 cRender::button("back to ($oTier->name) external tiers", cHttp::build_url("tierextgraph.php", $gsTierQS));
 ?>
-<h2>Activity details <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> to (<?=$totier?>)</h2>
+<h2>Activity details <?=$oTier->name?> to (<?=$totier?>)</h2>
 <p>
 <?php
 //********************************************************************

@@ -48,7 +48,7 @@ else
 	$metric = cADMetricPaths::tierCallsPerMin($tier);
 
 ?>
-<h2>Heatmap for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
+<h2>Heatmap for <?=$oApp->name?></h2>
 <?php
 //********************************************************************
 if (cAD::is_demo()){

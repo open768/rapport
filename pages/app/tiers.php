@@ -40,7 +40,7 @@ $aResponse =$oApp->GET_Tiers();
 if (cRender::is_list_mode()){
 	cRenderCards::card_start();
 		cRenderCards::title_start();
-			?>List of tiers in <?=cRender::show_name(cRender::NAME_APP,$oApp)?><?php
+			?>List of tiers in <?=$oApp->name?><?php
 		cRenderCards::title_end();
 		cRenderCards::action_start();
 			cRender::button("show as buttons", $sUrl);

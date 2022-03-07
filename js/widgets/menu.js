@@ -261,9 +261,9 @@ $.widget( "ck.admenu",{
 			oSelect.append(oOption);
 			var iCount = 1;
 			while (true){
-				sTier = oElement.attr("tname."+iCount);
+				var sTier = oElement.attr("tname."+iCount);
 				if (!sTier) break;
-				sTid = oElement.attr("tid."+iCount);
+				var sTid = oElement.attr("tid."+iCount);
 
 				var oParams = {};
 				oParams[cRenderQS.TIER_QS] = sTier;

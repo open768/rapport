@@ -67,7 +67,7 @@ if (cAD::is_demo()){
 		$sDisabled = ($oCred->restricted_login? "disabled": "");
 	?>
 	<option <?=$sDisabled?> value="<?=$sAllNodeUrl?>">
-		All <?=$oMetricDetails->short?> data for <?=cRender::show_name(cRender::NAME_APP,$oApp)?> Application</option>
+		All <?=$oMetricDetails->short?> data for <?=$oApp->name?> Application</option>
 	<optgroup label="Show details of ..">
 	<?php
 		$sAllInfraUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
@@ -101,7 +101,7 @@ $aMetricTypes = cADInfraMetric::getInfrastructureMetricTypes();
 	
 //####################################################################
 ?>
-<h2><?=$oMetricDetails->caption?> for all Servers in <?=cRender::show_name(cRender::NAME_TIER,$oTier)?> Tier</h2>
+<h2><?=$oMetricDetails->caption?> for all Servers in <?=$oTier->name?> Tier</h2>
 <p>
 <?php
 	$sNodeUrl = cHttp::build_url("tierinfrstats.php",$sTierQS);

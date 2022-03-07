@@ -47,9 +47,9 @@ if (cAD::is_demo()){
 //********************************************************************
 
 //####################################################################
-?><h2>Synthetics for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2>
+?><h2>Synthetics for <?=$oApp->name?></h2>
 
-<script src="<?=$jsinc?>/uri-parser/parse.js"></script>
+<script src="<?=$jsinc?>/extra/uri-parser/parse.js"></script>
 <script src="<?=$jsWidgets?>/synthetics.js"></script>
 <div id="container">Loading Synthetic data...</div>
 <script>

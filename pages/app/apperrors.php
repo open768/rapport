@@ -13,7 +13,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 **************************************************************************/
 
 //####################################################################
-//# TODO make asynchronous as it can take a long time to load
+//# TBD make asynchronous as it can take a long time to load
 //####################################################################
 
 //####################################################################

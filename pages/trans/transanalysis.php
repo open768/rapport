@@ -130,7 +130,7 @@ if ($bProceed){
 }
 
 //#####################################################################
-//TODO make this asynchronous
+//TBD make this asynchronous
 if ($bProceed){
 	cRenderCards::card_start("Analysis of Transactions External Calls");
 	cRenderCards::body_start();

@@ -190,7 +190,7 @@ var cRenderMDL={
 
 	//**********************************************************
 	title:function(psTitle){
-		return "<div class='mdl-card__title'><font class='card_title'>"+psTitle+"</font></div>";
+		return "<div class='mdl-card__title'><font class='card_::TITLE_QS'>"+psTitle+"</font></div>";
 	},
 
 	//**********************************************************

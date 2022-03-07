@@ -24,11 +24,7 @@ require_once "$root/inc/charts.php";
 cRenderHtml::header("All Remote Services");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="<?=$jsinc?>/bean/bean.js"></script>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-
-	
+	<script type="text/javascript" src="<?=$jsinc?>/extra/bean/bean.js"></script>
 <?php
 cChart::do_header();
 
@@ -68,7 +64,7 @@ $oApps = cADController::GET_all_Applications();
 		
 		?><h3><a name="<?=$iBackID?>"><?=$sBackend?></a></h3><?php
 			foreach ($aApps as $oApp){
-				?><h4><?=cRender::show_name(cRender::NAME_APP,$oApp)?></h4><?php
+				?><h4><?=$oApp->name?></h4><?php
 				
 				$aMetrics = [];
 				$sMetricUrl = cADMetricPaths::backendCallsPerMin($sBackend);

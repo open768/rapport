@@ -45,7 +45,7 @@ cRenderMenus::show_apps_menu("Availability");
 $oResponse =$oApp->GET_Tiers();
 
 // work through each tier
-?><h2>Availability for <?=cRender::show_name(cRender::NAME_APP,$oApp)?></h2><?php
+?><h2>Availability for <?=$oApp->name?></h2><?php
 
 
 $aMetrics = [];

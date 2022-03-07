@@ -51,7 +51,7 @@ if (cAD::is_demo()){
 	
 //####################################################################
 ?>
-<h2>Overall Disks Metrics for <?=cRender::show_name(cRender::NAME_TIER,$oTier)?></h2>
+<h2>Overall Disks Metrics for <?=$oTier->name?></h2>
 <?php
 	$aData = $oTier->GET_DiskMetrics();
 	$sBaseMetric = cADMetricPaths::InfrastructureNodeDisks($oTier->name);
@@ -61,7 +61,7 @@ if (cAD::is_demo()){
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 
 ?>
-<h2>disks for Node..<?=cRender::show_name(cRender::NAME_OTHER,$sNode)?></h2>
+<h2>disks for Node..<?=$sNode?></h2>
 <?php
 	$sBaseMetric = cADMetricPaths::InfrastructureNodeDisks($oTier->name, $sNode);
 	$aData = $oTier->GET_NodeDisks($sNode);

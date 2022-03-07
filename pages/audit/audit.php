@@ -39,7 +39,7 @@ if (cAD::is_demo()){
 if ($sType !== cRenderQS::AUDIT_TYPE_LIST_ACTIONS ){
 	cRenderCards::card_start("Audit Logs");
 		cRenderCards::action_start();
-			//TODO add a calender to pick audit events from different days
+			//TBD add a calender to pick audit events from different days
 			cRender::button("Back to actions list", "audit.php");
 			if ($sType === cRenderQS::AUDIT_TYPE_ACTION)
 				switch ( $sFilter){
