@@ -113,6 +113,7 @@ $.widget( "ck.adserviceendpoints",{
 		oElement.empty();
 		var oTable = $("<table>", {border:1,cellspacing:0,style:"width:100%;overflow-wrap: break-word"});
 			oTable.append("<TR><TH>Calls</TH><TH>Response Times</TH><TH>Errors per minute</TH></TR>");
+			
 			paData.forEach( function(poSP){
 				var sBaseUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/service/endpoint.php";
 				var oParams = {};

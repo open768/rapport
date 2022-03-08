@@ -161,63 +161,14 @@ class cRender{
 	
 	//**************************************************************************
 	public static function add_filter_box($psSelector,$psAttr,$psParentSelector, $psCaption = "Filter"){
+		global $home;
+		
 		if 	(self::is_list_mode() && !self::$FORCE_FILTERBOX_DISPLAY) return;
 
-		?><form action="#">
-			<div class="mdl-textfield mdl-js-textfield">
-				<input class="mdl-textfield__input" type="text" id="filter" disabled>
-				<label class="mdl-textfield__label" for="filter"><?=$psCaption?>...</label>
-			</div>
-		</form>
+		?>
+		<script language="javascript" src="<?=$home?>/js/filter.js"></script>
 		<script language="javascript">
-			
-			function onFilterKeyUp( poEvent){
-				//look through divs with selectmenu
-				var aSelected = $("<?=$psSelector?>");
-				var sInput = $("#filter").val().toLowerCase();
-				//iterate
-				aSelected.each(
-					function(index){
-						
-						var oEl = $(this);
-						var sAttr = oEl.attr("<?=$psAttr?>"); 
-						if (sAttr) { //skip selected that dont have the desired attribute
-							
-							var oParent=$(this).closest("<?=$psParentSelector?>");
-							var oTRParent = $(this).closest("TR");					
-							var oHider = oParent;
-							if (oTRParent.length > 0){
-								 if (oTRParent.parents().length > oParent.parents().length) //element is in a table
-								 	oHider = oTRParent;
-							}
-							
-							
-							if (sInput.length < 3){	//must be at least 3 chars
-								oHider.show();
-							}else{
-								sAttr = sAttr.toLowerCase();
-								if ( sAttr.indexOf(sInput) == -1)	////check the attribute for a match
-									oHider.hide();
-								else{
-									oHider.show();
-									oParent.show();
-								}
-							}
-						}
-					}
-				);
-			}
-			
-			$( 			
-				function setFilterKeyUp(){
-					$(
-						function(){
-							$("#filter" ).prop( "disabled", false );
-							$("#filter" ).keyup(onFilterKeyUp);
-						}
-					);
-				}
-			);
+			cFilterFunctions.filter_box("<?=$psCaption?>", "<?=$psSelector?>","<?=$psAttr?>", "<?=$psParentSelector?>" );
 		</script>
 	<?php	}
 
