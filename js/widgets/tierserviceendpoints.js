@@ -82,8 +82,10 @@ $.widget( "ck.adserviceendpoints",{
 		var aResponse = poHttp.response;
 		if (aResponse.length == 0 )
 			oElement.append(cRender.messagebox("no service end points found"));
-		else
-			this.render(poHttp.response);
+		else{
+			this.renderSummary(aResponse);
+			this.renderSEPs(aResponse);
+		}
 	},
 
 
@@ -105,81 +107,131 @@ $.widget( "ck.adserviceendpoints",{
 		},
 
 	//*******************************************************************
-	render: function(paData){
+	//TODO what happens if there are thousands of end points? need to page the list.
+	renderSummary: function(paData){
+		var oElement = this.element;
+		var sLastCh = null;
+		var sLast = null;
+		var iCommon = 0;
+		var sLastCommon = null;
+
+		var sHTML = cRenderMDL.card_start("Service End Points");
+			sHTML += cRenderMDL.body_start();
+				sHTML += "<div style='column-count:3;overflow-wrap:break-word' >";
+					paData.forEach(	function(poSP){
+						var sCh = poSP.name[0];
+						if (sCh !== sLastCh){
+							sHTML += "<hr><h3>" + sCh + "</h3>";
+							sLastCh = sCh;
+						}
+						var sName = poSP.name;
+						/* TBD trying to be too clever
+						if (sLast){
+							iCommon = cString.count_common_chars(sName, sLast);
+							if (iCommon >10 ){
+								var sCommon = sName.substr(0,iCommon -1);
+								if (sCommon === sLastCommon)
+									sName = "... " + sName.substr(iCommon );
+								sLastCommon = sCommon;
+							}
+						}*/
+						sHTML += "<li><a href='#" + poSP.id + "'>" + sName + "</a><br>";
+						sLast = poSP.name;
+					});
+				sHTML += "</div>";
+			sHTML += "</div>";
+		sHTML += "</div><p>";
+
+		oElement.append(sHTML);
+	},
+
+	//*******************************************************************
+	get_SEP_Table: function(poSP,psBaseMetric){
+		var oElement = this.element;
+		var oTable = $("<table>", {border:0,cellspacing:0,style:"width:100%;overflow-wrap: break-word"});
+		oTable.append("<TR><TH>Calls</TH><TH>Response Times</TH><TH>Errors per minute</TH></TR>");
+
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/service/endpoint.php";
+		var oParams = {};
+		oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS);
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		oParams[ cRenderQS.SERVICE_ID_QS ] = poSP.id;
+		oParams[ cRenderQS.SERVICE_QS ] = poSP.name;
+		var sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
+		var sSPMetric = psBaseMetric + "|" + poSP.name;
+
+		//-----------------------------------------------------------------
+		var oChartParams = {};
+			oChartParams[cChartConsts.ATTR_TITLE + "0"] = poSP.name ;
+			oChartParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS);
+			oChartParams["type"] = "spwidget";
+			oChartParams["style"] = "position: relative; max-width: 341px; width: 341px; height: 125px;";
+			oChartParams["class"] = "chart_widget";
+			oChartParams[cRenderQS.HOME_QS] =  oElement.attr(cRenderQS.HOME_QS) ;
+			oChartParams[cChartConsts.ATTR_SHOW_ZOOM] =1;
+			oChartParams[cChartConsts.ATTR_SHOW_COMPARE] = 1;
+			oChartParams[cChartConsts.ATTR_PREVIOUS] = 0;
+			oChartParams[cChartConsts.ATTR_WIDTH] = cChartConsts.WIDTH_3ACROSS;
+			oChartParams[cChartConsts.ATTR_HEIGHT] = cChartConsts.LETTERBOX_HEIGHT;
+
+		//-----------------------------------------------------------------
+		var oRow = $("<TR>");
+			oChartParams[cRenderQS.METRIC_QS + "0"] = sSPMetric + "|Calls per Minute";
+			oChartParams[cChartConsts.ATTR_GO_URL] =sUrl;
+			
+			var oTD = $("<TD>");
+			var oChart = $("<div>", oChartParams);
+				oChart.append("please wait - chart loading...")
+				oTD.append(oChart);
+			oRow.append(oTD);
+			
+			//-----------------------------------------------------------------
+			oChartParams[cRenderQS.METRIC_QS + "0"] = sSPMetric + "|Average Response Time (ms)";
+			oChartParams[cChartConsts.ATTR_GO_URL] = null;
+			oTD = $("<TD>");
+			oChart = $("<div>", oChartParams);
+				oChart.append("please wait - chart loading...")
+				oTD.append(oChart);
+			oRow.append(oTD);
+			
+			//-----------------------------------------------------------------
+			oChartParams[cRenderQS.METRIC_QS + "0"] = sSPMetric + "|Errors Per Minute";
+			oTD = $("<TD>");
+			oChart = $("<div>", oChartParams);
+				oChart.append("please wait - chart loading...")
+				oTD.append(oChart);
+			oRow.append(oTD);
+
+			//-----------------------------------------------------------------
+
+		oTable.append(oRow);
+		return oTable;
+	},
+	
+	//*******************************************************************
+	renderSEPs: function(paData){
 		var oThis = this;
 		var oElement = this.element;
 		var sBaseMetric = "Service Endpoints|"+oElement.attr(cRenderQS.TIER_QS);
 
-		oElement.empty();
-		var oTable = $("<table>", {border:1,cellspacing:0,style:"width:100%;overflow-wrap: break-word"});
-			oTable.append("<TR><TH>Calls</TH><TH>Response Times</TH><TH>Errors per minute</TH></TR>");
-			
-			paData.forEach( function(poSP){
-				var sBaseUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/service/endpoint.php";
-				var oParams = {};
-				oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS);
-				oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
-				oParams[ cRenderQS.SERVICE_ID_QS ] = poSP.id;
-				oParams[ cRenderQS.SERVICE_QS ] = poSP.name;
-				var sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
-				var sSPMetric = sBaseMetric + "|" + poSP.name;
-				
-				//-----------------------------------------------------------------------
-				var oRow = $("<TR>");
-					oRow.append("<td colspan='3'><a target='SP' href='" + sUrl + "'>" + poSP.name + "</a></td>");
-				oTable.append(oRow);
-				
-				//-----------------------------------------------------------------
-				var oChartParams = {};
-					oChartParams[cChartConsts.ATTR_TITLE + "0"] = poSP.name ;
-					oChartParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS);
-					oChartParams["type"] = "spwidget";
-					oChartParams["style"] = "position: relative; max-width: 341px; width: 341px; height: 125px;";
-					oChartParams["class"] = "chart_widget";
-					oChartParams[cRenderQS.HOME_QS] =  oElement.attr(cRenderQS.HOME_QS) ;
-					oChartParams[cChartConsts.ATTR_SHOW_ZOOM] =1;
-					oChartParams[cChartConsts.ATTR_SHOW_COMPARE] = 1;
-					oChartParams[cChartConsts.ATTR_PREVIOUS] = 0;
-					oChartParams[cChartConsts.ATTR_WIDTH] = cChartConsts.WIDTH_3ACROSS;
-					oChartParams[cChartConsts.ATTR_HEIGHT] = cChartConsts.LETTERBOX_HEIGHT;
+		
+		paData.forEach( function(poSP){
+			var sHTML = cRenderMDL.card_start("<a name='" + poSP.id + "'>" + poSP.name + "</a>");
+				sHTML += cRenderMDL.body_start();
+					var oTable = oThis.get_SEP_Table(poSP, sBaseMetric);
+					sHTML += oTable[0].outerHTML;
+				sHTML += "</div>";
+			sHTML += "</div><p>";
+			oElement.append(sHTML);
+		});
 
-				//-----------------------------------------------------------------
-				var oRow = $("<TR>");
-					oChartParams[cRenderQS.METRIC_QS + "0"] = sSPMetric + "|Calls per Minute"; 
-					var oTD = $("<TD>");
-					var oChart = $("<div>", oChartParams);
-						oChart.append("please wait - chart loading...")
-						oTD.append(oChart);
-					oRow.append(oTD);
-					//-----------------------------------------------------------------
-					oChartParams[cRenderQS.METRIC_QS + "0"] = sSPMetric + "|Average Response Time (ms)"; 
-					oTD = $("<TD>");
-					oChart = $("<div>", oChartParams);
-						oChart.append("please wait - chart loading...")
-						oTD.append(oChart);
-					oRow.append(oTD);
-					//-----------------------------------------------------------------
-					oChartParams[cRenderQS.METRIC_QS + "0"] = sSPMetric + "|Errors Per Minute"; 
-					oTD = $("<TD>");
-					oChart = $("<div>", oChartParams);
-						oChart.append("please wait - chart loading...")
-						oTD.append(oChart);
-					oRow.append(oTD);
-					
-					//-----------------------------------------------------------------
-					
-				oTable.append(oRow);
-			});
-		
-		oElement.append(oTable);
-		
 		//- - - - -convert chart to Widgets
 		if (cCharts.isGoogleChartsLoaded())
 			this.convert_to_widgets()
 		else
 			cCharts.load_google_charts(function(){this.convert_to_widgets();});
 	},
-	
+
 	//*******************************************************************
 	convert_to_widgets: function(){
 		$("DIV[type=spwidget]").each(

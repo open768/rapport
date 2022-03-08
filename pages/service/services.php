@@ -32,52 +32,45 @@ cChart::do_header();
 //get passed in values
 $oApp = cRenderObjs::get_current_app();
 $oTimes = cRender::get_times();
+$oTier = null;
+if (cHeader::get(cRenderQS::TIER_ID_QS))$oTier = cRenderObjs::get_current_tier();
 
+//********************************************************************
+//display a summary
 cRenderCards::card_start();
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
-		if (cHeader::get(cRenderQS::TIER_ID_QS)){
+		if ($oTier){
 			$sAppQS = cRenderQS::get_base_app_QS($oApp);
 			$sUrl = cHttp::build_url(cCommon::filename(), $sAppQS);
 			cRender::button("Service End points for App: $oApp->name", $sUrl);
 			cRenderMenus::show_tier_menu("Show Service EndPoints for");
+			cRenderMenus::show_tier_functions($oTier);
 		}else
 			cRenderMenus::show_apps_menu("Show Service EndPoints for");
 
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
-//####################################################################
-//TBD add a list mode - show the avg and max response times of each SEP
 
 //********************************************************************
-if (cHeader::get(cRenderQS::TIER_ID_QS)){
-	$oTier = cRenderObjs::get_current_tier();
-	cRenderCards::card_start("$oTier->name");
-		cRenderCards::body_start();
-			?>
-				<div 
-					type="widget" 
-					<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>" 
-					<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>" 
-					<?=cRenderQS::TIER_QS?>="<?=$oTier->name?>" 
-					<?=cRenderQS::HOME_QS?>="<?=$home?>" 
-				>
-					Please Wait..
-				</div>
-				<script language="javascript">
-				function init_widget(){
-					$("DIV[type=widget]").adserviceendpoints();
-				}
-				
-				$( init_widget);
-				</script>
-			<?php
-		cRenderCards::body_end();
-		cRenderCards::action_start();
-			cRenderMenus::show_tier_functions($oTier);
-		cRenderCards::action_end();
-	cRenderCards::card_end();
+if ($oTier){
+	?>
+		<div 
+			id="tierwidget" 
+			<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>" 
+			<?=cRenderQS::TIER_ID_QS?>="<?=$oTier->id?>" 
+			<?=cRenderQS::TIER_QS?>="<?=$oTier->name?>" 
+			<?=cRenderQS::HOME_QS?>="<?=$home?>" 
+		>
+			Please Wait..
+		</div>
+		<script language="javascript">
+			$(function(){
+				$("#tierwidget").adserviceendpoints();
+			});
+		</script>
+	<?php
 }else{
 	//TBD make these widgets that hide  tiers that dont have service end points 
 	$aTiers = $oApp->GET_Tiers();
