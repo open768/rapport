@@ -12,3 +12,4 @@ images/src
 composer.lock
 secret.php
 release.zip
+inc/secret-orig.php
