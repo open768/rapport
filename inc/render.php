@@ -166,9 +166,12 @@ class cRender{
 		if 	(self::is_list_mode() && !self::$FORCE_FILTERBOX_DISPLAY) return;
 
 		?>
+		<div id="fbplaceholder">please wait - loading filter box</div>
 		<script language="javascript" src="<?=$home?>/js/filter.js"></script>
 		<script language="javascript">
-			cFilterFunctions.filter_box("<?=$psCaption?>", "<?=$psSelector?>","<?=$psAttr?>", "<?=$psParentSelector?>" );
+			$( function(){
+				cFilterFunctions.filter_box("fbplaceholder", "<?=$psCaption?>", "<?=$psSelector?>","<?=$psAttr?>", "<?=$psParentSelector?>" );
+			});
 		</script>
 	<?php	}
 

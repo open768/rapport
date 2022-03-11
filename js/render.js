@@ -175,12 +175,6 @@ var cRender={
 	fade_element: function(poEl){
 		poEl.fadeOut(1000,function(){poEl.remove();});
 	},
-	
-	//**************************************************************************
-	filter_box: function(){
-	}
-	
-	
 };
 
 var cRenderW3={

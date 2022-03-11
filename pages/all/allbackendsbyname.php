@@ -24,7 +24,7 @@ require_once "$root/inc/charts.php";
 cRenderHtml::header("All Remote Services");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="<?=$jsinc?>/extra/bean/bean.js"></script>
+	<script type="text/javascript" src="<?=$js_extra?>/bean/bean.js"></script>
 <?php
 cChart::do_header();
 

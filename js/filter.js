@@ -6,8 +6,9 @@ var cFilterFunctions={
 	id:"filter",
 	
 	//**********************************************************************************
-	filter_box: function(psCaption, psSelector, psAttr, psParentSelector){
+	filter_box: function(psContainerID, psCaption, psSelector, psAttr, psParentSelector){
 		var oThis=this;
+		
 		this.selector = psSelector;
 		this.attr = psAttr;
 		this.parent_selector = psParentSelector;
@@ -18,13 +19,15 @@ var cFilterFunctions={
 				'<label class="mdl-textfield__label" for="' + this.id + '">' + psCaption + '...</label>' +
 			'</div>' +
 		'</form>';
-		document.writeln(sHTML);
+		var oDiv = $("#"+psContainerID);
+		oDiv.empty();
+		oDiv.append(sHTML);
 		
-		$( function(){oThis.setOnKeyUp()});			
+		this.setOnKeyUp();			
 	},
 	
 	//**********************************************************************************
-	setOnKeyUp: function(psID){
+	setOnKeyUp: function(){
 		var oThis=this;
 		$("#" + this.id ).prop( "disabled", false );
 		$("#" + this.id ).keyup( 

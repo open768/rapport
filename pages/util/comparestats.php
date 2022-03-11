@@ -40,9 +40,9 @@ if (cAD::is_demo()){
 
 
 ?>
-<LINK rel="stylesheet" type="text/css" href="<?=$jsinc?>/extra/jquery-datetimepicker/jquery.datetimepicker.min.css" >
+<LINK rel="stylesheet" type="text/css" href="<?=$js_extra?>/jquery-datetimepicker/jquery.datetimepicker.min.css" >
 <script language="javascript" src="<?=$jsWidgets?>/comparestats.js"></script>
-<script language="javascript" src="<?=$jsinc?>/extra/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
+<script language="javascript" src="<?=$js_extra?>/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
 <?php
 
 //********************************************************************
