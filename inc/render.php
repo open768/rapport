@@ -11,11 +11,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-require_once("$phpinc/ckinc/colour.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/ckinc/http.php");
-require_once("$ADlib/AD.php");
-require_once("$ADlib/core.php");
 require_once("$root/inc/filter.php");
 require_once("$root/inc/renderqs.php");
 require_once("$root/inc/rendermenus.php");
