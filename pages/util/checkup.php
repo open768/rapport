@@ -18,48 +18,65 @@ require_once "$home/inc/common.php";
 //####################################################################
 cRenderHtml::header("One Click Checkup");
 cRender::force_login();
+//TODO if application passed only do a checkup for that application.
 
-$aResponse = cADController::GET_all_Applications();
-
-//####################################################################
 ?><script language="javascript" src="<?=$jsWidgets?>/appcheckup.js"></script><?php
 
-cRenderCards::card_start("Checkup");
-cRenderCards::body_start();
-	$sPrevious = "";
-	echo "<div style='column-count:4'>";
-		foreach ( $aResponse as $oApp){
-			$sChar = strtolower(($oApp->name)[0]);
-			if ($sChar !== $sPrevious){
-				echo "<h3>".strtoupper($sChar)."</h3>";
-				$sPrevious = $sChar;
+//**********************************************************************************
+function render_summary($paApps){
+	cRenderCards::card_start("Checkup");
+	cRenderCards::body_start();
+		$sPrevious = "";
+		echo "<div style='column-count:4'>";
+			foreach ( $paApps as $oApp){
+				$sChar = strtolower(($oApp->name)[0]);
+				if ($sChar !== $sPrevious){
+					echo "<h3>".strtoupper($sChar)."</h3>";
+					$sPrevious = $sChar;
+				}
+				echo "<a href='#$oApp->id'>$oApp->name</a><br>";
 			}
-			echo "<a href='#$oApp->id'>$oApp->name</a><br>";
-		}
-	echo "</div>";	
-	cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
-cRenderCards::body_end();
-cRenderCards::card_end();
+		echo "</div>";	
+		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
+	cRenderCards::body_end();
+	cRenderCards::card_end();
+}
 
-//####################################################################
-//this needs to be asynchronous as when there are a lot of applications that page times out
-foreach ( $aResponse as $oApp){
-	cRenderCards::card_start("<a name='$oApp->id'>$oApp->name</a>");
+//**********************************************************************************
+function render_app($poApp){
+	global $home;
+	cRenderCards::card_start("<a name='$poApp->id'>$poApp->name</a>");
 	cRenderCards::body_start();
 	?><div 
 			type="appcheckup" 
-			<?=cRenderQS::APP_QS?>="<?=$oApp->name?>"
-			<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>"
+			<?=cRenderQS::APP_QS?>="<?=$poApp->name?>"
+			<?=cRenderQS::APP_ID_QS?>="<?=$poApp->id?>"
 			<?=cRenderQS::HOME_QS?>="<?=$home?>">
 			loading...
 	</div><?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRenderMenus::show_app_functions($oApp);
-		cADCommon::button(cADControllerUI::app_BT_config($oApp));
+		cRenderMenus::show_app_functions($poApp);
+		cADCommon::button(cADControllerUI::app_BT_config($poApp));
 	cRenderCards::action_end();
 	cRenderCards::card_end();
 }
+
+//**********************************************************************************
+$oApp = cRenderObjs::get_current_app();
+if ($oApp)
+	render_app($oApp);
+else{
+	$aResponse = cADController::GET_all_Applications();
+	render_summary($aResponse);
+
+
+	//####################################################################
+	//this needs to be asynchronous as when there are a lot of applications that page times out
+	foreach ( $aResponse as $oApp2)
+		render_app($oApp2);
+}
+
 ?>
 	<script language="javascript">
 		function init_a_checkup_widget(piIndex, poElement){
