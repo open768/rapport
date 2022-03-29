@@ -29,7 +29,7 @@ $oApp = $oTier->app;
 
 //*************************************************************************
 $sMetricPath = cADMetricPaths::transExtNames($oTrans);
-$oWalker = new cADTransFlow();
+$oWalker = new cADBTFlow();
 $oWalker->walk($oTrans);
 cCommon::write_json($oWalker);	
 ?>

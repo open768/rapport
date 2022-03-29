@@ -18,11 +18,12 @@ require_once "$home/inc/common.php";
 
 //###################### DATA #############################################
 $oApp = cRenderObjs::get_current_app();
+$oTimes = cRender::get_times();
 
 //*************************************************************************
 cDebug::write("doing a checkup on  - $oApp->name");
 
-$oOutput = $oApp->checkup($oApp);
+$oOutput = $oApp->checkup($oTimes);
 
 //*************************************************************************
 //* output

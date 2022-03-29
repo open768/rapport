@@ -69,9 +69,9 @@ if (cRender::is_list_mode()){
 	cRenderCards::card_start("Overall Activity in $oApp->name");
 		cRenderCards::body_start();
 			$aMetrics = [];
-			$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADMetricPaths::appCallsPerMin()];
-			$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADMetricPaths::appResponseTimes()];
-			$aMetrics[] = [cChart::LABEL=>"Overall Errors per min", cChart::METRIC=>cADMetricPaths::appErrorsPerMin()];
+			$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADAppMetrics::appCallsPerMin()];
+			$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADAppMetrics::appResponseTimes()];
+			$aMetrics[] = [cChart::LABEL=>"Overall Errors per min", cChart::METRIC=>cADAppMetrics::appErrorsPerMin()];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			
 		cRenderCards::body_end();
 		cRenderCards::action_start();
@@ -81,7 +81,7 @@ if (cRender::is_list_mode()){
 			$sUrl.= "&".cRenderQS::LIST_MODE_QS;
 			cRender::button("show as list", $sUrl);
 			
-			$sBaseMetric = cADMetricPaths::app();
+			$sBaseMetric = cADAppMetrics::app();
 			$sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);
 			$sUrl = cHttp::build_url($sUrl,cRenderQS::METRIC_QS, $sBaseMetric );
 			$sUrl = cHttp::build_url($sUrl,cRenderQS::TITLE_QS, "Application: $oApp->name" );
@@ -100,9 +100,9 @@ if (cRender::is_list_mode()){
 		$sTierQs=cRenderQS::get_base_tier_QS($oTier);
 		
 		$aMetrics = [];
-		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetricPaths::tierCallsPerMin($sTier), cChart::GO_HINT=>"Overview", cChart::GO_URL=>"../tier/tier.php?$sTierQs"];
-		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADMetricPaths::tierResponseTimes($sTier)];
-		$aMetrics[] = [cChart::LABEL=>"Errors per min", cChart::METRIC=>cADMetricPaths::tierErrorsPerMin($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADTierMetrics::tierCallsPerMin($sTier), cChart::GO_HINT=>"Overview", cChart::GO_URL=>"../tier/tier.php?$sTierQs"];
+		$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADTierMetrics::tierResponseTimes($sTier)];
+		$aMetrics[] = [cChart::LABEL=>"Errors per min", cChart::METRIC=>cADTierMetrics::tierErrorsPerMin($sTier)];
 		cRenderCards::card_start();
 			cRenderCards::body_start();
 				cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);			

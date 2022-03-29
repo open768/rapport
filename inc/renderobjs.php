@@ -89,7 +89,7 @@ class cRenderObjs{
 		$oTier = self::get_current_tier();
 		$sTrans = cHeader::get(cRenderQS::TRANS_QS);
 		$sTrid = cHeader::get(cRenderQS::TRANS_ID_QS);
-		return new cADTrans($oTier, $sTrans, $sTrid);
+		return new cADBT($oTier, $sTrans, $sTrid);
 	}
 	
 	public static function get_current_snapshot(){

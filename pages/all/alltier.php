@@ -55,8 +55,8 @@ foreach ( $aApps as $oApp){
 			$sUrl = "tier.php?$sTierQs";
 			
 			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oTier->name];
-			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cADMetricPaths::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
-			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cADMetricPaths::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
+			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cADTierMetrics::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
+			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cADTierMetrics::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
 		}
 		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3);
 	?></div><?php

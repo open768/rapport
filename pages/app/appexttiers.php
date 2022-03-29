@@ -63,8 +63,8 @@ foreach ( $oResponse as $oTier){
 	$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
 	
 	$aMetrics[] = [cChart::LABEL=>$sTier,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADMetricPaths::tierExtCallsPerMin($sTier,$sMatched), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"];
-	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADMetricPaths::tierExtResponseTimes($sTier,$sMatched)];
+	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADTierMetrics::tierExtCallsPerMin($sTier,$sMatched), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"];
+	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADTierMetrics::tierExtResponseTimes($sTier,$sMatched)];
 }
 cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 cChart::do_footer();

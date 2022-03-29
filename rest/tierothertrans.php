@@ -23,7 +23,7 @@ class cOutput{
 $oTier = cRenderObjs::get_current_tier();
 $oTimes = cRender::get_times();
 
-$oTrans = new cADTrans($oTier, cADMetricPaths::ALL_OTHER, null, true);
+$oTrans = new cADBT($oTier, cADMetricPaths::ALL_OTHER, null, true);
 $oTrans->populate_ID($oTimes);
 
 $oOut = new cOutput;

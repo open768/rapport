@@ -52,9 +52,9 @@ if (cAD::is_demo()){
 //********************************************************************
 	cRender::button("see Calling Transactions", "tierextalltrans.php?$sTransQs" );
 	$aMetrics=[];
-	$sMetricUrl=cADMetricPaths::tierExtCallsPerMin($oTier->name, $totier);
+	$sMetricUrl=cADTierMetrics::tierExtCallsPerMin($oTier->name, $totier);
 	$aMetrics[] = [cChart::LABEL=>"Calls per min from ($oTier->name) to ($totier)", cChart::METRIC=>$sMetricUrl];
-	$sMetricUrl=cADMetricPaths::tierExtResponseTimes($oTier->name, $totier);
+	$sMetricUrl=cADTierMetrics::tierExtResponseTimes($oTier->name, $totier);
 	$aMetrics[] = [cChart::LABEL=>"Response Times in ms from ($oTier->name) to ($totier)", cChart::METRIC=>$sMetricUrl];
 	cChart::metrics_table($oApp,$aMetrics,1,cRender::getRowClass());
 

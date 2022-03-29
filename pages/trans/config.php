@@ -227,7 +227,7 @@ cRenderCards::action_start();
 cRenderCards::action_end();
 cRenderCards::card_end();
 
-$aConfigs = $oApp->GET_Transaction_configs();
+$aConfigs = $oApp->GET_app_BT_configs();
 if (!$aConfigs || count($aConfigs) == 0){
 	cCommon::messagebox("no configurations found");
 	cRenderHtml::footer();

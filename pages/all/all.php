@@ -38,11 +38,11 @@ switch($sMetricType){
 		$sOtherTitle = "Web Browser Activity";
 		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
 		$sTitle1 = "Application Activity";
-		$sMetric1 = cADMetricPaths::appCallsPerMin();
+		$sMetric1 = cADAppMetrics::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
-		$sMetric2 = cADMetricPaths::appResponseTimes();
+		$sMetric2 = cADAppMetrics::appResponseTimes();
 		$sTitle3 = "Application Errors";
-		$sMetric3 = cADMetricPaths::appErrorsPerMin();
+		$sMetric3 = cADAppMetrics::appErrorsPerMin();
 		$sBaseUrl = "$home/pages/app/tiers.php";
 		break;
 }
