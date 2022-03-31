@@ -16,7 +16,6 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home=".";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 	
 cDebug::extra_debug("Page Initialising - started");
 cSession::clear_session();
@@ -40,8 +39,9 @@ function pr__show_error($psTitle, $psMessage){
 }
 
 //####################################################################
-if (cHeader::get(cLogin::KEY_SUBMIT))
+if (cHeader::get(cADLogin::KEY_SUBMIT))
 {
+	//cDebug::on(true);
 	cDebug::extra_debug("form submitted");
 	$oCred = new cADCredentials();
 	try{
@@ -54,7 +54,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	}
 	
 	//---------- where are we going
-	$sReferrer = cHeader::get(cLogin::KEY_REFERRER);
+	$sReferrer = cHeader::get(cADLogin::KEY_REFERRER);
 	$sIgnoreReferrer = cHeader::get(cRenderQS::IGNORE_REF_QS);
 	$sLocation = cHeader::get(cRenderQS::LOCATION_QS);
 	if (!$sLocation)
@@ -72,6 +72,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	//----------- redirect
 	cHeader::redirect($sLocation);
 	exit();
+//#########################################################################
 }else if (cHeader::get(cRenderQS::LOGIN_TOKEN_QS)){
 	cDebug::extra_debug("token found ");
 	try{
@@ -86,11 +87,13 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 	cHeader::redirect("$home/pages/all/all.php");
 	exit();
 	
+//#########################################################################
 }else{
 	cDebug::extra_debug("showing login screen ");
 	cRenderHtml::header("login");
 	?>
 		<!-- Login Box -->
+		<script type="text/javascript" src="js/index.js"></script>
 
 		<div class="mdl-card mdl-shadow--6dp login_box" >
 			<div class="mdl-card__title-text mdl-color--blue-900 ">
@@ -100,42 +103,107 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 			</div>
 			<div class="mdl-card__supporting-text" id="divCard">
 				<form method="POST" action="index.php">
+					<input type="hidden" name="<?=cRenderQS::LOCATION_QS?>" value="<?=cHeader::get(cRenderQS::LOCATION_QS)?>">
+					
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" id="txtAccount" type="text" name="<?=cLogin::KEY_ACCOUNT?>">
-						<label class="mdl-textfield__label" for="<?=cLogin::KEY_ACCOUNT?>">Account...</label>
-						<div class="mdl-tooltip" for="txtAccount">
-							use the same account details as you would when logging into your controller.
-						</div>
-					</div>
-					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" id="txtUsername" type="text" name="<?=cLogin::KEY_USERNAME?>">
-						<label class="mdl-textfield__label" for="<?=cLogin::KEY_USERNAME?>">Username...</label>
-						<div class="mdl-tooltip" for="txtUsername">
-							to use this application we recommend creating a local user with limited access in your controller.
-						</div>
-					</div>
-					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" id="txtpass" type="password" name="<?=cLogin::KEY_PASSWORD?>">
-						<label class="mdl-textfield__label" for="<?=cLogin::KEY_PASSWORD?>">Password...</label>
-						<div class="mdl-tooltip" for="txtpass">
-							this password is not stored by this web application.
-						</div>
-					</div>
-					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" id="txtHost" type="text" name="<?=cLogin::KEY_HOST?>">
-						<label class="mdl-textfield__label" for="<?=cLogin::KEY_HOST?>">Controller Hostname...</label>
-						<div class="mdl-tooltip" for="txtHost">
+						<input class="mdl-textfield__input" id="<?=cADLogin::KEY_HOST?>" type="text" name="<?=cADLogin::KEY_HOST?>">
+						<label class="mdl-textfield__label" for="<?=cADLogin::KEY_HOST?>">Controller Hostname...</label>
+						<div class="mdl-tooltip" for="<?=cADLogin::KEY_HOST?>">
 							usually &lt;account&gt;.saas.appdynamics.com
 						</div>
 					</div>
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<select name="<?=cLogin::KEY_HTTPS?>" class="mdl-textfield__input">
-							<option selected value="yes">yes</option>
-							<option  value="no">no</option>
-						</select>
-						<label class="mdl-textfield__label" for="<?=cLogin::KEY_HTTPS?>">use https:</label>
+						<input class="mdl-textfield__input" id="<?=cADLogin::KEY_ACCOUNT?>" type="text" name="<?=cADLogin::KEY_ACCOUNT?>">
+						<label class="mdl-textfield__label" for="<?=cADLogin::KEY_ACCOUNT?>">Account...</label>
+						<div class="mdl-tooltip" for="<?=cADLogin::KEY_ACCOUNT?>">
+							use the same account details as you would when logging into your controller.
+						</div>
 					</div>
-					<input type="hidden" name="<?=cRenderQS::LOCATION_QS?>" value="<?=cHeader::get(cRenderQS::LOCATION_QS)?>">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" id="<?=cADLogin::KEY_USERNAME?>" type="text" name="<?=cADLogin::KEY_USERNAME?>">
+						<label class="mdl-textfield__label" for="<?=cADLogin::KEY_USERNAME?>">Username...</label>
+						<div class="mdl-tooltip" for="<?=cADLogin::KEY_USERNAME?>">
+							to use this application we recommend creating a local user with limited access in your controller.
+						</div>
+					</div>
+					<div class="w3-border w3-padding" id="tabs_container">
+						<div class="w3-bar w3-blue" id="tabs">
+							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABP">Password</button>
+							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABAT">API token</button>
+							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABAS">API Secret</button>
+							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABJ">JSession</button>
+						</div><!-- tabs -->
+						<div id="tab panels" >
+							<!-- ******************************************************************** -->
+							<div class="tab w3-padding" id="TABP">
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_PASSWORD?>" type="password" name="<?=cADLogin::KEY_PASSWORD?>">
+									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_PASSWORD?>">Password...</label>
+									<div class="mdl-tooltip" for="<?=cADLogin::KEY_PASSWORD?>">
+										this password is not stored by this web application.
+									</div>
+								<p>
+								</div>
+								Note: using passwords will not work for SAML authenticated logins.
+							</div> <!-- P Panel -->
+							
+							<!-- ******************************************************************** -->
+							<div class="tab w3-padding" id="TABAT" style="display:none">
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_APITOKEN?>" type="text" name="<?=cADLogin::KEY_APITOKEN?>">
+									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_APITOKEN?>">API Token...</label>
+									<div class="mdl-tooltip" for="<?=cADLogin::KEY_APITOKEN?>">
+										Use the API token provided by the controller administrator. This token is not stored by this application
+									</div>
+								</div>
+							</div> <!-- AT Panel -->
+							
+							<!-- ******************************************************************** -->
+							<div class="tab w3-padding" id="TABAS" style="display:none">
+								This is not implemented
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_APIAPP?>" type="text" name="<?=cADLogin::KEY_APIAPP?>">
+									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_APIAPP?>">API Application...</label>
+									<div class="mdl-tooltip" for="<?=cADLogin::KEY_APIAPP?>">
+										Use the API Application name you have defined in the controller.
+									</div>
+								</div>
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_APISECRET?>" type="text" name="<?=cADLogin::KEY_APISECRET?>">
+									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_APISECRET?>">API Secret...</label>
+									<div class="mdl-tooltip" for="<?=cADLogin::KEY_APISECRET?>">
+										Use the API Secret details that you have defined in the controller. This token is not stored by this application
+									</div>
+								</div>
+							</div> <!-- AS Panel -->
+							
+							<!-- ******************************************************************** -->
+							<div class="tab w3-padding" id="TABJ" style="display:none">
+								This is not implemented
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_JSESSION_ID?>" type="text" name="<?=cADLogin::KEY_JSESSION_ID?>">
+									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_JSESSION_ID?>">JsessionID...</label>
+									<div class="mdl-tooltip" for="<?=cADLogin::KEY_JSESSION_ID?>">
+										see instructions below
+									</div>
+								</div>
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_XCSRFTOKEN?>" type="text" name="<?=cADLogin::KEY_XCSRFTOKEN?>">
+									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_XCSRFTOKEN?>">XCSRFToken...</label>
+									<div class="mdl-tooltip" for="<?=cADLogin::KEY_XCSRFTOKEN?>">
+										see instructions below
+									</div>
+								</div>
+								This is a hack and is used for SAML authenticated logins when no access to the controller REST apis have been provided.
+								<ul>
+									<li>using a seperate browser tab login to the controller 
+									<li>using  a cookie viewing developer tools extract the values of the JSESSIONID and XCRSF-TOKEN cookie
+									<li>copy and paste the JSESSIONID and XCRSF-TOKEN cookies below
+								</ul>
+							</div> <!-- J Panel -->
+							
+						</div><!-- tab panels -->
+					</div><!-- tabs contrainer-->
 
 					<?php
 						if (cDebug::is_debugging()){
@@ -145,7 +213,7 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 							?><input type="hidden" name="<?=cDebug::DEBUG2_STR?>" value="1"><?php
 						}
 					?>
-					<button id="btnlogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white login_submit" type="submit" value="1" name="<?=cLogin::KEY_SUBMIT?>">Login</button>
+					<button id="btnlogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white login_submit" type="submit" value="1" name="<?=cADLogin::KEY_SUBMIT?>">Login</button>
 					<div class="mdl-tooltip" for="btnlogin">
 						No login credentials are stored by this application, we really mean it
 					</div>
@@ -160,12 +228,11 @@ if (cHeader::get(cLogin::KEY_SUBMIT))
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<form action="index.php" method="POST" >
-					<input type="hidden" name="<?=cLogin::KEY_ACCOUNT?>" value="<?=cADCredentials::DEMO_ACCOUNT?>">
-					<input type="hidden" name="<?=cLogin::KEY_USERNAME?>" value="<?=cADCredentials::DEMO_USER?>">
-					<input type="hidden" name="<?=cLogin::KEY_PASSWORD?>" value="<?=cADCredentials::DEMO_PASS?>">
-					<input type="hidden" name="<?=cLogin::KEY_HOST?>" value="<?=cADCore::DEMO_HOST?>">
-					<input type="hidden" name="<?=cLogin::KEY_HTTPS?>" value="no">
-					<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect login_submit" id="demologin" name="<?=cLogin::KEY_SUBMIT?>" value="1" type="submit">Demo Mode</button>
+					<input type="hidden" name="<?=cADLogin::KEY_ACCOUNT?>" value="<?=cADCredentials::DEMO_ACCOUNT?>">
+					<input type="hidden" name="<?=cADLogin::KEY_USERNAME?>" value="<?=cADCredentials::DEMO_USER?>">
+					<input type="hidden" name="<?=cADLogin::KEY_PASSWORD?>" value="<?=cADCredentials::DEMO_PASS?>">
+					<input type="hidden" name="<?=cADLogin::KEY_HOST?>" value="<?=cADCore::DEMO_HOST?>">
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect login_submit" id="demologin" name="<?=cADLogin::KEY_SUBMIT?>" value="1" type="submit">Demo Mode</button>
 					<div class="mdl-tooltip" for="demologin">
 						look at our lovely features.
 					</div>
