@@ -127,11 +127,11 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 						</div>
 					</div>
 					<div class="w3-border w3-padding" id="tabs_container">
-						<div class="w3-bar w3-blue" id="tabs">
-							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABP">Password</button>
-							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABAT">API token</button>
-							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABAS">API Secret</button>
-							<button class="w3-bar-item w3-button tabbut" id="BUT" tab="TABJ">JSession</button>
+						<div class="w3-bar" id="tabs">
+							<button class="w3-bar-item w3-button tabbut" id="BUTP" tab="TABP">Password</button>
+							<button class="w3-bar-item w3-button tabbut" id="BUTA" tab="TABAT">API token</button>
+							<button class="w3-bar-item w3-button tabbut" id="BUTS" tab="TABAS">API Secret</button>
+							<button class="w3-bar-item w3-button tabbut" id="BUTJ" tab="TABJ">JSession</button>
 						</div><!-- tabs -->
 						<div id="tab panels" >
 							<!-- ******************************************************************** -->
@@ -160,7 +160,6 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 							
 							<!-- ******************************************************************** -->
 							<div class="tab w3-padding" id="TABAS" style="display:none">
-								This is not implemented
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_APIAPP?>" type="text" name="<?=cADLogin::KEY_APIAPP?>">
 									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_APIAPP?>">API Application...</label>
@@ -179,7 +178,7 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 							
 							<!-- ******************************************************************** -->
 							<div class="tab w3-padding" id="TABJ" style="display:none">
-								This is not implemented
+								<b>This is not implemented</b>
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_JSESSION_ID?>" type="text" name="<?=cADLogin::KEY_JSESSION_ID?>">
 									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_JSESSION_ID?>">JsessionID...</label>
@@ -197,8 +196,8 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 								This is a hack and is used for SAML authenticated logins when no access to the controller REST apis have been provided.
 								<ul>
 									<li>using a seperate browser tab login to the controller 
-									<li>using  a cookie viewing developer tools extract the values of the JSESSIONID and XCRSF-TOKEN cookie
-									<li>copy and paste the JSESSIONID and XCRSF-TOKEN cookies below
+									<li>from the browsers site information button (or an extension) extract the values of the JSESSIONID and X-CSRF-TOKEN cookie
+									<li>copy and paste the cookies values above
 								</ul>
 							</div> <!-- J Panel -->
 							
