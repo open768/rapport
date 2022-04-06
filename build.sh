@@ -1,9 +1,14 @@
 #!/bin/sh
 FILE="rapport/release.zip"
 cd ..
+if [ ! -d phpinc ];then
+	echo "no phpinc folder found. Did you do omit to do a 'cd -P'"
+	exit 1;
+fi
 rm $FILE 2> /dev/null
 mv rapport/inc/secret.php rapport/inc/secret-orig.php
 cp rapport/inc/secret-example.php rapport/inc/secret.php
+echo step 0
 zip -q -9 -r $FILE rapport -x \*\.git\/\* -x \*\\[\* -x \*\/vendor\/\* -x \*\/composer\* -x \*\/secret-orig.php -x \*\/images\/src\/\*
 echo step 1
 zip -q -9 -r $FILE phpinc/ckinc
