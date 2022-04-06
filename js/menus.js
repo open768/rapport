@@ -79,7 +79,35 @@ var cTopMenu={
 		poDiv.append(oLink);
 	},
 	
+	//*********************************************************
 	render: function(poDiv){
+		var bRestricted = poDiv.attr("restricted");
+		if (bRestricted)
+			this.render_restricted(poDiv);
+		else
+			this.render_full(poDiv);
+	},
+	
+	//*********************************************************
+	render_restricted: function (poDiv){
+		var sController = poDiv.attr("controller");
+		if (!sController) {	$.error("controller attr missing!");	}
+		var sHome = poDiv.attr("home");
+		if (!sHome) {	$.error("home attr missing!");	}
+		
+		//add the sections
+		var oContentDiv;
+			
+		oContentDiv = this.pr__add_expansion(poDiv, "General", true);
+			var oParams = {};
+			oParams[cRenderQS.IGNORE_REF_QS] = 1;
+			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
+			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
+		
+	},
+	
+	//*********************************************************
+	render_full: function (poDiv){
 		//check for required options
 		var sController = poDiv.attr("controller");
 		if (!sController) {	$.error("controller attr missing!");	}

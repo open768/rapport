@@ -81,7 +81,7 @@ cRenderCards::card_end();
 	</div>
 	<script language="javascript">
 		function init_widget(){
-			$("#allapps").adallapps();
+			$("#allapps").adallapps(); //need to work with RUM too
 		}
 		
 		$( init_widget);

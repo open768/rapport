@@ -171,7 +171,7 @@ class cRender{
 	<?php	}
 
 	//**************************************************************************
-	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null, $psTarget=null){
+	public static function button ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null, $psTarget=null, $pbForceButton=false){
 		global $home;
 		$bShow = false;
 		$oCred = null;
@@ -192,7 +192,7 @@ class cRender{
 		}
 
 		if ($oCred !== null)
-			if ($oCred->restricted_login){
+			if ($oCred->restricted_login && !$pbForceButton){
 					?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
 					cDebug::leave();;
 					return;

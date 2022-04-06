@@ -102,6 +102,7 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$home?>/js/render.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/qtip-init.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/dialog-init.js"></script>
+			<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
 			
 			<!-- rapport CSS  -->

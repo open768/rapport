@@ -57,14 +57,16 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 	$sReferrer = cHeader::get(cADLogin::KEY_REFERRER);
 	$sIgnoreReferrer = cHeader::get(cRenderQS::IGNORE_REF_QS);
 	$sLocation = cHeader::get(cRenderQS::LOCATION_QS);
-	if (!$sLocation)
-		$sLocation = "$home/pages/all/all.php";
+	if (!$sLocation) 	$sLocation = "$home/pages/all/all.php";
 
 	if ($sReferrer && !$sIgnoreReferrer){
 		$aUrl = parse_url($sReferrer);
 		if ( $aUrl["host"] == $_SERVER["SERVER_NAME"])
 			$sLocation = $sReferrer;
 	}
+	
+	if (!$oCred->is_logged_in && cCommon::is_string_set($oCred->jsessionid))
+		$sLocation = "$home/pages/jsession/home.php";
 	
 	if (cDebug::is_debugging()) 
 		$sLocation = cHttp::build_url($sLocation, "debug");
@@ -178,7 +180,6 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 							
 							<!-- ******************************************************************** -->
 							<div class="tab w3-padding" id="TABJ" style="display:none">
-								<b>This is not implemented</b>
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 									<input class="mdl-textfield__input" id="<?=cADLogin::KEY_JSESSION_ID?>" type="text" name="<?=cADLogin::KEY_JSESSION_ID?>">
 									<label class="mdl-textfield__label" for="<?=cADLogin::KEY_JSESSION_ID?>">JsessionID...</label>
@@ -193,7 +194,8 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 										see instructions below
 									</div>
 								</div>
-								This is a hack and is used for SAML authenticated logins when no access to the controller REST apis have been provided.
+								This hack is used for SAML authenticated logins when no access to the controller REST apis have been provided.
+								A restricted set of functions is available using this method.
 								<ul>
 									<li>using a seperate browser tab login to the controller 
 									<li>from the browsers site information button (or an extension) extract the values of the JSESSIONID and X-CSRF-TOKEN cookie
