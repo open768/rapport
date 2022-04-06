@@ -1,7 +1,7 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adhistagentstiers",{
+$.widget( "ck.adhistagentstiers", $.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -38,35 +38,6 @@ $.widget( "ck.adhistagentstiers",{
 		oQueue.go(oElement, this.get_url());
 	},
 
-
-	//*******************************************************************
-	onStatus: function(psMessage){
-		var oElement = this.element;
-		oElement.empty();
-		oElement.append("status: " +psMessage);
-	},
-	
-	//*******************************************************************
-	onError: function(poHttp, psMessage){
-		var oThis = this;
-		var oElement = this.element;
-				
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-			oElement.append("There was an error  getting data  ");
-	},
-
-//*******************************************************************
-	onStart: function(poItem){
-		var oElement = this.element;
-
-		oElement.empty();
-		oElement.removeClass();
-		
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading: ");
-	},
 	
 	//*******************************************************************
 	onResponse: function(poHttp){

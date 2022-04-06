@@ -1,7 +1,7 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adcomparestats",{
+$.widget( "ck.adcomparestats",  $.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -42,35 +42,6 @@ $.widget( "ck.adcomparestats",{
 	},
 
 
-	//*******************************************************************
-	onStatus: function(psMessage){
-		var oElement = this.element;
-		oElement.empty();
-		oElement.append("status: " +psMessage);
-	},
-	
-	//*******************************************************************
-	onError: function(poHttp, psMessage){
-		var oThis = this;
-		var oElement = this.element;
-				
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-			oElement.append("<td colspan='7'>There was an error  getting data  </td>");
-	},
-
-//*******************************************************************
-	onStart: function(poItem){
-		var oElement = this.element;
-
-		oElement.empty();
-		oElement.removeClass();
-		
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("<td colspan='7'>Loading: </td>");
-	},
-	
 	//*******************************************************************
 	onResponse: function(poHttp){
 		var oThis = this;

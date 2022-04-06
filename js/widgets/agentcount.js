@@ -1,7 +1,7 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adagentcount",{
+$.widget( "ck.adagentcount",  $.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -51,26 +51,6 @@ $.widget( "ck.adagentcount",{
 			oElement.append("status: " +psMessage);
 	},
 	
-	//*******************************************************************
-	onError: function(poHttp, psMessage){
-		var oElement = this.element;
-				
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-			oElement.append("There was an error  getting data  ");
-	},
-
-//*******************************************************************
-	onStart: function(poItem){
-		var oElement = this.element;
-
-		oElement.empty();
-		oElement.removeClass();
-		
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: 0.25});
-		oElement.append(oLoader).append("Loading: ");
-	},
 	
 	//*******************************************************************
 	onResponse: function(poHttp){

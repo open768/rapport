@@ -9,7 +9,7 @@ var cSynthetics = {
 cSynthetics.queue.maxTransfers = 3	; 	//dont overload the controller
 
 
-$.widget( "ck.adsynlist",{
+$.widget( "ck.adsynlist",$.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -80,22 +80,6 @@ $.widget( "ck.adsynlist",{
 	//#################################################################
 	//# Events
 	//#################################################################`
-	onStart: function(){
-		var oThis = this;
-		var oElement = oThis.element;
-		oElement.append("...loading");
-	},
-	
-	onError: function(){
-		var oThis = this;
-		var oElement = oThis.element;
-		var oOptions = this.options;
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-		oElement.append("There was an error getting synthetic data for " + oOptions.app);
-		
-		setTimeout( function(){oThis.element.hide()}, 500);
-	},
 	
 	onResponse: function(poHttp){
 		var oThis = this;
@@ -131,7 +115,7 @@ function cVisJSData(){
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.appdsyntimeline",{
+$.widget( "ck.appdsyntimeline", $.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -202,20 +186,13 @@ $.widget( "ck.appdsyntimeline",{
 		
 		ohttp = new cHttp2();
 		bean.on(ohttp,"result",		function(poHttp){ oThis.onLoadSynNames(poHttp)}	);
-		bean.on(ohttp,"error",		function(poHttp) {oThis.onErrSynNames()}		);
+		bean.on(ohttp,"error",		function(poHttp){oThis.onError(poHttp);}		);
 		ohttp.fetch_json(sUrl);
 	},
 	
 	//#################################################################
 	//# Events
 	//#################################################################`
-	onErrSynNames: function(){
-		var oThis = this;
-		var oElement = oThis.element;
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-		oElement.append("unable to get synthetic data for " + oOptions.app);
-	},
 	
 	//*******************************************************************
 	onLoadSynNames: function(poHttp){

@@ -1,14 +1,14 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adtiererrors",{
+$.widget( "ck.adtiererrors", $.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
 	consts:{
 		REST_API:"/rest/tiererrors.php"
 	},
-
+	
 	//#################################################################
 	//# Constructor
 	//#################################################################`
@@ -39,35 +39,6 @@ $.widget( "ck.adtiererrors",{
 	},
 
 
-	//*******************************************************************
-	onStatus: function(psMessage){
-		var oElement = this.element;
-		oElement.empty();
-		oElement.append("status: " +psMessage);
-	},
-	
-	//*******************************************************************
-	onError: function(poHttp, psMessage){
-		var oThis = this;
-		var oElement = this.element;
-				
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-			oElement.append("There was an error  getting data  ");
-	},
-
-//*******************************************************************
-	onStart: function(poItem){
-		var oElement = this.element;
-
-		oElement.empty();
-		oElement.removeClass();
-		
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading: ");
-	},
-	
 	//*******************************************************************
 	onResponse: function(poHttp){
 		var oThis = this;

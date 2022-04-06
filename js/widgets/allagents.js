@@ -1,7 +1,7 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.adallagents",{
+$.widget( "ck.adallagents", $.ck.common, {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -36,35 +36,6 @@ $.widget( "ck.adallagents",{
 		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);
 		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
 		oQueue.go(oElement, this.get_url());
-	},
-
-
-	//*******************************************************************
-	onStatus: function(psMessage){
-		var oElement = this.element;
-		oElement.empty();
-		oElement.append("status: " +psMessage);
-		},
-	
-	//*******************************************************************
-	onError: function(poHttp, psMessage){
-		var oElement = this.element;
-				
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-			oElement.append("There was an error  getting data  ");
-	},
-
-//*******************************************************************
-	onStart: function(poItem){
-		var oElement = this.element;
-
-		oElement.empty();
-		oElement.removeClass();
-		
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: 0.25});
-		oElement.append(oLoader).append("Loading: ");
 	},
 	
 	//*******************************************************************
