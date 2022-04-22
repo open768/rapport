@@ -20,11 +20,6 @@ require_once "$root/inc/charts.php";
 //####################################################################
 cRenderHtml::header("All Tiers");
 cRender::force_login();
-?>
-	<script type="text/javascript" src="js/remote.js"></script>
-	
-<?php
-cChart::do_header();
 
 //####################################################################
 
@@ -37,31 +32,85 @@ if (cAD::is_demo()){
 //********************************************************************
 	
 
-$aApps = cADController::GET_all_Applications();
-if (count($aApps) == 0) cCommon::errorbox("No Applications found");
+try{
+	$aApps = cADController::GET_all_Applications();
+}catch( Exception $e){
+	cCommon::errorbox("Error retrieving applications");
+	cDebug::error($e);
+}
+if (count($aApps) == 0) {
+	cCommon::errorbox("No Applications found");
+	cRenderHtml::footer();
+	return;
+}
+cChart::do_header();
+?>
+	<script language="javascript" src="<?=$jsWidgets?>/showtiers.js"></script>
+	<script language="javascript" src="<?=$jsinc?>/extra/appd/metrics.js"></script>
+<?php
 
 //####################################################################
-foreach ( $aApps as $oApp){
-	if (cFilter::isAppFilteredOut($oApp)) continue;
-	$sAppQS = cRenderQS::get_base_app_QS($oApp);
-	$sClass = cRender::getRowClass();
-	?><DIV><?php
-		cRenderMenus::show_app_functions($oApp);
-		$aTiers =$oApp->GET_Tiers();
-		$aMetrics = [];
-		foreach ($aTiers as $oTier){ 
-			if (cFilter::isTierFilteredOut($oTier)) continue;
-			$sTierQs = cRenderQS::get_base_tier_QS( $oTier );
-			$sUrl = "tier.php?$sTierQs";
-			
-			$aMetrics[] = [cChart::TYPE=>cChart::LABEL, cChart::LABEL=>$oTier->name];
-			$aMetrics[] = [cChart::LABEL=>"calls: $oTier->name", cChart::METRIC=>cADTierMetrics::tierCallsPerMin($oTier->name), cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
-			$aMetrics[] = [cChart::LABEL=>"Response: $oTier->name", cChart::METRIC=>cADTierMetrics::tierResponseTimes($oTier->name),cChart::GO_HINT=>$oTier->name, cChart::GO_URL=>$sUrl];
+function app_toc($paApps){
+	echo "<div style='column-count:3'>";
+	$chLast = "";
+	foreach ($paApps as $oApp){
+		$ch = strtolower($oApp->name[0]);
+		if ($ch !== $chLast){
+			echo "<h2>".strtoupper($ch)."</h2>";
+			$chLast = $ch;
 		}
-		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/3);
-	?></div><?php
+		echo "<a href='#$oApp->id'>$oApp->name</a><br>";
+	}
+	echo "</div>";
 }
-cChart::do_footer();
+
+
+//####################################################################
+cRenderCards::card_start("Applications");
+	cRenderCards::body_start();
+		app_toc($aApps);
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRender::add_filter_box("a[appname]","appname",".mdl-card");
+		cADCommon::button(cADControllerUI::apps_home());
+		$sUrl = cCommon::filename();
+		if (!cRender::is_list_mode()){
+			$sUrl = cHttp::build_url($sUrl,cRenderQS::LIST_MODE_QS,"1");
+			cRender::button("list mode", $sUrl);
+		}else			
+			cRender::button("chart mode", $sUrl);
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
+//####################################################################
+//todo should be asynchronous - page will crash when there are too many applications
+
+foreach ( $aApps as $oApp){
+	cRenderCards::card_start("Tiers in <a name='$oApp->id' appname='$oApp->name'>$oApp->name</a>");
+		cRenderCards::body_start();
+			?>
+			<div type="adWidget" 
+				<?=cRenderQS::LIST_MODE_QS?>="<?=cHeader::get(cRenderQS::LIST_MODE_QS)?>"
+				<?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>"
+				<?=cRenderQS::HOME_QS?>="<?=$home?>"
+			>please wait...</div>
+			<?php
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_app_functions($oApp);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}
+?><script language="javascript">
+		function init_widget(piIndex, poElement){
+			$(poElement).adshowtiers();
+		}
+		function init_widgets(){
+			$("DIV[type='adWidget']").each(init_widget);
+		}
+		
+		$( init_widgets	);
+</script><?php
 
 cRenderHtml::footer();
 ?>
