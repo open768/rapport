@@ -71,7 +71,7 @@ $.widget( "ck.adappcheckup",  $.ck.common, {
 		
 		var oParams = {};
 		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
-		
+		oParams[ cRenderQS.CHECK_ONLY_QS ] = oElement.attr(cRenderQS.CHECK_ONLY_QS);
 		
 		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
 		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
@@ -102,18 +102,32 @@ $.widget( "ck.adappcheckup",  $.ck.common, {
 		sAid = cRenderQS.APP_ID_QS +"="+oElement.attr(cRenderQS.APP_ID_QS);
 		
 		var sHTML, sUrl, oButton;
+		var sCheckOnly = oElement.attr(cRenderQS.CHECK_ONLY_QS);
 		sHTML = "<table border='1' cellspacing='0' width='100%'>";
 			sHTML += this.pr_output_data("General", poData.general);
-			sUrl=  sHome + "/app/datacollectors.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Data Collectors</a>", poData.DCs);
+		
+			if(!sCheckOnly){
+				sUrl=  sHome + "/app/datacollectors.php?"+ sAid
+				sHTML += this.pr_output_data("<a href='"+sUrl+"'>Data Collectors</a>", poData.DCs);
+			}
+			
 			sUrl=  sHome + "/trans/apptrans.php?"+ sAid
 			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Transactions</a>", poData.BTs);
-			sUrl=  sHome + "/app/tiers.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Tiers</a>", poData.tiers);
-			sUrl=  sHome + "/app/appext.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Backends</a>", poData.backends);
-			sUrl=  sHome + "/service/services.php?"+ sAid
-			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Service End Points</a>", poData.sendpoints);
+			
+			if(!sCheckOnly){
+				sUrl=  sHome + "/app/tiers.php?"+ sAid
+				sHTML += this.pr_output_data("<a href='"+sUrl+"'>Tiers</a>", poData.tiers);
+			}
+			
+			if(!sCheckOnly){
+				sUrl=  sHome + "/app/appext.php?"+ sAid
+				sHTML += this.pr_output_data("<a href='"+sUrl+"'>Backends</a>", poData.backends);
+			}
+			
+			if(!sCheckOnly){
+				sUrl=  sHome + "/service/services.php?"+ sAid
+				sHTML += this.pr_output_data("<a href='"+sUrl+"'>Service End Points</a>", poData.sendpoints);
+			}
 		sHTML += "</table>";
 		oElement.append(sHTML);
 		

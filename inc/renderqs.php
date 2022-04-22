@@ -74,6 +74,10 @@ class cRenderQS{
 	const AUDIT_USER_QS = "auh";
 	
 	//************************************************************
+	const CHECK_ONLY_QS = "cho";
+	const CHECK_ONLY_BT = "cob";
+	
+	//************************************************************
 	const IGNORE_REF_QS = "igr";
 	const LIST_MODE_QS = "list";
 	const TOTALS_QS = "totl";

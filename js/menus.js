@@ -116,6 +116,7 @@ var cTopMenu={
 		
 		var sAppPrefixUrl = sHome+"/pages/app";
 		var sAllPrefixUrl = sHome+"/pages/all";
+		var sCheckPrefixUrl = sHome+"/pages/check";
 		var sUtilPrefixUrl = sHome+"/pages/util";
 		var sRumPrefixUrl = sHome+"/pages/rum";
 		var sSrvPrefixUrl = sHome+"/pages/server";
@@ -148,7 +149,7 @@ var cTopMenu={
 		oContentDiv = this.pr__add_expansion(poDiv, "Check");
 			this.pr__add_to_expansion(oContentDiv, "Audit Logs", sHome +"/pages/audit/audit.php");
 			this.pr__add_to_expansion(oContentDiv, "Configuration", sUtilPrefixUrl+"/config.php");
-			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sUtilPrefixUrl+"/checkup.php");
+			this.pr__add_to_expansion(oContentDiv, "One Click Checkup", sCheckPrefixUrl+"/checkup.php");
 			
 		oContentDiv = this.pr__add_expansion(poDiv, "Dashboards");
 			this.pr__add_to_expansion(oContentDiv, "Check", sHome +"/pages/dash/check.php");

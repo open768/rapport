@@ -63,6 +63,10 @@ var cRenderQS={
 	COUNT_TYPE_ACTUAL : "ctac",
 	
 	//************************************************************
+	CHECK_ONLY_QS : "cho",
+	CHECK_ONLY_BT : "cob",
+	
+	//************************************************************
 	IGNORE_REF_QS : "igr",
 	LIST_MODE_QS : "list",
 	TOTALS_QS : "totl",

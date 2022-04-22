@@ -91,11 +91,12 @@ $.widget( "ck.admenu",{
 		
 		
 		//build the menu
-		var sTransPrefixUrl = oOptions.home+"/pages/trans";
-		var sAppPrefixUrl = oOptions.home+"/pages/app";
-		var sSrvPrefixUrl = oOptions.home+"/pages/service";
-		var sRumPrefixUrl = oOptions.home+"/pages/rum";
 		var sAgentPrefixUrl = oOptions.home+"/pages/agents";
+		var sAppPrefixUrl = oOptions.home+"/pages/app";
+		var sCheckPrefixUrl = oOptions.home+"/pages/check";
+		var sRumPrefixUrl = oOptions.home+"/pages/rum";
+		var sSrvPrefixUrl = oOptions.home+"/pages/service";
+		var sTransPrefixUrl = oOptions.home+"/pages/trans";
 		var sUtilPrefixUrl = oOptions.home+"/pages/util";
 		
 		var oSelect ;
@@ -107,7 +108,7 @@ $.widget( "ck.admenu",{
 				oGroup.append(oOption);		
 				
 				this.pr__addToGroup(oGroup, "Agents", cBrowser.buildUrl(sAgentPrefixUrl+"/appagents.php", oParams));
-				this.pr__addToGroup(oGroup, "Checkup", cBrowser.buildUrl(sUtilPrefixUrl+"/checkup.php", oParams));
+				this.pr__addToGroup(oGroup, "Checkup", cBrowser.buildUrl(sCheckPrefixUrl+"/checkup.php", oParams));
 				this.pr__addToGroup(oGroup, "Data collectors", cBrowser.buildUrl(sAppPrefixUrl+"/datacollectors.php", oParams));
 				this.pr__addToGroup(oGroup, "Flow Map", cBrowser.buildUrl(sAppPrefixUrl+"/appflowmap.php", oParams));
 				this.pr__addToGroup(oGroup, "One Pager", cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams));

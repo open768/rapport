@@ -37,8 +37,18 @@ function render_summary($paApps){
 				echo "<a href='#$oApp->id'>$oApp->name</a><br>";
 			}
 		echo "</div>";	
-		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
 	cRenderCards::body_end();
+	cRenderCards::action_start();
+		$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::APP_ID_QS, cHeader::GET(cRenderQS::APP_ID_QS));
+		$checkQS = cHeader::GET(cRenderQS::CHECK_ONLY_QS);
+		if ($checkQS === cRenderQS::CHECK_ONLY_BT)
+			cRender::button("show all checks", $sUrl);
+		else{
+			$sUrl = cHttp::build_url($sUrl, cRenderQS::CHECK_ONLY_QS, cRenderQS::CHECK_ONLY_BT);
+			cRender::button("show only BT Checks", $sUrl);
+		}
+		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
+	cRenderCards::action_end();
 	cRenderCards::card_end();
 }
 
@@ -51,7 +61,8 @@ function render_app($poApp){
 			type="appcheckup" 
 			<?=cRenderQS::APP_QS?>="<?=$poApp->name?>"
 			<?=cRenderQS::APP_ID_QS?>="<?=$poApp->id?>"
-			<?=cRenderQS::HOME_QS?>="<?=$home?>">
+			<?=cRenderQS::HOME_QS?>="<?=$home?>"
+			<?=cRenderQS::CHECK_ONLY_QS?>="<?=cHeader::GET(cRenderQS::CHECK_ONLY_QS)?>">
 			loading...
 	</div><?php
 	cRenderCards::body_end();
@@ -70,9 +81,7 @@ else{
 	$aResponse = cADController::GET_all_Applications();
 	render_summary($aResponse);
 
-
-	//####################################################################
-	//this needs to be asynchronous as when there are a lot of applications that page times out
+	//TODO list of applications can be fetched asynchronously
 	foreach ( $aResponse as $oApp2)
 		render_app($oApp2);
 }

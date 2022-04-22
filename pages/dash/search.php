@@ -85,7 +85,7 @@ cRenderCards::body_start();
 							" <?=cRenderQS::DASH_NAME_QS?>='" +oDash.name + "'" + 
 							" <?=cRenderQS::DASH_ID_QS?>='" +oDash.id+"'" +
 							" <?=cRenderQS::SEARCH_QS?>='"+ sSearch + "'" +
-							" <?=cRender::DASH_URL_TEMPLATE?>='<?=$sTemplate?>'" +
+							" <?=cRenderQS::DASH_URL_TEMPLATE?>='<?=$sTemplate?>'" +
 							" home='<?=$home?>'"+ 
 						">" +
 								"Searching dashboard " + oDash.name + "..." +
