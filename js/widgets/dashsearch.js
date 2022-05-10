@@ -93,7 +93,7 @@ $.widget( "ck.addashsearch",  $.ck.common, {
 		oElement.empty();
 		var sUrl = oElement.attr(cRenderQS.DASH_URL_TEMPLATE);
 		sUrl = sUrl.replace("-tmp-", iDash);
-		sJS= "window.open('"+sUrl+"','appd');"
+		var sJS= "window.open('"+sUrl+"','appd');"
 		var oButton = $("<button>",{onclick:sJS}).append("->");
 		oElement.append(oButton);
 		
