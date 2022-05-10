@@ -230,6 +230,13 @@ class cRender{
   		return "<button  class='$sClass' onclick='window.stop();$sOnClick;return false;'>$psCaption</button>";
 	}
 	
+	//**************************************************************************
+	public static function jsbutton($psCaption, $psjs, $psID="btn_js"){
+		$sClass = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect";
+		$sHTML = "<button id='$psID' class='$sClass' onclick='$psjs'>$psCaption</button>";
+		echo $sHTML;
+	}
+
 	
 	//**************************************************************************
 	public static function is_list_mode(){

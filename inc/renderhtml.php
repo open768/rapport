@@ -104,7 +104,12 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$home?>/js/dialog-init.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
-			
+			<script type="text/javascript">
+				var cLocations = {
+					home: "<?=$home?>",
+					rest: "<?=$home?>/rest"
+				};
+			</script>
 			<!-- rapport CSS  -->
 			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >			
 		</head>

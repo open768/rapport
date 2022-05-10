@@ -26,7 +26,7 @@ $.widget( "ck.addashsearch",  $.ck.common, {
 		//check for required options
 		if (!oElement.attr(cRenderQS.DASH_ID_QS))		$.error("dash ID  missing!");			
 		if (!oElement.attr(cRenderQS.DASH_NAME_QS))	$.error("dash name missing!");			
-		if (!oElement.attr(cRender.DASH_URL_TEMPLATE))	$.error("dash url template missing!");					
+		if (!oElement.attr(cRenderQS.DASH_URL_TEMPLATE))	$.error("dash url template missing!");					
 		if (!oElement.attr(cRenderQS.SEARCH_QS))		$.error("search missing!");			
 		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
 					
@@ -91,7 +91,7 @@ $.widget( "ck.addashsearch",  $.ck.common, {
 		var iDash = oElement.attr(cRenderQS.DASH_ID_QS);
 		
 		oElement.empty();
-		var sUrl = oElement.attr(cRender.DASH_URL_TEMPLATE);
+		var sUrl = oElement.attr(cRenderQS.DASH_URL_TEMPLATE);
 		sUrl = sUrl.replace("-tmp-", iDash);
 		sJS= "window.open('"+sUrl+"','appd');"
 		var oButton = $("<button>",{onclick:sJS}).append("->");

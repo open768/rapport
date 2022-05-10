@@ -27,6 +27,7 @@ function render_summary($paApps){
 	cRenderCards::card_start("Checkup");
 	cRenderCards::body_start();
 		$sPrevious = "";
+		echo "<h3>There are ".count($paApps)." Applications</h3>";
 		echo "<div style='column-count:4'>";
 			foreach ( $paApps as $oApp){
 				$sChar = strtolower(($oApp->name)[0]);
@@ -47,6 +48,9 @@ function render_summary($paApps){
 			$sUrl = cHttp::build_url($sUrl, cRenderQS::CHECK_ONLY_QS, cRenderQS::CHECK_ONLY_BT);
 			cRender::button("show only BT Checks", $sUrl);
 		}
+		
+		cRender::jsbutton("hide menus and links", "cRender.hide_menus_and_links();return false;", "btn_hider");
+		
 		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
 	cRenderCards::action_end();
 	cRenderCards::card_end();

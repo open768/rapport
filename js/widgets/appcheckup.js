@@ -114,10 +114,8 @@ $.widget( "ck.adappcheckup",  $.ck.common, {
 			sUrl=  sHome + "/trans/apptrans.php?"+ sAid
 			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Transactions</a>", poData.BTs);
 			
-			if(!sCheckOnly){
-				sUrl=  sHome + "/app/tiers.php?"+ sAid
-				sHTML += this.pr_output_data("<a href='"+sUrl+"'>Tiers</a>", poData.tiers);
-			}
+			sUrl=  sHome + "/app/tiers.php?"+ sAid
+			sHTML += this.pr_output_data("<a href='"+sUrl+"'>Tiers</a>", poData.tiers);
 			
 			if(!sCheckOnly){
 				sUrl=  sHome + "/app/appext.php?"+ sAid

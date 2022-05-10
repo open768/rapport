@@ -3,12 +3,13 @@ $phpinc = "not set";
 $root = "not set";
 $jsinc = "not set";
 $ADlib = "not set";
+$jsHome = "not set";
 $jsWidgets = "not set";
 
 class cRoot{
 	//**************************************************************************
 	public static function set_root($psRoot){
-		global $home, $root, $phpinc, $jsinc, $ADlib, $jsWidgets;
+		global $home, $root, $phpinc, $jsinc, $ADlib, $jsWidgets, $jsHome;
 
 		//php can follow symlinks but not apache apparently
 		
@@ -18,7 +19,8 @@ class cRoot{
 		$phpinc = realpath("$root/../phpinc");
 		$jsinc = "$psRoot/../jsinc";
 		$ADlib = realpath("$phpinc/appd");
-		$jsWidgets = "$home/js/widgets";
+		$jsHome = "$home/js";
+		$jsWidgets = "$jsHome/widgets";
 
 	}
 }

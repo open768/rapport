@@ -179,6 +179,21 @@ var cRender={
 	fade_element: function(poEl){
 		poEl.fadeOut(1000,function(){poEl.remove();});
 	},
+	
+	//**************************************************************************
+	hide_menus_and_links: function(){
+		// hide all forms
+		$("form").each( function (pi, poEl){ $(poEl).hide() });
+		// hide all buttons
+		$("button").each( function (pi, poEl){$(poEl).hide() });
+		// remove hyperlinks
+		$("a[href]").each( function (pi, poEl){ $(poEl).removeAttr("href") });
+		//remove menus
+		$("div[type=admenus]").each( function (pi, poEl){ $(poEl).hide() });
+		
+		$('#btn_hider').show();
+		return false;
+	}
 };
 
 var cRenderW3={
