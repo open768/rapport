@@ -169,7 +169,7 @@ $.widget( "ck.adhistagent",$.ck.common,{
 	//#################################################################
 	consts:{
 		REST_API:"/rest/tierhistoricalagents.php",
-		MAX_IDS: 30
+		MAX_IDS: 49
 	},
 	
 	vars:{
