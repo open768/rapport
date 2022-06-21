@@ -87,7 +87,7 @@ cRenderCards::card_start("Contents");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cRenderMenus::show_apps_menu("change App");
-		cRender::button("All Agent Versions", "../agents/allagentversions.php");	
+		cRender::button("All Agent Versions", "allagentversions.php");	
 	cRenderCards::action_end();
 cRenderCards::card_end();
 

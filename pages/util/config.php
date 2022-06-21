@@ -27,7 +27,7 @@ if (!$sUsage) $sUsage = 1;
 
 //####################################################################
 function sort_config($a,$b){
-	return strcmp($a->description, $b->description );
+	return strcasecmp($a->name, $b->name );
 }
 //********************************************************************
 if (cAD::is_demo()){
@@ -36,33 +36,60 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
+?>
+	<style>
+		table {table-layout:fixed;}
+		table td {word-wrap:break-word}
+	</style>
+<?php
 
+//----------------- get the config 
 $aConfig=cADController::GET_configuration();
+
+//----------------- sanitise the config 
 uasort($aConfig,"sort_config");
+cDebug::vardump($aConfig[0]);
+
+//----------------- render  the config 
 $sStyle = cRender::getRowClass();			
+$sLastCh = "";
 
 //cDebug::vardump($aConfig,true);
-?>
-<h2>Controller Configuration</h2>
-	<table border="1" cellspacing=0 cellpadding=2>
-		<tr class="<?=$sStyle?>">
-			<th>Description</th>
-			<th>Value</th>
-		</tr>
-		<?php
-			foreach ( $aConfig as $oItem){
-				$sValue = str_replace( ",", ", ", $oItem->value);
-				$sValue = str_replace( ",  ", ", ", $sValue);
-				
-				$sDesc = $oItem->description;
-				if (stristr($sDesc,"password")) $sValue = "**********";
-				?><tr>
-					<td valign='top'><?=$sDesc?></td>
-					<td><font face="courier"><?=$sValue?></font></td>
-				</tr><?php
-			}
-		?>
-	</table><?php
+cRenderCards::card_start("Controller Configuration");
+	cRenderCards::body_start();
+		foreach ( $aConfig as $oItem){
+			$sValue = str_replace( ",", ", ", $oItem->value);
+			$sValue = str_replace( ",  ", ", ", $sValue);
+			
+			$sDesc = $oItem->description;
+			$sCh = strtoupper(($oItem->name)[0]);
+			if ($sCh !== $sLastCh){
+				if ($sLastCh) {
+					?></table><p><?php
+				}
+				?>
+					<h3><a name="<?=$sCh?>"><?=$sCh?></a></h3>
+					<table width="100%" border="1" cellspacing="0" cellpadding="2">
+						<tr>
+							<th width="300">Name</th>
+							<th width="*">Value</th>
+							<th width="300">Description</th>
+						</tr>
+				<?php
+				$sLastCh = $sCh;
+			} 
+			
+			if (stristr($sDesc,"password")) $sValue = "**********";
+			$sDesc = str_replace( ".", " ", $sDesc);
+			?><tr>
+				<td valign='top'><?=$oItem->name?></td>
+				<td><font face="courier"><?=$sValue?></font></td>
+				<td valign='top'><?=$sDesc?></td>
+			</tr><?php
+		}
+		?></table><?php
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
 cRenderHtml::footer();
 ?>

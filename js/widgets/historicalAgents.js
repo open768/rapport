@@ -159,15 +159,23 @@ $.widget( "ck.adhistagentstiers", $.ck.common, {
 	
 });
 
-$.widget( "ck.adhistagent",{
+//##########################################################################################
+//#
+//##########################################################################################
+
+$.widget( "ck.adhistagent",$.ck.common,{
 	//#################################################################
 	//# Definition
 	//#################################################################
 	consts:{
 		REST_API:"/rest/tierhistoricalagents.php",
-		MARK_API:"/rest/markhistoricalagents.php"
+		MAX_IDS: 30
 	},
-
+	
+	vars:{
+		count:0
+	},
+	
 	//#################################################################
 	//# Constructor
 	//#################################################################`
@@ -202,35 +210,6 @@ $.widget( "ck.adhistagent",{
 		oQueue.go(oElement, this.get_url());
 	},
 
-
-	//*******************************************************************
-	onStatus: function(psMessage){
-		var oElement = this.element;
-		oElement.empty();
-		oElement.append("status: " +psMessage);
-	},
-	
-	//*******************************************************************
-	onError: function(poHttp, psMessage){
-		var oThis = this;
-		var oElement = this.element;
-				
-		oElement.empty();
-		oElement.addClass("ui-state-error");
-			oElement.append("There was an error  getting data  ");
-	},
-
-	//*******************************************************************
-	onStart: function(poItem){
-		var oElement = this.element;
-
-		oElement.empty();
-		oElement.removeClass();
-		
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading: ");
-	},
 	
 	//*******************************************************************
 	onResponse: function(poHttp){
@@ -294,29 +273,108 @@ $.widget( "ck.adhistagent",{
 			$("#"+sID).click( 
 				function(){oThis.onClickMarkNodes(poData.nodes);}
 			);
+			
+			sID = oElement.attr("id") + "_MarkStatus";
+			var oDiv = $("<DIV>", {id:sID}).append ("progress....");
+			oElement.append(oDiv);
 		}
 	},
 	
 	//*******************************************************************
 	onClickMarkNodes:function(paNodes){
 		var oElement = this.element;
+		var oThis = this;
 		
 		if (confirm("please confirm operation")){
-			var aNodes = [];
-			paNodes.forEach(
-				function(poNode){
-					if (poNode.id == null) return;
-					aNodes.push(poNode.id) ;
+			//needs to be split into batches of 100 for larger numbers of agents
+			var aNodeIDs=[];
+			paNodes.forEach( function(poItem){
+				aNodeIDs.push(poItem.id);
+				if (aNodeIDs.length > oThis.consts.MAX_IDS){
+					oThis.markAgents(aNodeIDs);
+					aNodeIDs = [];
 				}
-			);
-			
-			var oParams = {};
-			oParams[cRenderQS.NODE_IDS_QS] = JSON.stringify(aNodes);
-			var sAPI = oElement.attr(cRenderQS.HOME_QS) + this.consts.MARK_API;
-			var sUrl = cBrowser.buildUrl(sAPI, oParams);
-			$.get(sUrl);
-			
-			this.init();
+			});
+			if (aNodeIDs.length > 0) this.markAgents(aNodeIDs);
 		}
+	},
+	
+	//*******************************************************************
+	markAgents: function (paNodeIds){
+		var oElement = this.element;
+		var sStatusID = oElement.attr("id") + "_MarkStatus";
+		var oStatusDiv = $("#" + sStatusID);
+		
+		this.vars.count ++;
+		var sMarkerID = sStatusID + this.vars.count;
+		var oParams = {id:sMarkerID};
+		oParams[ cRenderQS.NODE_IDS_QS ] = JSON.stringify(paNodeIds);
+		oParams[ cRenderQS.HOME_QS ] = oElement.attr(cRenderQS.HOME_QS);
+		oParams[ cRenderQS.TITLE_QS ] = "batch "+ this.vars.count;
+		var oMarkerDiv = $("<DIV>", oParams).append("Marking Batch: " + this.vars.count);
+		oStatusDiv.append(oMarkerDiv);
+		$("#"+sMarkerID).adexpireagents();
 	}
+});
+
+//##########################################################################################
+//#
+//##########################################################################################
+
+$.widget( "ck.adexpireagents",$.ck.common,{
+	consts:{
+		MARK_API:"/rest/markhistoricalagents.php",
+	},
+	
+	//*******************************************************************
+	_create: function(){
+		var oThis = this;
+		
+		//set basic stuff
+		var oElement = this.element;
+		oElement.uniqueId();
+		
+		//check for necessary classes
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
+		if (!bean)						$.error("bean class is missing! check includes");	
+		
+		//check for required options
+		if (!oElement.attr(cRenderQS.NODE_IDS_QS))		$.error("nodes  missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.TITLE_QS))		$.error("title  missing!");			
+					
+		this.init();
+	},
+	
+	//*******************************************************************
+	init:function(){
+		var oElement = this.element;
+		var oThis = this;
+		//set behaviour for widget when it becomes visible
+		var oQueue = new cQueueifVisible();
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);	//inherited			
+		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);					//inherited			
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);		//inherited			
+		var oParams = {};
+		oParams[cRenderQS.NODE_IDS_QS] = oElement.attr(cRenderQS.NODE_IDS_QS);
+		oQueue.go(oElement, this.get_url(), oParams);
+	},
+	
+	//*******************************************************************
+	get_url: function (){
+		var oElement = this.element;
+		
+		var sUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.MARK_API;
+		return sUrl;
+	},
+	
+	//*******************************************************************
+	onResponse: function(poHttp){
+		var oElement = this.element;
+		oElement.empty();
+		oElement.append("completed request: " + oElement.attr(cRenderQS.TITLE_QS));
+	}
+
+
 });

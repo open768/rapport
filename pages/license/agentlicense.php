@@ -29,7 +29,7 @@ if (cAD::is_demo()){
 //********************************************************************
 
 try{
-	$aRules=cADRestUI::GET_allocationRules();
+	$aRules=cADAccount::GET_LicenseRules();
 }
 catch (Exception $e){
 	cCommon::errorbox("unable to get license details - $e");

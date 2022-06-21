@@ -22,11 +22,17 @@ if ($sNodes == null || $sNodes=="")
 	cDebug::error("missing node IDs");
 $aNodes= json_decode($sNodes);
 
+if (count($aNodes) > 50){
+	http_response_code(501);
+	cDebug::error("too many nodes, must limit to 50");
+	return;
+}
+
 cADController::Mark_historical_nodes($aNodes);
 
 //*************************************************************************
 //* output
 //*************************************************************************
-
+cCommon::write_json("ok");	
 return;
 ?>

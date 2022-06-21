@@ -64,8 +64,8 @@ function render_tier_transactions($poApp, $poTier){
 	$sBaseUrl = cHttp::build_url("transdetails.php", $sTierQS);
 	$iCount = 0;
 
-	$oTrans = new cADBT( $poTier, "*", null, true);
-	$sMetricpath = cADMetricPaths::transResponseTimes($oTrans);
+	$oAllTrans = new cADBT( $poTier, "*", null, true);
+	$sMetricpath = cADMetricPaths::transResponseTimes($oAllTrans);
 	$aStats = $poApp->GET_MetricData( $sMetricpath, $oTimes,true,false,true);
 	uasort($aStats,"sort_by_metricpath" );
 
@@ -79,9 +79,10 @@ function render_tier_transactions($poApp, $poTier){
 		}
 		catch (Exception $e){
 			$sTrID = null;
+			continue;
 		}
 		$sLink = null;
-		$oTrans = new cADBT($oTier, $sTrName, $sTrID);
+		$oTrans = new cADBT($poTier, $sTrName, $sTrID);
 		
 		if ($oStats->count == 0)	continue;
 		$iCount ++;

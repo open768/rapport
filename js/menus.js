@@ -121,6 +121,7 @@ var cTopMenu={
 		var sRumPrefixUrl = sHome+"/pages/rum";
 		var sSrvPrefixUrl = sHome+"/pages/server";
 		var sAgentPrefix = sHome+"/pages/agents"
+		var sLicensePrefix = sHome+"/pages/license"
 		var sAnalyticsPrefixUrl = sHome+"/pages/analytics";
 		
 		
@@ -128,10 +129,10 @@ var cTopMenu={
 		var oContentDiv;
 		oContentDiv = this.pr__add_expansion(poDiv, "Agents AND licenses");
 			this.pr__add_to_expansion(oContentDiv, "Agent Downloads", sAgentPrefix+"/appdversions.php");
-			this.pr__add_to_expansion(oContentDiv, "Agent Licenses", sAgentPrefix+"/agentlicense.php");
+			this.pr__add_to_expansion(oContentDiv, "Agent Licenses", sLicensePrefix+"/agentlicense.php");
 			this.pr__add_to_expansion(oContentDiv, "Agent Versions", sAgentPrefix + "/allagentversions.php");
 			this.pr__add_to_expansion(oContentDiv, "Count Agents by application", sAgentPrefix + "/countappagents.php");
-			this.pr__add_to_expansion(oContentDiv, "License Usage Summary", sAgentPrefix+"/licenseusage.php");
+			this.pr__add_to_expansion(oContentDiv, "License Usage Summary", sLicensePrefix+"/licenseusage.php");
 			
 
 		oContentDiv = this.pr__add_expansion(poDiv, "All");

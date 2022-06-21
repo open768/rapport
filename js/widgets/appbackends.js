@@ -86,25 +86,33 @@ $.widget( "ck.adappbackend", $.ck.common, {
 	//*******************************************************************
 	pr_render_charts: function(paData){
 		var oElement = this.element;
-		var sbaseID, sID, iCount=0;
+		var sBaseID, sID, iCount=0;
 		
-		sbaseID=  oElement.attr("id")+"_chart_";
+		sBaseID=  oElement.attr("id")+"_chart_";
 		paData.forEach( function(poItem){
-			sID = sbaseID +iCount;
-			oDiv = $("<DIV>", {type:"adchart", id:sID});
+			sID = sBaseID +iCount;
+			var oChartParams = {type:"adchart", id:sID};
+			
+			var oParams = {};
+			oParams[cRenderQS.APP_ID_QS] =  oElement.attr(cRenderQS.APP_ID_QS);
+			oParams[cRenderQS.BACKEND_QS] =  poItem.name;
+			var sBackendUrl = cBrowser.buildUrl(oElement.attr(cRenderQS.HOME_QS) + "/pages/app/appexttiers.php", oParams);	
+			
+			oChartParams[cRenderQS.HOME_QS] =  oElement.attr(cRenderQS.HOME_QS) ;
+			oChartParams[cRenderQS.APP_ID_QS] =  oElement.attr(cRenderQS.APP_ID_QS);
+			oChartParams[cChartConsts.ATTR_TITLE + "0"] = poItem.name ;
+			oChartParams[cRenderQS.METRIC_QS + "0"] = poItem.metric;
+			oChartParams[cChartConsts.ATTR_SHOW_ZOOM] =1;
+			oChartParams[cChartConsts.ATTR_SHOW_COMPARE] = 1;
+			oChartParams[cChartConsts.ATTR_PREVIOUS] = 0;
+			oChartParams[cChartConsts.ATTR_WIDTH] = 341;
+			oChartParams[cChartConsts.ATTR_HEIGHT] = 125;
+			oChartParams[cChartConsts.ATTR_GO_URL] = sBackendUrl;
+			
+			var oDiv = $("<DIV>", oChartParams );
 			oDiv.append("please wait loading chart");
 			oElement.append(oDiv);
-			$("#"+sID).adchart({
-				home:oElement.attr(cRenderQS.HOME_QS),
-				appName:oElement.attr(cRenderQS.APP_QS),
-				title:poItem.name,
-				metric:poItem.metric,
-				width:341,
-				height:125,
-				showZoom:1,
-				showCompare:1,
-				previous_period:0
-			});
+			$("#"+sID).adchart();
 			iCount++;
 		} );
 	},
@@ -113,7 +121,7 @@ $.widget( "ck.adappbackend", $.ck.common, {
 	pr_render_list: function(paData){
 		var oElement = this.element;
 		
-		oDiv = $("<DIV>", {style:"column-count:3"});
+		var oDiv = $("<DIV>", {style:"column-count:3"});
 		paData.forEach( function(poItem){		
 			var sName = poItem.name;
 			if (sName.startsWith("Discovered backend call")) sName = sName.slice(26);

@@ -1,9 +1,9 @@
 <?php
 
 /**************************************************************************
-Copyright (C) Chicken Katsu 2013-2021 
+Copyright (C) Chicken Katsu 2013-2021
 
-This code is protected by copyright under the terms of the 
+This code is protected by copyright under the terms of the
 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
 http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
@@ -20,16 +20,12 @@ require_once "$root/inc/charts.php";
 
 
 //####################################################################
-// common functions
-//####################################################################
 //get passed in values
-try{
-	$moTier = cRenderObjs::get_current_tier();
+$moTier = cRenderObjs::get_current_tier();
+if ($moTier)
 	$moApp = $moTier->app;
-}catch (Exception $e){
-	$moTier = null;
+else
 	$moApp = cRenderObjs::get_current_app();
-}
 
 $gsAppQS = cRenderQS::get_base_app_QS($moApp);
 
@@ -43,39 +39,21 @@ if (cAD::is_demo()){
 	cRenderHtml::footer();
 	exit;
 }
-//********************************************************************
-?><script language="javascript" src="<?=$jsWidgets?>/tiertrans.js"></script><?php
 
+if (!$moApp) cDebug::error("no app");
 
-cRenderCards::card_start();
-cRenderCards::body_start();
-	cRender::add_filter_box("span[type=tiertrans]","name",".mdl-card");
-cRenderCards::body_end();
-cRenderCards::action_start();
-	cRenderMenus::show_apps_menu("Change Application");
-	cADCommon::button(cADControllerUI::businessTransactions($moApp));
-	$sUrl = cHttp::build_url("config.php", $gsAppQS);
-	cRender::button("config", $sUrl);
-	
-	$sUrl = cHttp::build_url("$home/pages/app/datacollectors.php", $gsAppQS);
-	cRender::button("data collectors", $sUrl);
-	
-	$sUrl = cHttp::build_url("allother.php", $gsAppQS);
-	cRender::button("All Other Transactions", $sUrl);
-cRenderCards::action_end();
-cRenderCards::card_end();
 
 //####################################################################
 function tier_card($poTier){
 	global $moApp, $gsAppQS, $home;
-	
+
 	//get the transaction names for the Tier
 	cRenderCards::card_start();
 		cRenderCards::body_start();
-			?><div 
-				type="adtiertrans" 
-				home="<?=$home?>" 
-				<?=cRenderQS::APP_ID_QS?>="<?=$moApp->id?>" 
+			?><div
+				type="adtiertrans"
+				home="<?=$home?>"
+				<?=cRenderQS::APP_ID_QS?>="<?=$moApp->id?>"
 				<?=cRenderQS::TIER_ID_QS?>="<?=$poTier->id?>">please wait...</div><?php
 		cRenderCards::body_end();
 		cRenderCards::action_start();
@@ -88,6 +66,28 @@ function tier_card($poTier){
 		cRenderCards::action_end();
 	cRenderCards::card_end();
 }
+//####################################################################
+
+?><script language="javascript" src="<?=$jsWidgets?>/tiertrans.js"></script><?php
+
+//*********************** header panel ***********************************
+cRenderCards::card_start();
+cRenderCards::body_start();
+	cRender::add_filter_box("span[type=tiertrans]","name",".mdl-card");
+cRenderCards::body_end();
+cRenderCards::action_start();
+	cRenderMenus::show_apps_menu("Change Application");
+	cADCommon::button(cADControllerUI::businessTransactions($moApp));
+	$sUrl = cHttp::build_url("config.php", $gsAppQS);
+	cRender::button("config", $sUrl);
+
+	$sUrl = cHttp::build_url("$home/pages/app/datacollectors.php", $gsAppQS);
+	cRender::button("data collectors", $sUrl);
+
+	$sUrl = cHttp::build_url("allother.php", $gsAppQS);
+	cRender::button("All Other Transactions", $sUrl);
+cRenderCards::action_end();
+cRenderCards::card_end();
 
 if ($moTier){
 	tier_card($moTier);
@@ -109,7 +109,5 @@ if ($moTier){
 </script>
 
 <?php
-				
-
 cRenderHtml::footer();
 ?>

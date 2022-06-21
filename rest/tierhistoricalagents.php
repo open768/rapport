@@ -21,16 +21,16 @@ $oTier = cRenderObjs::get_current_tier();
 
 //*************************************************************************
 $oTimes = new cADTimes();
-$oTimes->set_duration(60*24); //last day
+$oTimes->set_duration(60); //last HOUR  //TBD get node retention period from controller - Thanks Ala
 
 class cNode{
-	public $name, $id;
+	public $name;
+	public $id;
 }
 
 class cOutput{
 	public $status;
 	public $node_count = 0;
-	public $version_counts = [];
 	public $nodes = [];
 }
 
@@ -38,59 +38,32 @@ class cOutput{
 $oOutput = new cOutput;
 
 cDebug::extra_debug("Checking tier: $oTier->name");
-$sStatus = "no status";
-$iCount = 0;
+$aNodeNames = [];
 
 //*************************************************************************
-//get the nodes, will need to double check the metrics
-$aNodes = $oTier->GET_nodes(); //get availability for all nodes in the tier
+//get agent count
+$aAvailData = $oTier->GET_All_App_Agent_availability($oTimes, "*"); //get all nodes in the tier
+$oOutput->node_count = count($aAvailData);
+unset($aAvailData);
 
 //*************************************************************************
 //get agent availability
-$aAvailData = $oTier->GET_All_App_Agent_availability($oTimes, "*"); //get availability for all nodes in the tier
-if (!cArrayUtil::array_is_empty($aAvailData)){
-	cDebug::extra_debug("app agents found for: $oTier->name = ". count($aAvailData));
-	//cDebug::vardump($aData);
-	$oOutput->node_count = count($aAvailData);
-	foreach ($aAvailData as $oItem) //loop through nodes
-		if (count($oItem->metricValues) > 0)
-			if ($oItem->metricValues[0]->sum == 0){						//only historical if the sum is 0
-				$sNode = cAdUtil::extract_node_name($oItem->metricPath);
-				$sNodeID = cAdUtil::get_node_id($oTier->app, $sNode);
-				$oNode = new cNode;
-				$oNode->name = $sNode;
-				$oNode->id = $sNodeID;
-				$oOutput->nodes[] = $oNode;
-				$iCount ++;
-			}
-	
-	if ($iCount == 0)
-		$oOutput->status = "no inactive app agents found";
-	else
-		$oOutput->status = "inactive app agents found";
+$aInactive = $oTier->GET_Inactive_App_Agents($oTimes); //get availability for all nodes in the tier
+$iCount = count($aInactive);
+if ($iCount == 0)
+	$oOutput->status = "no inactive app agents found";
+else{
+	$oOutput->status = " $iCount inactive app agents found";
+	$aAgents = [];
+	foreach ($aInactive as $oAgent){
+		$oNode = new cNode;
+		$oNode->name = $oAgent->name;
+		$oNode->id = $oAgent->id;
+		$aAgents[] = $oNode;
 	}
-	
-	//cross reference with nodes  showing as no metrics uploaded
-	//TBD
-	
-	//check list of nodes for tier against this list of nodes from above to see if nodes are missing
-	//TBD
-}else{
-	// no app agents found, but you would expect that each node has at least one app agent
-	cDebug::extra_debug("no app agents data found");
-	if (cArrayUtil::array_is_empty($aNodes))
-		$oOutput->status = "no nodes found for tier";
-	else{
-		$oOutput->status = "no app agents data found - using list of nodes";
-		foreach ($aNodes as $oItem){
-			$oNode = new cNode;
-			$oNode->name = $oItem->name;
-			$oNode->id = cAdUtil::get_node_id($oTier->app, $oItem->name);
-			$oOutput->nodes[] = $oNode;
-		}
-	}
+	$oOutput->nodes = $aAgents ;
 }
-
+	
 
 //*************************************************************************
 //* output
