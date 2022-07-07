@@ -311,7 +311,7 @@ $.widget( "ck.adhistagent",$.ck.common,{
 		oParams[ cRenderQS.NODE_IDS_QS ] = JSON.stringify(paNodeIds);
 		oParams[ cRenderQS.HOME_QS ] = oElement.attr(cRenderQS.HOME_QS);
 		oParams[ cRenderQS.TITLE_QS ] = "batch "+ this.vars.count;
-		var oMarkerDiv = $("<DIV>", oParams).append("Marking Batch: " + this.vars.count);
+		var oMarkerDiv = $("<SPAN>", oParams).append("Marking Batch: " + this.vars.count);
 		oStatusDiv.append(oMarkerDiv);
 		$("#"+sMarkerID).adexpireagents();
 	}
@@ -373,7 +373,7 @@ $.widget( "ck.adexpireagents",$.ck.common,{
 	onResponse: function(poHttp){
 		var oElement = this.element;
 		oElement.empty();
-		oElement.append("completed request: " + oElement.attr(cRenderQS.TITLE_QS));
+		oElement.append('<i class="material-icons" style="font-size:48px;color:green">done</i>');
 	}
 
 

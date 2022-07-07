@@ -21,7 +21,7 @@ require_once "$home/inc/common.php";
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
-$sBaseMetric = cADTierMetrics::tier($oTier->name);
+$sBaseMetric = cADTierMetricPaths::tier($oTier->name);
 $sCaption = "Tier: $oTier->name";
 
 $sUrl = cHttp::build_url("../util/comparestats.php",$sAppQS);

@@ -110,7 +110,7 @@ if (cAD::is_demo()){
 ?>
 <h2>Page Requests</h2>
 <?php
-	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetricPaths::BASE_PAGES, "*");
+	$sMetricpath = cADWebRumMetricPaths::PageResponseTimes(cADMetricPaths::BASE_PAGES, "*");
 	$aData = $oApp->GET_MetricData( $sMetricpath, $oTimes,true,false,true);
 	//cDebug::on(true);
 	//cDebug::vardump($aData);
@@ -121,7 +121,7 @@ if (cAD::is_demo()){
 ?>
 <h2>Ajax Requests</h2>
 <?php
-	$sMetricpath = cADWebRumMetric::PageResponseTimes(cADMetricPaths::AJAX_REQ, "*");
+	$sMetricpath = cADWebRumMetricPaths::PageResponseTimes(cADMetricPaths::AJAX_REQ, "*");
 	$aData = $oApp->GET_MetricData($sMetricpath, $oTimes,true,false,true);
 	render_table(cADMetricPaths::AJAX_REQ, $aData);
 

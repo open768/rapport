@@ -43,9 +43,9 @@ cRenderMenus::show_apps_menu("heatmap");
 
 // get the data from 
 if ($tier === null)
-	$metric = cADAppMetrics::appResponseTimes();
+	$metric = cADAppMetricPaths::appResponseTimes();
 else
-	$metric = cADTierMetrics::tierCallsPerMin($tier);
+	$metric = cADTierMetricPaths::tierCallsPerMin($tier);
 
 ?>
 <h2>Heatmap for <?=$oApp->name?></h2>

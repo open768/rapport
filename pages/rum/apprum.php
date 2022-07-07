@@ -43,21 +43,21 @@ if (cAD::is_demo()){
 //####################################################################
 ?><h2>Overall Statistics</h2><?php
 $aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADAppMetrics::appCallsPerMin()];
-$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADAppMetrics::appResponseTimes()];
+$aMetrics[] = [cChart::LABEL=>"Overall Calls per min",cChart::METRIC=>cADAppMetricPaths::appCallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Overall response time in ms", cChart::METRIC=>cADAppMetricPaths::appResponseTimes()];
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			
 
 ?><h2>Browser Stats for <?=$oApp->name?></h2><?php
 cRender::button("Show Page Statistics", "../rum/rumstats.php?$sAppQS");
 $aMetrics = [];
-$aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cADWebRumMetric::CallsPerMin()];
-$aMetrics[] = [cChart::LABEL=>"Page response time",cChart::METRIC=>cADWebRumMetric::ResponseTimes()];
-$aMetrics[] = [cChart::LABEL=>"Page connection time",cChart::METRIC=>cADWebRumMetric::TCPTime()];
-$aMetrics[] = [cChart::LABEL=>"Page Server time",cChart::METRIC=>cADWebRumMetric::ServerTime()];
-$aMetrics[] = [cChart::LABEL=>"Page first byte time",cChart::METRIC=>cADWebRumMetric::FirstByte()];
+$aMetrics[] = [cChart::LABEL=>"Page requests per minute",cChart::METRIC=>cADWebRumMetricPaths::CallsPerMin()];
+$aMetrics[] = [cChart::LABEL=>"Page response time",cChart::METRIC=>cADWebRumMetricPaths::ResponseTimes()];
+$aMetrics[] = [cChart::LABEL=>"Page connection time",cChart::METRIC=>cADWebRumMetricPaths::TCPTime()];
+$aMetrics[] = [cChart::LABEL=>"Page Server time",cChart::METRIC=>cADWebRumMetricPaths::ServerTime()];
+$aMetrics[] = [cChart::LABEL=>"Page first byte time",cChart::METRIC=>cADWebRumMetricPaths::FirstByte()];
 $sUrl="rumerrors.php?$sAppQS";
 $aMetrics[] = [
-	cChart::LABEL=>"JavaScript Errors",cChart::METRIC=>cADWebRumMetric::JavaScriptErrors(), 
+	cChart::LABEL=>"JavaScript Errors",cChart::METRIC=>cADWebRumMetricPaths::JavaScriptErrors(), 
 	cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"javascript Errors"];
 
 cChart::metrics_table($oApp, $aMetrics,2,cRender::getRowClass());			

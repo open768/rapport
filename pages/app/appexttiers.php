@@ -26,47 +26,62 @@ if (cAD::is_demo()){
 
 //-----------------------------------------------
 $oApp = cRenderObjs::get_current_app();
-$sExt = cHeader::get(cRenderQS::BACKEND_QS);
+$sExtSought = cHeader::get(cRenderQS::BACKEND_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
-$sTitle = "External Calls in $oApp->name for $sExt";
+$sTitle = "Matching External Calls in $oApp->name";
 cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-cRenderMenus::show_app_functions();
+cRenderCards::card_start();
+	cRenderCards::body_start();
+		?>remote endpoints that match <?=$sExtSought?><?php
+		cRender::add_filter_box("a[name]","name",".mdl-card");
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRenderMenus::show_app_functions();
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
-?>
-<!-- ************************************************** -->
-<h2><?=$sExt?></h2>
-<?php
 //-----------------------------------------------
-$oResponse =$oApp->GET_Tiers();
-$sMatched = cADUtil::get_matching_extcall($oApp, $sExt);
-if ($sMatched == null){
-	cCommon::errorbox("unable to find a matching external call: $sExt");
-	exit;
-}
-$sExtQS = cHttp::build_qs($sAppQS, cRenderQS::BACKEND_QS, $sMatched);
-
-$aMetrics = [];
+$aTiers =$oApp->GET_Tiers();
 
 
-foreach ( $oResponse as $oTier){
+//**********************************************************
+//TODO this needs to be asynchonous in a widget for each tier
+//**********************************************************
+foreach ( $aTiers as $oTier){
 	$sTier=$oTier->name;
 	
-	$sUrl = cHttp::build_qs($sExtQS, cRenderQS::TIER_QS, $oTier->name);
-	$sUrl = cHttp::build_qs($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
-	$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
+	$aTierExt = cADUtil::get_matching_tier_extcalls($oTier, $sExtSought);
+	cRenderCards::card_start("<a name='$sTier'>$sTier</a>");
+		cRenderCards::body_start();
+			if (count($aTierExt) > 0){
+				$aMetrics = [];
+					cDebug::vardump($aTierExt);
+					foreach ($aTierExt as $sExtFound){
+						$aMetrics[] = [cChart::LABEL=>$sExtFound,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];
+						$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADTierMetricPaths::toTierCallsPerMin($sTier,$sExtFound)];
+						$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADTierMetricPaths::toTierResponseTimes($sTier,$sExtFound)];
+					}
+					cChart::metrics_table($oApp, $aMetrics,3,null);
+			}else
+				cCommon::messagebox("Nothing found");
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_tier_functions($oTier);
+			$sUrl = cRenderQS::get_base_tier_QS($oTier);
+			$sUrl = cHttp::build_qs($sUrl, cRenderQS::BACKEND_QS, $sExtSought);
+			$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
+			cRender::button("All transactions involving this backend for this tier", $sUrl);	
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}	
 	
-	$aMetrics[] = [cChart::LABEL=>$sTier,cChart::TYPE=>cChart::LABEL, cChart::WIDTH=>300];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADTierMetrics::tierExtCallsPerMin($sTier,$sMatched), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"];
-	$aMetrics[] = [cChart::LABEL=>"Response time in ms", cChart::METRIC=>cADTierMetrics::tierExtResponseTimes($sTier,$sMatched)];
-}
-cChart::metrics_table($oApp, $aMetrics,3,cRender::getRowClass());
 cChart::do_footer();
 
 cRenderHtml::footer();

@@ -24,11 +24,11 @@ switch($sMetricType){
 		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 
 		$sTitle1 = "Web Browser Page Requests";
-		$sMetric1 = cADWebRumMetric::CallsPerMin();
+		$sMetric1 = cADWebRumMetricPaths::CallsPerMin();
 		$sTitle2 = "Web Browser Page Response";
-		$sMetric2 = cADWebRumMetric::ResponseTimes();
+		$sMetric2 = cADWebRumMetricPaths::ResponseTimes();
 		$sTitle3 = "Pages With Javascript Errors";
-		$sMetric3 = cADWebRumMetric::JavaScriptErrors();
+		$sMetric3 = cADWebRumMetricPaths::JavaScriptErrors();
 		
 		$sBaseUrl = "$home/pages/rum/apprum.php";
 		break;
@@ -38,11 +38,11 @@ switch($sMetricType){
 		$sOtherTitle = "Web Browser Activity";
 		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
 		$sTitle1 = "Application Activity";
-		$sMetric1 = cADAppMetrics::appCallsPerMin();
+		$sMetric1 = cADAppMetricPaths::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
-		$sMetric2 = cADAppMetrics::appResponseTimes();
+		$sMetric2 = cADAppMetricPaths::appResponseTimes();
 		$sTitle3 = "Application Errors";
-		$sMetric3 = cADAppMetrics::appErrorsPerMin();
+		$sMetric3 = cADAppMetricPaths::appErrorsPerMin();
 		$sBaseUrl = "$home/pages/app/tiers.php";
 		break;
 }
