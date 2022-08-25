@@ -22,29 +22,9 @@ class cRenderHtml{
 	const NAVIGATION_ID = "RenderNID";
 
 	//**************************************************************************
-	public static function header ($psTitle){
+	public static function common_header (){
 		global $jsinc, $js_extra, $home;
-		cDebug::enter();
-		$bLoggedin = true;
-
-		//-------------------------------------------------------------
-		//getting credentials to pre-fill the form
-		cDebug::extra_debug("getting credentials");
-		$oCred = cRenderObjs::get_AD_credentials();
-		$bLoggedin = ($oCred != null);
-		
-		//-------------------------------------------------------------
-		cDebug::extra_debug("displaying page");
-		?><!DOCTYPE html>
-		<html>
-		<head>
-			<title><?=$psTitle?></title>
-			<?php 		
-				if (cDebug::is_debugging()) {
-					echo "</head><body>";
-					return;				
-				}
-			?>
+		?>
 			<!-- analytics tags -->
 			<?php
 				if (cSecret::ENABLE_GOOGLE_ANALYTICS) 
@@ -100,10 +80,6 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$home?>/js/menus.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/common.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/render.js"></script>
-			<script type="text/javascript" src="<?=$home?>/js/qtip-init.js"></script>
-			<script type="text/javascript" src="<?=$home?>/js/dialog-init.js"></script>
-			<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
-			<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
 			<script type="text/javascript">
 				var cLocations = {
 					home: "<?=$home?>",
@@ -112,36 +88,84 @@ class cRenderHtml{
 			</script>
 			<!-- rapport CSS  -->
 			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >			
-		</head>
-		<BODY>
-			<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
-				<div class="mdl-layout__drawer">
-					<span class="mdl-layout__title">Rapport</span>
-					<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
-				</div>
-				<header class="mdl-layout__header">
-					<div class="mdl-layout-icon"></div>
-					<div class="mdl-layout__header-row">
-						<span class="mdl-layout__title" id="<?=self::TITLE_ID?>"><?=$psTitle?></span>
-						<div class="mdl-layout-spacer"></div>
-						<nav class="mdl-navigation" id="<?=self::CONTROLLER_ID?>">
-						<?php
-							if ($bLoggedin){
-								echo "Account: $oCred->account &mdash;&nbsp;".cADCommon::get_time_label();
-								cRender::show_time_options();
-							}else
-								echo "not logged in";
-						?>
-						</nav>
-						<div class="mdl-layout-spacer"></div>
-						<nav class="mdl-navigation" id="<?=self::TIME_ID?>">
-							<?=($bLoggedin?"initialising..":"")?>
-						</nav>
+		<?php
+	}
+	
+	//**************************************************************************
+	public static function widget_header (){
+		?><!DOCTYPE html>
+			<html>
+			<head>
+				<?php 		
+					self::common_header();
+				?>
+			</head>
+			<BODY id="widget_content">
+		<?php
+		//check for login or a login token_get_all
+	}
+	
+	public static function widget_footer(){
+		?></BODY></HTML><?php
+	}
+	
+	//**************************************************************************
+	public static function header ($psTitle){
+		global $jsinc, $js_extra, $home;
+		cDebug::enter();
+		$bLoggedin = true;
+
+		//-------------------------------------------------------------
+		//getting credentials to pre-fill the form
+		cDebug::extra_debug("getting credentials");
+		$oCred = cRenderObjs::get_AD_credentials();
+		$bLoggedin = ($oCred != null);
+		
+		//-------------------------------------------------------------
+		cDebug::extra_debug("displaying page");
+		?><!DOCTYPE html>
+			<html>
+			<head>
+				<title><?=$psTitle?></title>
+				<?php 		
+					if (cDebug::is_debugging()) {
+						echo "</head><body>";
+						return;				
+					}
+					self::common_header();
+				?>
+				<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
+				<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
+			</head>
+			<BODY>
+				<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
+					<div class="mdl-layout__drawer">
+						<span class="mdl-layout__title">Rapport</span>
+						<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
 					</div>
-				</header>
-				<main class="mdl-layout__content" style="flex: 1 0 auto;">
-					<div id="page_content">
-  <?php
+					<header class="mdl-layout__header">
+						<div class="mdl-layout-icon"></div>
+						<div class="mdl-layout__header-row">
+							<span class="mdl-layout__title" id="<?=self::TITLE_ID?>"><?=$psTitle?></span>
+							<div class="mdl-layout-spacer"></div>
+							<nav class="mdl-navigation" id="<?=self::CONTROLLER_ID?>">
+							<?php
+								if ($bLoggedin){
+									echo "Account: $oCred->account &mdash;&nbsp;".cADCommon::get_time_label();
+									cRender::show_time_options();
+								}else
+									echo "not logged in";
+							?>
+							</nav>
+							<div class="mdl-layout-spacer"></div>
+							<nav class="mdl-navigation" id="<?=self::TIME_ID?>">
+								<?=($bLoggedin?"initialising..":"")?>
+							</nav>
+						</div>
+					</header>
+					<main class="mdl-layout__content" style="flex: 1 0 auto;">
+						<div id="page_content">
+  		<?php
 		//show the navigation menu - this updates the material design navigation menu
 		if ($bLoggedin)	cRenderMenus::top_menu();
 

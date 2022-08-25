@@ -18,6 +18,7 @@ class cRenderQS{
 	
 	const APP_QS = "app";
 	const APP_ID_QS = "aid";
+	const APPS_QS = "apps";
 	
 	const DB_QS = "db";
 	
@@ -111,6 +112,7 @@ class cRenderQS{
 	const LOG_CREATED_QS = "loc";
 	
 	//************************************************************
+	const HELP_QS ="help";
 	const HEALTH_ID_QS ="hi";
 	const HOME_QS = "home";
 	const LABEL_QS = "lbl";
@@ -147,10 +149,12 @@ class cRenderQS{
 	const TIME_DURATION_QS = "tdur";
 	const LAST_YEAR_QS = "lyq";
 	
+	//**************************************************************************
 	const TYPE_QS  = "typ";
 	
-	
 	//**************************************************************************
+	const WIDGET_NO_DETAIL_QS  = "nd";
+	
 	//**************************************************************************
 	public static function get_base_app_QS( $poApp){
 		//cDebug::enter();

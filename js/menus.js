@@ -162,8 +162,9 @@ var cTopMenu={
 			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Login Token", sHome +"/pages/authtoken.php");
 			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
-			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
 			this.pr__add_to_expansion(oContentDiv, "API tester", sHome +"/pages/api/api.php");
+			this.pr__add_to_expansion(oContentDiv, "Widgets", sHome +"/widgets");
+			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
 		
 		oContentDiv = this.pr__add_expansion(poDiv, "Servers");
 			this.pr__add_to_expansion(oContentDiv, "Server Visibility", sSrvPrefixUrl+"/servers.php");

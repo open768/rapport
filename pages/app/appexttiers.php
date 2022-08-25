@@ -34,6 +34,7 @@ $sTitle = "Matching External Calls in $oApp->name";
 cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();
+$oTimes = cRender::get_times();
 
 //####################################################################
 cRenderCards::card_start();
@@ -74,10 +75,12 @@ foreach ( $aTiers as $oTier){
 		cRenderCards::body_end();
 		cRenderCards::action_start();
 			cRenderMenus::show_tier_functions($oTier);
-			$sUrl = cRenderQS::get_base_tier_QS($oTier);
-			$sUrl = cHttp::build_qs($sUrl, cRenderQS::BACKEND_QS, $sExtSought);
-			$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
-			cRender::button("All transactions involving this backend for this tier", $sUrl);	
+			if (count($aTierExt) > 0){
+				$sUrl = cRenderQS::get_base_tier_QS($oTier);
+				$sUrl = cHttp::build_qs($sUrl, cRenderQS::BACKEND_QS, $sExtSought);
+				$sUrl = cHttp::build_url("$home/pages/tier/tierextalltrans.php", $sUrl);
+				cRender::button("All transactions involving this backend for this tier", $sUrl);	
+			}
 		cRenderCards::action_end();
 	cRenderCards::card_end();
 }	
