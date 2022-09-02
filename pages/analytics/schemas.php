@@ -18,24 +18,35 @@ require_once "$home/inc/common.php";
 
 
 //####################################################################
-cRenderHtml::header("Analytics");
+cRenderHtml::header("Schemas");
 cRender::force_login();
 
+$aSchemas = cADAnalytics::list_schemas();
+
 //####################################################################
-cRenderCards::card_start();
+cRenderCards::card_start("Analytics schemas");
 	cRenderCards::body_start();
-	?><ul>
-		<li><a href="log.php">Log Analytics</a>
-		<li><a href="trans.php">Transaction Analytics</a>
-		<li><a href="schemas.php">Schemas</a>
-	</ul>
-	<?php
+		echo "there are ".count($aSchemas)." analytics schemas<p>";
+		echo '<DIV style="column-count:3">';
+			foreach ($aSchemas as $sSchemaName)
+				echo "<a href='#$sSchemaName'>$sSchemaName</a><br>";
+		echo '</DIV>';
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cADCommon::button(cADControllerUI::analytics_home());
-		cADCommon::button(cADControllerUI::analytics_config(), "Analytics configuration");
+		cRender::button("back to analytics","analytics.php");
 	cRenderCards::action_end();
 cRenderCards::card_end();
-
+		
+foreach ($aSchemas as $sSchemaName){
+	cRenderCards::card_start("<a name='$sSchemaName'>$sSchemaName</a>");
+		cRenderCards::body_start();
+			echo '<DIV style="column-count:3">';
+				$aFields = cADAnalytics::schema_fields($sSchemaName);
+				foreach ($aFields as $oField)
+					echo "$oField->fieldName: $oField->fieldType<br>";
+			echo '</DIV>';
+		cRenderCards::body_end();
+	cRenderCards::card_end();
+}
 cRenderHtml::footer();
 ?>

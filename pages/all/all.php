@@ -74,7 +74,7 @@ cRenderCards::card_end();
 ?>
 	<div 
 		id='allapps' 	type='adWidget' 
-		home='<?=$home?>' <?=cRenderQS::LIST_MODE_QS?>='<?=cRender::is_list_mode()?>' baseUrl = '<?=$sBaseUrl?>'
+		<?=cRenderQS::HOME_QS?>='<?=$home?>' <?=cRenderQS::LIST_MODE_QS?>='<?=cRender::is_list_mode()?>' baseUrl = '<?=$sBaseUrl?>'
 		title1='<?=$sTitle1?>' title2='<?=$sTitle2?>' title3='<?=$sTitle3?>'
 		metric1='<?=$sMetric1?>' metric2='<?=$sMetric2?>' metric3='<?=$sMetric3?>'>
 			please wait...
