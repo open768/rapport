@@ -80,6 +80,9 @@ class cRenderHtml{
 			<script type="text/javascript" src="<?=$home?>/js/menus.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/common.js"></script>
 			<script type="text/javascript" src="<?=$home?>/js/render.js"></script>
+			
+			<!-- widgets  -->
+			<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
 			<script type="text/javascript">
 				var cLocations = {
 					home: "<?=$home?>",
@@ -134,7 +137,6 @@ class cRenderHtml{
 					}
 					self::common_header();
 				?>
-				<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
 				<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
 			</head>
 			<BODY>

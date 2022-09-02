@@ -20,6 +20,8 @@ class cRenderQS{
 	const APP_ID_QS = "aid";
 	const APPS_QS = "apps";
 	
+	const CONTROLLER_URL_QS = "cur";
+	
 	const DB_QS = "db";
 	
 	const TIER_QS = "tier";

@@ -25,7 +25,7 @@ if (cHeader::is_set(cRenderQS::HELP_QS)){
 		//*********************** USAGE *******************************************************************************************
 		?>
 			<code>
-				Usage: <?=cCommon::filename()?>?&lt;Parameters&gt;
+				Usage: <?=cHeader::get_page_url()?>?&lt;Parameters&gt;
 				<dl>
 					<dt><b>mandatory parameters: </b></dt>
 					<dd><table border=1>
@@ -49,52 +49,33 @@ if (cHeader::is_set(cRenderQS::HELP_QS)){
 	if (!$sLoginToken)
 		cDebug::Error("no login token present please see <a target='usage' href='$sUsageLink'>usage</a>");
 	else{
-		cADCredentials::login_with_token( $sLoginToken);
 		$sApps = cHeader::get(cRenderQS::APPS_QS);
 		if (!cCommon::is_string_set($sApps))	cDebug::Error("must give a list of apps. See <a target='usage' href='$sUsageLink'>usage</a>");
 		
 		$aApps = explode(",",$sApps);
 		if (gettype($aApps) !== "array")	cDebug::error("no list of apps found");
 		
-		//build  list of app ids - regardless if a name was provided
-		$sInApps =[];
-		foreach ($aApps as $sInApp){
-			$oApp= null;
-			if(is_numeric($sInApp))
-				$oApp = new cADApp(null, $sInApp);
-			else
-				$oApp = new cADApp($sInApp);
-			$sInApps[$oApp->id] = true;
-		}
-		$aAppIds = array_keys($sInApps);
-		
-		$aDetails = cADRestUI::get_applications_status_from_ids($aAppIds, ["APP_OVERALL_HEALTH","CALLS","CALLS_PER_MINUTE","AVERAGE_RESPONSE_TIME","ERRORS_PER_MINUTE"]);
-		//cDebug::vardump($aDetails);
-		
 		cRenderHtml::widget_header();
-		?><div class="w3-container w3-light-grey w3-round-large"><table border="1" cellspacing="0" cellpadding="4">
-			<tr>
-				<th>Name</th>
-				<th>Health</th>
-				<th>Calls</th>
-				<th>Response Time (ms)</th>
-				<th>Errors</th>
-			</tr><?php
-			foreach ($aDetails as $oDetail){ ?>
-				<tr>
-					<td width="200" align="right"><?=$oDetail->name?></td>
-					<td width="100"><?=$oDetail->severitySummary->performanceState?></td>
-					<td width="100" align="right"><?=$oDetail->callsPerMinute?></td>
-					<td width="100" align="right"><?=$oDetail->averageResponseTime?></td>
-					<td width="100" align="right"><?=$oDetail->errorsPerMinute?></td>
-				</tr>
-			<?php }
-		?></table></div><?php
-
+		?>
+			<script language="javascript" src="<?=$jsWidgets?>/appsummary.js"></script>
+			<div 
+				id='widget' 
+				<?=cRenderQS::LOGIN_TOKEN_QS?>="<?=cHeader::get(cRenderQS::LOGIN_TOKEN_QS)?>"
+				<?=cRenderQS::APPS_QS?>="<?=cHeader::get(cRenderQS::APPS_QS)?>"
+				<?=cRenderQS::HOME_QS?>="<?=$home?>"
+				<?=cRenderQS::CONTROLLER_URL_QS?>="<?=cADCore::GET_controller()?>"
+			>
+					Loading please wait
+			</div>
+			<script language="javascript">
+				function init_widget(){
+					$("#widget").adappsummary(); //need to work with RUM too
+				}
+				
+				$( init_widget);
+			</script>
+		<?php
 		cRenderHtml::widget_footer();
 	}
 }
-	
-
-
 ?>

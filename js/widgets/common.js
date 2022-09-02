@@ -7,6 +7,7 @@ $.widget( "ck.common",{
 		if (typeof bean === 'undefined')	$.error("bean class is missing! check includes");
 		if (typeof cHttp2 === 'undefined')	$.error("http2 class is missing! check includes");
 		if (!this.element.gSpinner) 		$.error("gSpinner is missing! check includes");
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");
 	},
 	
 	//*******************************************************************

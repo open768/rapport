@@ -27,7 +27,7 @@ cRenderCards::card_start("Widgets");
 		
 		<h3>Widgets</h3>
 		<ul>
-			<li><a href="appsummary.php">Application summary - shows the status of some or all applications</a>
+			<li><a href="appsummary.php?help">Application summary - shows the status of some or all applications</a>
 			<li>Application detail
 		</ul>
 	<?php

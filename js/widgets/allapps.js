@@ -167,7 +167,7 @@ $.widget( "ck.adallapps", $.ck.common, {
 				oParams[ cRenderQS.APP_QS ] = poApp.id;
 
 				var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
-				var sCh = poApp.name[0];
+				var sCh = poApp.name[0].toUpperCase();
 				if (sCh !== sLastCh){
 					sHTML += "<h3>"+sCh + "</h3>";
 					sLastCh = sCh;

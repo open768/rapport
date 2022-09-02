@@ -119,8 +119,8 @@ $.widget( "ck.admenu",{
 				this.pr__addToGroup(oGroup, "Activity (tiers)", cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams));
 				this.pr__addToGroup(oGroup, "Availability", cBrowser.buildUrl(sAppPrefixUrl+"/appavail.php", oParams));
 				this.pr__addToGroup(oGroup, "Errors", cBrowser.buildUrl(sAppPrefixUrl+"/apperrors.php", oParams));
-				this.pr__addToGroup(oGroup, "Events and Health", cBrowser.buildUrl(sAppPrefixUrl+"/events.php", oParams));
 				this.pr__addToGroup(oGroup, "External Calls", cBrowser.buildUrl(sAppPrefixUrl+"/appext.php", oParams));
+				this.pr__addToGroup(oGroup, "Health Rules", cBrowser.buildUrl(sAppPrefixUrl+"/healthrules.php", oParams));
 				this.pr__addToGroup(oGroup, "Infrastructure", cBrowser.buildUrl(sAppPrefixUrl+"/appinfra.php", oParams));
 				this.pr__addToGroup(oGroup, "Information Points", cBrowser.buildUrl(sAppPrefixUrl+"/appinfo.php", oParams));
 				this.pr__addToGroup(oGroup, "Service End Points", cBrowser.buildUrl(sSrvPrefixUrl+"/services.php", oParams));

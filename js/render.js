@@ -7,7 +7,10 @@
 var cRenderQS={
 	APP_QS : "app",
 	APP_ID_QS : "aid",
+	APPS_QS : "apps",
 
+	CONTROLLER_URL_QS : "cur",
+	
 	DB_QS : "db",
 
 	TIER_QS : "tier",
