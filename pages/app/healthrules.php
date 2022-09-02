@@ -53,6 +53,7 @@ if ($iDisabled == $iCount){
 }
 
 //######################################################################################
+
 cRenderCards::card_start("Overview");
 cRenderCards::body_start();
 	echo "there are $iCount Rules of which $iDisabled are disabled";
@@ -76,7 +77,7 @@ cRenderCards::card_end();
 if (cRender::is_list_mode()){
 	cRenderCards::card_start("Health Rules");
 	cRenderCards::body_start();
-		echo '<DIV style="column-count:3">';
+		echo '<DIV style="column-count:2">';
 		$sLastCh = "";
 		foreach ($aRules as $oRule){
 			$sRule = $oRule->name;
@@ -85,7 +86,13 @@ if (cRender::is_list_mode()){
 				echo "<h3>$sCh</h3>";
 				$sLastCh = $sCh;
 			}
-			echo "$sRule<br>";
+			echo $sRule;
+			if ($oRule->createdBy)
+				echo " <i>(".$oRule->createdBy->name.")</i>";
+			else
+				echo " <i>(Built-in rule)</i>";
+			
+			echo "<br>";
 		}	
 		echo '</DIV>';
 	cRenderCards::body_end();
@@ -97,6 +104,11 @@ if (cRender::is_list_mode()){
 			cRenderCards::body_start();
 				//display widgets for health rules
 				//they will be asynchronously fetched by the javascript using a http queue;
+				if ($oRule->createdBy)
+					echo "created by: ".$oRule->createdBy->name."<p>";
+				else
+					echo "created by: Appdynamics";
+					
 				echo "<div type='adhealthrule' home='$home' ".
 						cRenderQS::APP_QS."='$oApp->name' ".
 						cRenderQS::APP_ID_QS."='$oApp->id' ".
