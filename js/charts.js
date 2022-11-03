@@ -90,7 +90,8 @@ var cCharts={
 			google.charts.load('current', {'packages':['corechart']});
 		}
 		catch (e){}
-		google.charts.setOnLoadCallback( pfnCallback );
+		if (pfnCallback)
+			google.charts.setOnLoadCallback( pfnCallback );
 	},
 	
 	//*********************************************************

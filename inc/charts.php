@@ -133,7 +133,7 @@ class cChart{
 		global $home;
 		?>
 		<div id="AllMetrics">...</div>
-		<script language="javascript">
+		<script>
 			$(	function(){cCharts.show_export_all=<?=self::$show_export_all?>;cCharts.init("<?=$home?>");}	);
 		</script>
 		<?php

@@ -25,7 +25,7 @@ cRenderHtml::header("All Remote Services");
 cRender::force_login();
 cChart::do_header();
 $title ="All Remote Services";
-?><script language="javascript" src="<?=$jsWidgets?>/appbackends.js"></script><?php
+?><script src="<?=$jsWidgets?>/appbackends.js"></script><?php
 
 //####################################################################
 $oApps = cADController::GET_all_Applications();
@@ -43,7 +43,7 @@ if (cAD::is_demo()){
 //********************************************************************
 cRenderCards::card_start("Applications");
 	cRenderCards::body_start();
-		echo "<div style='column-count:3'>";
+		echo "<div style='column-count:3;overflow-wrap:break-word'>";
 			$sLastCh = "";
 			foreach ($oApps as $oApp){
 				$sCh = strtoupper(($oApp->name)[0]);
@@ -96,7 +96,7 @@ foreach ($oApps as $oApp){
 	cRenderCards::card_end();
 }
 
-	?><script language="javascript">
+	?><script>
 		function init_widget(piIndex, poElement){
 			$(poElement).adappbackend();
 		}

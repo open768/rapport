@@ -39,8 +39,8 @@ if (cAD::is_demo()){
 }
 ?>
 <LINK rel="stylesheet" type="text/css" href="<?=$js_extra?>/jquery-datetimepicker/jquery.datetimepicker.min.css" >
-<script language="javascript" src="<?=$jsWidgets?>/comparestats.js"></script>
-<script language="javascript" src="<?=$js_extra?>/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
+<script src="<?=$jsWidgets?>/comparestats.js"></script>
+<script src="<?=$js_extra?>/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
 <?php
 
 //********************************************************************
@@ -195,7 +195,7 @@ show_hourly_card("<a name='daily'>daily: 00 to 24 hrs</a>");
 	
 //####################################################################
 
-?><script language="javascript">
+?><script>
 	function init_widget(piIndex, poElement){
 		$(poElement).adcomparestats();
 	}

@@ -23,7 +23,7 @@ require_once "$root/inc/charts.php";
 cRenderHtml::header("Activity Heat Map");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="js/remote.js"></script>
+	<script src="js/remote.js"></script>
 	
 <?php
 //choose a default duration

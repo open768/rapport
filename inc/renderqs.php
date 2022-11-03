@@ -57,6 +57,9 @@ class cRenderQS{
 	const LOGIN_TOKEN_QS="lt";
 
 	//************************************************************
+	const ANALYTICS_METRIC_QS = "anmet";
+	
+	//************************************************************
 	const AUDIT_TYPE_QS = "aut";
 	const AUDIT_TYPE_LIST_ACTIONS = "als";
 	const AUDIT_TYPE_ACTION = "ala";

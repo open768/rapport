@@ -28,6 +28,7 @@ cRenderCards::card_start();
 		<li><a href="log.php">Log Analytics</a>
 		<li><a href="trans.php">Transaction Analytics</a>
 		<li><a href="schemas.php">Schemas</a>
+		<li><a href="metrics.php">Metrics</a>
 	</ul>
 	<?php
 	cRenderCards::body_end();

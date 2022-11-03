@@ -162,8 +162,8 @@ class cRender{
 
 		?>
 		<div id="fbplaceholder">please wait - loading filter box</div>
-		<script language="javascript" src="<?=$home?>/js/filter.js"></script>
-		<script language="javascript">
+		<script src="<?=$home?>/js/filter.js"></script>
+		<script>
 			$( function(){
 				cFilterFunctions.filter_box("fbplaceholder", "<?=$psCaption?>", "<?=$psSelector?>","<?=$psAttr?>", "<?=$psParentSelector?>" );
 			});

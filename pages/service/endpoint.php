@@ -105,7 +105,7 @@ if (count($aSnapshots) == 0){
 				<?php }
 			?></tbody>
 		</table>
-		<script language="javascript">
+		<script>
 			$( function(){ 
 				$("#trans").tablesorter({
 					headers:{

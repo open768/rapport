@@ -204,7 +204,7 @@ cRenderCards::body_start();
 				}
 			?></tbody>
 		</table>
-		<script language="javascript">
+		<script>
 			$( function(){ 
 				$("#SLOW__METHODS").tablesorter({
 					headers:{
@@ -292,7 +292,7 @@ cRenderCards::card_end();
 							<b>Total time taken for all remote calls: <?=$iElapsedAll?> ms, 
 							of which slow calls account for: <?=$iElapsed?> ms</b>
 						</div>
-						<script language="javascript">
+						<script>
 							$( function(){ 
 								$("#SLOW<?=$oNode->name?>").tablesorter({
 									headers:{
@@ -358,7 +358,7 @@ cRenderCards::card_end();
 							<h3>Total time taken for all external calls: <?=$iElapsedAll?> ms, 
 							of which <?=$iCount?> high frequency calls account for: <?=$iElapsed?> ms</h3>
 						</div>
-						<script language="javascript">
+						<script>
 							$( function(){ 
 								$("#REPT<?=$oNode->name?>").tablesorter({
 									headers:{

@@ -29,7 +29,7 @@ if (cAD::is_demo()){
 	cRenderHtml::footer();
 	exit;
 }
-?><script language="javascript" src="<?=$jsWidgets?>/healthrule.js"></script><?php
+?><script src="<?=$jsWidgets?>/healthrule.js"></script><?php
 
 $aRules = $oApp->GET_HealthRules();
 $iCount = ($aRules==null?0:count($aRules));
@@ -77,7 +77,7 @@ cRenderCards::card_end();
 if (cRender::is_list_mode()){
 	cRenderCards::card_start("Health Rules");
 	cRenderCards::body_start();
-		echo '<DIV style="column-count:2">';
+		echo '<DIV style="column-count:2;overflow-wrap:break-word">';
 		$sLastCh = "";
 		foreach ($aRules as $oRule){
 			$sRule = $oRule->name;
@@ -119,7 +119,7 @@ if (cRender::is_list_mode()){
 			cRenderCards::card_end();
 		}
 	}
-	?><script language="javascript">
+	?><script>
 		function init_widget(piIndex, poElement){
 			$(poElement).adhealthdetail();
 		}

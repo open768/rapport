@@ -74,7 +74,13 @@ var cTopMenu={
 		
 	//*********************************************************
 	pr__add_to_expansion: function(poDiv, psCaption, psUrl){
-		var sJS = "window.stop();document.location='"+psUrl+"';";
+		var sJS;
+		if (psUrl.startsWith("script:")){
+			var sCmd = psUrl.slice(7);
+			sJS = "window.stop();"+sCmd+";";
+		}else{
+			sJS = "window.stop();document.location='"+psUrl+"';";
+		}
 		var oLink = $("<span>", {class:"mdl-navigation__link",onclick:sJS}).append(psCaption);
 		poDiv.append(oLink);
 	},
@@ -161,10 +167,11 @@ var cTopMenu={
 			oParams[cRenderQS.IGNORE_REF_QS] = 1;
 			this.pr__add_to_expansion(oContentDiv, "Logout", cBrowser.buildUrl(sHome +"/index.php", oParams));
 			this.pr__add_to_expansion(oContentDiv, "Login Token", sHome +"/pages/authtoken.php");
-			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
 			this.pr__add_to_expansion(oContentDiv, "API tester", sHome +"/pages/api/api.php");
-			this.pr__add_to_expansion(oContentDiv, "Widgets", sHome +"/widgets");
 			this.pr__add_to_expansion(oContentDiv, "Appdynamics", "https://"+sController + "/controller/");
+			this.pr__add_to_expansion(oContentDiv, "Link to this page", sHome +"/pages/link.php");
+			this.pr__add_to_expansion(oContentDiv, "Remove links on page", "script:cRender.hide_menus_and_links()");
+			this.pr__add_to_expansion(oContentDiv, "Widgets", sHome +"/widgets");
 		
 		oContentDiv = this.pr__add_expansion(poDiv, "Servers");
 			this.pr__add_to_expansion(oContentDiv, "Server Visibility", sSrvPrefixUrl+"/servers.php");

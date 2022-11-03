@@ -26,7 +26,7 @@ $oApp = $oTier->app;
 cRenderHtml::header("Search Snapshots for Transaction");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="<?=$jsWidgets?>/snapsearch.js"></script>	
+	<script src="<?=$jsWidgets?>/snapsearch.js"></script>	
 <?php
 
 //####################################################
@@ -63,7 +63,7 @@ cRenderCards::card_start("Search $oTrans->name");
 				<i class="material-icons">search</i>
 			</button>
 		</form>
-		<script language="javascript">
+		<script>
 			function onClick(){
 				window.stop();
 				getSnapshotList();

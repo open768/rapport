@@ -19,7 +19,7 @@ require_once "$home/inc/common.php";
 cRenderHtml::header("Dashboards");
 cRender::force_login();
 $oTimes = cRender::get_times();
-?><script language="javascript" src="<?=$jsWidgets?>/dashhealth.js"></script><?php
+?><script src="<?=$jsWidgets?>/dashhealth.js"></script><?php
 
 //####################################################################
 $aDashData = cADRestUI::GET_dashboards();
@@ -34,7 +34,7 @@ function render_list(){
 	
 	?>
 	<h3>there are <?=count($aDashData)?> dashboards</h3>
-	<div style="column-count:3"><?php
+	<div style="column-count:3;overflow-wrap:break-word"><?php
 		$sLastCh=null;
 		foreach ($aDashData as $oDash){
 			$sName = $oDash->name;
@@ -101,7 +101,7 @@ cRenderCards::card_start();
 					}
 					?></tbody>
 				</table>
-				<script language="javascript">
+				<script>
 
 					function init_a_dash_health_widget(piIndex, poElement){
 						$(poElement).addashhealth();

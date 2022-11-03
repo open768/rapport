@@ -84,7 +84,7 @@ if (cAD::is_demo()){
 	</optgroup>
 </select>
 
-<script language="javascript">
+<script>
 $(  
 	function(){
 		$("#menuDetails").selectmenu({change:common_onListChange});

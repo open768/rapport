@@ -20,7 +20,7 @@ require_once "$home/inc/common.php";
 //####################################################################
 cRenderHtml::header("Log Analytics");
 cRender::force_login();
-?><script language="javascript" src="<?=$jsWidgets?>/logdetail.js"></script><?php
+?><script src="<?=$jsWidgets?>/logdetail.js"></script><?php
 
 //####################################################################
 cRenderCards::card_start();
@@ -58,7 +58,7 @@ foreach ($aData as $oSource){
 	}
 }
 ?>
-<script language="javascript">
+<script>
 	function init_widget(piIndex, poElement){
 		$(poElement).adlogdetail();
 	}

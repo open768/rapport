@@ -57,7 +57,7 @@ if (cHeader::is_set(cRenderQS::HELP_QS)){
 		
 		cRenderHtml::widget_header();
 		?>
-			<script language="javascript" src="<?=$jsWidgets?>/appsummary.js"></script>
+			<script src="<?=$jsWidgets?>/appsummary.js"></script>
 			<div 
 				id='widget' 
 				<?=cRenderQS::LOGIN_TOKEN_QS?>="<?=cHeader::get(cRenderQS::LOGIN_TOKEN_QS)?>"
@@ -67,7 +67,7 @@ if (cHeader::is_set(cRenderQS::HELP_QS)){
 			>
 					Loading please wait
 			</div>
-			<script language="javascript">
+			<script>
 				function init_widget(){
 					$("#widget").adappsummary(); //need to work with RUM too
 				}

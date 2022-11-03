@@ -85,7 +85,7 @@ if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 	?></optgroup>
 </select>
 
-<script language="javascript">
+<script>
 $(  
 	function(){
 		$("#menuNodes").selectmenu({change:common_onListChange});

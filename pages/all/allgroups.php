@@ -33,7 +33,7 @@ if (cArrayUtil::array_is_empty($aGroups)){
 	cRenderHtml::footer();
 	return;
 }
-?><script language="javascript" src="<?=$jsWidgets?>/rbac_group_user.js"></script><?php
+?><script src="<?=$jsWidgets?>/rbac_group_user.js"></script><?php
 
 
 //####################################################################
@@ -63,7 +63,7 @@ foreach ($aGroups as $oGroup){
 	cRenderCards::body_end();
 	cRenderCards::card_end();
 }
-?><script language="javascript">
+?><script>
 	
 	function init_widgets(){
 		$("DIV[type='widget']").each(

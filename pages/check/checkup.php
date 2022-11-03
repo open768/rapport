@@ -20,7 +20,7 @@ cRenderHtml::header("One Click Checkup");
 cRender::force_login();
 //TODO if application passed only do a checkup for that application.
 
-?><script language="javascript" src="<?=$jsWidgets?>/appcheckup.js"></script><?php
+?><script src="<?=$jsWidgets?>/appcheckup.js"></script><?php
 
 //**********************************************************************************
 function render_summary($paApps){
@@ -28,7 +28,7 @@ function render_summary($paApps){
 	cRenderCards::body_start();
 		$sPrevious = "";
 		echo "<h3>There are ".count($paApps)." Applications</h3>";
-		echo "<div style='column-count:4'>";
+		echo "<div style='column-count:4;overflow-wrap:break-word'>";
 			foreach ( $paApps as $oApp){
 				$sChar = strtolower(($oApp->name)[0]);
 				if ($sChar !== $sPrevious){
@@ -49,7 +49,6 @@ function render_summary($paApps){
 			cRender::button("show only BT Checks", $sUrl);
 		}
 		
-		cRender::jsbutton("hide menus and links", "cRender.hide_menus_and_links();return false;", "btn_hider");
 		
 		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
 	cRenderCards::action_end();
@@ -91,7 +90,7 @@ else{
 }
 
 ?>
-	<script language="javascript">
+	<script>
 		function init_a_checkup_widget(piIndex, poElement){
 			$(poElement).adappcheckup();
 		}

@@ -19,8 +19,8 @@ cRenderHtml::header("Agent Counts");
 cRender::force_login();
 
 ?>
-	<script language="javascript" src="<?=$jsWidgets?>/allagents.js"></script>
-	<script language="javascript" src="<?=$jsWidgets?>/agentcount.js"></script>
+	<script src="<?=$jsWidgets?>/allagents.js"></script>
+	<script src="<?=$jsWidgets?>/agentcount.js"></script>
 <?php
 
 
@@ -59,7 +59,7 @@ cRenderCards::card_end();
 		<?=cRenderQS::AGENT_COUNT_TYPE_QS?>='<?=cRenderQS::COUNT_TYPE_APPD?>' >
 			Please Wait...
 	</div>
-	<script language="javascript">
+	<script>
 		function init_widget(){
 			$("#allagentwidget").adallagents();
 		}

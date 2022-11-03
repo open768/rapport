@@ -17,7 +17,7 @@ require_once "$home/inc/common.php";
 
 //####################################################################
 cRenderHtml::header("jsession healthchecks ");
-?><script language="javascript" src="<?=$jsWidgets?>/appcheckup.js"></script><?php
+?><script src="<?=$jsWidgets?>/appcheckup.js"></script><?php
 
 //cDebug::on(true);
 
@@ -25,7 +25,7 @@ $aApps = cADController::GET_all_Applications();
 //####################################################################
 cRenderCards::card_start();
 	cRenderCards::body_start();
-		echo "<div style='column-count:3'>";
+		echo "<div style='column-count:3;overflow-wrap:break-word'>";
 			$chLast = null;
 			foreach ($aApps as $oApp){
 				$sApp = $oApp->name;
@@ -59,7 +59,7 @@ foreach ($aApps as $oApp){
 	cRenderCards::card_end();
 }
 ?>
-	<script language="javascript">
+	<script>
 		function init_a_checkup_widget(piIndex, poElement){
 			$(poElement).adappcheckup();
 		}

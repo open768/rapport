@@ -46,30 +46,36 @@ var cFilterFunctions={
 		//iterate
 		aSelected.each(
 			function(index){
+				//set up variables
+				var oParent=$(this).closest(oThis.parent_selector);
+				var oHider = oParent;
+				var oTRParent = $(this).closest("TR");					
+				if (oTRParent.length > 0){
+					 if (oTRParent.parents().length > oParent.parents().length) //element is in a table
+						oHider = oTRParent;
+				}
 				
+				//check minimum length of search expression
+				if (sInput.length < 3){	//must be at least 3 chars
+					oHider.show();
+					return;
+				}
+
+				//perform search
 				var oEl = $(this);
-				var sAttr = oEl.attr(oThis.attr); 
-				if (sAttr) { //skip selected that dont have the desired attribute
-					
-					var oParent=$(this).closest(oThis.parent_selector);
-					var oTRParent = $(this).closest("TR");					
-					var oHider = oParent;
-					if (oTRParent.length > 0){
-						 if (oTRParent.parents().length > oParent.parents().length) //element is in a table
-							oHider = oTRParent;
-					}
-					
-					
-					if (sInput.length < 3){	//must be at least 3 chars
+				var sSearch;
+				if (oThis.attr == "")
+					sSearch = oEl[0].innerText;
+				else
+					sSearch = oEl.attr(oThis.attr); 
+				
+				if (sSearch) { //skip selected that dont have the desired attribute
+					sSearch = sSearch.toLowerCase();
+					if ( sSearch.indexOf(sInput) == -1)	////check the attribute for a match
+						oHider.hide();
+					else{
 						oHider.show();
-					}else{
-						sAttr = sAttr.toLowerCase();
-						if ( sAttr.indexOf(sInput) == -1)	////check the attribute for a match
-							oHider.hide();
-						else{
-							oHider.show();
-							oParent.show();
-						}
+						oParent.show();
 					}
 				}
 			}

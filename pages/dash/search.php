@@ -20,8 +20,8 @@ require_once "$home/inc/common.php";
 //####################################################################
 cRenderHtml::header("Search Dashboards");
 ?>
-	<script type="text/javascript" src="<?=$jsWidgets?>/dashsearch.js"></script>	
-	<script type="text/javascript" src="<?=$jsHome?>/listdash.js"></script>	
+	<script src="<?=$jsWidgets?>/dashsearch.js"></script>	
+	<script src="<?=$jsHome?>/listdash.js"></script>	
 <?php
 cRender::force_login();
 $oTimes = cRender::get_times();
@@ -40,7 +40,7 @@ cRenderCards::body_start();
 			<i class="material-icons">search</i>
 		</button>
 	</form>
-	<script language="javascript">
+	<script>
 		
 		
 		//-------------------------------------------------------------

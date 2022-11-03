@@ -35,6 +35,6 @@ $.widget( "ck.common",{
 
 		var oLoader = $("<DIV>");
 		oLoader.gSpinner({scale: 0.25});
-		oElement.append(oLoader).append("Loading: ");
+		oElement.append(oLoader).append("Starting Server Request: ");
 	},
 });

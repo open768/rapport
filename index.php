@@ -95,7 +95,7 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 	cRenderHtml::header("login");
 	?>
 		<!-- Login Box -->
-		<script type="text/javascript" src="js/index.js"></script>
+		<script src="js/index.js"></script>
 
 		<div class="mdl-card mdl-shadow--6dp login_box" >
 			<div class="mdl-card__title-text mdl-color--blue-900 ">
@@ -135,7 +135,7 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 							<button class="w3-bar-item w3-button tabbut" id="BUTS" tab="TABAS">API Secret</button>
 							<button class="w3-bar-item w3-button tabbut" id="BUTJ" tab="TABJ">JSession</button>
 						</div><!-- tabs -->
-						<div id="tab panels" >
+						<div id="tab_panels" >
 							<!-- ******************************************************************** -->
 							<div class="tab w3-padding" id="TABP">
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -221,7 +221,7 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 				</form>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-			Rapport gets the stuff you need to focus on from your AppDynamics &tm; SAAS controller. 
+			Rapport gets the stuff you need to focus on from your AppDynamics&trade; SAAS controller. 
 			Absolutely no credentials are stored by this application. For security reasons we recommend creating a limited access local user in your controller for use with this application.
 			</div>
 			<div class="mdl-card__actions mdl-card--border">

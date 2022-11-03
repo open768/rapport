@@ -32,7 +32,7 @@ if (cAD::is_demo()){
 }
 
 ?>
-	<script language="javascript" src="<?=$jsWidgets?>/audit.js"></script>
+	<script src="<?=$jsWidgets?>/audit.js"></script>
 <?php
 
 //####################################################################
@@ -62,7 +62,7 @@ cRenderCards::card_start();
 	>
 		Please Wait...
 	</div>
-	<script language="javascript">
+	<script>
 		function init_widget(){
 			$("#widget").adaudit();
 		}

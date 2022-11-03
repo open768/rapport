@@ -33,7 +33,7 @@ if (cAD::is_demo()){
 		table {table-layout:fixed;}
 		table td {word-wrap:break-word;font-size:10px}
 	</style>
-	<script language="javascript" src="<?=$jsWidgets?>/allagentversions.js"></script>
+	<script src="<?=$jsWidgets?>/allagentversions.js"></script>
 <?php
 
 function add_card( $psCaption, $psAnchor, $psType, $psGoUrl = null){
@@ -93,7 +93,7 @@ add_card("Database Agents", "d", "db", "../db/alldb.php");
 
 //*****************************************************************
 ?>
-<script language="javascript">
+<script>
 	function init_widget(){
 		$("DIV[type=widget]").adallagentversions();
 	}

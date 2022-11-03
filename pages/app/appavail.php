@@ -25,7 +25,7 @@ set_time_limit(200);
 cRenderHtml::header("App Activity");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="js/remote.js"></script>
+	<script src="js/remote.js"></script>
 	
 <?php
 cChart::do_header();

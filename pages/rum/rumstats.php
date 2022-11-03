@@ -89,7 +89,7 @@ function render_table($psType, $paData){
 		?></tbody>
 	</table>
 	
-	<script language="javascript">
+	<script>
 		$( function(){ $("#TBL<?=$gsTABLE_ID?>").tablesorter();} );
 	</script>
 

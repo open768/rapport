@@ -26,7 +26,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 ?>
-	<script type="text/javascript" src="js/remote.js"></script>
+	<script src="js/remote.js"></script>
 	
 <?php
 cChart::do_header();

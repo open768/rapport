@@ -48,10 +48,11 @@ switch($sMetricType){
 }
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
 cChart::do_header();
-?><script language="javascript" src="<?=$jsWidgets?>/allapps.js"></script><?php
+?><script src="<?=$jsWidgets?>/allapps.js"></script><?php
 
 //####################################################################
 cRenderCards::card_start();
@@ -79,7 +80,7 @@ cRenderCards::card_end();
 		metric1='<?=$sMetric1?>' metric2='<?=$sMetric2?>' metric3='<?=$sMetric3?>'>
 			please wait...
 	</div>
-	<script language="javascript">
+	<script>
 		function init_widget(){
 			$("#allapps").adallapps(); //need to work with RUM too
 		}

@@ -44,7 +44,7 @@ function show_tier_menu(){
 			}
 		?>
 	</select>
-	<script language="javascript">
+	<script>
 	$(  
 		function(){
 			$("#TierMenu").selectmenu({change:common_onListChange});  

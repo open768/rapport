@@ -68,7 +68,7 @@ function tier_card($poTier){
 }
 //####################################################################
 
-?><script language="javascript" src="<?=$jsWidgets?>/tiertrans.js"></script><?php
+?><script src="<?=$jsWidgets?>/tiertrans.js"></script><?php
 
 //*********************** header panel ***********************************
 cRenderCards::card_start();
@@ -101,7 +101,7 @@ if ($moTier){
 
 ?>
 
-<script language="javascript">
+<script>
 	function init_widget(piIndex, poElement){
 		$(poElement).adtiertrans();
 	}

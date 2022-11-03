@@ -26,7 +26,7 @@ class cRemote{
 	//****************************************************************************
 	public static function do_footer(){
 	?>
-		<script type="text/javascript" >
+		<script >
 			window.onload = function(){
 			<?php
 				foreach (self::$remote_items as $aRow) {
@@ -51,9 +51,9 @@ class cRemote{
 	public static function do_header(){
 		global $js_extra;
 	?>
-		<script type="text/javascript" src="<?=$js_extra?>/rgraph/libraries/RGraph.common.core.js"></script>
-		<script type="text/javascript" src="<?=$js_extra?>/rgraph/libraries/RGraph.common.dynamic.js"></script>
-		<script type="text/javascript" src="<?=$js_extra?>/bean/bean.js"></script>
+		<script src="<?=$js_extra?>/rgraph/libraries/RGraph.common.core.js"></script>
+		<script src="<?=$js_extra?>/rgraph/libraries/RGraph.common.dynamic.js"></script>
+		<script src="<?=$js_extra?>/bean/bean.js"></script>
 	<?php
 	}
 }

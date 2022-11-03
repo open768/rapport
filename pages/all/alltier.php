@@ -45,13 +45,13 @@ if (count($aApps) == 0) {
 }
 cChart::do_header();
 ?>
-	<script language="javascript" src="<?=$jsWidgets?>/showtiers.js"></script>
-	<script language="javascript" src="<?=$jsinc?>/extra/appd/metrics.js"></script>
+	<script src="<?=$jsWidgets?>/showtiers.js"></script>
+	<script src="<?=$jsinc?>/extra/appd/metrics.js"></script>
 <?php
 
 //####################################################################
 function app_toc($paApps){
-	echo "<div style='column-count:3'>";
+	echo "<div style='column-count:3;overflow-wrap:break-word'>";
 	$chLast = "";
 	foreach ($paApps as $oApp){
 		$ch = strtolower($oApp->name[0]);
@@ -101,7 +101,7 @@ foreach ( $aApps as $oApp){
 		cRenderCards::action_end();
 	cRenderCards::card_end();
 }
-?><script language="javascript">
+?><script>
 		function init_widget(piIndex, poElement){
 			$(poElement).adshowtiers();
 		}

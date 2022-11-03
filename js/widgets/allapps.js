@@ -1,5 +1,6 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//# rendering delay caused by loading google charts
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.adallapps", $.ck.common, {
 	//#################################################################
@@ -54,6 +55,7 @@ $.widget( "ck.adallapps", $.ck.common, {
 		var oElement = this.element;
 
 		oElement.empty();
+		oElement.append("got response");
 		oElement.removeClass();
 
 		var aResponse = poHttp.response;
@@ -85,6 +87,7 @@ $.widget( "ck.adallapps", $.ck.common, {
 		var sHome = oElement.attr(cRenderQS.HOME_QS);
 		var oThis = this;
 
+		//iterate  each application
 		paData.forEach( function(poApp){
 			var oUrlParams = {};
 			
@@ -97,7 +100,8 @@ $.widget( "ck.adallapps", $.ck.common, {
 			var sHTML = cRenderMDL.card_start();
 				sHTML += cRenderMDL.body_start();
 
-					for (var i=1; i<=3; i++){
+					for (var i=1; i<=3; i++){ //3 different charts for each application
+						//----------------------------------------------------------------------
 						var oChartParams = {
 							type:"adchart",
 							style:"position: relative; max-width: 341px; width: 341px; height: 125px;",
@@ -114,6 +118,7 @@ $.widget( "ck.adallapps", $.ck.common, {
 						oChartParams[cChartConsts.ATTR_WIDTH] = cChartConsts.WIDTH_3ACROSS;
 						oChartParams[cChartConsts.ATTR_HEIGHT] = cChartConsts.LETTERBOX_HEIGHT;
 
+						//----------------------------------------------------------------------
 						if (i==1) oChartParams[cChartConsts.ATTR_GO_URL] =  sGoUrl ;
 						var oDiv = $("<DIV>", oChartParams).append("please Wait");
 
@@ -131,7 +136,11 @@ $.widget( "ck.adallapps", $.ck.common, {
 			if (cCharts.isGoogleChartsLoaded())
 				oThis.convert_charts_to_widgets(poApp)
 			else
-				cCharts.load_google_charts(function(){oThis.convert_charts_to_widgets(poApp);});
+				cCharts.load_google_charts( 
+					function(){
+						oThis.convert_charts_to_widgets(poApp);
+					}
+				);
 
 			//- - - render the menus
 			$("#"+poApp.id+"menu").admenu();
@@ -141,13 +150,6 @@ $.widget( "ck.adallapps", $.ck.common, {
 
 	//*******************************************************************
 	convert_charts_to_widgets: function(poApp){
-		var oElement = this.element;
-		var oParams = {};
-		oParams[ cRenderQS.APP_ID_QS ] = poApp.id;
-		oParams[ cRenderQS.APP_QS ] = poApp.name;
-		var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
-		var sHome = oElement.attr(cRenderQS.HOME_QS);
-
 		for (var i=1; i<=3; i++)
 			$("#a"+poApp.id+"i"+i).adchart();
 	},

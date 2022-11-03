@@ -183,7 +183,7 @@ cRenderCards::body_start();
 		}
 	?></tbody>
 </table>
-	<script language="javascript">
+	<script>
 		$( 
 			function(){ 
 				$("#tblEvents").tablesorter();

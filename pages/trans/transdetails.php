@@ -26,8 +26,8 @@ const MIN_TRANS_TIME=150;
 cRenderHtml::header("Transactions");
 cRender::force_login();
 ?>
-	<script type="text/javascript" src="<?=$home?>/js/remote.js"></script>	
-	<script type="text/javascript" src="<?=$home?>/js/transflow.js"></script>
+	<script src="<?=$home?>/js/remote.js"></script>	
+	<script src="<?=$home?>/js/transflow.js"></script>
 <?php
 cChart::do_header();
 
@@ -88,7 +88,7 @@ function show_nodes($psNode){
 			?>
 			</optgroup>
 		</select>
-		<script language="javascript">
+		<script>
 		$(  
 			function(){
 				$("#showMenu").selectmenu({change:common_onListChange});
@@ -259,7 +259,7 @@ cRenderCards::card_start("<a name='5'>Transaction Snapshots</a>");
 					}
 				?></tbody>
 			</table>
-			<script language="javascript">
+			<script>
 				$( function(){ 
 					$("#trans").tablesorter({
 						headers:{

@@ -91,7 +91,7 @@ $aNodes = $oTier->GET_Nodes();
 	?></optgroup>
 </select>
 
-<script language="javascript">
+<script>
 $(  
 	function(){
 		$("#menuNodes").selectmenu({change:common_onListChange});

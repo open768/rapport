@@ -59,7 +59,7 @@ cRenderCards::card_start("Licence Usage for last $sUsage Months");
 			?></optgroup>
 		</select>
 
-		<script language="javascript">
+		<script>
 		$(  function(){
 				$("#menuTime").selectmenu({change:common_onListChange,width:300});
 		} );

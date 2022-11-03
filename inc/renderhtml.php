@@ -20,11 +20,17 @@ class cRenderHtml{
 	const TIME_ID = "RenderTMID";
 	const TITLE_ID = "RenderTID";
 	const NAVIGATION_ID = "RenderNID";
+	static $load_google_charts = false;
 
 	//**************************************************************************
 	public static function common_header (){
 		global $jsinc, $js_extra, $home;
 		?>
+			<!-- 
+				############################################################################
+				# COMMON HEADER START
+				############################################################################ 
+			-->
 			<!-- analytics tags -->
 			<?php
 				if (cSecret::ENABLE_GOOGLE_ANALYTICS) 
@@ -38,66 +44,79 @@ class cRenderHtml{
 			
 			<!-- google fonts fonts.googleapis.com -->			
 			<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
-			<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp" rel="stylesheet">
 			<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
 			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
 
 			<!-- Material Design Lite https://getmdl.io/components/index.html -->			
 			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
 
-			<!-- Google charts -->
-			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+			<!-- additional style sheets -->			
+			<link rel="stylesheet" href="<?=$js_extra?>/jquery-spinner/css/gspinner.min.css">			
+			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >			
+			
+			<!-- google charts JS  -->
+			<?php
+				if (self::$load_google_charts){ ?>
+					<script src="https://www.gstatic.com/charts/loader.js"></script>
+					<script >
+						google.charts.load('current', {packages: ['corechart']});
+					</script>
+				<?php }
+			?>
 			
 			<!-- jquery -->
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
-			<script type="text/javascript" src="<?=$js_extra?>/jquery/jquery-3.2.1.min.js"></script>
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-ui/jquery-ui.min.js"></script>
-			<script type="text/javascript" src="<?=$js_extra?>/tablesorter/jquery.tablesorter.min.js"></script>
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-inview/jquery.inview.min.js"></script>
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-visible/jquery.visible.min.js"></script>
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.js"></script>
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-flowtype/flowtype.js"></script>
-			
-			<script type="text/javascript" src="<?=$js_extra?>/jquery-spinner/g-spinner.min.js"></script>
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-spinner/css/gspinner.min.css">			
+			<script src="<?=$js_extra?>/jquery/jquery-3.2.1.min.js"></script>
+			<script src="<?=$js_extra?>/jquery-ui/jquery-ui.min.js"></script>
+			<script src="<?=$js_extra?>/tablesorter/jquery.tablesorter.min.js"></script>
+			<script src="<?=$js_extra?>/jquery-inview/jquery.inview.min.js"></script>
+			<script src="<?=$js_extra?>/jquery-visible/jquery.visible.min.js"></script>
+			<script src="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.js"></script>
+			<script src="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
+			<script src="<?=$js_extra?>/jquery-flowtype/flowtype.js"></script>
+			<script src="<?=$js_extra?>/jquery-spinner/g-spinner.min.js"></script>
 			
 			<!-- bean -->
-			<script type="text/javascript" src="<?=$js_extra?>/bean/bean.js"></script>
-
+			<script src="<?=$js_extra?>/bean/bean.js"></script>
+					
 			<!-- common JS  -->
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/debug.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/common.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/http.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
-			<script type="text/javascript" src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/debug.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/common.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/http.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/render.js"></script>
 			
 			<!-- Rapport JS  -->
-			<script type="text/javascript" src="<?=$home?>/js/menus.js"></script>
-			<script type="text/javascript" src="<?=$home?>/js/common.js"></script>
-			<script type="text/javascript" src="<?=$home?>/js/render.js"></script>
+			<script src="<?=$home?>/js/menus.js"></script>
+			<script src="<?=$home?>/js/common.js"></script>
+			<script src="<?=$home?>/js/renderqs.js"></script>
 			
 			<!-- widgets  -->
-			<script type="text/javascript" src="<?=$home?>/js/widgets/common.js"></script>
-			<script type="text/javascript">
+			<script src="<?=$home?>/js/widgets/common.js"></script>
+			<script >
 				var cLocations = {
 					home: "<?=$home?>",
 					rest: "<?=$home?>/rest"
 				};
 			</script>
-			<!-- rapport CSS  -->
-			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >			
+			<!-- 
+				############################################################################
+				# COMMON HEADER END
+				############################################################################ 
+			-->
 		<?php
 	}
 	
 	//**************************************************************************
 	public static function widget_header (){
 		?><!DOCTYPE html>
-			<html>
+			<html lang="en">
 			<head>
 				<?php 		
 					self::common_header();
@@ -127,7 +146,12 @@ class cRenderHtml{
 		//-------------------------------------------------------------
 		cDebug::extra_debug("displaying page");
 		?><!DOCTYPE html>
-			<html>
+			<html lang="en">
+			<!-- 
+				############################################################################
+				# HEADER START
+				############################################################################ 
+			-->
 			<head>
 				<title><?=$psTitle?></title>
 				<?php 		
@@ -137,10 +161,10 @@ class cRenderHtml{
 					}
 					self::common_header();
 				?>
-				<script type="text/javascript" src="<?=$home?>/js/widgets/menu.js"></script>
+				<script src="<?=$home?>/js/widgets/menu.js"></script>
 			</head>
 			<BODY>
-				<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500">
+				<div class="mdl-layout mdl-js-layout mdl-color--light-blue-200 mdl-color-text--blue-grey-500" id="mdl-container">
 					<div class="mdl-layout__drawer">
 						<span class="mdl-layout__title">Rapport</span>
 						<nav class="mdl-navigation" id="<?=self::NAVIGATION_ID?>"></nav>
@@ -165,8 +189,15 @@ class cRenderHtml{
 							</nav>
 						</div>
 					</header>
+					<!-- 
+						############################################################################
+						# HEADER END
+						############################################################################ 
+					-->
+
 					<main class="mdl-layout__content" style="flex: 1 0 auto;">
 						<div id="page_content">
+						<!-- ####### PAGE CONTENT GOES BELOW HERE -->
   		<?php
 		//show the navigation menu - this updates the material design navigation menu
 		if ($bLoggedin)	cRenderMenus::top_menu();
@@ -181,52 +212,78 @@ class cRenderHtml{
 		global $home;
 		if (cDebug::is_debugging()) return;
 		?>
-					</div>
-				</main><!-- page content -->
+						<!-- #######  PAGE CONTENT STOPS ABOVE HERE-->
+					</div> <!-- id=page_content -->
+				</main>
+			<!-- 
+				############################################################################
+				# FOOTER START
+				############################################################################ 
+			-->
 				<div class="footer-container">
 					<footer class="mdl-mini-footer">
-						<div class="mdl-mini-footer__left-section">
-							<div class="mdl-logo">
+						<div class="mdl-mini-footer__left-section" id="footer_leftsection">
+							<!-- ******************************************************************* -->
+							<script>
+								function init_modal_dialog(psButtonID, psTxtID){
+									$(psButtonID).click(
+										function (){
+											showDialog( { text: $(psTxtID).html() });
+										}
+									)
+								}
+							</script>
+							<!-- ******************************************************************* -->
+							<div class="mdl-logo" id="footer_logo">
 								<img id="cklogo" class="cklogo" src="<?=$home?>/images/chicken_icon.png">
 								<div class="mdl-tooltip" for="cklogo">
 									We are Chicken Katsu.
 								</div>		
-								<script language="javascript">
+								<script>
 								$(
 									function(){
 										$('#cklogo').click( function(){window.open("https://www.chickenkatsu.co.uk");});
 									}
 								);
 								</script>
-							</div>
-							<span>
+							</div><!-- id="footer_logo" -->
+
+							<!-- ******************************************************************* -->
+							<div style="display:inline" id="footer_about">
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrabout" onclick="document.location.href='<?=$home?>/pages/about/about.php';return false">About</button>
-							</span>
-							<span>
+							</div><!--  id="footer_about" -->
+
+							<!-- ******************************************************************* -->
+							<div style="display:inline" id="footer_copyright">
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
-								<div style="display:none" class="dialog" for="ftrcopy" title="Copyright">
+								<div style="display:none" id="dlg_copy">
 									<b>Copyright (c) 2013-2021 <a target="katsu" href="https://www.chickenkatsu.co.uk/">ChickenKatsu</a></b>
-									<p/>
+									<p>
 									This software is protected by copyright under the terms of the 
 									<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
 									For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
-									<p/>
+									<p>
 									Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
 									USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
-									<p>
 								</div>
-							</span>
-							<span>
+								<script>init_modal_dialog('#ftrcopy', "#dlg_copy");</script>
+							</div><!--  id="footer_copyright" -->
+							
+							<!-- ******************************************************************* -->
+							<div style="display:inline" id="footer_info">
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrinfo">Information</button>
-								<div style="display:none" class="dialog" for="ftrinfo" title="Information">
+								<div style="display:none" id="dlg_info">
 									We're on <a href="https://github.com/open768/rapport">Github</a><br>
 									No passwords are stored by this application.<br>
 									Appdynamics is a trademark of Appdynamics LLC which is part of Cisco. This site is not affiliated with either Appdynamics or Cisco.
 								</div>
-							</span>
-							<span>
-								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrLibraries">Libraries Used</button>
-								<div style="display:none" class="dialog" for="ftrLibraries" title="Libraries Used">
+								<script>init_modal_dialog('#ftrinfo', "#dlg_info");</script>
+							</div><!-- id="footer_info" -->
+							
+							<!-- ******************************************************************* -->
+							<div style="display:inline" id="footer_lib">
+								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrlib">Libraries Used</button>
+								<div style="display:none" id="dlg_lib">
 									<ul class="mdl-list">
 										<li class="mdl-list__item mdl-list__item--three-line">
 											<span class="mdl-list__item-primary-content">
@@ -305,15 +362,16 @@ class cRenderHtml{
 												</span>
 											</span>
 										</li>
-										
 									</ul>
-								</div idref="foot_libs_text">
-							</span>
-						</div>
+								</div><!-- id="dlg_lib" -->
+								<script>init_modal_dialog('#ftrlib', "#dlg_lib");</script>
+							</div ><!-- id="footer_lib" -->
+							
+						</div> <!-- id="footer_leftsection" -->
 					</footer>
-				</div> <!-- footer container -->
-			</div> <!-- page layout -->
-			<script language="javascript">
+				</div><!--  id="footer-container" -->
+			</div><!-- id="mdl-container" -->
+			<script>
 				$(
 					function(){
 						$("button.blue_button").removeAttr("class").button();
@@ -322,6 +380,11 @@ class cRenderHtml{
 					}
 				);
 			</script>
+			<!-- 
+				############################################################################
+				# FOOTER END
+				############################################################################ 
+			-->
 		</BODY>
 	</HTML><?php
 	}	

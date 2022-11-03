@@ -30,7 +30,7 @@ $oApp = cRenderObjs::get_current_app();
 $title ="$oApp->name Application Errors and Exceptions";
 cRenderHtml::header("$title");
 cRender::force_login();
-?><script language="javascript" src="<?=$jsWidgets?>/tiererrors.js"></script><?php
+?><script src="<?=$jsWidgets?>/tiererrors.js"></script><?php
 
 $oTimes = cRender::get_times();
 
@@ -93,7 +93,7 @@ else
 	foreach ( $aResponse as $oTier)
 		render_tier_errors($oTier);
 ?>
-<script language="javascript">
+<script>
 	function init_widget(piIndex, poElement){
 		$(poElement).adtiererrors();
 	}

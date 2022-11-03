@@ -27,8 +27,8 @@ if (cAD::is_demo()){
 	exit;
 }
 ?>
-	<script language="javascript" src="<?=$jsWidgets?>/historicalAgents.js"></script>
-	<script language="javascript" src="<?=$jsWidgets?>/agentcount.js"></script>
+	<script src="<?=$jsWidgets?>/historicalAgents.js"></script>
+	<script src="<?=$jsWidgets?>/agentcount.js"></script>
 <?php
 	cRenderCards::card_start("Historical Agents");
 	cRenderCards::action_start();
@@ -47,7 +47,7 @@ if (cAD::is_demo()){
 		</div>
 	<?
 ?>
-<script language="javascript">
+<script>
 	function init_widget(){
 		$("DIV[type=widget]").adhistagentstiers();
 	}

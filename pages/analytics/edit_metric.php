@@ -16,37 +16,31 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 $home="../..";
 require_once "$home/inc/common.php";
 
-
 //####################################################################
-cRenderHtml::header("Schemas");
+cRenderHtml::header("Edit Metrics");
 cRender::force_login();
 
-$aSchemas = cADAnalytics::list_schemas();
+$sMetric = cHeader::GET(cRenderQS::ANALYTICS_METRIC_QS);
+if (!$sMetric){
+	cDebug::error("missing metric name");
+}
+
+$oMetric = cADAnalytics::get_metric($sMetric);
+if (! $oMetric){
+	cDebug::error("couldnt find metric with name: $sMetric");
+}
+
 
 //####################################################################
-cRenderCards::card_start("Analytics schemas");
+cRenderCards::card_start("Edit Metric");
 	cRenderCards::body_start();
-		echo "there are ".count($aSchemas)." analytics schemas<p>";
-		echo '<DIV style="column-count:3;overflow-wrap:break-word">';
-			foreach ($aSchemas as $sSchemaName)
-				echo "<a href='#$sSchemaName'>$sSchemaName</a><br>";
-		echo '</DIV>';
+		cCommon::messagebox("Found Metric with name: $sMetric TBD");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRender::button("back to analytics","analytics.php");
+		cRender::button("back to metrics","metrics.php");
 	cRenderCards::action_end();
 cRenderCards::card_end();
-		
-foreach ($aSchemas as $sSchemaName){
-	cRenderCards::card_start("<a name='$sSchemaName'>$sSchemaName</a>");
-		cRenderCards::body_start();
-			echo '<DIV style="column-count:3;overflow-wrap:break-word">';
-				$aFields = cADAnalytics::schema_fields($sSchemaName);
-				foreach ($aFields as $oField)
-					echo "$oField->fieldName: $oField->fieldType<br>";
-			echo '</DIV>';
-		cRenderCards::body_end();
-	cRenderCards::card_end();
-}
+
+	
 cRenderHtml::footer();
 ?>

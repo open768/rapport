@@ -36,7 +36,7 @@ $sURL = cHttp::build_URL($sURL,cRenderQS::LOGIN_TOKEN_QS, $sToken);
 	<p>
 	<input type="text" value="<?=$sURL?>" class="clipbox">
 	<p>
-	<script language='javascript'>
+	<script>
 		$(function(){
 			cBrowser.copy_to_clipboard("<?=$sURL?>");
 		});

@@ -26,7 +26,7 @@ if (cAD::is_demo()){
 }
 
 ?>
-	<script language="javascript" src="<?=$jsWidgets?>/allagents.js"></script>
+	<script src="<?=$jsWidgets?>/allagents.js"></script>
 <?php
 
 //#############################################################
@@ -50,7 +50,7 @@ cRenderCards::card_end();
 		>
 		Please Wait...
 	</div>
-	<script language="javascript">
+	<script>
 		function init_widget(){
 			$("#allagentwidget").adallagents();
 		}

@@ -25,7 +25,7 @@ cRenderHtml::header("Service End Points");
 cRender::force_login();
 cChart::do_header();
 ?>
-	<script language="javascript" src="<?=$jsWidgets?>/tierserviceendpoints.js"></script>
+	<script src="<?=$jsWidgets?>/tierserviceendpoints.js"></script>
 <?php
 
 //####################################################################
@@ -65,7 +65,7 @@ if ($oTier){
 		>
 			Please Wait..
 		</div>
-		<script language="javascript">
+		<script>
 			$(function(){
 				$("#tierwidget").adserviceendpoints();
 			});
@@ -76,7 +76,7 @@ if ($oTier){
 	$aTiers = $oApp->GET_Tiers();
 	cRenderCards::card_start("Select a Tier");
 		cRenderCards::body_start();
-		?><DIV style="column-count:3"><?php
+		?><DIV style="column-count:3;overflow-wrap:break-word"><?php
 		$sLastCh = "";
 		
 		foreach ($aTiers as $oTier){

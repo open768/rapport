@@ -153,7 +153,7 @@ function show_node_menu(){
 		?>
 		</optgroup>
 	</select>
-	<script language="javascript">
+	<script>
 	$(  
 		function(){
 			$("#nodesMenu").selectmenu({change:common_onListChange});

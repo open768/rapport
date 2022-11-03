@@ -35,7 +35,7 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
-?><script language="javascript" src="<?=$jsWidgets?>/tierothertrans.js"></script><?php
+?><script src="<?=$jsWidgets?>/tierothertrans.js"></script><?php
 
 //********************************************************************
 cRenderCards::card_start();
@@ -73,7 +73,7 @@ foreach ( $aTiers as $oTier){
 }
 
 ?>
-<script language="javascript">
+<script>
 	function init_widget(piIndex, poElement){
 		$(poElement).adtierothertrans();
 	}

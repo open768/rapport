@@ -114,7 +114,7 @@ if ($bProceed){
 			<?php }
 		?></tbody>
 	</table>
-	<script language="javascript">
+	<script>
 		$( function(){ 
 			$("#trans").tablesorter({
 				headers:{
@@ -151,7 +151,7 @@ if ($bProceed){
 	if ($oTable->length() == 0)
 		cCommon::messagebox("no data found to analyse");
 	else{
-		?><script language="javascript">$(function(){ $("#progress").empty()});</script>
+		?><script>$(function(){ $("#progress").empty()});</script>
 	
 		<table border="1" cellpadding="2" cellspacing="0">
 			<thead><tr>
