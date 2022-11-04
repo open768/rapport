@@ -252,7 +252,7 @@ class cRenderHtml{
 							<div style="display:inline" id="footer_about">
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrabout" onclick="document.location.href='<?=$home?>/pages/about/about.php';return false">About</button>
 							</div><!--  id="footer_about" -->
-
+							
 							<!-- ******************************************************************* -->
 							<div style="display:inline" id="footer_copyright">
 								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrcopy">Copyright</button>
@@ -366,6 +366,11 @@ class cRenderHtml{
 								</div><!-- id="dlg_lib" -->
 								<script>init_modal_dialog('#ftrlib', "#dlg_lib");</script>
 							</div ><!-- id="footer_lib" -->
+							
+							<!-- ******************************************************************* -->
+							<div style="display:inline" id="footer_feedback">
+								<button class="mdl-button mdl-js-button mdl-button--raised" id="ftrabout" onclick="window.open('https://github.com/open768/rapport/issues');return false">Feedback</button>
+							</div><!--  id="footer_feedback" -->
 							
 						</div> <!-- id="footer_leftsection" -->
 					</footer>
