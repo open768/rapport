@@ -31,7 +31,9 @@ cRender::force_login();
 cChart::$show_export_all = "0";
 cChart::do_header();
 
-/*
+//#####################################################################
+//TODO make sections asynchonous, it takes a long time to load
+
 //####################################################################
 cRenderCards::card_start("Overview for $oApp->name");
 	cRenderCards::body_start();
@@ -115,7 +117,7 @@ cRenderCards::card_start("<a name='backend'>Backends</a>");
 		cDebug::flush();
 	cRenderCards::body_end();
 cRenderCards::card_end();
-*/
+
 
 //####################################################################
 cRenderCards::card_start("<a name='trans'>Transactions</a>");
