@@ -20,6 +20,7 @@ class cRenderHtml{
 	const TIME_ID = "RenderTMID";
 	const TITLE_ID = "RenderTID";
 	const NAVIGATION_ID = "RenderNID";
+	const DIV_COLUMNS = 4;
 	static $load_google_charts = false;
 
 	//**************************************************************************

@@ -32,20 +32,19 @@ if (count($aDashData) == 0){
 function render_list(){
 	global $aDashData;
 	
-	?>
-	<h3>there are <?=count($aDashData)?> dashboards</h3>
-	<div style="column-count:3;overflow-wrap:break-word"><?php
-		$sLastCh=null;
-		foreach ($aDashData as $oDash){
-			$sName = $oDash->name;
-			$sCh = strtoupper($sName[0]);
-			if ($sCh !== $sLastCh){
-				echo "<h3>$sCh</h3>";
-				$sLastCh = $sCh;
+	?><h3>there are <?=count($aDashData)?> dashboards</h3><?php
+		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+			$sLastCh=null;
+			foreach ($aDashData as $oDash){
+				$sName = $oDash->name;
+				$sCh = strtoupper($sName[0]);
+				if ($sCh !== $sLastCh){
+					echo "<h3>$sCh</h3>";
+					$sLastCh = $sCh;
+				}
+				echo "<li>$sName<br>";
 			}
-			echo "<li>$sName<br>";
-		}
-	?></div><?php
+		echo "</div>";
 }
 
 //####################################################################

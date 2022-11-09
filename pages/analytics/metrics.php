@@ -114,7 +114,7 @@ if ($iMetricCount >0){
 		//-----------------render contents
 		cRenderCards::card_start("<a type='metric'>Contents</a>");
 			cRenderCards::body_start();
-				echo "<div style='column-count:4;overflow-wrap:break-word''>";
+				cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
 					cDebug::vardump($aMetrics[0]);
 					$iCount = 1;
 					$sPrevious=null;

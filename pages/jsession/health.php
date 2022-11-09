@@ -25,7 +25,7 @@ $aApps = cADController::GET_all_Applications();
 //####################################################################
 cRenderCards::card_start();
 	cRenderCards::body_start();
-		echo "<div style='column-count:3;overflow-wrap:break-word'>";
+		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			$chLast = null;
 			foreach ($aApps as $oApp){
 				$sApp = $oApp->name;

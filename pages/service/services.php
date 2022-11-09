@@ -76,23 +76,23 @@ if ($oTier){
 	$aTiers = $oApp->GET_Tiers();
 	cRenderCards::card_start("Select a Tier");
 		cRenderCards::body_start();
-		?><DIV style="column-count:3;overflow-wrap:break-word"><?php
-		$sLastCh = "";
-		
-		foreach ($aTiers as $oTier){
-			$sTier = $oTier->name;
-			$sCh = strtoupper($sTier[0]);
-			if ($sCh !== $sLastCh){
-				echo "<h3>$sCh</h3>";
-				$sLastCh = $sCh;
-			}
+		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+			$sLastCh = "";
 			
-			$sTierQS = cRenderQS::get_base_tier_QS($oTier);
-			$sUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
-			cRender::button($oTier->name, $sUrl);
-			echo "<br>";
-		}	
-		?></DIV><?php
+			foreach ($aTiers as $oTier){
+				$sTier = $oTier->name;
+				$sCh = strtoupper($sTier[0]);
+				if ($sCh !== $sLastCh){
+					echo "<h3>$sCh</h3>";
+					$sLastCh = $sCh;
+				}
+				
+				$sTierQS = cRenderQS::get_base_tier_QS($oTier);
+				$sUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
+				cRender::button($oTier->name, $sUrl);
+				echo "<br>";
+			}	
+			echo "</div>";
 		cRenderCards::body_end();
 	cRenderCards::card_end();
 }

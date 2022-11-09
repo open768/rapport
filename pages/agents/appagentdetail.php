@@ -18,6 +18,7 @@ require_once "$root/inc/charts.php";
 
 
 
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Application node detail ");
 cRender::force_login();
 $oApp = cRenderObjs::get_current_app();

@@ -21,6 +21,7 @@ require_once "$root/inc/charts.php";
 //-----------------------------------------------
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Remote Services");
 cRender::force_login();
 cChart::do_header();
@@ -43,7 +44,7 @@ if (cAD::is_demo()){
 //********************************************************************
 cRenderCards::card_start("Applications");
 	cRenderCards::body_start();
-		echo "<div style='column-count:3;overflow-wrap:break-word'>";
+		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			$sLastCh = "";
 			foreach ($oApps as $oApp){
 				$sCh = strtoupper(($oApp->name)[0]);

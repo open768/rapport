@@ -51,16 +51,16 @@ cChart::do_header();
 
 //####################################################################
 function app_toc($paApps){
-	echo "<div style='column-count:3;overflow-wrap:break-word'>";
-	$chLast = "";
-	foreach ($paApps as $oApp){
-		$ch = strtolower($oApp->name[0]);
-		if ($ch !== $chLast){
-			echo "<h2>".strtoupper($ch)."</h2>";
-			$chLast = $ch;
+	cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+		$chLast = "";
+		foreach ($paApps as $oApp){
+			$ch = strtolower($oApp->name[0]);
+			if ($ch !== $chLast){
+				echo "<h2>".strtoupper($ch)."</h2>";
+				$chLast = $ch;
+			}
+			echo "<a href='#$oApp->id'>$oApp->name</a><br>";
 		}
-		echo "<a href='#$oApp->id'>$oApp->name</a><br>";
-	}
 	echo "</div>";
 }
 
