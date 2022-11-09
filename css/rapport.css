@@ -303,7 +303,8 @@ div.ui-selectmenu-open {
 }
 
 .rapport-card.mdl-card {
-  width: 100%;
+  width: 99%;
+  margin: 15px 5px 15px 5px;
 }
 
 .page-title.mdl-card {
