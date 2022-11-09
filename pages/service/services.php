@@ -21,6 +21,7 @@ require_once "$root/inc/charts.php";
 set_time_limit(200); 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Service End Points");
 cRender::force_login();
 cChart::do_header();

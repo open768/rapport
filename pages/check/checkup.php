@@ -28,7 +28,7 @@ function render_summary($paApps){
 	cRenderCards::body_start();
 		$sPrevious = "";
 		echo "<h3>There are ".count($paApps)." Applications</h3>";
-		echo "<div style='column-count:4;overflow-wrap:break-word'>";
+		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			foreach ( $paApps as $oApp){
 				$sChar = strtolower(($oApp->name)[0]);
 				if ($sChar !== $sPrevious){

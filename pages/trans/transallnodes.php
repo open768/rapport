@@ -22,6 +22,7 @@ require_once("$root/inc/filter.php");
 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Transaction details for all nodes");
 cRender::force_login();
 cChart::do_header();

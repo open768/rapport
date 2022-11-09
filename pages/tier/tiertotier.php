@@ -30,6 +30,7 @@ $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 $sTransQs = cHttp::build_qs($gsTierQS, cRenderQS::BACKEND_QS, $totier);
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("External tier calls");
 cRender::force_login();
 cChart::do_header();

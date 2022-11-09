@@ -27,6 +27,7 @@ $oApp = $oTier->app;
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("tier $oTier->name");
 cRender::force_login();
 

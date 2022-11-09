@@ -14,12 +14,11 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
 
 //####################################################################
 $iCount = cHeader::get(cRenderQS::CHART_COUNT_FIELD);
 if ($iCount == null)
-	cDebug::error("no Metric count found");
+cDebug::error("no Metric count found");
 //####################################################################
 cRender::force_login();
 

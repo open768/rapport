@@ -17,6 +17,7 @@ require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("License Usage");
 cRender::force_login();
 cChart::do_header();

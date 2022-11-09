@@ -27,6 +27,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Statistics for the day: $sCaption");
 cRender::force_login();
 

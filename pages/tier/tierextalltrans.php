@@ -34,6 +34,7 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 $sTitle = "External Service: $sExt";
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();

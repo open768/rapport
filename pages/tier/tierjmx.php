@@ -24,6 +24,7 @@ require_once "$root/inc/charts.php";
 $CHART_IGNORE_ZEROS = false;
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("tier JMX Database Pools");
 cRender::force_login();
 cChart::do_header();

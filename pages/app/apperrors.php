@@ -28,6 +28,7 @@ $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
 $title ="$oApp->name Application Errors and Exceptions";
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("$title");
 cRender::force_login();
 ?><script src="<?=$jsWidgets?>/tiererrors.js"></script><?php

@@ -28,6 +28,7 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 $title ="$oApp->name&gtWeb Real User Monitoring Details&gt;$rum_page";
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Web browser - Real user monitoring - $rum_page");
 
 cRender::force_login();

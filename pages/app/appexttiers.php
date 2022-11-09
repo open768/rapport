@@ -31,6 +31,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
 $sTitle = "Matching External Calls in $oApp->name";
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header($sTitle);
 cRender::force_login();
 cChart::do_header();

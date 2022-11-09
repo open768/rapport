@@ -22,12 +22,9 @@ require_once "$root/inc/charts.php";
 set_time_limit(200); 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("App Activity");
 cRender::force_login();
-?>
-	<script src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 
 //####################################################################

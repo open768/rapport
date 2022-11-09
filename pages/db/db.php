@@ -22,6 +22,7 @@ $sDB = cHeader::get(cRenderQS::DB_QS);
 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Database - $sDB");
 cRender::force_login();
 cChart::do_header();

@@ -23,6 +23,7 @@ const FLOW_ID = "trflw";
 const MIN_TRANS_TIME=150;
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Transactions");
 cRender::force_login();
 ?>

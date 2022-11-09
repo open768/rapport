@@ -26,6 +26,7 @@ $oApp = cRenderObjs::get_current_app();
 if (!$oApp->name) $oApp->name = "No Application Specified";
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("compare: $sChartTitle");
 if (!$sMetric ) cDebug::error("Metric missing");
 cRender::force_login();

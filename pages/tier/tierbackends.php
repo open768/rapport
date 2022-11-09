@@ -24,6 +24,7 @@ $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Backends resolving to tier: $oTier->name");
 cRender::force_login();
 

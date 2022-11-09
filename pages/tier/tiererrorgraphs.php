@@ -24,6 +24,7 @@ $gsTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //####################################################################
 $title ="$oApp->name&gt;$oTier->name&gt;Errors and Exceptions";
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("$title");
 cChart::do_header();
 

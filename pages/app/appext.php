@@ -24,6 +24,7 @@ $gsAppQS = cRenderQS::get_base_app_QS($oApp);
 $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("External Calls");
 cRender::force_login();
 cChart::do_header();

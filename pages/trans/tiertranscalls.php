@@ -19,6 +19,7 @@ require_once "$root/inc/charts.php";
 
 set_time_limit(200); // huge time limit as this takes a long time
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("External tier calls");
 cRender::force_login();
 

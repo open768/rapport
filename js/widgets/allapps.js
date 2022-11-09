@@ -128,7 +128,7 @@ $.widget( "ck.adallapps", $.ck.common, {
 				sHTML += cRenderMDL.action_start();
 					sHTML += cMenusCode.appfunctions( poApp, sHome, poApp.id+"menu");
 				sHTML += "</DIV>";
-			sHTML += "</DIV><p>";
+			sHTML += "</DIV>";
 			oElement.append(sHTML);
 
 

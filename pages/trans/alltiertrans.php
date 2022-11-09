@@ -20,6 +20,7 @@ require_once "$root/inc/charts.php";
 require_once("$root/inc/filter.php");
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Tier Transactions");
 cRender::force_login();
 cChart::do_header();

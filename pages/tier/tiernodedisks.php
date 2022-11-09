@@ -19,6 +19,7 @@ require_once "$root/inc/charts.php";
 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("tier disks");
 cChart::do_header();
 cRender::force_login();

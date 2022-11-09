@@ -32,6 +32,7 @@ if (!$sQManager){
 cRender::force_login(); 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("MQ Queues for $sQManager on node $sNode");
 cChart::do_header();
 cChart::$hideGroupIfNoData = true;

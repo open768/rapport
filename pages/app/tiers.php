@@ -22,6 +22,7 @@ require_once "$root/inc/charts.php";
 $oApp = cRenderObjs::get_current_app();
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Tiers in Application $oApp->name");
 cRender::force_login();
 cChart::do_header();

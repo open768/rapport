@@ -29,6 +29,7 @@ $oApp = $oTier->app;
 $gsTierQs = cRenderQS::get_base_tier_QS($oTier);
 
 //################### CHART HEADER ########################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("External tier calls");
 cRender::force_login();
 cChart::do_header();

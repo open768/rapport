@@ -26,6 +26,7 @@ $oApp = cRenderObjs::get_current_app();
 $sGraphUrl = cHttp::build_url("rumstats.php", $gsAppQS);
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Web browser - Real user monitoring - graphs");
 cChart::do_header();
 

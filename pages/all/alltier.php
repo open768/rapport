@@ -18,6 +18,7 @@ require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Tiers");
 cRender::force_login();
 

@@ -20,6 +20,7 @@ require_once "$root/inc/charts.php";
 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Servers");
 cRender::force_login(); 
 cChart::do_header();

@@ -23,6 +23,7 @@ $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Web browser - Real user monitoring");
 cRender::force_login();
 cChart::do_header();

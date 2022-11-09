@@ -38,6 +38,7 @@ if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRenderQS::NODE_QS, $node )
 $sExtraCaption = ($node?"($node) node":"");
 $title= "$oApp->name&gt;$oTier->name $sExtraCaption&gt;Transaction graphs";
 
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header($title);
 cRender::force_login();
 cChart::do_header();

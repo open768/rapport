@@ -25,6 +25,7 @@ if (!$oApp->name) $oApp->name = "No Application Specified";
 $sTitle = cHeader::get(cRenderQS::TITLE_QS);
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header($sTitle);
 cRender::force_login();
 

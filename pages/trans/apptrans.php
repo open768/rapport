@@ -30,6 +30,7 @@ else
 $gsAppQS = cRenderQS::get_base_app_QS($moApp);
 
 
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("Transactions for $moApp->name");
 cRender::force_login();
 
