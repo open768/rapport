@@ -21,14 +21,10 @@ require_once "$root/inc/charts.php";
 //-----------------------------------------------
 
 //####################################################################
+cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Remote Services");
 cRender::force_login();
-?>
-	<script src="<?=$js_extra?>/bean/bean.js"></script>
-<?php
 cChart::do_header();
-
-$title ="All Remote Services";
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -36,35 +32,39 @@ if (cAD::is_demo()){
 	cRenderHtml::footer();
 	exit;
 }
-//********************************************************************
-
+# TODO make into a widget
+$aBackends = cADController::GET_all_Backends();
 
 //####################################################################
-$oApps = cADController::GET_all_Applications();
-?>
+cRenderCards::card_start("All Remote Services");
+	cRenderCards::body_start();
+		$sLastCh = "";
+		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+			echo "<ul>";
+				$iBackID = 0;
+				foreach ($aBackends as $sBackend=>$aApps){
+					$sCh = strtoupper($sBackend[0]);
+					if ($sCh !== $sLastCh){
+						echo "<h3>$sCh</h3>";
+						$sLastCh = $sCh;
+					}
+					$iBackID++;
+					?><li><a href="#<?=$iBackID?>"><?=$sBackend?></a><?php
+				}
+			echo "</ul></div>";
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
-
-<h2><?=$title?></h2>
-<div class="maintable"><ul><?php
-	$aBackends = cADController::GET_all_Backends();
-	$iBackID = 0;
-	foreach ($aBackends as $sBackend=>$aApps){
-		$iBackID++;
-		?><li><a href="#<?=$iBackID?>"><?=$sBackend?></a><?php
-	}
-?></ul></div>
-
-<!-- ############################################################## -->
-<h2>Backend  Details</h2>
-<?php
-	$iBackID = 0;
-	foreach ($aBackends as $sBackend=>$aApps){
-		$iBackID++;
-		$sClass=cRender::getRowClass();
-		
-		?><h3><a name="<?=$iBackID?>"><?=$sBackend?></a></h3><?php
+############################################################################################
+$iBackID = 0;
+foreach ($aBackends as $sBackend=>$aApps){
+	cRenderCards::card_start("<a name='$iBackID'>$sBackend</a>");
+		cRenderCards::body_start();
+			$iBackID++;
+			$sClass=cRender::getRowClass();
+			
 			foreach ($aApps as $oApp){
-				?><h4><?=$oApp->name?></h4><?php
+				echo "<h4>$oApp->name</h4>";
 				
 				$aMetrics = [];
 				$sMetricUrl = cADMetricPaths::backendCallsPerMin($sBackend);
@@ -72,13 +72,18 @@ $oApps = cADController::GET_all_Applications();
 				$sMetricUrl = cADMetricPaths::backendResponseTimes($sBackend);
 				$aMetrics[] = [cChart::LABEL=>"Response Times: ($sBackend) in ($oApp->name) App", cChart::METRIC=>$sMetricUrl];
 				cChart::metrics_table($oApp, $aMetrics, 2, cRender::getRowClass());
-
-				$sGoUrl = cHttp::build_url("backcalls.php", cRenderQS::APP_QS, $oApp->name);
-				$sGoUrl = cHttp::build_url($sGoUrl, cRenderQS::APP_ID_QS, $oApp->id);
-				$sGoUrl = cHttp::build_url($sGoUrl, cRenderQS::BACKEND_QS, $sBackend);
-				cRender::button("Go", $sGoUrl);
+				
+				echo "<hr>";
 			}
-	}
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			$sGoUrl = cHttp::build_url("backcalls.php", cRenderQS::APP_QS, $oApp->name);
+			$sGoUrl = cHttp::build_url($sGoUrl, cRenderQS::APP_ID_QS, $oApp->id);
+			$sGoUrl = cHttp::build_url($sGoUrl, cRenderQS::BACKEND_QS, $sBackend);
+			cRender::button("Go", $sGoUrl);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
+}	
 
 cChart::do_footer();
 cRenderHtml::footer();
