@@ -165,8 +165,8 @@ $.widget( "ck.adallapps", $.ck.common, {
 			var sLastCh = null;
 			paData.forEach( function(poApp){
 				var oParams = {};
-				oParams[ cRenderQS.APP_ID_QS ] = poApp.name;
-				oParams[ cRenderQS.APP_QS ] = poApp.id;
+				oParams[ cRenderQS.APP_ID_QS ] = poApp.id;
+				oParams[ cRenderQS.APP_QS ] = poApp.name;
 
 				var sUrl = cBrowser.buildUrl(oElement.attr("baseurl"),oParams);
 				var sCh = poApp.name[0].toUpperCase();
