@@ -46,7 +46,7 @@ catch (Exception $e){
 cRenderCards::card_start("Licence Usage for last $sUsage Months");
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::licenses());
-		cRender::button("license rules", "rules.php");
+		cRender::button("license rules", "agentlicense.php");
 		?><p>
 		<select id="menuTime">
 			<option selected disabled>Show Licenses for</option>

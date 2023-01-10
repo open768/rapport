@@ -36,6 +36,12 @@ catch (Exception $e){
 	exit;	
 }
 
+if (count($aRules) == 0){
+	cCommon::messagebox("No License Rules found");
+	cRenderHtml::footer();
+	exit;	
+}
+
 function filter_sort($a,$b){
 	$k1 = "$a->type.$a->operator.$a->entityName";
 	$k2 = "$b->type.$b->operator.$b->entityName";
