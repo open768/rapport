@@ -85,8 +85,8 @@ class cRenderHtml{
 			<script src="<?=$js_extra?>/bean/bean.js"></script>
 					
 			<!-- common JS  -->
-			<script src="<?=$jsinc?>/ck-inc/debug.js"></script>
 			<script src="<?=$jsinc?>/ck-inc/common.js"></script>
+			<script src="<?=$jsinc?>/ck-inc/debug.js"></script>
 			<script src="<?=$jsinc?>/ck-inc/http.js"></script>
 			<script src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
 			<script src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
