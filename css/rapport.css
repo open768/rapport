@@ -1,395 +1,381 @@
 /*************************************************************
 *************************************************************/
-body
-{
-	background-color:#eeeeee;
-	font-family:ubuntu,arial,sans-serif;
-	font-style:normal;
+body {
+	background-color: #eeeeee;
+	font-family: ubuntu, arial, sans-serif;
+	font-style: normal;
 }
+
 /* On screens that are 992px wide or less, the background color is blue */
 
-.card_title
-{
-	color:#2D95BF;
-    font-size:24px;
+.card_title {
+	color: #2D95BF;
+	font-size: 24px;
 }
 
 /*************************************************************
 * jquery
 *************************************************************/
 div.ui-selectmenu-open {
-    position: absolute;
-    z-index: 65535;
+	position: absolute;
+	z-index: 65535;
 }
 
 /*************************************************************
 * login styles
 *************************************************************/
-.login_box{
-	margin:auto;
-	padding:5px;
-	min-width:450px;
+.login_box {
+	margin: auto;
+	padding: 5px;
+	min-width: 450px;
 }
-.login_submit{
-	width:100%;
+
+.login_submit {
+	width: 100%;
 }
-.login_title{
+
+.login_title {
 	font-family: 'Courgette', cursive;
-	padding:15px;
+	padding: 15px;
 }
+
 @media screen and (max-width: 992px) {
-    .login_title {
-        font-size:25px
-    }
+	.login_title {
+		font-size: 25px
+	}
 }
+
 @media screen and (max-width: 600px) {
-    .login_title {
-        font-size:40px
-    }
+	.login_title {
+		font-size: 40px
+	}
 }
 
 /*************************************************************
 *************************************************************/
-.cklogo{
-	height:45px;
+.cklogo {
+	height: 45px;
 	border-radius: 5px;
 	box-shadow: 0px 0px 20px white;
 }
 
-.bad_row{
-	background-color:#ffe6e6;
-}
-.good_row{
-	background-color:#e6ffe6;
+.bad_row {
+	background-color: #ffe6e6;
 }
 
-.recommend{
-	border:2px solid darkcyan;
-	background-color:#eeeeee;
-	padding:3px;
+.good_row {
+	background-color: #e6ffe6;
+}
+
+.recommend {
+	border: 2px solid darkcyan;
+	background-color: #eeeeee;
+	padding: 3px;
 	/* font*/
-	color:FireBrick;
-	font-size:15px;
+	color: FireBrick;
+	font-size: 15px;
 }
 
-.blue_button
-{
+.blue_button {
 	/* This button was generated using CSSButtonGenerator.com */
-	-moz-box-shadow:inset 0px 1px 0px 0px #97c4fe;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
-	box-shadow:inset 0px 1px 0px 0px #97c4fe;
-	
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #2D95BF), color-stop(1, #2D95BF) );
-	background:-moz-linear-gradient( center top, #2D95BF 5%, #2D95BF 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2D95BF', endColorstr='#2D95BF');
-	background-color:#2D95BF;
+	-moz-box-shadow: inset 0px 1px 0px 0px #97c4fe;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #97c4fe;
+	box-shadow: inset 0px 1px 0px 0px #97c4fe;
+
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2D95BF), color-stop(1, #2D95BF));
+	background: -moz-linear-gradient(center top, #2D95BF 5%, #2D95BF 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2D95BF', endColorstr='#2D95BF');
+	background-color: #2D95BF;
 	border-radius: 5px;
-	border:1px solid LightSlateGray;
-	padding:3px;
-	padding-left:8px;
-	padding-right:8px;
-	
+	border: 1px solid LightSlateGray;
+	padding: 3px;
+	padding-left: 8px;
+	padding-right: 8px;
+
 	/* font*/
-	color:white;
-	font-size:15px;
-	font-weight:bold;
-}
-.fake_blue_button
-{
-	background-color:#2D95BF;
-	border-radius: 5px;
-	border:1px solid LightSlateGray;
-	padding:8px;
-	line-height:34px;
-	white-space:nowrap;	
-	/* font*/
-	color:white;
-	font-size:15px;
-	font-weight:bold;
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+
+	z-index: auto;
+	overflow: visible;
 }
 
-.trans_name{
+.fake_blue_button {
+	background-color: #2D95BF;
+	border-radius: 5px;
+	border: 1px solid LightSlateGray;
+	padding: 8px;
+	line-height: 34px;
+	white-space: nowrap;
+	/* font*/
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.trans_name {
 	/*border:1px solid LightSlateGray;*/
 	background-image: url("trans.png");
-    background-repeat: no-repeat;
-    background-position: left top;
-	padding-left:7px;
-	color:#9f1aff ;
+	background-repeat: no-repeat;
+	background-position: left top;
+	padding-left: 7px;
+	color: #9f1aff;
 }
-.app_name{
+
+.app_name {
 	/*border:1px solid LightSlateGray;*/
 	background-image: url("app.png");
-    background-repeat: no-repeat;
-    background-position: left top;
-	padding-left:7px;
-	color:#9f1aff ;
+	background-repeat: no-repeat;
+	background-position: left top;
+	padding-left: 7px;
+	color: #9f1aff;
 }
 
-.tier_name{
+.tier_name {
 	/*border:1px solid LightSlateGray;*/
 	background-image: url("tier.png");
-    background-repeat: no-repeat;
-    background-position: left top;
-	padding-left:7px;
-	color:Indigo ;
+	background-repeat: no-repeat;
+	background-position: left top;
+	padding-left: 7px;
+	color: Indigo;
 }
 
-.external_name{
+.external_name {
 	/*border:1px solid LightSlateGray;*/
 	background-image: url("external.png");
-    background-repeat: no-repeat;
-    background-position: left top;
-	padding-left:7px;
-	color:#2d004d ;
+	background-repeat: no-repeat;
+	background-position: left top;
+	padding-left: 7px;
+	color: #2d004d;
 }
 
 
 
-.appd_button{
+.appd_button {
 	/* This button was generated using CSSButtonGenerator.com */
-	-moz-box-shadow:inset 0px 1px 0px 0px #97c4fe;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
-	box-shadow:inset 0px 1px 0px 0px #97c4fe;
-	
+	-moz-box-shadow: inset 0px 1px 0px 0px #97c4fe;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #97c4fe;
+	box-shadow: inset 0px 1px 0px 0px #97c4fe;
+
 	background-image: url("link.png");
-    background-repeat: no-repeat;
-    background-position: right;
-	background-color:#2D95BF;
-	
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: #2D95BF;
+
 	border-radius: 5px;
-	border:1px solid LightSlateGray;
-	padding:9px;
-	padding-left:10px;
-	padding-right:35px;
-	line-height:34px;
-	
+	border: 1px solid LightSlateGray;
+	padding: 9px;
+	padding-left: 10px;
+	padding-right: 35px;
+	line-height: 34px;
+
 	/* font*/
-	color:white;
-	font-size:15px;
-	font-weight:bold;
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
 	text-decoration: none;
 }
 
-}
-.maintable
-{
+.maintable {
 	width: 1060px;
 	border-radius: 3px;
 	padding: 10px;
 	/* box-shadow: 10px 10px 5px #888888; */
 	border: 3px solid #2D95BF;
 }
-.tableheader
-{
+
+.tableheader {
 	border: 3px solid #2D95BF;
-	background-color:#2D95BF;
+	background-color: #2D95BF;
 	color: white;
 }
 
-.transactionflow{
+.transactionflow {
 	border: 1px solid black;
-	background-color:white;
+	background-color: white;
 	width: 1060px;
-	height:300px;
+	height: 300px;
 }
 
-.footer
-{
+.footer {
 	width: 100%;
 	font-size: 10px;
-	font-family:arial,sans-serif;
+	font-family: arial, sans-serif;
 }
 
-.loginbox{
+.loginbox {
 	border: 10px solid #2D95BF;
-   	background-color:#ffffff;
-	
+	background-color: #ffffff;
+
 	padding: 10px;
-	padding-right:25px;
-	
+	padding-right: 25px;
+
 	border-radius: 5px;
-	
-   -moz-box-shadow:    inset 0 0 10px #000000;
-   -webkit-box-shadow: inset 0 0 10px #000000;
-   box-shadow:         inset 0 0 10px #000000;
+
+	-moz-box-shadow: inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow: inset 0 0 10px #000000;
 }
 
-.timebox
-{
+.timebox {
 	border: 8px solid #2D95BF;
-	background:#ffffff;
+	background: #ffffff;
 	border-radius: 3px;
-	
+
 	padding: 10px;
 	width: 1060px;
 
-	-moz-box-shadow:    inset 0 0 5px #000000;
+	-moz-box-shadow: inset 0 0 5px #000000;
 	-webkit-box-shadow: inset 0 0 5px #000000;
-	box-shadow:         inset 0 0 5px #000000;
+	box-shadow: inset 0 0 5px #000000;
 }
 
-.errorbox
-{
+.errorbox {
 	border: 3px solid red;
-	background:#ffffff;
+	background: #ffffff;
 	padding: 10px;
 	width: 1060px;
 	font-size: 15px;
 }
 
-.note
-{
+.note {
 	outline: 2px solid #FFE042;
 	outline-offset: 0px;
 	width: 100pct;
-	background:#ffffff;
+	background: #ffffff;
 	margin: 10px 0px 10px 0px;
 }
 
-.clipbox{
+.clipbox {
 	font-family: Courier;
 	font-size: 15px;
 	width: 1024px;
 	padding: 10px;
-	font-weight:bold;
+	font-weight: bold;
 }
 
 
-.loginText{
-	font-size:30px;
-	font-weight:bold;
-	color:white;
+.loginText {
+	font-size: 30px;
+	font-weight: bold;
+	color: white;
 	text-shadow: 2px 2px #808080;
 }
 
-.row1
-{
+.row1 {
 	background: white;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
-.row2
-{
-	background:#CAEBF8;
+.row2 {
+	background: #CAEBF8;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
-.logotable
-{
-	background:#ffffff;
+.logotable {
+	background: #ffffff;
 	border-radius: 3px;
-	padding:5px;
-	padding-right:10px;
-	width:100%;
+	padding: 5px;
+	padding-right: 10px;
+	width: 100%;
 }
 
-.licenseBox{
-	border:1px solid darkcyan;
+.licenseBox {
+	border: 1px solid darkcyan;
 	border-radius: 5px;
 	padding: 2px;
 }
 
+.raised-blue {}
+
 /*************************************************************
 * material design stuff
 *************************************************************/
-.footer-container{
+.footer-container {
 	display: inline-block;
 }
 
 .pgrn-navigation.mdl-navigation .mdl-navigation__link {
-    padding: 5px;
+	padding: 5px;
 }
 
 .rapport-card.mdl-card {
-  width: 99%;
-  margin: 15px 5px 15px 5px;
+	width: 99%;
+	margin: 15px 5px 15px 5px;
+	z-index: auto;
+	overflow: visible;
 }
 
 .page-title.mdl-card {
-  height: 100px;
+	height: 100px;
 }
 
 /*************************************************************
 * chart stuff
 *************************************************************/
-.chartbuttonpanel
-{
-	width:25px;
+.chartbuttonpanel {
+	width: 25px;
 }
 
-.chartinfopanel
-{
-	font-size:9px;
-	width:70px;
+.chartinfopanel {
+	font-size: 9px;
+	width: 70px;
 }
 
-.chartgraph
-{
-	display:inline-block;	
-	border:1px solid #000000;
+.chartgraph {
+	display: inline-block;
+	border: 1px solid #000000;
 }
 
-.chartnodata
-{
-	display:inline-block;	
-	border:1px solid #000000;
-	background-color:AliceBlue;
+.chartnodata {
+	display: inline-block;
+	border: 1px solid #000000;
+	background-color: AliceBlue;
 	font-family: Courier;
-	font-size:12px;
-}
-.charthidden
-{
-	display:inline-block;	
-	height:1px;
-	width:1px;
+	font-size: 12px;
 }
 
-.charttooltip
-{
-	border:2px solid darkcyan;
+.charthidden {
+	display: inline-block;
+	height: 1px;
+	width: 1px;
+}
+
+.charttooltip {
+	border: 2px solid darkcyan;
 	border-radius: 5px;
 	padding: 5px;
 }
 
-.chart_widget
-{
-	display:inline-flex;	
-	vertical-align: top	;
+.chart_widget {
+	display: inline-flex;
+	vertical-align: top;
 	/*border:1px solid AliceBlue;*/
 }
 
-.chart_initialising{
-	background: repeating-linear-gradient(
-		45deg,
-		white,
-		white 10px,
-		lavender 10px,
-		lavender 20px
-	);	
+.chart_initialising {
+	background: repeating-linear-gradient(45deg,
+			white,
+			white 10px,
+			lavender 10px,
+			lavender 20px);
 }
 
-.chart_queuing{
-	background: repeating-linear-gradient(
-		45deg,
-		white,
-		white 10px,
-		gainsboro 10px,
-		gainsboro 20px
-	);	
+.chart_queuing {
+	background: repeating-linear-gradient(45deg,
+			white,
+			white 10px,
+			gainsboro 10px,
+			gainsboro 20px);
 }
 
-.chart_loading{
-	background: repeating-linear-gradient(
-		45deg,
-		white,
-		white 5px,
-		lemonchiffon 5px,
-		lemonchiffon 10px
-	);	
+.chart_loading {
+	background: repeating-linear-gradient(45deg,
+			white,
+			white 5px,
+			lemonchiffon 5px,
+			lemonchiffon 10px);
 }
-
-.chart_drawing{
-}
- 

@@ -54,7 +54,8 @@ cRender::force_login();
 cChart::do_header();
 ?><script src="<?=$jsWidgets?>/allapps.js"></script><?php
 
-//####################################################################
+//###################################################################
+//# CARD at top of page
 cRenderCards::card_start();
 	cRenderCards::body_start();
 		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
@@ -72,9 +73,10 @@ cRenderCards::card_start();
 cRenderCards::card_end();
 
 //####################################################################
+//# CARD that load all applicaions
 ?>
 	<div 
-		id='allapps' 	type='adWidget' 
+		id='allapps' type='adWidget'  widget_type="allapps"
 		<?=cRenderQS::HOME_QS?>='<?=$home?>' <?=cRenderQS::LIST_MODE_QS?>='<?=cRender::is_list_mode()?>' baseUrl = '<?=$sBaseUrl?>'
 		title1='<?=$sTitle1?>' title2='<?=$sTitle2?>' title3='<?=$sTitle3?>'
 		metric1='<?=$sMetric1?>' metric2='<?=$sMetric2?>' metric3='<?=$sMetric3?>'>

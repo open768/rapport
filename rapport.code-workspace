@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "phpinc",
+			"path": "../phpinc"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../jsinc"
+		}
+	],
+	"settings": {}
+}
