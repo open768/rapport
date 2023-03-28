@@ -134,15 +134,15 @@ $.widget("ck.admenu", {
 
 
 		var oLink
-		var oDiv = $("<div>", {class:"w3-tag w3-indigo"})
-			var oDropDown = $("<div>", {class:"w3-dropdown-hover"})
+		var oDiv = $("<div>", {class:"w3-tag w3-light-blue w3-round"})
+			var oDropDown = $("<div>", {class:"w3-dropdown-hover w3-light-blue"})
 				var oButton = $("<button>", {class:"w3-button w3-circle"})
 					oButton.append("<font color='white'><i class='material-icons'>more_vert</i></font>")
 					oDropDown.append(oButton)
-				var oContent = $("<div>", {class:"w3-dropdown-content w3-bar-block w3-card-4"})
+				var oContent = $("<div>", {class:"w3-dropdown-content w3-bar-block"})
 					aMenuItems.forEach( poItem =>{
 						if (poItem.type === "separator")
-							oLink =  $("<font>", {class:"w3-bar-item"}).append(poItem.label) 
+							oLink =  $("<font>", {class:"w3-bar-item w3-pale-blue w3-border"}).append(poItem.label) 
 						else
 								oLink = $("<a>", {href:poItem.url, class:"w3-bar-item"}).append(poItem.label)
 						oContent.append( oLink )
