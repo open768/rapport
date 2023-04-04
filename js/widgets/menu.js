@@ -13,6 +13,7 @@ $.widget("ck.admenu", {
 		TierID: null,
 		home: "."
 	},
+	MENU_COL_COUNT: 4,
 
 
 	//#################################################################
@@ -105,55 +106,70 @@ $.widget("ck.admenu", {
 
 		//build the menu
 		var aMenuItems = [
-			{type:"separator", label:"Application"},
-			{type:"item", label:"Agents", url:cBrowser.buildUrl(sAgentPrefixUrl+"/appagents.php", oParams)},
-			{type:"item", label:"Checkup", url:cBrowser.buildUrl(sCheckPrefixUrl+"/checkup.php", oParams)},
-			{type:"item", label:"Data collectors", url:cBrowser.buildUrl(sAppPrefixUrl+"/datacollectors.php", oParams)},
-			{type:"item", label:"Flow Map", url:cBrowser.buildUrl(sAppPrefixUrl+"/appflowmap.php", oParams)},
-			{type:"item", label:"One Pager", url:cBrowser.buildUrl(sAppPrefixUrl+"/appoverview.php", oParams)},
+			{ type: "separator", label: "Application" },
+			{ type: "item", label: "Agents", url: cBrowser.buildUrl(sAgentPrefixUrl + "/appagents.php", oParams) },
+			{ type: "item", label: "Checkup", url: cBrowser.buildUrl(sCheckPrefixUrl + "/checkup.php", oParams) },
+			{ type: "item", label: "Data collectors", url: cBrowser.buildUrl(sAppPrefixUrl + "/datacollectors.php", oParams) },
+			{ type: "item", label: "Flow Map", url: cBrowser.buildUrl(sAppPrefixUrl + "/appflowmap.php", oParams) },
+			{ type: "item", label: "One Pager", url: cBrowser.buildUrl(sAppPrefixUrl + "/appoverview.php", oParams) },
 
-			{type:"separator", label:"Show..."},
-			{type:"item", label:"Activity (tiers)", url:cBrowser.buildUrl(sAppPrefixUrl+"/tiers.php", oParams)},
-			{type:"item", label:"Availability", url:cBrowser.buildUrl(sAppPrefixUrl+"/appavail.php", oParams)},
-			{type:"item", label:"Errors", url:cBrowser.buildUrl(sAppPrefixUrl+"/apperrors.php", oParams)},
-			{type:"item", label:"External Calls", url:cBrowser.buildUrl(sAppPrefixUrl+"/appext.php", oParams)},
-			{type:"item", label:"Health Rules", url:cBrowser.buildUrl(sAppPrefixUrl+"/healthrules.php", oParams)},
-			{type:"item", label:"Infrastructure", url:cBrowser.buildUrl(sAppPrefixUrl+"/appinfra.php", oParams)},
-			{type:"item", label:"Information Points", url:cBrowser.buildUrl(sAppPrefixUrl+"/appinfo.php", oParams)},
-			{type:"item", label:"Service End Points", url:cBrowser.buildUrl(sSrvPrefixUrl+"/services.php", oParams)},
-			{type:"item", label:"Transactions", url:cBrowser.buildUrl(sTransPrefixUrl+"/apptrans.php", oParams)},
+			{ type: "separator", label: "Show..." },
+			{ type: "item", label: "Activity (tiers)", url: cBrowser.buildUrl(sAppPrefixUrl + "/tiers.php", oParams) },
+			{ type: "item", label: "Availability", url: cBrowser.buildUrl(sAppPrefixUrl + "/appavail.php", oParams) },
+			{ type: "item", label: "Errors", url: cBrowser.buildUrl(sAppPrefixUrl + "/apperrors.php", oParams) },
+			{ type: "item", label: "External Calls", url: cBrowser.buildUrl(sAppPrefixUrl + "/appext.php", oParams) },
+			{ type: "item", label: "Health Rules", url: cBrowser.buildUrl(sAppPrefixUrl + "/healthrules.php", oParams) },
+			{ type: "item", label: "Infrastructure", url: cBrowser.buildUrl(sAppPrefixUrl + "/appinfra.php", oParams) },
+			{ type: "item", label: "Information Points", url: cBrowser.buildUrl(sAppPrefixUrl + "/appinfo.php", oParams) },
+			{ type: "item", label: "Service End Points", url: cBrowser.buildUrl(sSrvPrefixUrl + "/services.php", oParams) },
+			{ type: "item", label: "Transactions", url: cBrowser.buildUrl(sTransPrefixUrl + "/apptrans.php", oParams) },
 
-			{type:"separator", label:"Synthetics"},
-			{type:"item", label:"Overview", url:cBrowser.buildUrl(sRumPrefixUrl+"/synthetic.php", oParams)},
+			{ type: "separator", label: "Synthetics" },
+			{ type: "item", label: "Overview", url: cBrowser.buildUrl(sRumPrefixUrl + "/synthetic.php", oParams) },
 
-			{type:"separator", label:"Web Real User Monitoring"},
-			{type:"item", label:"Overall stats", url:cBrowser.buildUrl(sRumPrefixUrl+"/apprum.php", oParams)},
-			{type:"item", label:"Page requests", url:cBrowser.buildUrl(sRumPrefixUrl+"/rumstats.php", oParams)},
-			{type:"item", label:"Errors", url:cBrowser.buildUrl(sRumPrefixUrl+"/rumerrors.php", oParams)}
+			{ type: "separator", label: "Web RUM" },
+			{ type: "item", label: "Overall stats", url: cBrowser.buildUrl(sRumPrefixUrl + "/apprum.php", oParams) },
+			{ type: "item", label: "Page requests", url: cBrowser.buildUrl(sRumPrefixUrl + "/rumstats.php", oParams) },
+			{ type: "item", label: "Errors", url: cBrowser.buildUrl(sRumPrefixUrl + "/rumerrors.php", oParams) }
 		]
 
+		//render the menu
+		this.pr__render_dropdown_menu(oElement, sAppname, aMenuItems)
+	},
 
-		var oLink
-		var oDiv = $("<div>", {class:"w3-tag w3-indigo"})
-			var oDropDown = $("<div>", {class:"w3-dropdown-hover"})
-				var oButton = $("<button>", {class:"w3-button w3-circle"})
+	//****************************************************************
+	pr__render_dropdown_menu(poElement, psCaption, paItems) {
+		var oMenuDiv = $("<div>", { class: "w3-tag w3-light-blue w3-round" })
+			//----- dropdown button
+			var oDropDown = $("<div>", { class: "w3-dropdown-hover w3-light-blue" })
+				//------- dropdown target
+				var oButton = $("<button>", { class: "w3-button w3-circle" })
 					oButton.append("<font color='white'><i class='material-icons'>more_vert</i></font>")
-					oDropDown.append(oButton)
-				var oContent = $("<div>", {class:"w3-dropdown-content w3-bar-block w3-card-4"})
-					aMenuItems.forEach( poItem =>{
-						if (poItem.type === "separator")
-							oLink =  $("<font>", {class:"w3-bar-item"}).append(poItem.label) 
-						else
-								oLink = $("<a>", {href:poItem.url, class:"w3-bar-item"}).append(poItem.label)
-						oContent.append( oLink )
-					} )
-					oDropDown.append(oContent)
-			oDiv.append(oDropDown)
-			oDiv.append(" ")
-			oDiv.append(sAppname)
+				oDropDown.append(oButton)
+			//------- dropdown content (unfortunately it doesnt bring itself to top zorder when displaying ) 
+			var oDropDownContent = $("<div>", { class: "w3-dropdown-content w3-border", style: "z-index:200" })
+				var oInnerDiv = $("<div>", { style: "column-count:" + this.MENU_COL_COUNT + ";column-gap:0"})
+				paItems.forEach(poItem => {
+					var oSpan, oLink
+					if (poItem.type === "separator"){
+						oSpan = $("<div>", { class: "w3-container w3-light-grey w3-border w3-padding-4",style:"break-before:column;column-width:100px" })
+						oSpan.append(poItem.label)
+					} else {
+						oSpan = $("<div>", { class: "w3-container w3-padding-4" })
+							oLink = $("<a>", { href: poItem.url}).append(poItem.label)
+							oSpan.append(oLink)
+					}
+					oInnerDiv.append(oSpan)
+				})
+				oDropDownContent.append(oInnerDiv)
+		oDropDown.append(oDropDownContent)
+		oMenuDiv.append(oDropDown)
 
-		//add elements to the button
-		oElement.append(oDiv);
+		//----- stuff after the dropdown button
+		oMenuDiv.append("&nbsp;")
+		oMenuDiv.append(psCaption)
+
+		poElement.append(oMenuDiv);
 	},
 
 
