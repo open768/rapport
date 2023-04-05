@@ -13,6 +13,10 @@ body {
 	font-size: 24px;
 }
 
+.no-decoration {
+	text-decoration: none;
+}
+
 /*************************************************************
 * jquery
 *************************************************************/
@@ -25,8 +29,8 @@ div.ui-selectmenu-open {
 * w3c
 *************************************************************/
 .w3-padding-4 {
-    padding-top: 4px!important;
-    padding-bottom: 4px!important;
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
 }
 
 /*************************************************************

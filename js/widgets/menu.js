@@ -177,7 +177,7 @@ $.widget("ck.admenu", {
 						oSpan.append(poItem.label)
 						oInnerDiv.append(oSpan)
 					} else {
-						oLink = $("<a>", { href: poItem.url})
+						oLink = $("<a>", { href: poItem.url, class:"no-decoration"})
 							oSpan = $("<div>", { class: "w3-block w3-button w3-padding-4" })
 								oSpan.append(poItem.label)
 							oLink.append(oSpan)
