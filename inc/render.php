@@ -269,30 +269,6 @@ class cRender{
 	}
 	
 	//**************************************************************************
-	public static function show_name($piNameType, $pvWhat){
-		$sClass = "other_name";
-		$sOutput = $pvWhat;
-		switch( $piNameType){
-
-			case self::NAME_TRANS: 
-				$sClass = "trans_name"; 
-				break;
-			case self::NAME_APP: 
-				$sClass = "app_name"; 
-				$sOutput = $pvWhat->name;
-				break;
-			case self::NAME_TIER: 
-				$sClass = "tier_name"; 
-				$sOutput = $pvWhat->name;
-				break;
-			case self::NAME_EXT: 
-				$sClass = "external_name"; break;
-		}
-		?><span class="<?=$sClass?>"><?=$sOutput?></span><?php
-	}
-
-	
-	//**************************************************************************
 	public static function show_time_options(){
 		global $_SERVER,$home;
 		
