@@ -36,7 +36,7 @@ class cRenderMenus{
 				type="admenus" menu="appfunctions" 
 				home="<?=$home?>"
 				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-				<font class="ui-selectmenu-text"><?=$poApp->name?></font>
+				<i>loading menu:<?=$poApp->name?></i>
 			</div>
 		<?php
 		cDebug::leave();
