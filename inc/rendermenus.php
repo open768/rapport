@@ -43,7 +43,7 @@ class cRenderMenus{
 	}
 
 	//******************************************************************************************
-	public static function show_apps_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
+	public static function show_app_change_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;
 	
 		cDebug::enter();
@@ -60,13 +60,14 @@ class cRenderMenus{
 
 		//TBD change to a DIV - widget can replace with a select menu
 		?>
-			<SELECT
-				type="admenus" menu="appsmenu" 
+			<DIV
+				type="admenus" menu="appchange" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
-				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>>
-				<option selected><?=$psCaption?> - please wait
-			</SELECT>
+				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>
+				>
+				 - please wait
+			</DIV>
 		<?php
 		self::show_app_functions();
 		cDebug::leave();

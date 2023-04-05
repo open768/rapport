@@ -45,7 +45,7 @@ cRenderCards::body_end();
 cRenderCards::action_start();
 	$sUrl = cHttp::build_url("apptrans.php", $gsAppQS);
 	cRender::button("back to transactions", $sUrl);
-	cRenderMenus::show_apps_menu("Change Application");
+	cRenderMenus::show_app_change_menu("Change Application");
 cRenderCards::action_end();
 cRenderCards::card_end();
 

@@ -32,7 +32,7 @@ cChart::do_header();
 cRender::force_login();
 $title ="$oApp->name&gtWeb Real User Monitoring &gt; javascript errors";
 
-cRenderMenus::show_apps_menu("Show JS Errors for:");
+cRenderMenus::show_app_change_menu("Show JS Errors for:");
 $oTimes = cRender::get_times();
 
 $sGraphUrl = cHttp::build_url("rumerrors.php", $gsAppQS);

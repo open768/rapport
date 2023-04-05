@@ -48,7 +48,7 @@ cRenderCards::card_start();
 			cRenderMenus::show_tier_menu("Show Service EndPoints for");
 			cRenderMenus::show_tier_functions($oTier);
 		}else
-			cRenderMenus::show_apps_menu("Show Service EndPoints for");
+			cRenderMenus::show_app_change_menu("Show Service EndPoints for");
 
 	cRenderCards::action_end();
 cRenderCards::card_end();

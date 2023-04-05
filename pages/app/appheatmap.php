@@ -39,7 +39,7 @@ $tier = cHeader::get(cRenderQS::TIER_QS);
 
 $title= "$oApp->name&gt;Activity&gt;heatmap";
 
-cRenderMenus::show_apps_menu("heatmap");
+cRenderMenus::show_app_change_menu("heatmap");
 
 // get the data from 
 if ($tier === null)

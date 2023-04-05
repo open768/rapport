@@ -35,7 +35,7 @@ $title ="$oApp->name&gt;Web Real User Monitoring&gt;Synthetic Jobs";
 
 $oTimes = cRender::get_times();
 
-cRenderMenus::show_apps_menu("Show Synthetics for:");
+cRenderMenus::show_app_change_menu("Show Synthetics for:");
 cRender::button("All Synthetics", "$home/pages/all/allsynth.php");
 cADCommon::button(cADControllerUI::webrum_synthetics($oApp, $oTimes));
 

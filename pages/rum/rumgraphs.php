@@ -33,7 +33,7 @@ cChart::do_header();
 cRender::force_login();
 $title ="$oApp->name&gtWeb Real User Monitoring Stats";
 
-cRenderMenus::show_apps_menu("Show Stats for:");
+cRenderMenus::show_app_change_menu("Show Stats for:");
 $oTimes = cRender::get_times();
 cRender::button("Statistics", $sGraphUrl);	
 cADCommon::button(cADControllerUI::webrum_pages($oApp));

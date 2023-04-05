@@ -33,7 +33,7 @@ $sTitle ="Infrastructure Overview for $oApp->name";
 <h2><?=$sTitle?></h2>
 <?php
 //####################################################################
-cRenderMenus::show_apps_menu("Infrastructure");
+cRenderMenus::show_app_change_menu("Infrastructure");
 ?>
 <h2>Tiers</h2>
 <?php

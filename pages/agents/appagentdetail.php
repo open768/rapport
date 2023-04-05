@@ -79,7 +79,7 @@ $sDetailRootQS = cHttp::build_url(cCommon::filename(), $sAppQS);
 
 cRenderMenus::show_app_agent_menu();
 
-cRenderMenus::show_apps_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
+cRenderMenus::show_app_change_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
 
 cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 //####################################################################

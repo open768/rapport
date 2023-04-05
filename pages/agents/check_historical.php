@@ -32,7 +32,7 @@ if (cAD::is_demo()){
 <?php
 	cRenderCards::card_start("Historical Agents");
 	cRenderCards::action_start();
-		cRenderMenus::show_apps_menu("Change App");
+		cRenderMenus::show_app_change_menu("Change App");
 		$sUrl = cHttp::build_url("appagents.php", cRenderQS::APP_ID_QS, $oApp->id);
 		cRender::button("Back to agents: $oApp->name", $sUrl);
 		//cRender::add_filter_box("a[type=tier]","name",".mdl-card");

@@ -26,7 +26,7 @@ cRenderHtml::header("Web browser - Real user monitoring - Stats");
 cRender::force_login();
 $title ="$oApp->name&gtWeb Real User Monitoring Stats";
 
-cRenderMenus::show_apps_menu("Show Stats for:");
+cRenderMenus::show_app_change_menu("Show Stats for:");
 $oTimes = cRender::get_times();
 
 $sGraphUrl = cHttp::build_url("rumgraphs.php", $gsAppQS);

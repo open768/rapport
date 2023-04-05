@@ -47,7 +47,7 @@ cRenderCards::card_start("Overview for $oApp->name");
 	<?php
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		cRenderMenus::show_apps_menu("Show Overview for:");
+		cRenderMenus::show_app_change_menu("Show Overview for:");
 		cADCommon::button(cADControllerUI::application($oApp));
 	cRenderCards::action_end();
 cRenderCards::card_end();
