@@ -1,6 +1,20 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+class cMenuItem{
+	static TYPE_SEPARATOR = "s"
+	static TYPE_ITEM = "i"
+	type=null
+	label=null
+	url=null
+
+	constructor (psType, psLabel, psUrl = null){
+		this.type = psType
+		this.label = psLabel
+		this.url = psUrl
+	}
+}
+
 $.widget("ck.admenu", {
 	//#################################################################
 	//# Definition
@@ -13,7 +27,6 @@ $.widget("ck.admenu", {
 		TierID: null,
 		home: "."
 	},
-	MENU_COL_COUNT: 4,
 
 
 	//#################################################################
@@ -106,31 +119,31 @@ $.widget("ck.admenu", {
 
 		//build the menu
 		var aMenuItems = [
-			{ type: "separator", label: "Application" },
-			{ type: "item", label: "Agents", url: cBrowser.buildUrl(sAgentPrefixUrl + "/appagents.php", oParams) },
-			{ type: "item", label: "Checkup", url: cBrowser.buildUrl(sCheckPrefixUrl + "/checkup.php", oParams) },
-			{ type: "item", label: "Data collectors", url: cBrowser.buildUrl(sAppPrefixUrl + "/datacollectors.php", oParams) },
-			{ type: "item", label: "Flow Map", url: cBrowser.buildUrl(sAppPrefixUrl + "/appflowmap.php", oParams) },
-			{ type: "item", label: "One Pager", url: cBrowser.buildUrl(sAppPrefixUrl + "/appoverview.php", oParams) },
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR, "Application"),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Agents",cBrowser.buildUrl(sAgentPrefixUrl + "/appagents.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Checkup",cBrowser.buildUrl(sCheckPrefixUrl + "/checkup.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Data collectors",cBrowser.buildUrl(sAppPrefixUrl + "/datacollectors.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Flow Map",cBrowser.buildUrl(sAppPrefixUrl + "/appflowmap.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"One Pager",cBrowser.buildUrl(sAppPrefixUrl + "/appoverview.php", oParams) ),
 
-			{ type: "separator", label: "Show..." },
-			{ type: "item", label: "Activity (tiers)", url: cBrowser.buildUrl(sAppPrefixUrl + "/tiers.php", oParams) },
-			{ type: "item", label: "Availability", url: cBrowser.buildUrl(sAppPrefixUrl + "/appavail.php", oParams) },
-			{ type: "item", label: "Errors", url: cBrowser.buildUrl(sAppPrefixUrl + "/apperrors.php", oParams) },
-			{ type: "item", label: "External Calls", url: cBrowser.buildUrl(sAppPrefixUrl + "/appext.php", oParams) },
-			{ type: "item", label: "Health Rules", url: cBrowser.buildUrl(sAppPrefixUrl + "/healthrules.php", oParams) },
-			{ type: "item", label: "Infrastructure", url: cBrowser.buildUrl(sAppPrefixUrl + "/appinfra.php", oParams) },
-			{ type: "item", label: "Information Points", url: cBrowser.buildUrl(sAppPrefixUrl + "/appinfo.php", oParams) },
-			{ type: "item", label: "Service End Points", url: cBrowser.buildUrl(sSrvPrefixUrl + "/services.php", oParams) },
-			{ type: "item", label: "Transactions", url: cBrowser.buildUrl(sTransPrefixUrl + "/apptrans.php", oParams) },
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR,"Show..." ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Activity (tiers)",cBrowser.buildUrl(sAppPrefixUrl + "/tiers.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Availability",cBrowser.buildUrl(sAppPrefixUrl + "/appavail.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Errors",cBrowser.buildUrl(sAppPrefixUrl + "/apperrors.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"External Calls",cBrowser.buildUrl(sAppPrefixUrl + "/appext.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Health Rules",cBrowser.buildUrl(sAppPrefixUrl + "/healthrules.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Infrastructure",cBrowser.buildUrl(sAppPrefixUrl + "/appinfra.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Information Points",cBrowser.buildUrl(sAppPrefixUrl + "/appinfo.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Service End Points",cBrowser.buildUrl(sSrvPrefixUrl + "/services.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Transactions",cBrowser.buildUrl(sTransPrefixUrl + "/apptrans.php", oParams) ),
 
-			{ type: "separator", label: "Synthetics" },
-			{ type: "item", label: "Overview", url: cBrowser.buildUrl(sRumPrefixUrl + "/synthetic.php", oParams) },
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR,"Synthetics" ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Overview",cBrowser.buildUrl(sRumPrefixUrl + "/synthetic.php", oParams) ),
 
-			{ type: "separator", label: "Web RUM" },
-			{ type: "item", label: "Overall stats", url: cBrowser.buildUrl(sRumPrefixUrl + "/apprum.php", oParams) },
-			{ type: "item", label: "Page requests", url: cBrowser.buildUrl(sRumPrefixUrl + "/rumstats.php", oParams) },
-			{ type: "item", label: "Errors", url: cBrowser.buildUrl(sRumPrefixUrl + "/rumerrors.php", oParams) }
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR,"Web RUM" ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Overall stats",cBrowser.buildUrl(sRumPrefixUrl + "/apprum.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Page requests",cBrowser.buildUrl(sRumPrefixUrl + "/rumstats.php", oParams) ),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Errors",cBrowser.buildUrl(sRumPrefixUrl + "/rumerrors.php", oParams) )
 		]
 
 		//render the menu
@@ -139,6 +152,14 @@ $.widget("ck.admenu", {
 
 	//****************************************************************
 	pr__render_dropdown_menu(poElement, psCaption, paItems) {
+		//count how many columns needed
+		var iCols = 0
+		paItems.forEach(poItem => {
+			if (poItem.type === cMenuItem.TYPE_SEPARATOR)
+				iCols ++
+		})
+
+		//render the menu as a dropdown
 		var oMenuDiv = $("<div>", { class: "w3-tag w3-light-blue w3-round" })
 			//----- dropdown button
 			var oDropDown = $("<div>", { class: "w3-dropdown-hover w3-light-blue" })
@@ -148,18 +169,20 @@ $.widget("ck.admenu", {
 				oDropDown.append(oButton)
 			//------- dropdown content (unfortunately it doesnt bring itself to top zorder when displaying ) 
 			var oDropDownContent = $("<div>", { class: "w3-dropdown-content w3-border", style: "z-index:200" })
-				var oInnerDiv = $("<div>", { style: "column-count:" + this.MENU_COL_COUNT + ";column-gap:0"})
+				var oInnerDiv = $("<div>", { style: "column-count:" + iCols + ";column-gap:0"})
 				paItems.forEach(poItem => {
 					var oSpan, oLink
-					if (poItem.type === "separator"){
-						oSpan = $("<div>", { class: "w3-container w3-light-grey w3-border w3-padding-4",style:"break-before:column;column-width:100px" })
+					if (poItem.type === cMenuItem.TYPE_SEPARATOR){
+						oSpan = $("<div>", { class: "w3-block w3-light-grey w3-border w3-padding-4",style:"break-before:column;column-width:100px" })
 						oSpan.append(poItem.label)
+						oInnerDiv.append(oSpan)
 					} else {
-						oSpan = $("<div>", { class: "w3-container w3-padding-4" })
-							oLink = $("<a>", { href: poItem.url}).append(poItem.label)
-							oSpan.append(oLink)
+						oLink = $("<a>", { href: poItem.url})
+							oSpan = $("<div>", { class: "w3-block w3-button w3-padding-4" })
+								oSpan.append(poItem.label)
+							oLink.append(oSpan)
+						oInnerDiv.append(oLink)
 					}
-					oInnerDiv.append(oSpan)
 				})
 				oDropDownContent.append(oInnerDiv)
 		oDropDown.append(oDropDownContent)

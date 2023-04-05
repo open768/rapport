@@ -39,7 +39,7 @@ var cFilterFunctions={
 	
 	//**********************************************************************************
 	onFilterKeyUp: function( poEvent){
-		//look through divs with selectmenu
+		//look through divs with selector
 		var oThis = this;
 		var aSelected = $(oThis.selector);
 		var sInput = $("#filter").val().toLowerCase();
