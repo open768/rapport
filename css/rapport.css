@@ -29,11 +29,19 @@ div.ui-selectmenu-open {
 /*************************************************************
 * w3c
 *************************************************************/
-.w3-padding-4 {
+.ck-padding-4 {
 	padding-top: 4px !important;
 	padding-bottom: 4px !important;
 }
-
+.ck-z-index-200 {
+	z-index: 200;
+}
+.ck-no-column-gap{
+	column-gap:0;	
+}
+.ck-menu-separator{
+	break-before:column;
+}
 /*************************************************************
 * login styles
 *************************************************************/
