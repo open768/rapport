@@ -42,6 +42,9 @@ div.ui-selectmenu-open {
 .ck-menu-separator{
 	break-before:column;
 }
+.ck-menu{
+	display:inline-block;
+}
 /*************************************************************
 * login styles
 *************************************************************/

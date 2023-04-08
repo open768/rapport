@@ -169,14 +169,13 @@ class cRenderMenus{
 		if ($poTier == null){
 			$poTier = cRenderObjs::get_current_tier();
 		}
-		//TBD change to a DIV - widget can replace with a select menu
 		?>
-			<SELECT 
+			<div 
 				type="admenus" menu="tierfunctions"  
 				home="<?=$home?>"
 				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
-				<option selected><?=$poTier->name?> - please wait
-			</SELECT>
+				<?=$poTier->name?> - please wait
+			</div>
 		<?php
 		cDebug::leave();
 	}

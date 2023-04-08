@@ -1,97 +1,6 @@
 'use strict';
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-class cMenuItem{
-	static TYPE_SEPARATOR = "s"
-	static TYPE_ITEM = "i"
-	type=null
-	label=null
-	url=null
-	disabled=false
-
-	constructor (psType, psLabel, psUrl = null){
-		this.type = psType
-		this.label = psLabel
-		this.url = psUrl
-	}
-}
-
-class cDropDownMenu{
-	//****************************************************************
-	/**
-	 * Description
-	 * @param {Element} poElement
-	 * @param {string} psCaption
-	 * @param {Array} paItems
-	 * @param {number} piFixedCols=null
-	 */
-	static render(poElement, psCaption, paItems, piFixedCols = null) {
-		//count how many columns needed
-		var iCols = 0
-		var iBreakAtRow = null
-		if (piFixedCols !== null){
-			iCols = piFixedCols
-			iBreakAtRow = Math.trunc( paItems.length / iCols)
-		}else
-			paItems.forEach(poItem => {
-				if (poItem.type === cMenuItem.TYPE_SEPARATOR)
-					iCols ++
-			})
-
-		//render the menu as a dropdown
-		var oMenuDiv = $("<div>", { class: "w3-tag w3-light-blue w3-round" })
-			//----- dropdown button
-			var oDropDown = $("<div>", { class: "w3-dropdown-hover w3-light-blue" })
-				//------- dropdown target
-				var oButton = $("<button>", { class: "w3-button w3-circle" })
-					oButton.append("<font color='white'><i class='material-icons'>more_vert</i></font>")
-				oDropDown.append(oButton)
-			//------- dropdown content (unfortunately it doesnt bring itself to top zorder when displaying ) 
-			var oDropDownContent = $("<div>", { class: "w3-dropdown-content w3-border ck-z-index-200"})
-				var oInnerDropDownDiv = $("<div>", { style: "column-count:" + iCols,class:"ck-no-column-gap"})
-				var iRow = 0
-				paItems.forEach(poItem => {
-					var oSpan, oLink
-					if (poItem.type === cMenuItem.TYPE_SEPARATOR){
-						//- - - - - - separator 
-						oSpan = $("<div>", { class: "w3-block w3-light-grey w3-border ck-padding-4 ck-menu-separator" })
-						oSpan.append(poItem.label)
-						oInnerDropDownDiv.append(oSpan)
-					} else {
-						//- - - - - - not a separator 
-						var oDivParams = null
-						if (iBreakAtRow && iRow >= iBreakAtRow){
-							oDivParams = {class: "ck-menu-separator"}
-							iRow = 0;
-						}
-						var oItemDiv = $( "<DIV>", oDivParams )
-							if (poItem.disabled){
-								oSpan = $("<div>", { class: "w3-block w3-text-grey ck-padding-4" })
-									oSpan.append(poItem.label)
-								oItemDiv.append(oSpan)
-							}else{
-								oLink = $("<a>", { href: poItem.url, class:"no-decoration"} )
-									oSpan = $("<div>", { class: "w3-block w3-button ck-padding-4" })
-										oSpan.append(poItem.label)
-									oLink.append(oSpan)
-								oItemDiv.append(oLink)
-							}
-						oInnerDropDownDiv.append(oItemDiv)
-					}
-					iRow ++
-				})
-				oDropDownContent.append(oInnerDropDownDiv)
-		oDropDown.append(oDropDownContent)
-		oMenuDiv.append(oDropDown)
-
-		//----- stuff after the dropdown button
-		oMenuDiv.append("&nbsp;")
-		oMenuDiv.append(psCaption)
-
-		poElement.append(oMenuDiv);
-	}
-}
-
 $.widget("ck.admenu", {
 	//#################################################################
 	//# Definition
@@ -119,12 +28,9 @@ $.widget("ck.admenu", {
 		oElement.uniqueId();
 		oElement.css({ position: "relative" });
 
-		var sElementName = oElement.get(0).tagName;
-		//if (sElementName !== "SELECT")	$.error("element must be a select");		
-		//select menu doesnt automatically go to the top - dont forget to modify the CSS
-
 		//check for necessary classes
 		if (!oElement.selectmenu) $.error("select Menu type missing! check includes");
+		if (!cDropDownMenu) $.error("cDropDownMenu misssing check includes");
 		if (!oElement.attr("menu")) $.error("select menu misssing menu attribute");
 
 		//get attributes
@@ -165,7 +71,6 @@ $.widget("ck.admenu", {
 		var sAppname, sAppid;
 		oOptions = this.options;
 		oElement = this.element;
-		var oThis = this;
 		oElement.empty();
 
 		var sElementName = oElement.get(0).tagName;
@@ -379,35 +284,25 @@ $.widget("ck.admenu", {
 		var sSrvPrefixUrl = oOptions.home + "/pages/service";
 		var sTransPrefixUrl = oOptions.home + "/pages/trans";
 
-		cJquery.setTopZindex(oElement);
-
-		var oSelect = oElement;
 		//--------------------------------------------------------------------
-		var oOption = $("<option>", { selected: 1, disabled: 1 }).append(sTier);
-		oSelect.append(oOption);
+		var aMenuItems = [
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR, "Show..."),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Overview", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tier.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Backends", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierbackends.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Errors", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tiererrors.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierextgraph.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierextcalls.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierinfrstats.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Service End Points", this.pr__get_base_tier_QS(sSrvPrefixUrl + "/services.php")),
+			new cMenuItem(cMenuItem.TYPE_ITEM,"Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl + "/apptrans.php")),
+		]
 
-		var oGroup = $("<optgroup>", { label: "Show..." });
-		this.pr__addToGroup(oGroup, "Overview", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tier.php"));
-		this.pr__addToGroup(oGroup, "Backends", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierbackends.php"));
-		this.pr__addToGroup(oGroup, "Errors", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tiererrors.php"));
-		this.pr__addToGroup(oGroup, "External Calls (graph)", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierextgraph.php"));
-		this.pr__addToGroup(oGroup, "External Calls (table)", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierextcalls.php"));
-		this.pr__addToGroup(oGroup, "Infrastructure", this.pr__get_base_tier_QS(sTierPrefixUrl + "/tierinfrstats.php"));
-		this.pr__addToGroup(oGroup, "Service End Points", this.pr__get_base_tier_QS(sSrvPrefixUrl + "/services.php"));
-		this.pr__addToGroup(oGroup, "Transactions", this.pr__get_base_tier_QS(sTransPrefixUrl + "/apptrans.php"));
-		oSelect.append(oGroup);
-
-		//--------------------------------------------------------------------
-		oGroup = $("<optgroup>", { label: "Misc..." });
+		aMenuItems.push(new cMenuItem(cMenuItem.TYPE_SEPARATOR, "Misc..."))
 		if (sThisTier)
-			this.pr__addToGroup(oGroup, "Back to (" + sApp + ")", this.pr__get_base_app_QS(sAppPrefixUrl + "/tiers.php"));
-		var sUrl = this.pr__get_base_tier_QS(sTierPrefixUrl + "/comparestats.php");
-		this.pr__addToGroup(oGroup, "Compare", sUrl);
-		oSelect.append(oGroup);
+			aMenuItems.push( new cMenuItem(cMenuItem.TYPE_ITEM, "Back to (" + sApp + ")", this.pr__get_base_app_QS(sAppPrefixUrl + "/tiers.php")))
+		aMenuItems.push( new cMenuItem(cMenuItem.TYPE_ITEM, "Compare", this.pr__get_base_tier_QS(sTierPrefixUrl + "/comparestats.php")))
 
-		//add and make the menu a selectmenu
-		var oThis = this;
-		oSelect.selectmenu({ select: function (poEvent, poTarget) { oThis.onSelectItem(poTarget.item.element) } });
+		cDropDownMenu.render(oElement, sTier, aMenuItems)
 	},
 
 	//#################################################################

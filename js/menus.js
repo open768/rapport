@@ -1,6 +1,100 @@
 'use strict';
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//###############################################################################
+//#
+//###############################################################################
+class cMenuItem{
+	static TYPE_SEPARATOR = "s"
+	static TYPE_ITEM = "i"
+	type=null
+	label=null
+	url=null
+	disabled=false
+
+	constructor (psType, psLabel, psUrl = null){
+		this.type = psType
+		this.label = psLabel
+		this.url = psUrl
+	}
+}
+
+class cDropDownMenu{
+	//****************************************************************
+	/**
+	 * Description
+	 * @param {Element} poElement
+	 * @param {string} psCaption
+	 * @param {Array} paItems
+	 * @param {number} piFixedCols=null
+	 */
+	static render(poElement, psCaption, paItems, piFixedCols = null) {
+		poElement.addClass("ck-menu")
+		
+		//count how many columns needed
+		var iCols = 0
+		var iBreakAtRow = null
+		if (piFixedCols !== null){
+			iCols = piFixedCols
+			iBreakAtRow = Math.trunc( paItems.length / iCols)
+		}else
+			paItems.forEach(poItem => {
+				if (poItem.type === cMenuItem.TYPE_SEPARATOR)
+					iCols ++
+			})
+
+		//render the menu as a dropdown
+		var oMenuDiv = $("<div>", { class: "w3-tag w3-light-blue w3-round" })
+			//----- dropdown button
+			var oDropDown = $("<div>", { class: "w3-dropdown-hover w3-light-blue" })
+				//------- dropdown target
+				var oButton = $("<button>", { class: "w3-button w3-circle" })
+					oButton.append("<font color='white'><i class='material-icons'>more_vert</i></font>")
+				oDropDown.append(oButton)
+			//------- dropdown content (unfortunately it doesnt bring itself to top zorder when displaying ) 
+			var oDropDownContent = $("<div>", { class: "w3-dropdown-content w3-border ck-z-index-200"})
+				var oInnerDropDownDiv = $("<div>", { style: "column-count:" + iCols,class:"ck-no-column-gap"})
+				var iRow = 0
+				paItems.forEach(poItem => {
+					var oSpan, oLink
+					if (poItem.type === cMenuItem.TYPE_SEPARATOR){
+						//- - - - - - separator 
+						oSpan = $("<div>", { class: "w3-block w3-light-grey w3-border ck-padding-4 ck-menu-separator" })
+						oSpan.append(poItem.label)
+						oInnerDropDownDiv.append(oSpan)
+					} else {
+						//- - - - - - not a separator 
+						var oDivParams = null
+						if (iBreakAtRow && iRow >= iBreakAtRow){
+							oDivParams = {class: "ck-menu-separator"}
+							iRow = 0;
+						}
+						var oItemDiv = $( "<DIV>", oDivParams )
+							if (poItem.disabled){
+								oSpan = $("<div>", { class: "w3-block w3-text-grey ck-padding-4" })
+									oSpan.append(poItem.label)
+								oItemDiv.append(oSpan)
+							}else{
+								oLink = $("<a>", { href: poItem.url, class:"no-decoration"} )
+									oSpan = $("<div>", { class: "w3-block w3-button ck-padding-4" })
+										oSpan.append(poItem.label)
+									oLink.append(oSpan)
+								oItemDiv.append(oLink)
+							}
+						oInnerDropDownDiv.append(oItemDiv)
+					}
+					iRow ++
+				})
+				oDropDownContent.append(oInnerDropDownDiv)
+		oDropDown.append(oDropDownContent)
+		oMenuDiv.append(oDropDown)
+
+		//----- stuff after the dropdown button
+		oMenuDiv.append("&nbsp;")
+		oMenuDiv.append(psCaption)
+
+		poElement.append(oMenuDiv);
+	}
+}
+//###############################################################################
 //#
 //###############################################################################
 var cMenus={
@@ -40,13 +134,13 @@ var cMenusCode={
 	
 	tierfunctions: function(poTier, psHome){
 		var sHTML = 
-			"<SELECT " + 
+			"<DIV " + 
 				"type='admenus' menu='tierfunctions' " +
 				"home='" + psHome + "' " +
 				"tier='" + poTier.name + "' " +
 				"tid='" + poTier.id + "'> " +
-					"<option selected>" + poTier.name + " - please wait" +
-			"</SELECT>";	
+					 poTier.name + " - please wait" +
+			"</DIV>";	
 		return sHTML;
 	}
 }
