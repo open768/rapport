@@ -198,13 +198,13 @@ class cRenderMenus{
 		
 		//TBD change to a DIV - widget can replace with a select menu
 		?>
-			<SELECT 
+			<div 
 				type="admenus" menu="tierchangemenu" 
 				home="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>
-				<option selected><?=$psCaption?> - please wait
-			</SELECT>
+				please wait
+			</div>
 		<?php
 		cDebug::leave();
 	}	

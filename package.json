@@ -1,0 +1,22 @@
+{
+  "name": "rapport",
+  "version": "1.0.0",
+  "description": "rapport for appdynamics",
+  "main": "index.php",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/open768/rapport.git"
+  },
+  "author": "chicken katsu",
+  "license": "CC-BY-NC-ND-4.0",
+  "bugs": {
+    "url": "https://github.com/open768/rapport/issues"
+  },
+  "homepage": "https://github.com/open768/rapport#readme"
+}
