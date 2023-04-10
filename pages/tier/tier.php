@@ -103,12 +103,12 @@ cDebug::flush();
 
 	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_CPU_BUSY);
 	$aMetrics[] = [
-		cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADMetricPaths::InfrastructureCpuBusy($oTier->name), cChart::HIDEIFNODATA=>1,
+		cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADInfraMetric::InfrastructureCpuBusy($oTier->name), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	
 	$aMetrics[] = [
-		cChart::LABEL=>"Disk Free", cChart::METRIC=>cADMetricPaths::InfrastructureDiskFree($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Disk Free", cChart::METRIC=>cADInfraMetric::InfrastructureDiskFree($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
 	];
 	
 	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ERRORS);
@@ -123,23 +123,23 @@ cDebug::flush();
 	
 	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_JAVA_HEAP_USED);
 	$aMetrics[] = [
-		cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADMetricPaths::InfrastructureJavaHeapUsed($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1,
+		cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADInfraMetric::InfrastructureJavaHeapUsed($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>".Net Heap used", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetHeapUsed($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>".Net Heap used", cChart::METRIC=>cADInfraMetric::InfrastructureDotnetHeapUsed($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Network In", cChart::METRIC=>cADMetricPaths::InfrastructureNetworkIncoming($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Network In", cChart::METRIC=>cADInfraMetric::InfrastructureNetworkIncoming($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Network Out", cChart::METRIC=>cADMetricPaths::InfrastructureNetworkOutgoing($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Network Out", cChart::METRIC=>cADInfraMetric::InfrastructureNetworkOutgoing($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Machine Availability", cChart::METRIC=>cADMetricPaths::InfrastructureMachineAvailability($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Machine Availability", cChart::METRIC=>cADInfraMetric::InfrastructureMachineAvailability($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	$aMetrics[] = [
-		cChart::LABEL=>"Agent Availability", cChart::METRIC=>cADMetricPaths::InfrastructureAgentAvailability($oTier->name), cChart::HIDEIFNODATA=>1
+		cChart::LABEL=>"Agent Availability", cChart::METRIC=>cADInfraMetric::InfrastructureAgentAvailability($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 		
 	cRenderCards::card_start("Key Metrics for $oTier->name");

@@ -54,7 +54,7 @@ if (cAD::is_demo()){
 <h2>Overall Disks Metrics for <?=$oTier->name?></h2>
 <?php
 	$aData = $oTier->GET_DiskMetrics();
-	$sBaseMetric = cADMetricPaths::InfrastructureNodeDisks($oTier->name);
+	$sBaseMetric = cADInfraMetric::InfrastructureNodeDisks($oTier->name);
 	$aMetrics = [];
 	foreach ($aData as $oMetric)
 		$aMetrics[]= [cChart::LABEL=>$oMetric->name, cChart::METRIC=>$oMetric->name];

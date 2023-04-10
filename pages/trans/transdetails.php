@@ -67,11 +67,11 @@ function show_nodes($psNode){
 		<select id="showMenu">
 			<optgroup label="Nodes">
 				<?php
-					if ($node){
+					if ($psNode){
 						?><option value="transdetails.php?<?=$sTransQS?>">All servers for this transaction</option><?php
 						$sNodeQs = cHttp::build_QS($sTransQS, cRenderQS::NODE_QS, $psNode);
 						?><option value="tiertransgraph.php?<?=$sNodeQs?>">
-							(<?=($node)?>) server
+							(<?=($psNode)?>) server
 						</option><?php 
 					}
 				?>
@@ -79,7 +79,7 @@ function show_nodes($psNode){
 			<optgroup label="Nodes">
 			<?php
 				foreach ($aNodes as $oNode){
-					$sDisabled = ($oNode->name==$node?"disabled":"");
+					$sDisabled = ($oNode->name==$psNode?"disabled":"");
 					$sNodeQs = cHttp::build_QS($sTransQS, cRenderQS::NODE_QS, $oNode->name);
 					$sUrl = "transdetails.php?$sNodeQs";
 					?>
@@ -175,11 +175,11 @@ if ($node){
 	cRenderCards::card_start("Server Data");
 		cRenderCards::body_start();
 			$aMetrics = [];
-			$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cADMetricPaths::InfrastructureCpuBusy($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cADMetricPaths::InfrastructureJavaHeapUsed($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cADMetricPaths::InfrastructureJavaGCTime($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetHeapUsed($oTier->name, $node)];
-			$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetGCTime($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall CPU Busy:", cChart::METRIC=>cADInfraMetric::InfrastructureCpuBusy($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall Java Heap Used:", cChart::METRIC=>cADInfraMetric::InfrastructureJavaHeapUsed($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall Java GC Time:", cChart::METRIC=>cADInfraMetric::InfrastructureJavaGCTime($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall .Net Heap Used:", cChart::METRIC=>cADInfraMetric::InfrastructureDotnetHeapUsed($oTier->name, $node)];
+			$aMetrics[] = [cChart::LABEL=>"Overall .Net GC Time:", cChart::METRIC=>cADInfraMetric::InfrastructureDotnetGCTime($oTier->name, $node)];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		cRenderCards::body_end();
 	cRenderCards::card_end();

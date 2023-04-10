@@ -85,9 +85,9 @@ cRenderCards::card_start("<a name='tperf'>Tier Performance</a>");
 			$aMetrics = [];
 			$aMetrics[] = [cChart::LABEL=>"Calls Per min ", cChart::METRIC=>cADTierMetricPaths::tierCallsPerMin($sTier)];
 			$aMetrics[] = [cChart::LABEL=>"Response Times", cChart::METRIC=>cADTierMetricPaths::tierResponseTimes($sTier)];
-			$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADMetricPaths::InfrastructureCpuBusy($sTier)];
-			$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADMetricPaths::InfrastructureJavaHeapUsed($sTier)];
-			$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cADMetricPaths::InfrastructureDotnetHeapUsed($sTier)];
+			$aMetrics[] = [cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADInfraMetric::InfrastructureCpuBusy($sTier)];
+			$aMetrics[] = [cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADInfraMetric::InfrastructureJavaHeapUsed($sTier)];
+			$aMetrics[] = [cChart::LABEL=>".Net Heap Used", cChart::METRIC=>cADInfraMetric::InfrastructureDotnetHeapUsed($sTier)];
 			cChart::render_metrics($oApp, $aMetrics,cChart::CHART_WIDTH_LETTERBOX/3);
 		}
 		cDebug::flush();

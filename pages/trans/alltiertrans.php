@@ -77,7 +77,7 @@ cRenderMenus::show_tier_functions();
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"All Transactions"
 	];
 	
-	$sMetricUrl = cADMetricPaths::InfrastructureCpuBusy($oTier->name);
+	$sMetricUrl = cADInfraMetric::InfrastructureCpuBusy($oTier->name);
 	$aMetrics[] = [
 		cChart::LABEL=>"CPU($oTier->name)tier", cChart::METRIC=>$sMetricUrl
 	];

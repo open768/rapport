@@ -120,11 +120,11 @@ else{
 			?><tr class="<?=cRender::getRowClass()?>">
 				<td><?=$sPool?></td>
 				<td><?php
-					$sMetric = cADMetricPaths::InfrastructureJDBCPoolActive($oTier->name,$node, $sPool);
+					$sMetric = cADInfraMetric::InfrastructureJDBCPoolActive($oTier->name,$node, $sPool);
 					cChart::add("active connections" , $sMetric, $oApp->name, 100);
 				?></td>
 				<td><?php
-					$sMetric = cADMetricPaths::InfrastructureJDBCPoolMax($oTier->name,$node, $sPool);
+					$sMetric = cADInfraMetric::InfrastructureJDBCPoolMax($oTier->name,$node, $sPool);
 					cChart::add("Max connections" , $sMetric, $oApp->name, 100);
 				?></td>
 			</tr><?php

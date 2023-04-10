@@ -29,38 +29,55 @@ cChart::do_header();
 $oApp = cRenderObjs::get_current_app();
 $sTitle ="Infrastructure Overview for $oApp->name";
 
-?>
-<h2><?=$sTitle?></h2>
-<?php
+cRenderCards::card_start();
+	cRenderCards::title_start();
+		echo $sTitle;
+	cRenderCards::title_end();
+	cRenderCards::body_start();
+		echo "infrastructure metrics are shown for each tier below. metrics not available are hidden";
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		cRenderMenus::show_app_change_menu("Infrastructure");
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
 //####################################################################
-cRenderMenus::show_app_change_menu("Infrastructure");
-?>
-<h2>Tiers</h2>
-<?php
 $aActivityMetrics = [cADMetricPaths::METRIC_TYPE_ACTIVITY, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES];
 $aMetricTypes = cADInfraMetric::getInfrastructureMetricTypes();
 
 $aTiers =$oApp->GET_Tiers();
-foreach ($aTiers as $oTier){
-	if (cFilter::isTierFilteredOut($oTier)) continue;
-	
-	cRenderMenus::show_tier_functions($oTier);
-	$sTierQs = cRenderQS::get_base_tier_QS($oTier );
-	$sAllUrl = cHttp::build_url("../tier/tierallnodeinfra.php", $sTierQs);
+if (count($aTiers) == 0)
+	cCommon::messagebox("no Tiers Found");
+else{
+	foreach ($aTiers as $oTier){
 
-	$aMetrics = [];
-	foreach ($aMetricTypes as $sMetricType){
-		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
-		$aMetrics[] = [
-			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
-			cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers",
-			cChart::HIDEIFNODATA=>1
-		];
+		$sTierQs = cRenderQS::get_base_tier_QS($oTier );
+		$sAllUrl = cHttp::build_url("../tier/tierallnodeinfra.php", $sTierQs);
+
+		$aMetrics = [];
+		foreach ($aMetricTypes as $sMetricType){
+			$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
+			$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
+			$aMetrics[] = [
+				cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
+				cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers",
+				cChart::HIDEIFNODATA=>1
+			];
+		}
+		
+		cRenderCards::card_start();
+			cRenderCards::title_start();
+				echo $oTier->name;
+			cRenderCards::title_end();
+			cRenderCards::body_start();
+				cChart::render_metrics($oApp,$aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+			cRenderCards::body_end();
+			cRenderCards::action_start();
+				cRenderMenus::show_tier_functions($oTier);
+			cRenderCards::action_end();
+		cRenderCards::card_end();
+
 	}
-	
-	$sClass = cRender::getRowClass();
-	cChart::render_metrics($oApp,$aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 }
 
 //####################################################################
