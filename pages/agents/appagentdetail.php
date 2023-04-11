@@ -117,7 +117,6 @@ if ($iNodes==0){
 				$tier = $aTierNodes[0]->tierName;
 				$oTier = cRenderObjs::make_tier_obj($oApp, $tier, $tid);
 				
-				if (cFilter::isTierFilteredOut($oTier)) continue;
 				?><hr><?php
 
 				cRenderMenus::show_tier_functions($oTier);

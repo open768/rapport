@@ -112,7 +112,6 @@ $aMetricTypes = cADInfraMetric::getInfrastructureMetricTypes();
 
 	foreach ($aNodes as $oNode){
 		$sNode = $oNode->name;
-		if (cFilter::isNodeFilteredOut($sNode)) continue;
 		
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$sNode, $sMetricType);
 		$sUrl = cHttp::build_url($sNodeUrl, cRenderQS::NODE_QS, $sNode);

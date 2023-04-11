@@ -29,10 +29,7 @@ cChart::do_header();
 $oApp = cRenderObjs::get_current_app();
 $sTitle ="Infrastructure Overview for $oApp->name";
 
-cRenderCards::card_start();
-	cRenderCards::title_start();
-		echo $sTitle;
-	cRenderCards::title_end();
+cRenderCards::card_start($sTitle);
 	cRenderCards::body_start();
 		echo "infrastructure metrics are shown for each tier below. metrics not available are hidden";
 	cRenderCards::body_end();
@@ -65,10 +62,7 @@ else{
 			];
 		}
 		
-		cRenderCards::card_start();
-			cRenderCards::title_start();
-				echo $oTier->name;
-			cRenderCards::title_end();
+		cRenderCards::card_start($oTier->name);
 			cRenderCards::body_start();
 				cChart::render_metrics($oApp,$aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
 			cRenderCards::body_end();

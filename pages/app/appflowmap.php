@@ -23,14 +23,30 @@ $oApp = cRenderObjs::get_current_app();
 cRenderHtml::header("Flowmap for Application $oApp->name");
 cRender::force_login();
 ?><script src="https://d3js.org/d3.v7.min.js"></script><?php
-cCommon::messagebox("work in progress");
 
-cDebug::write("fetching flowmap");
-cDebug::on(true);
-$oData = $oApp->GET_flowmap();
-cDebug::write("got data");
-cDebug::vardump($oData, true);
-cDebug::off();
+cRenderCards::card_start("Flowmap");
+    cRenderCards::body_start();
+        cCommon::messagebox("work in progress");
+    cRenderCards::body_end();
+    cRenderCards::action_start();
+        cRenderMenus::show_app_change_menu("flowmap");
+    cRenderCards::action_end();
+cRenderCards::card_end();
+
+cRenderCards::card_start("Flowmap for $oApp->name");
+    cRenderCards::body_start();
+        cDebug::write("fetching flowmap");
+        cDebug::on(true);
+        $oData = $oApp->GET_flowmap();
+        cDebug::write("got data");
+        if (!$oData)
+            cCommon::messagebox("no flowmap data found");
+        else        
+            cDebug::vardump($oData, true);
+
+        cDebug::off();
+    cRenderCards::body_end();
+cRenderCards::card_end();
 
 cRenderHtml::footer();
 ?>

@@ -17,7 +17,6 @@ $home="../..";
 require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
-require_once("$root/inc/filter.php");
 
 //####################################################################
 	
@@ -127,14 +126,12 @@ function render_tier_transactions($poApp, $poTier){
 function show_node_menu(){
 	global $oTier, $oApp, $gsTierQs, $gsAppQs;
 	
-	$sFilterQS = cHttp::build_QS($gsAppQs, cFilter::makeTierFilter($oTier->name));
 
 
 	?>
 	<select id="nodesMenu">
 		<option selected disabled>Show...</option>
 		<option value="apptrans.php?<?=$gsAppQs?>">All Transactions for <?=$oApp->name?> application</option>
-		<option value="apptrans.php?<?=$sFilterQS?>">Transactions table for <?=$oTier->name?></option>
 		
 		<optgroup label="Servers">
 		<?php
