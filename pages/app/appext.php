@@ -62,42 +62,46 @@ cDebug::flush();
 
 
 cRendercards::card_start("Overall statistics for $oApp->name");
-cRendercards::body_start();
-	$aMetrics = [];
-	$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADAppMetricPaths::appCallsPerMin()];
-	$aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cADAppMetricPaths::appResponseTimes()];
-	cChart::metrics_table($oApp, $aMetrics,2,null);
-echo "</div>";
-cRendercards::action_start();
-	if ($oCred->restricted_login == null){ 
-		//********************************************************************
-		show_tier_menu();
-		cRenderMenus::show_app_change_menu("External Calls");
-	}
-echo "</div>";
-echo "</div><p>";
+	cRendercards::body_start();
+		$aMetrics = [];
+		$aMetrics[] = [cChart::LABEL=>"Calls per min",cChart::METRIC=>cADAppMetricPaths::appCallsPerMin()];
+		$aMetrics[] = [cChart::LABEL=>"Response Time",cChart::METRIC=>cADAppMetricPaths::appResponseTimes()];
+		cChart::metrics_table($oApp, $aMetrics,2,null);
+	cRendercards::body_end();
+	cRendercards::action_start();
+		if ($oCred->restricted_login == null){ 
+			//********************************************************************
+			show_tier_menu();
+			cRenderMenus::show_app_change_menu("External Calls");
+		}
+	cRendercards::action_end();
+cRendercards::card_end();
 
 //##################################################################
 cRendercards::card_start("External calls from $oApp->name");
 cRendercards::body_start();
 	$aMetrics = [];
 
-	$oResponse = $oApp->GET_ExtTiers();
-	foreach ( $oResponse as $oExtTier){
-		$class=cRender::getRowClass();
-		$sName = $oExtTier->name;
-		
-		$sUrl=cHttp::build_qs($gsAppQS,cRenderQS::BACKEND_QS,$oExtTier->name);
-		$sUrl=cHttp::build_url("appexttiers.php", $sUrl);
+	$aResponse = $oApp->GET_ExtTiers();
+	if (count($aResponse) == 0)
+		cCommon::messagebox("no External calls found");
+	else{
+		foreach ( $aResponse as $oExtTier){
+			$class=cRender::getRowClass();
+			$sName = $oExtTier->name;
+			
+			$sUrl=cHttp::build_qs($gsAppQS,cRenderQS::BACKEND_QS,$oExtTier->name);
+			$sUrl=cHttp::build_url("appexttiers.php", $sUrl);
 
-		$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>200];
-		$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cADMetricPaths::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers", cChart::HIDEIFNODATA=>1];
-		$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cADMetricPaths::backendResponseTimes($sName), cChart::HIDEIFNODATA=>1];
-		$aMetrics[] = [cChart::LABEL=>"Errors ($sName)",cChart::METRIC=>cADMetricPaths::backendErrorsPerMin($sName), cChart::HIDEIFNODATA=>1];
+			$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>$sName,cChart::WIDTH=>200];
+			$aMetrics[] = [cChart::LABEL=>"Calls per min to ($sName)",cChart::METRIC=>cADMetricPaths::backendCallsPerMin($sName), cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"see all tiers", cChart::HIDEIFNODATA=>1];
+			$aMetrics[] = [cChart::LABEL=>"Response time to ($sName)",cChart::METRIC=>cADMetricPaths::backendResponseTimes($sName), cChart::HIDEIFNODATA=>1];
+			$aMetrics[] = [cChart::LABEL=>"Errors ($sName)",cChart::METRIC=>cADMetricPaths::backendErrorsPerMin($sName), cChart::HIDEIFNODATA=>1];
+		}
+		cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
 	}
-	cChart::metrics_table($oApp, $aMetrics,4,cRender::getRowClass());
-echo "</div>";
-echo "</div>";
+	cRendercards::body_end();
+cRendercards::card_end();
 
 //##################################################################
 cChart::do_footer();

@@ -127,7 +127,7 @@ $.widget("ck.admenu", {
 		]
 
 		//render the menu
-		cDropDownMenu.render(oElement, sAppname, aMenuItems)
+		cDropDownMenu.render(oElement, "App: "+ sAppname, aMenuItems)
 	},
 
 
@@ -233,7 +233,7 @@ $.widget("ck.admenu", {
 		}
 
 		//add menu
-		cDropDownMenu.render(oElement, sCaption, aMenuItems,5)
+		cDropDownMenu.render(oElement, "Change App: "+sCaption, aMenuItems,5)
 
 	},
 
@@ -266,7 +266,7 @@ $.widget("ck.admenu", {
 
 			iCount++
 		}
-		cDropDownMenu.render(oElement, sCaption, aMenuItems,5)
+		cDropDownMenu.render(oElement, "Change Tier: "+ sCaption, aMenuItems,5)
 	},
 
 	//****************************************************************
@@ -303,7 +303,7 @@ $.widget("ck.admenu", {
 			aMenuItems.push( new cMenuItem(cMenuItem.TYPE_ITEM, "Back to (" + sApp + ")", this.pr__get_base_app_QS(sAppPrefixUrl + "/tiers.php")))
 		aMenuItems.push( new cMenuItem(cMenuItem.TYPE_ITEM, "Compare", this.pr__get_base_tier_QS(sTierPrefixUrl + "/comparestats.php")))
 
-		cDropDownMenu.render(oElement, sTier, aMenuItems)
+		cDropDownMenu.render(oElement, "Tier: "+sTier, aMenuItems)
 	},
 
 	//#################################################################

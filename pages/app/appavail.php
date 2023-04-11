@@ -28,22 +28,19 @@ cRender::force_login();
 cChart::do_header();
 
 //####################################################################
-//get passed in values
-
 $oApp = cRenderObjs::get_current_app();
 
 
-$title= "$oApp->name&gt;Availability";
-
-cRenderMenus::show_app_change_menu("Availability");
+// work through each tier
+cRenderCards::card_start("Availability for $oApp->name");
+	cRenderCards::action_start();
+		cRenderMenus::show_app_change_menu("Availability");
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
 //####################################################################
 //retrieve tiers
 $oResponse =$oApp->GET_Tiers();
-
-// work through each tier
-?><h2>Availability for <?=$oApp->name?></h2><?php
-
 
 $aMetrics = [];
 foreach ( $oResponse as $oTier){
@@ -52,7 +49,11 @@ foreach ( $oResponse as $oTier){
 	$aMetrics[] = [cChart::LABEL=>"'$oTier->name': infrastructure availability",cChart::METRIC=>cADInfraMetric::InfrastructureAgentAvailability($oTier->name)];
 }
 $sClass = cRender::getRowClass();
-cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/2);
+cRenderCards::card_start("Details");
+	cRenderCards::body_start();
+		cChart::metrics_table($oApp,$aMetrics,3,$sClass,null,cChart::CHART_WIDTH_LETTERBOX/2);
+	cRenderCards::body_end();
+cRenderCards::card_end();
 	
 cChart::do_footer();
 
