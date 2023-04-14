@@ -1,4 +1,5 @@
 'use strict'
+/* globals bean,cQueueifVisible,cRender,cRenderQS,cRenderMDL,cChartConsts,cCharts,cBrowser */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.adserviceendpoints", $.ck.common, {
@@ -44,7 +45,6 @@ $.widget( "ck.adserviceendpoints", $.ck.common, {
 
 	//*******************************************************************
 	onResponse: function(poHttp){
-		var oThis = this
 		var oElement = this.element
 
 		oElement.empty()
@@ -82,9 +82,6 @@ $.widget( "ck.adserviceendpoints", $.ck.common, {
 	renderSummary: function(paData){
 		var oElement = this.element
 		var sLastCh = null
-		var sLast = null
-		var iCommon = 0
-		var sLastCommon = null
 
 		var sHTML = cRenderMDL.card_start("Service End Points")
 			sHTML += cRenderMDL.body_start()
@@ -107,7 +104,6 @@ $.widget( "ck.adserviceendpoints", $.ck.common, {
 							}
 						}*/
 						sHTML += "<li><a href='#" + poSP.id + "'>" + sName + "</a><br>"
-						sLast = poSP.name
 					})
 				sHTML += "</div>"
 			sHTML += "</div>"

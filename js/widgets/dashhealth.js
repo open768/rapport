@@ -1,4 +1,5 @@
 'use strict'
+/* globals bean,cQueueifVisible,cRenderQS,cBrowser */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.addashhealth",  $.ck.common, {
@@ -40,7 +41,6 @@ $.widget( "ck.addashhealth",  $.ck.common, {
 
 	//*******************************************************************
 	onResponse: function(poHttp){
-		var oThis = this
 		var oElement = this.element
 
 		oElement.empty()
@@ -59,7 +59,6 @@ $.widget( "ck.addashhealth",  $.ck.common, {
 	//#################################################################`
 	get_dash_health_url: function (){
 		var sUrl
-		var oConsts = this.consts
 		var oElement = this.element
 		
 		var oParams = {}
@@ -72,8 +71,8 @@ $.widget( "ck.addashhealth",  $.ck.common, {
 	},
 	
 	//*******************************************************************
+	// eslint-disable-next-line no-unused-vars
 	render_health: function(paData){
-		var oThis = this
 		var oElement = this.element
 		
 		oElement.empty()
