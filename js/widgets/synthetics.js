@@ -1,12 +1,13 @@
-'use strict';
+'use strict'
+/*global cBrowser, cRenderQS,bean, cHttp2, cHttpQueue, cHttpQueueItem,vis */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 var cSynthetics = {
 	queue: new cHttpQueue,
 	METRIC_API:"rest/getMetric.php",
 	SYNLIST_API:"rest/getSynList.php"
-};
-cSynthetics.queue.maxTransfers = 3	; 	//dont overload the controller
+}
+cSynthetics.queue.maxTransfers = 3	 	//dont overload the controller
 
 
 $.widget( "ck.adsynlist",$.ck.common, {
@@ -23,57 +24,56 @@ $.widget( "ck.adsynlist",$.ck.common, {
 	//# Constructor
 	//#################################################################`
 	_create: function(){
-		var oThis, oElement;
+		var oThis, oElement
 		
 		//set basic stuff
-		oThis = this;
-		oElement = oThis.element;
-		oElement.uniqueId();
+		oThis = this
+		oElement = oThis.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (!bean){						$.error("bean class is missing! check includes");	}
-		if (!cHttp2){					$.error("http2 class is missing! check includes");	}
-		if (!this.element.gSpinner){ 	$.error("gSpinner is missing! check includes");		}
+		if (!bean){						$.error("bean class is missing! check includes")	}
+		if (!cHttp2){					$.error("http2 class is missing! check includes")	}
+		if (!this.element.gSpinner){ 	$.error("gSpinner is missing! check includes")		}
 		
 		//check for required options
-		var oOptions = this.options;
-		if (oOptions.home==null){		$.error("home is missing! check options");	}
-		if (oOptions.app==null){		$.error("app is missing! check options");	}
-		if (oOptions.app_id==null){		$.error("app id is missing! check options");	}
+		var oOptions = this.options
+		if (oOptions.home==null){		$.error("home is missing! check options")	}
+		if (oOptions.app==null){		$.error("app is missing! check options")	}
+		if (oOptions.app_id==null){		$.error("app id is missing! check options")	}
 				
 		//set display style
-		oElement.removeClass();
+		oElement.removeClass()
 	
 		//load content
-		this.pr__load_synthetics();
+		this.pr__load_synthetics()
 	},
 	
 	//#################################################################
 	//# privates
 	//#################################################################`
 	pr__load_synthetics: function(){
-		var oThis = this;
-		var oElement = oThis.element;
-		var oOptions = this.options;
-		var oConsts = this.consts;
+		var oThis = this
+		var oElement = oThis.element
+		var oOptions = this.options
 		
-		oElement.empty();
-		oElement.append("initialising Synthetics for " + oOptions.app);
+		oElement.empty()
+		oElement.append("initialising Synthetics for " + oOptions.app)
 		
 		//create http object and add to the queue
-		var oParams = {};
-		oParams[ cRenderQS.APP_QS ] = oOptions.app;
-		oParams[ cRenderQS.APP_ID_QS ] = oOptions.app_id;
-		oParams[ cRenderQS.SYNTH_DETAILS_QS] = 0;
-		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
+		var oParams = {}
+		oParams[ cRenderQS.APP_QS ] = oOptions.app
+		oParams[ cRenderQS.APP_ID_QS ] = oOptions.app_id
+		oParams[ cRenderQS.SYNTH_DETAILS_QS] = 0
+		var sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams)
 
-		var oItem = new cHttpQueueItem();
-		oItem.url = sUrl;
+		var oItem = new cHttpQueueItem()
+		oItem.url = sUrl
 
-		bean.on(oItem, "start", 	function(){oThis.onStart(oItem);}	);				
-		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		cSynthetics.queue.add(oItem);
+		bean.on(oItem, "start", 	function(){oThis.onStart(oItem)}	)				
+		bean.on(oItem, "result", 	function(poHttp){oThis.onResponse(poHttp)}	)				
+		bean.on(oItem, "error", 	function(poHttp){oThis.onError(poHttp)}	)				
+		cSynthetics.queue.add(oItem)
 
 	},
 	
@@ -82,36 +82,36 @@ $.widget( "ck.adsynlist",$.ck.common, {
 	//#################################################################`
 	
 	onResponse: function(poHttp){
-		var oThis = this;
-		var oElement = oThis.element;
-		var oOptions = this.options;
+		var oThis = this
+		var oElement = oThis.element
+		var oOptions = this.options
 
-		oElement.empty();
-		var aJobs =poHttp.response; 
+		oElement.empty()
+		var aJobs =poHttp.response 
 		if (aJobs.length == 0){
-			oElement.append("No Synthetic jobs found for " + oOptions.app);
-			setTimeout( function(){oThis.element.hide()}, 500);
+			oElement.append("No Synthetic jobs found for " + oOptions.app)
+			setTimeout( function(){oThis.element.hide()}, 500)
 		}else{
-			var oParams={app:oOptions.app,aid:oOptions.app_id};
-			var sUrl = cBrowser.buildUrl(oOptions.home + "/pages/rum/synthetic.php", oParams);
-			var oLink = $("<a>", {href:sUrl}).append("See Synthetic jobs for: " + oOptions.app) ;
-			var oList = $("<ul>");
-			oElement.append(oLink );
+			var oParams={app:oOptions.app,aid:oOptions.app_id}
+			var sUrl = cBrowser.buildUrl(oOptions.home + "/pages/rum/synthetic.php", oParams)
+			var oLink = $("<a>", {href:sUrl}).append("See Synthetic jobs for: " + oOptions.app) 
+			var oList = $("<ul>")
+			oElement.append(oLink )
 			for (var i=0; i<aJobs.length; i++){
-				var oJob =  aJobs[i];
-				var oLi = $("<li>").append(oJob.name);
-				oList.append(oLi);
+				var oJob =  aJobs[i]
+				var oLi = $("<li>").append(oJob.name)
+				oList.append(oLi)
 			}
-			oElement.append(oList );
+			oElement.append(oList )
 		}
 	},
 	
-});
+})
 function cVisJSData(){
-	this.chart = null;
-	this.data = new vis.DataSet();
-	this.groups = new vis.DataSet();
-};
+	this.chart = null
+	this.data = new vis.DataSet()
+	this.groups = new vis.DataSet()
+}
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,61 +133,60 @@ $.widget( "ck.appdsyntimeline", $.ck.common, {
 	//# Constructor
 	//#################################################################`
 	_create: function(){
-		var oThis, oElement;
+		var oThis, oElement
 		
 		//set basic stuff
-		oThis = this;
-		oElement = oThis.element;
-		oElement.uniqueId();
+		oThis = this
+		oElement = oThis.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (typeof bean === 'undefined')	$.error("bean class is missing! check includes");
-		if (typeof cHttp2 === 'undefined')	$.error("http2 class is missing! check includes");
-		if (!this.element.gSpinner) 		$.error("gSpinner is missing! check includes");
-		if (typeof parseURL === 'undefined') $.error("parseURL is missing! check includes");
-		if (typeof vis === 'undefined') 	$.error("visjs is missing! check includes");
+		if (typeof bean === 'undefined')	$.error("bean class is missing! check includes")
+		if (typeof cHttp2 === 'undefined')	$.error("http2 class is missing! check includes")
+		if (!this.element.gSpinner) 		$.error("gSpinner is missing! check includes")
+		if (typeof parseURL === 'undefined') $.error("parseURL is missing! check includes")
+		if (typeof vis === 'undefined') 	$.error("visjs is missing! check includes")
 		
 		//check for required options
-		var oOptions = this.options;
-		if (oOptions.home== null){		$.error("home is missing! check options");	}
+		var oOptions = this.options
+		if (oOptions.home== null){		$.error("home is missing! check options")	}
 		
-		var oURI = parseURL(document.URL);
-		oOptions.app = oURI.params.app;
-		oOptions.app_id = oURI.params.aid;
+		var oURI = parseURL(document.URL)
+		oOptions.app = oURI.params.app
+		oOptions.app_id = oURI.params.aid
 		
-		this.visjs_data = new cVisJSData;
+		this.visjs_data = new cVisJSData
 		
 		//set display style
-		oElement.removeClass();
+		oElement.removeClass()
 	
 		//load content
-		this.pr__load_synthetics();
+		this.pr__load_synthetics()
 	},
 	
 	//#################################################################
 	//# privates
 	//#################################################################`
 	pr__load_synthetics: function(){
-		var oThis = this;
-		var oElement = oThis.element;
-		var oOptions = this.options;
-		var oConsts = this.consts;
+		var oThis = this
+		var oElement = oThis.element
+		var oOptions = this.options
 		
-		oElement.empty();
-		var oLoader = $("<DIV>");
-		oLoader.gSpinner({scale: .25});
-		oElement.append(oLoader).append("Loading: Synthetics");
+		oElement.empty()
+		var oLoader = $("<DIV>")
+		oLoader.gSpinner({scale: .25})
+		oElement.append(oLoader).append("Loading: Synthetics")
 				
-		var oParams = {};
-		oParams[ cRenderQS.APP_QS ] = oOptions.app;
-		oParams[ cRenderQS.APP_ID_QS ] = oOptions.app_id;
-		oParams[ cRenderQS.SYNTH_DETAILS_QS] = 1;
-		sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams);
+		var oParams = {}
+		oParams[ cRenderQS.APP_QS ] = oOptions.app
+		oParams[ cRenderQS.APP_ID_QS ] = oOptions.app_id
+		oParams[ cRenderQS.SYNTH_DETAILS_QS] = 1
+		var sUrl = cBrowser.buildUrl(this.options.home+"/"+cSynthetics.SYNLIST_API, oParams)
 		
-		ohttp = new cHttp2();
-		bean.on(ohttp,"result",		function(poHttp){ oThis.onLoadSynNames(poHttp)}	);
-		bean.on(ohttp,"error",		function(poHttp){oThis.onError(poHttp);}		);
-		ohttp.fetch_json(sUrl);
+		var ohttp = new cHttp2()
+		bean.on(ohttp,"result",		function(poHttp){ oThis.onLoadSynNames(poHttp)}	)
+		bean.on(ohttp,"error",		function(poHttp){oThis.onError(poHttp)}		)
+		ohttp.fetch_json(sUrl)
 	},
 	
 	//#################################################################
@@ -196,19 +195,19 @@ $.widget( "ck.appdsyntimeline", $.ck.common, {
 	
 	//*******************************************************************
 	onLoadSynNames: function(poHttp){
-		var oThis = this;
-		var oElement = oThis.element;
-		var oOptions = this.options;
+		var oThis = this
+		var oElement = oThis.element
+		var oOptions = this.options
 
-		oElement.empty();
+		oElement.empty()
 		
-		var oData = poHttp.response;
+		var oData = poHttp.response
 		if (oData.error){
-			oElement.addClass("ui-state-error");
-			oElement.append("there are no synthetic Jobs for " + oOptions.app);
+			oElement.addClass("ui-state-error")
+			oElement.append("there are no synthetic Jobs for " + oOptions.app)
 		}else{
 			for ( var i=0 ; i< oData.length; i++){
-				var oItem = oData[i];
+				var oItem = oData[i]
 				oElement.append("<li>" + oItem.name)
 			}
 			
@@ -217,4 +216,4 @@ $.widget( "ck.appdsyntimeline", $.ck.common, {
 		}
 	},
 	
-});
+})

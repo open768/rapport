@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* globals cRenderQS, google, cHttpQueue */
 //###############################################################################
 var cChartConsts={
 	ALL_CSV_URL:"/pages/all_csv.php",
@@ -31,75 +32,77 @@ var cCharts={
 	
 	//*********************************************************
 	rememberChart: function(psApp, psMetric, psTitle){
-		var oItem = new cChartItem(psApp, psMetric, psTitle);
-		cCharts.allCharts.push(oItem);
+		var oItem = new cChartItem(psApp, psMetric, psTitle)
+		cCharts.allCharts.push(oItem)
 	},
 	
 	//*********************************************************
 	loadCharts: function(){	
-		var iCount ,oInput;
-		var oThis = this;
+		var iCount ,oInput
+		var oThis = this
 		
-		iCount = 0;
-		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cChartConsts.ALL_CSV_URL,target:"_blank"});
+		iCount = 0
+		var oForm = $("<form>", {id:"AllMetricsForm",method:"POST",action:this.home+cChartConsts.ALL_CSV_URL,target:"_blank"})
 		
 		$("DIV[type='adchart']").each( //all  elements which have their type set to adchart
 			function(pIndex, pElement){
-				var oElement = $(pElement);
+				var oElement = $(pElement)
 				
-				var sAppName = oElement.attr(cRenderQS.APP_QS);
-				var sMetric = oElement.attr(cRenderQS.METRIC_QS +"0");
-				var sTitle = oElement.attr(cRenderQS.TITLE_QS+"0");
+				var sAppName = oElement.attr(cRenderQS.APP_QS)
+				var sMetric = oElement.attr(cRenderQS.METRIC_QS +"0")
+				var sTitle = oElement.attr(cRenderQS.TITLE_QS+"0")
 								
-				oElement.adchart();
+				oElement.adchart()
 					
 				//-------------build the form
 				if(oThis.show_export_all){
-					iCount++;
-					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_METRIC_FIELD+"."+iCount,value:sMetric}	);
-					oForm.append(oInput);
-					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_TITLE_FIELD+"."+iCount,value:sTitle}	);
-					oForm.append(oInput);
-					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_APP_FIELD+"."+iCount,value:sAppName}	);
-					oForm.append(oInput);
+					iCount++
+					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_METRIC_FIELD+"."+iCount,value:sMetric}	)
+					oForm.append(oInput)
+					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_TITLE_FIELD+"."+iCount,value:sTitle}	)
+					oForm.append(oInput)
+					oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_APP_FIELD+"."+iCount,value:sAppName}	)
+					oForm.append(oInput)
 				}
 			}
-		);
+		)
 		
 		//complete the form
 		if ((iCount >0)  && this.show_export_all){
-			oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_COUNT_FIELD,value:iCount}	);
-			oForm.append(oInput);
-			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV", class:"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"}	);
-			oForm.append(oInput);
-			$("#AllMetrics").empty().append(oForm);
+			oInput = $("<input>",{type:"hidden",name:cRenderQS.CHART_COUNT_FIELD,value:iCount}	)
+			oForm.append(oInput)
+			oInput = $("<input>",{type:"submit",name:"submit",value:"Export All as CSV", class:"mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"}	)
+			oForm.append(oInput)
+			$("#AllMetrics").empty().append(oForm)
 		}
 	},
 	
 	//*********************************************************
 	init:function(psHome){
-		var oThis = this;
-		this.home=psHome;
-		this.load_google_charts(function(){oThis.loadCharts()});
+		var oThis = this
+		this.home=psHome
+		this.load_google_charts(function(){oThis.loadCharts()})
 	},
 	
 	//*********************************************************
 	load_google_charts: function( pfnCallback){
 		//load google charts
 		try{
-			google.charts.load('current', {'packages':['corechart']});
+			google.charts.load('current', {'packages':['corechart']})
 		}
-		catch (e){}
+		catch (e){
+			/*do nothing */
+		}
 		if (pfnCallback)
-			google.charts.setOnLoadCallback( pfnCallback );
+			google.charts.setOnLoadCallback( pfnCallback )
 	},
 	
 	//*********************************************************
 	isGoogleChartsLoaded: function(){
 		if ((typeof google === 'undefined') || (typeof google.visualization === 'undefined')) 
-		   return false;
+			return false
 		else
-		 return true;
-   	}	
+			return true
+	}	
 }
-cCharts.queue.maxTransfers = 5	; 	//dont overload the controller
+cCharts.queue.maxTransfers = 5	 	//dont overload the controller

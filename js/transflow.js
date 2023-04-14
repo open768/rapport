@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/*global cRenderQS, cCommon*/
 /**************************************************************************
 Copyright (C) Chicken Katsu 2013-2018 
 
@@ -11,57 +12,59 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 
-function cTransFlow( psDivID){
-	this.div_id = psDivID;
-	this.data_url = "rest/getTransFlow.php";
-	this.home = ".";
-	
+// eslint-disable-next-line no-unused-vars
+class cTransFlow {
+	constructor(psDivID) {
+		this.div_id = psDivID
+		this.data_url = "rest/getTransFlow.php"
+		this.home = "."
+	}
 	//**********************************************************************
-	this.OnJSON = function(poResult){
-		var oDiv = $("#"+this.div_id);
-		$("#"+this.div_id).css('height','auto');
-		oDiv.empty();
-		this.build_html(oDiv, poResult);
-	};
-	
+	OnJSON(poResult) {
+		var oDiv = $("#" + this.div_id)
+		$("#" + this.div_id).css('height', 'auto')
+		oDiv.empty()
+		this.build_html(oDiv, poResult)
+	}
+
 	//**********************************************************************
-	this.build_html = function(poContainer, poData){
-		var oList, oItem, oChild, i;
-		
-		poContainer.append(poData.name);
-		oList = $("<OL>");
-		for (i = 0; i < poData.children.length;i++ ){
-			oChild = poData.children[i];
-			oItem = $("<LI>");
-			this.build_html(oItem, oChild);
-			oList.append(oItem);
+	build_html(poContainer, poData) {
+		var oList, oItem, oChild, i
+
+		poContainer.append(poData.name)
+		oList = $("<OL>")
+		for (i = 0; i < poData.children.length; i++) {
+			oChild = poData.children[i]
+			oItem = $("<LI>")
+			this.build_html(oItem, oChild)
+			oList.append(oItem)
 		}
-		poContainer.append(oList);
-	};
-	
+		poContainer.append(oList)
+	}
+
 	//**********************************************************************
-	this.OnJSONError = function(){
-		$("#"+this.div_id).html("Oops there was an error getting the transaction map");
-		$("#"+this.div_id).height(20);
-	};
-	
+	OnJSONError() {
+		$("#" + this.div_id).html("Oops there was an error getting the transaction map")
+		$("#" + this.div_id).height(20)
+	}
+
 	//**********************************************************************
-	this.load = function(psApp, psTier, psTrans) {
-		var oParent = this;
-		var oOptions = {};
-			oOptions[cRenderQS.APP_QS] = psApp;
-			oOptions[cRenderQS.TIER_QS] = psTier;
-			oOptions[cRenderQS.TRANS_QS]= psTrans;
-		var sUrl = this.home + "/" + this.data_url + "?" + $.param(oOptions);
-		$("#"+this.div_id).html("loading transaction flow")
-		write_console("transaction flow url: "+ sUrl);
-		return $.ajax({ //default is async
-          url: sUrl,
-          dataType: "json",
-          async: true,
-		  success: function(psResult){oParent.OnJSON(psResult)},
-		  error: function(){oParent.OnJSONError()},
-		  timeout:this.ajaxTimeout
-        });
+	load(psApp, psTier, psTrans) {
+		var oParent = this
+		var oOptions = {}
+		oOptions[cRenderQS.APP_QS] = psApp
+		oOptions[cRenderQS.TIER_QS] = psTier
+		oOptions[cRenderQS.TRANS_QS] = psTrans
+		var sUrl = this.home + "/" + this.data_url + "?" + $.param(oOptions)
+		$("#" + this.div_id).html("loading transaction flow")
+		cCommon.writeConsole("transaction flow url: " + sUrl)
+		return $.ajax({
+			url: sUrl,
+			dataType: "json",
+			async: true,
+			success: function (psResult) { oParent.OnJSON(psResult) },
+			error: function () { oParent.OnJSONError() },
+			timeout: this.ajaxTimeout
+		})
 	}
 }

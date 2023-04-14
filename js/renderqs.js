@@ -1,9 +1,9 @@
-'use strict';
-'use strict';
+'use strict'
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //#
 //###############################################################################
+// eslint-disable-next-line no-unused-vars
 var cRenderQS={
 	APP_QS : "app",
 	APP_ID_QS : "aid",
@@ -54,11 +54,6 @@ var cRenderQS={
 	AUDIT_FILTER_LOGIN_FAILED : "LOGIN_FAILED",
 	AUDIT_FILTER_LOGOUT : "LOGOUT",
 	AUDIT_FILTER_OBJECT	 : "OBJECT_UPDATED",
-	
-	//************************************************************
-	AGENT_COUNT_TYPE_QS : "act",
-	COUNT_TYPE_APPD : "ctap",
-	COUNT_TYPE_ACTUAL : "ctac",
 	
 	//************************************************************
 	AGENT_COUNT_TYPE_QS : "act",
@@ -139,4 +134,4 @@ var cRenderQS={
 	TIME_DURATION_QS : "tdur",
 	LAST_YEAR_QS:"lyq",
 	TYPE_QS: "typ"
-};
+}

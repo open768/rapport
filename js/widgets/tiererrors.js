@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* globals bean,cQueueifVisible,cRenderQS,cBrowser */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.adtiererrors", $.ck.common, {
@@ -13,45 +14,44 @@ $.widget( "ck.adtiererrors", $.ck.common, {
 	//# Constructor
 	//#################################################################`
 	_create: function(){
-		var oThis = this;
+		var oThis = this
 		
 		//set basic stuff
-		var oElement = this.element;
-		oElement.uniqueId();
+		var oElement = this.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
-		if (!bean)						$.error("bean class is missing! check includes");	
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes")	
+		if (!bean)						$.error("bean class is missing! check includes")	
 		
 		//check for required options
-		if (!oElement.attr(cRenderQS.TIER_QS))		$.error("tier ID  missing!");			
-		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app ID  missing!");			
-		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.TIER_QS))		$.error("tier ID  missing!")			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app ID  missing!")			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!")			
 					
 	
 		//set behaviour for widget when it becomes visible
-		var oQueue = new cQueueifVisible();
-		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
-		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
-		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_tier_error_url());
+		var oQueue = new cQueueifVisible()
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus)}	)				
+		bean.on(oQueue, "start", 	function(){oThis.onStart()}	)				
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp)}	)				
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp)}	)				
+		oQueue.go(oElement, this.get_tier_error_url())
 	},
 
 
 	//*******************************************************************
 	onResponse: function(poHttp){
-		var oThis = this;
-		var oElement = this.element;
+		var oElement = this.element
 
-		oElement.empty();
-		oElement.removeClass();
+		oElement.empty()
+		oElement.removeClass()
 		
-		var aResponse = poHttp.response;
+		var aResponse = poHttp.response
 		if (aResponse.length == 0 )
-			oElement.append("<i>no errors found</i>");
+			oElement.append("<i>no errors found</i>")
 		else
-			this.render_errors(poHttp.response);
+			this.render_errors(poHttp.response)
 	},
 
 	
@@ -59,55 +59,54 @@ $.widget( "ck.adtiererrors", $.ck.common, {
 	//# functions
 	//#################################################################`
 	get_tier_error_url: function (){
-		var sUrl;
-		var oConsts = this.consts;
-		var oElement = this.element;
+		var sUrl
+		var oConsts = this.consts
+		var oElement = this.element
 		
-		var oParams = {};
-		oParams[ cRenderQS.TIER_QS ] = oElement.attr(cRenderQS.TIER_QS);
-		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		var oParams = {}
+		oParams[ cRenderQS.TIER_QS ] = oElement.attr(cRenderQS.TIER_QS)
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS)
 		
 		
-		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+oConsts.REST_API;
-		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
-		return sUrl;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+oConsts.REST_API
+		sUrl = cBrowser.buildUrl(sBaseUrl, oParams)
+		return sUrl
 	},
 	
 	//*******************************************************************
 	render_errors: function(paData){
-		var oThis = this;
-		var oElement = this.element;
+		var oElement = this.element
 		
-		oElement.empty();
+		oElement.empty()
 		if (paData.length == 0){
-			oElement.append("<i>no information found</i>");
-			return;
+			oElement.append("<i>no information found</i>")
+			return
 		}
 		
-		var oTable = $("<TABLE>", {width:"100%", border:1, cellspacing:0});
+		var oTable = $("<TABLE>", {width:"100%", border:1, cellspacing:0})
 		oTable.append(
 			"<thead><tr>" +
 				"<th width=\"*\">Name</th>" +
 				"<th width=\"50\">Count</th>" + 
 				"<th width=\"50\">Average</th>" +
 				"</tr></thead>"
-		);
+		)
 		
-		var oBody = $("<tbody>");
+		var oBody = $("<tbody>")
 		for (var i=0; i< paData.length; i++){
-			var oItem = paData[i];
+			var oItem = paData[i]
 			oBody.append("<tr>" +
 				"<td>"+ oItem.name +"</td>" +
 				"<td>"+ oItem.count+"</td>" +
 				"<td>"+ oItem.average+"</td>" +
-			"</tr>");
+			"</tr>")
 		}
-		oTable.append(oBody);
+		oTable.append(oBody)
 		
 		//---------------------------------------------------
-		var sID = oElement.attr("id") + "tbl";
-		oTable.attr("id", sID );
-		oElement.append(oTable);
-		$("#"+sID).tablesorter();
+		var sID = oElement.attr("id") + "tbl"
+		oTable.attr("id", sID )
+		oElement.append(oTable)
+		$("#"+sID).tablesorter()
 	}
-});
+})

@@ -366,9 +366,9 @@ var cHR_CriteriaRenderer = {
 						break
 					case "BASELINE_TYPE":
 						sFragment += oEvalCompare.baselineCondition +
-							 " of " + cRenderW3.tag(oEvalCompare.baselineName) +
-							 " by "+ cRenderW3.tag(oEvalCompare.compareValue) +
-							 " "+ oEvalCompare.baselineUnit
+							" of " + cRenderW3.tag(oEvalCompare.baselineName) +
+							" by "+ cRenderW3.tag(oEvalCompare.compareValue) +
+							" "+ oEvalCompare.baselineUnit
 						break
 					default:
 						sFragment += "unknown type: sEvalDetailType"
@@ -437,6 +437,7 @@ var cHR_Render = {
 	},
 	
 	//**********************************************************
+	// eslint-disable-next-line no-unused-vars
 	pattern: function(poPattern){
 		return "work in progress"
 	},

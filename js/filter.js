@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+// eslint-disable-next-line no-unused-vars
 var cFilterFunctions={
 	selector:null,
 	parent_selector:null,
@@ -7,78 +8,79 @@ var cFilterFunctions={
 	
 	//**********************************************************************************
 	filter_box: function(psContainerID, psCaption, psSelector, psAttr, psParentSelector){
-		var oThis=this;
 		
-		this.selector = psSelector;
-		this.attr = psAttr;
-		this.parent_selector = psParentSelector;
+		this.selector = psSelector
+		this.attr = psAttr
+		this.parent_selector = psParentSelector
 		
 		var sHTML = '<form action="#">' +
 			'<div class="mdl-textfield mdl-js-textfield">' +
 				'<input class="mdl-textfield__input" type="text" id="' + this.id + '" disabled>' +
 				'<label class="mdl-textfield__label" for="' + this.id + '">' + psCaption + '...</label>' +
 			'</div>' +
-		'</form>';
-		var oDiv = $("#"+psContainerID);
-		oDiv.empty();
-		oDiv.append(sHTML);
+		'</form>'
+		var oDiv = $("#"+psContainerID)
+		oDiv.empty()
+		oDiv.append(sHTML)
 		
-		this.setOnKeyUp();			
+		this.setOnKeyUp()			
 	},
 	
 	//**********************************************************************************
 	setOnKeyUp: function(){
-		var oThis=this;
-		$("#" + this.id ).prop( "disabled", false );
+		var oThis=this
+		$("#" + this.id ).prop( "disabled", false )
 		$("#" + this.id ).keyup( 
 			function(poEvent){
-				oThis.onFilterKeyUp(poEvent);
+				oThis.onFilterKeyUp(poEvent)
 			}
-		);
+		)
 	},
 	
 	//**********************************************************************************
+	// eslint-disable-next-line no-unused-vars
 	onFilterKeyUp: function( poEvent){
 		//look through divs with selector
-		var oThis = this;
-		var aSelected = $(oThis.selector);
-		var sInput = $("#filter").val().toLowerCase();
+		var oThis = this
+		var aSelected = $(oThis.selector)
+		var sInput = $("#filter").val().toLowerCase()
 		//iterate
 		aSelected.each(
+			// eslint-disable-next-line no-unused-vars
 			function(index){
 				//set up variables
-				var oParent=$(this).closest(oThis.parent_selector);
-				var oHider = oParent;
-				var oTRParent = $(this).closest("TR");					
+				var oParent=$(this).closest(oThis.parent_selector)
+				var oHider = oParent
+				var oTRParent = $(this).closest("TR")					
 				if (oTRParent.length > 0){
-					 if (oTRParent.parents().length > oParent.parents().length) //element is in a table
-						oHider = oTRParent;
+					if (oTRParent.parents().length > oParent.parents().length) //element is in a table
+						oHider = oTRParent
 				}
 				
 				//check minimum length of search expression
 				if (sInput.length < 3){	//must be at least 3 chars
-					oHider.show();
-					return;
+					oHider.show()
+					return
 				}
 
 				//perform search
-				var oEl = $(this);
-				var sSearch;
+				var oEl = $(this)
+				var sSearch
 				if (oThis.attr == "")
-					sSearch = oEl[0].innerText;
+					sSearch = oEl[0].innerText
 				else
-					sSearch = oEl.attr(oThis.attr); 
+					sSearch = oEl.attr(oThis.attr) 
 				
 				if (sSearch) { //skip selected that dont have the desired attribute
-					sSearch = sSearch.toLowerCase();
+					sSearch = sSearch.toLowerCase()
 					if ( sSearch.indexOf(sInput) == -1)	////check the attribute for a match
-						oHider.hide();
+						oHider.hide()
 					else{
-						oHider.show();
-						oParent.show();
+						oHider.show()
+						oParent.show()
 					}
 				}
 			}
-		);
+		)
 	}
 }

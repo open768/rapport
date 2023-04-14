@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* globals bean,cQueueifVisible,cRenderQS,cBrowser,cRender,cRenderW3 */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.adallagentversions", $.ck.common, {
@@ -13,40 +14,40 @@ $.widget( "ck.adallagentversions", $.ck.common, {
 	//# Constructor
 	//#################################################################`
 	_create: function(){
-		var oThis = this;
+		var oThis = this
 		
 		//set basic stuff
-		var oElement = this.element;
-		oElement.uniqueId();
+		var oElement = this.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
-		if (!bean)						$.error("bean class is missing! check includes");	
-		if (!oElement.tablesorter)		$.error("tablesorter widget is missing! check includes");	
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes")	
+		if (!bean)						$.error("bean class is missing! check includes")	
+		if (!oElement.tablesorter)		$.error("tablesorter widget is missing! check includes")	
 		
 		//check for required options
-		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home attr missing!");			
-		if (!oElement.attr(cRenderQS.TYPE_QS))		$.error("type attr missing!");			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home attr missing!")			
+		if (!oElement.attr(cRenderQS.TYPE_QS))		$.error("type attr missing!")			
 					
 	
 		//set behaviour for widget when it becomes visible
-		var oQueue = new cQueueifVisible();
-		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);
-		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
-		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);
-		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_url());
+		var oQueue = new cQueueifVisible()
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus)}	)
+		bean.on(oQueue, "start", 	function(){oThis.onStart()}	)				
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp)}	)
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp)}	)				
+		oQueue.go(oElement, this.get_url())
 	},
 
 	
 	//*******************************************************************
 	onResponse: function(poHttp){
-		var oElement = this.element;
+		var oElement = this.element
 		
-		oElement.empty();
-		oElement.removeClass();
+		oElement.empty()
+		oElement.removeClass()
 		
-		this.render(poHttp.response);
+		this.render(poHttp.response)
 	},
 
 	
@@ -54,89 +55,85 @@ $.widget( "ck.adallagentversions", $.ck.common, {
 	//# functions
 	//#################################################################`
 	get_url: function (){
-		var oElement = this.element;
-		var oParams = {};
-		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
-		oParams[ cRenderQS.TYPE_QS ] = oElement.attr(cRenderQS.TYPE_QS);
-		oParams[ cRenderQS.TOTALS_QS ] = oElement.attr(cRenderQS.TOTALS_QS);
-		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
-		return cBrowser.buildUrl(sBaseUrl, oParams);
+		var oElement = this.element
+		var oParams = {}
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS)
+		oParams[ cRenderQS.TYPE_QS ] = oElement.attr(cRenderQS.TYPE_QS)
+		oParams[ cRenderQS.TOTALS_QS ] = oElement.attr(cRenderQS.TOTALS_QS)
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API
+		return cBrowser.buildUrl(sBaseUrl, oParams)
 	},
 	
 	//*******************************************************************
 	render: function(poData){
-		var oElement = this.element;
-		var oThis = this;
+		var oElement = this.element
 		
-		oElement.empty();
+		oElement.empty()
 		//-----------------------------------------------------------------------------------
-		var aCounts = poData.counts;
+		var aCounts = poData.counts
 		if (aCounts==null || aCounts.length==0){
-			oElement.append(cRender.messagebox("<i>no agents found</i>"));
-			return;
+			oElement.append(cRender.messagebox("<i>no agents found</i>"))
+			return
 		}
 		
 		//-----------------------------------------------------------------------------------
 		//add the totals to the page
-		var sHTML = "<div style='border-style:solid'>";
-			var iTot = 0;
+		var sHTML = "<div style='border-style:solid'>"
+			var iTot = 0
 			for (var i=0; i<aCounts.length; i++){
-				var oItem = aCounts[i];
-				sHTML += cRenderW3.tag(oItem.name +" ("+ oItem.count + ")") + " ";
-				iTot += oItem.count;
+				var oItem = aCounts[i]
+				sHTML += cRenderW3.tag(oItem.name +" ("+ oItem.count + ")") + " "
+				iTot += oItem.count
 			}
-			sHTML += cRenderW3.tag("<b>Total ("+ iTot + ")</b>") + " ";
-		sHTML += "</div>";
-		oElement.append( sHTML );
+			sHTML += cRenderW3.tag("<b>Total ("+ iTot + ")</b>") + " "
+		sHTML += "</div>"
+		oElement.append( sHTML )
 		
 		//-----------------------------------------------------------------------------------
 		if (oElement.attr(cRenderQS.TOTALS_QS))
-			this.render_agent_totals(poData.detail);
+			this.render_agent_totals(poData.detail)
 		else
-			this.render_details(poData.detail);
+			this.render_details(poData.detail)
 	},
 
 	//*******************************************************************
 	render_agent_totals: function(paDetails){
-		var oElement = this.element;
-		var oThis = this;
+		var oElement = this.element
 		
-		var sHTML = "<p>&nbsp;<p>Agent Counts:<div style='border-style:solid;column-count:3' >";
+		var sHTML = "<p>&nbsp;<p>Agent Counts:<div style='border-style:solid;column-count:3' >"
 
 		//-----------------------------------------------------------------------------------
 		for (var i=0; i<paDetails.length; i++){
-			var oItem = paDetails[i];
-			sHTML += cRenderW3.tag(oItem.name +" ("+ oItem.count + ")") + " ";
+			var oItem = paDetails[i]
+			sHTML += cRenderW3.tag(oItem.name +" ("+ oItem.count + ")") + " "
 		}
-		sHTML += "</div>";
-		oElement.append( sHTML );
+		sHTML += "</div>"
+		oElement.append( sHTML )
 	},
 
 	
 	//*******************************************************************
 	render_details: function(paDetails){
-		var oElement = this.element;
-		var oThis = this;
+		var oElement = this.element
 		
 		//-----------------------------------------------------------------------------------
-		var sTableID = oElement.attr("id") + "T";
-		var oNote = $("<div>",{class:"note"});
-		oNote.append("click on table headings to sort   ");
+		var sTableID = oElement.attr("id") + "T"
+		var oNote = $("<div>",{class:"note"})
+		oNote.append("click on table headings to sort   ")
 		
-		var oBtn = $("<button>");
-		oBtn.append("copy table to clipboard");
+		var oBtn = $("<button>")
+		oBtn.append("copy table to clipboard")
 		oBtn.click(
 			function(){
-				cBrowser.copy_to_clipboard(sTableID);
+				cBrowser.copy_to_clipboard(sTableID)
 			}
-		);
-		oNote.append(oBtn);
+		)
+		oNote.append(oBtn)
 		
-		oElement.append(oNote);
+		oElement.append(oNote)
 		
 		//-----------------------------------------------------------------------------------
-		var sHTML = "<TABLE border='1' cellpadding='2' cellspacing='0' id='"+ sTableID +"' width='100%'  style='font-size:10px'>";
-			var iTot = 0;
+		var sHTML = "<TABLE border='1' cellpadding='2' cellspacing='0' id='"+ sTableID +"' width='100%'  style='font-size:10px'>"
 			sHTML += "<THEAD><TR>" + 
 				"<th width='100'>Agent Type</th>" + 
 				"<th width='100'>Application</th>" + 
@@ -145,26 +142,26 @@ $.widget( "ck.adallagentversions", $.ck.common, {
 				"<th width='150'>Hostname</th>" + 
 				"<th width='70'>Version</th>" + 
 				"<th width='*'  >Runtime</th>" + 
-			"</TR></THEAD>";
-			sHTML += "<tbody>";
+			"</TR></THEAD>"
+			sHTML += "<tbody>"
 			for (var i=0; i<paDetails.length; i++){
 				
-				var oItem = paDetails[i];
+				var oItem = paDetails[i]
 				
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-				var sApp;
+				var sApp
 				if (!oItem.app)
-					sApp = "";
+					sApp = ""
 				else if (typeof oItem.app === "string")
-					sApp = oItem.app;
+					sApp = oItem.app
 				else
-					sApp = oItem.app.name;
+					sApp = oItem.app.name
 				
-				var sTier = "";
-				if (oItem.tier) sTier = oItem.tier;
+				var sTier = ""
+				if (oItem.tier) sTier = oItem.tier
 				
-				var sNode = "";
-				if (oItem.node) sNode = oItem.node;
+				var sNode = ""
+				if (oItem.node) sNode = oItem.node
 				
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 				sHTML += "<TR>" +
@@ -181,17 +178,16 @@ $.widget( "ck.adallagentversions", $.ck.common, {
 						oItem.runtime + 
 						"<span class='w3-text w3-tag' style='position:absolute;left:0;bottom:18px'>" + oItem.installDir + "</span>" +
 					"</p></td>" + 
-				"</tr>";
+				"</tr>"
 				
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-				iTot += oItem.count;
 			}
-		sHTML += "</tbody></table>";
-		oElement.append( sHTML );
+		sHTML += "</tbody></table>"
+		oElement.append( sHTML )
 		
 	
-		$("#"+sTableID).tablesorter();
+		$("#"+sTableID).tablesorter()
 	},
 	
 	
-});
+})

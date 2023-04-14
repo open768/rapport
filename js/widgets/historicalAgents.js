@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* globals bean,cQueueifVisible,cRender,cRenderQS,cRenderMDL,cBrowser,cMenusCode,cMenus */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 $.widget( "ck.adhistagentstiers", $.ck.common, {
@@ -13,42 +14,41 @@ $.widget( "ck.adhistagentstiers", $.ck.common, {
 	//# Constructor
 	//#################################################################`
 	_create: function(){
-		var oThis = this;
+		var oThis = this
 		
 		//set basic stuff
-		var oElement = this.element;
-		oElement.uniqueId();
+		var oElement = this.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
-		if (!bean)						$.error("bean class is missing! check includes");	
-		if (!oElement.adagentcount)		$.error("missing adagentcount widget! check includes");	
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes")	
+		if (!bean)						$.error("bean class is missing! check includes")	
+		if (!oElement.adagentcount)		$.error("missing adagentcount widget! check includes")	
 		
 		//check for required options
-		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!");			
-		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!")			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!")			
 					
 	
 		//set behaviour for widget when it becomes visible
-		var oQueue = new cQueueifVisible();
-		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
-		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
-		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_url());
+		var oQueue = new cQueueifVisible()
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus)}	)				
+		bean.on(oQueue, "start", 	function(){oThis.onStart()}	)				
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp)}	)				
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp)}	)				
+		oQueue.go(oElement, this.get_url())
 	},
 
 	
 	//*******************************************************************
 	onResponse: function(poHttp){
-		var oThis = this;
-		var oElement = this.element;
+		var oElement = this.element
 
-		oElement.empty();
-		oElement.removeClass();
+		oElement.empty()
+		oElement.removeClass()
 		
-		var  aResponse = poHttp.response;
-		this.render_tiers(aResponse);
+		var  aResponse = poHttp.response
+		this.render_tiers(aResponse)
 	},
 
 	
@@ -56,78 +56,77 @@ $.widget( "ck.adhistagentstiers", $.ck.common, {
 	//# functions
 	//#################################################################`
 	get_url: function (){
-		var sUrl;
-		var oConsts = this.consts;
-		var oElement = this.element;
+		var sUrl
+		var oElement = this.element
 		
-		var oParams = {};
-		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
+		var oParams = {}
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS)
 		
 		
-		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
-		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
-		return sUrl;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API
+		sUrl = cBrowser.buildUrl(sBaseUrl, oParams)
+		return sUrl
 	},
 	
 	//*******************************************************************
 	render_tiers: function(paTiers){
-		var oElement = this.element;
-		var sHTML= "";
+		var oElement = this.element
+		var sHTML= ""
 		
 		//error handling - no tiers
 		if (paTiers.length == 0){
-			sHTML = cRenderMDL.card_start("Summary");
-				sHTML += cRenderMDL.body_start();
-					sHTML += cRender.messagebox("no tiers found");
-				sHTML += "</div>";
-			sHTML += "</div>";
-			oElement.append(sHTML);
-			return;
+			sHTML = cRenderMDL.card_start("Summary")
+				sHTML += cRenderMDL.body_start()
+					sHTML += cRender.messagebox("no tiers found")
+				sHTML += "</div>"
+			sHTML += "</div>"
+			oElement.append(sHTML)
+			return
 		}
 		
 		// a card showing summary of agents
 		var sID = oElement.attr("id") + "_sum"
-		sHTML = cRenderMDL.card_start("Summary");
-			sHTML += cRenderMDL.body_start();
+		sHTML = cRenderMDL.card_start("Summary")
+			sHTML += cRenderMDL.body_start()
 				sHTML += "<div "+
 					"id='" + sID + "' " +
 					cRenderQS.APP_ID_QS+"='"+oElement.attr(cRenderQS.APP_ID_QS)+"' "+
 					cRenderQS.APP_QS+"='"+ paTiers[0].app.name +"' "+
 					cRenderQS.HOME_QS +"='" + oElement.attr(cRenderQS.HOME_QS) + "' " + 
 					", Please wait.." + 
-				"</div>";
-			sHTML += "</div>";
-		sHTML += "</div></div><p>";
+				"</div>"
+			sHTML += "</div>"
+		sHTML += "</div></div><p>"
 		
-		oElement.append(sHTML);
-		$("#"+sID).adagentcount();
+		oElement.append(sHTML)
+		$("#"+sID).adagentcount()
 
 		// a card that lists the tiers
-		sHTML = cRenderMDL.card_start("Tiers");
-			sHTML += cRenderMDL.body_start();
+		sHTML = cRenderMDL.card_start("Tiers")
+			sHTML += cRenderMDL.body_start()
 				sHTML += "<div style='column-count:3'>"
 					paTiers.forEach(
 						function (poTier){
-							sHTML += "<a href='#" + poTier.name + "'>" + poTier.name + "</a><br>";
+							sHTML += "<a href='#" + poTier.name + "'>" + poTier.name + "</a><br>"
 						}
-					);
-				sHTML += "</div>";
-			sHTML += "</div>";
-			sHTML += cRenderMDL.action_start();
-				sHTML += "filter WIP";
-			sHTML += "</div>";
-		sHTML += "</div></div><p>";
-		oElement.append(sHTML);
+					)
+				sHTML += "</div>"
+			sHTML += "</div>"
+			sHTML += cRenderMDL.action_start()
+				sHTML += "filter WIP"
+			sHTML += "</div>"
+		sHTML += "</div></div><p>"
+		oElement.append(sHTML)
 		
 		
 		// a card for each tier
-		sHTML= "";
+		sHTML= ""
 		paTiers.forEach(
 			function (poTier){
-				sHTML += cRenderMDL.card_start("<a type='tier' name='" + poTier.name + "' >" + poTier.name + "</a>");
-					sHTML += cRenderMDL.body_start();
+				sHTML += cRenderMDL.card_start("<a type='tier' name='" + poTier.name + "' >" + poTier.name + "</a>")
+					sHTML += cRenderMDL.body_start()
 					if (poTier.name === "Machine Agent"){
-						sHTML += cRender.messagebox("skipping machine agent tier");
+						sHTML += cRender.messagebox("skipping machine agent tier")
 					}else{
 						sHTML += 
 							"<div " + 
@@ -137,27 +136,27 @@ $.widget( "ck.adhistagentstiers", $.ck.common, {
 								cRenderQS.HOME_QS + "='" + oElement.attr(cRenderQS.HOME_QS) +"' " +
 								cRenderQS.TIER_ID_QS + "='" + poTier.id +"' >" +
 									"Please wait" +
-							"</div>";
-						sHTML += "</div>";
-						sHTML += cRenderMDL.action_start();
-							sHTML += cMenusCode.tierfunctions(poTier, oElement.attr(cRenderQS.HOME_QS));
-						sHTML += "</div>";
+							"</div>"
+						sHTML += "</div>"
+						sHTML += cRenderMDL.action_start()
+							sHTML += cMenusCode.tierfunctions(poTier, oElement.attr(cRenderQS.HOME_QS))
+						sHTML += "</div>"
 					}
-				sHTML += "</div></div><p>";
+				sHTML += "</div></div><p>"
 			}
-		);
+		)
 		
-		oElement.append(sHTML);
+		oElement.append(sHTML)
 		//now convert widgets TBD
 		$("DIV[type=histwidget]").each (
 			function (pi,pEl){
-				$(pEl).adhistagent();
+				$(pEl).adhistagent()
 			}
-		);
-		cMenus.renderMenus();
+		)
+		cMenus.renderMenus()
 	},
 	
-});
+})
 
 //##########################################################################################
 //#
@@ -180,47 +179,43 @@ $.widget( "ck.adhistagent",$.ck.common,{
 	//# Constructor
 	//#################################################################`
 	_create: function(){
-		var oThis = this;
-		
 		//set basic stuff
-		var oElement = this.element;
-		oElement.uniqueId();
+		var oElement = this.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
-		if (!bean)						$.error("bean class is missing! check includes");	
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes")	
+		if (!bean)						$.error("bean class is missing! check includes")	
 		
 		//check for required options
-		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!");			
-		if (!oElement.attr(cRenderQS.TIER_ID_QS))		$.error("tier  missing!");			
-		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("app  missing!")			
+		if (!oElement.attr(cRenderQS.TIER_ID_QS))		$.error("tier  missing!")			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!")			
 					
-		this.init();
+		this.init()
 	},
 	
 	init:function(){
-		var oElement = this.element;
-		var oThis = this;
+		var oElement = this.element
+		var oThis = this
 		//set behaviour for widget when it becomes visible
-		var oQueue = new cQueueifVisible();
-		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);				
-		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);				
-		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);				
-		oQueue.go(oElement, this.get_url());
+		var oQueue = new cQueueifVisible()
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus)}	)				
+		bean.on(oQueue, "start", 	function(){oThis.onStart()}	)				
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp)}	)				
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp)}	)				
+		oQueue.go(oElement, this.get_url())
 	},
 
 	
 	//*******************************************************************
 	onResponse: function(poHttp){
-		var oThis = this;
-		var oElement = this.element;
+		var oElement = this.element
 
-		oElement.empty();
-		oElement.removeClass();
+		oElement.empty()
+		oElement.removeClass()
 		
-		var aResponse = poHttp.response;
-		this.render(poHttp.response);
+		this.render(poHttp.response)
 	},
 
 	
@@ -228,23 +223,22 @@ $.widget( "ck.adhistagent",$.ck.common,{
 	//# functions
 	//#################################################################`
 	get_url: function (){
-		var sUrl;
-		var oConsts = this.consts;
-		var oElement = this.element;
+		var sUrl
+		var oElement = this.element
 		
-		var oParams = {};
-		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS);
-		oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS);
+		var oParams = {}
+		oParams[ cRenderQS.APP_ID_QS ] = oElement.attr(cRenderQS.APP_ID_QS)
+		oParams[ cRenderQS.TIER_ID_QS ] = oElement.attr(cRenderQS.TIER_ID_QS)
 		
-		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API;
-		sUrl = cBrowser.buildUrl(sBaseUrl, oParams);
-		return sUrl;
+		var sBaseUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.REST_API
+		sUrl = cBrowser.buildUrl(sBaseUrl, oParams)
+		return sUrl
 	},
 	
 	//*******************************************************************
 	render: function(poData){
-		var oElement = this.element;
-		var oThis = this;
+		var oElement = this.element
+		var oThis = this
 		
 		//display the count of agents for tier
 		var sID = oElement.attr("id") + "_Count"
@@ -257,65 +251,63 @@ $.widget( "ck.adhistagent",$.ck.common,{
 			cRenderQS.DONT_SHOW_TOTAL_QS + "='1' " +
 			cRenderQS.DONT_CLOSE_CARD_QS + "='1'>" +
 			"number of nodes counted: " + poData.node_count + ", Please wait.." + 
-		"</div>";
-		oElement.append(sHTML);
-		$("#"+sID).adagentcount();
+		"</div>"
+		oElement.append(sHTML)
+		$("#"+sID).adagentcount()
 			
 		//display the results
-		oElement.append( cRender.messagebox(poData.status));
-		sHTML = "";
-		var iNodes = poData.nodes.length;
+		oElement.append( cRender.messagebox(poData.status))
+		sHTML = ""
+		var iNodes = poData.nodes.length
 		if (iNodes > 0){
-			var sIds = "";
-			var sID = oElement.attr("id") + "_Mark"
-			sHTML += "<button id='" + sID + "'> Mark these " + iNodes + " nodes as historical</button>";
-			oElement.append(sHTML);
+			sID = oElement.attr("id") + "_Mark"
+			sHTML += "<button id='" + sID + "'> Mark these " + iNodes + " nodes as historical</button>"
+			oElement.append(sHTML)
 			$("#"+sID).click( 
-				function(){oThis.onClickMarkNodes(poData.nodes);}
-			);
+				function(){oThis.onClickMarkNodes(poData.nodes)}
+			)
 			
-			sID = oElement.attr("id") + "_MarkStatus";
-			var oDiv = $("<DIV>", {id:sID}).append ("progress....");
-			oElement.append(oDiv);
+			sID = oElement.attr("id") + "_MarkStatus"
+			var oDiv = $("<DIV>", {id:sID}).append ("progress....")
+			oElement.append(oDiv)
 		}
 	},
 	
 	//*******************************************************************
 	onClickMarkNodes:function(paNodes){
-		var oElement = this.element;
-		var oThis = this;
+		var oThis = this
 		
 		if (confirm("please confirm operation")){
 			//needs to be split into batches of 100 for larger numbers of agents
-			var aNodeIDs=[];
+			var aNodeIDs=[]
 			paNodes.forEach( function(poItem){
-				aNodeIDs.push(poItem.id);
+				aNodeIDs.push(poItem.id)
 				if (aNodeIDs.length > oThis.consts.MAX_IDS){
-					oThis.markAgents(aNodeIDs);
-					aNodeIDs = [];
+					oThis.markAgents(aNodeIDs)
+					aNodeIDs = []
 				}
-			});
-			if (aNodeIDs.length > 0) this.markAgents(aNodeIDs);
+			})
+			if (aNodeIDs.length > 0) this.markAgents(aNodeIDs)
 		}
 	},
 	
 	//*******************************************************************
 	markAgents: function (paNodeIds){
-		var oElement = this.element;
-		var sStatusID = oElement.attr("id") + "_MarkStatus";
-		var oStatusDiv = $("#" + sStatusID);
+		var oElement = this.element
+		var sStatusID = oElement.attr("id") + "_MarkStatus"
+		var oStatusDiv = $("#" + sStatusID)
 		
-		this.vars.count ++;
-		var sMarkerID = sStatusID + this.vars.count;
-		var oParams = {id:sMarkerID};
-		oParams[ cRenderQS.NODE_IDS_QS ] = JSON.stringify(paNodeIds);
-		oParams[ cRenderQS.HOME_QS ] = oElement.attr(cRenderQS.HOME_QS);
-		oParams[ cRenderQS.TITLE_QS ] = "batch "+ this.vars.count;
-		var oMarkerDiv = $("<SPAN>", oParams).append("Marking Batch: " + this.vars.count);
-		oStatusDiv.append(oMarkerDiv);
-		$("#"+sMarkerID).adexpireagents();
+		this.vars.count ++
+		var sMarkerID = sStatusID + this.vars.count
+		var oParams = {id:sMarkerID}
+		oParams[ cRenderQS.NODE_IDS_QS ] = JSON.stringify(paNodeIds)
+		oParams[ cRenderQS.HOME_QS ] = oElement.attr(cRenderQS.HOME_QS)
+		oParams[ cRenderQS.TITLE_QS ] = "batch "+ this.vars.count
+		var oMarkerDiv = $("<SPAN>", oParams).append("Marking Batch: " + this.vars.count)
+		oStatusDiv.append(oMarkerDiv)
+		$("#"+sMarkerID).adexpireagents()
 	}
-});
+})
 
 //##########################################################################################
 //#
@@ -328,53 +320,52 @@ $.widget( "ck.adexpireagents",$.ck.common,{
 	
 	//*******************************************************************
 	_create: function(){
-		var oThis = this;
-		
 		//set basic stuff
-		var oElement = this.element;
-		oElement.uniqueId();
+		var oElement = this.element
+		oElement.uniqueId()
 		
 		//check for necessary classes
-		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes");	
-		if (!bean)						$.error("bean class is missing! check includes");	
+		if (!cQueueifVisible)			$.error("Queue on visible class is missing! check includes")	
+		if (!bean)						$.error("bean class is missing! check includes")	
 		
 		//check for required options
-		if (!oElement.attr(cRenderQS.NODE_IDS_QS))		$.error("nodes  missing!");			
-		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!");			
-		if (!oElement.attr(cRenderQS.TITLE_QS))		$.error("title  missing!");			
+		if (!oElement.attr(cRenderQS.NODE_IDS_QS))		$.error("nodes  missing!")			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!")			
+		if (!oElement.attr(cRenderQS.TITLE_QS))		$.error("title  missing!")			
 					
-		this.init();
+		this.init()
 	},
 	
 	//*******************************************************************
 	init:function(){
-		var oElement = this.element;
-		var oThis = this;
+		var oElement = this.element
+		var oThis = this
 		//set behaviour for widget when it becomes visible
-		var oQueue = new cQueueifVisible();
-		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus);}	);	//inherited			
-		bean.on(oQueue, "start", 	function(){oThis.onStart();}	);					//inherited			
-		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp);}	);				
-		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp);}	);		//inherited			
-		var oParams = {};
-		oParams[cRenderQS.NODE_IDS_QS] = oElement.attr(cRenderQS.NODE_IDS_QS);
-		oQueue.go(oElement, this.get_url(), oParams);
+		var oQueue = new cQueueifVisible()
+		bean.on(oQueue, "status", 	function(psStatus){oThis.onStatus(psStatus)}	)	//inherited			
+		bean.on(oQueue, "start", 	function(){oThis.onStart()}	)					//inherited			
+		bean.on(oQueue, "result", 	function(poHttp){oThis.onResponse(poHttp)}	)				
+		bean.on(oQueue, "error", 	function(poHttp){oThis.onError(poHttp)}	)		//inherited			
+		var oParams = {}
+		oParams[cRenderQS.NODE_IDS_QS] = oElement.attr(cRenderQS.NODE_IDS_QS)
+		oQueue.go(oElement, this.get_url(), oParams)
 	},
 	
 	//*******************************************************************
 	get_url: function (){
-		var oElement = this.element;
+		var oElement = this.element
 		
-		var sUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.MARK_API;
-		return sUrl;
+		var sUrl = oElement.attr(cRenderQS.HOME_QS)+this.consts.MARK_API
+		return sUrl
 	},
 	
 	//*******************************************************************
+	// eslint-disable-next-line no-unused-vars
 	onResponse: function(poHttp){
-		var oElement = this.element;
-		oElement.empty();
-		oElement.append('<i class="material-icons" style="font-size:48px;color:green">done</i>');
+		var oElement = this.element
+		oElement.empty()
+		oElement.append('<i class="material-icons" style="font-size:48px;color:green">done</i>')
 	}
 
 
-});
+})

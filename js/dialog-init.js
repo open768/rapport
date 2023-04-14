@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 //for details on qtip see http://qtip2.com/
 //documentation is here: https://github.com/qTip2/qtip2/wiki
-
+/*globals cBrowser,showDialog*/
 function dialog__instrument_it( piIndex, poThing){
-	let oDialog = $(poThing);
-	let oTarget = $("#"+oDialog.attr("for"));
+	let oDialog = $(poThing)
+	let oTarget = $("#"+oDialog.attr("for"))
 	
 	oTarget.click(
 		function(){
@@ -13,12 +13,12 @@ function dialog__instrument_it( piIndex, poThing){
 				text: oDialog.html()
 			})
 		}
-	);
+	)
 }
 
 function dialog_init(){
-	cBrowser.writeConsole("**** initialising dialog ****");
-	$("div[class*='dialog']").each(dialog__instrument_it);
+	cBrowser.writeConsole("**** initialising dialog ****")
+	$("div[class*='dialog']").each(dialog__instrument_it)
 }
 
-$(dialog_init);
+$(dialog_init)
