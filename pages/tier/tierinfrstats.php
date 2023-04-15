@@ -18,11 +18,6 @@ require_once "$home/inc/common.php";
 require_once "$root/inc/charts.php";
 
 
-//choose a default duration
-
-
-$CHART_IGNORE_ZEROS = false;
-
 //####################################################################
 cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("tier infrastructure");
@@ -31,87 +26,93 @@ cChart::do_header();
 cChart::$width=cChart::CHART_WIDTH_LARGE;
 
 //####################################################################
-// huge time limit as this takes a long time//display the results
-set_time_limit(200); 
-
 //get passed in values
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $node = cHeader::get(cRenderQS::NODE_QS);
-	
 
-$title = "$oApp->name&gt;$oTier->name&gt;Infrastructure";
-
-//stuff for later
-
-$sAppQs = cRenderQS::get_base_app_QS($oApp);
-$sTierQs = cRenderQS::get_base_tier_QS($oTier);
-$sTierInfraUrl = cHttp::build_url(cCommon::filename(),$sTierQs);
-$sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
-$oApp = cRenderObjs::get_current_app();
-
-// show time options
-
-$showlink = cCommon::get_session($LINK_SESS_KEY);
+//####################################################################
 if (!$oTier->name){
 	cCommon::errorbox("no Tier parameter found");
 	exit;
 }
-
-//********************************************************************
 if (cAD::is_demo()){
 	cCommon::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
-//********************************************************************
+
+//####################################################################
+// huge time limit as this takes a long time//display the results
+set_time_limit(200); 
 
 
 //####################################################################
-//other buttons
-$aNodes = $oTier->GET_Nodes();	
-
+//stuff for later
+$sAppQs = cRenderQS::get_base_app_QS($oApp);
+$sTierQs = cRenderQS::get_base_tier_QS($oTier);
+$sTierInfraUrl = cHttp::build_url(cCommon::filename(),$sTierQs);
+$sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
+$oApp = cRenderObjs::get_current_app();
 $oCred = cRenderObjs::get_AD_credentials();
-if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
-?><select id="menuNodes">
-	<option selected disabled>Show Infrastructure Details for</option>
-	<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=$oTier->name?>) tier</option>
-	<option value="<?=$sAppInfraUrl?>"><?=$oApp->name?> Application</option>
-	<optgroup label="Individual Servers"><?php
-		foreach ($aNodes as $oNode){
-			$sNode = $oNode->name;
-			?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sTierInfraUrl, cRenderQS::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
-		}
-	?></optgroup>
-</select>
-
-<script>
-$(  
-	function(){
-		$("#menuNodes").selectmenu({change:common_onListChange});
-	}  
-);
-</script><?php
-if ($node) {
-	$sNodeID = cADUtil::get_node_id($oApp, $node);
-	if ($sNodeID){
-		$sUrl = cADControllerUI::nodeDashboard($oApp, $sNodeID);
-		cADCommon::button($sUrl);
-	}
-}
-$sDiskUrl = cHttp::build_url("tierdisks.php", $sTierQs);
-cRender::button("disk statistics", $sDiskUrl);
-
-cDebug::flush();
-$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 
 //####################################################################
-?>
-<p>
-<h2>Overall Statistics for <?=$oTier->name?>, <?=($node?"($node) Server":"all Servers")?></h2>
-<?php
+//# CARD
+//####################################################################
+$sTitle = "Tier Infrastructure for $oTier->name, ".($node?"($node) Server":"all Servers");
+cRenderCards::card_start($sTitle);
+	cRenderCards::body_start();
+	?><ul>
+		<li><a href=#agent>Agent Statistics</a></li>
+		<li><a href=#mem>Memory Statistics</a></li>
+		<li><a href=#infr>Infrastructure Statistics</a></li>
+	</ul>
+	<?php
+	cRenderCards::body_end();
 
+	cRenderCards::action_start();
+		if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
+
+		$aNodes = $oTier->GET_Nodes();	
+		?><select id="menuNodes">
+			<option selected disabled>Show Infrastructure Details for</option>
+			<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=$oTier->name?>) tier</option>
+			<option value="<?=$sAppInfraUrl?>"><?=$oApp->name?> Application</option>
+			<optgroup label="Individual Servers"><?php
+				foreach ($aNodes as $oNode){
+					$sNode = $oNode->name;
+					?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sTierInfraUrl, cRenderQS::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
+				}
+			?></optgroup>
+		</select>
+
+		<script>
+		$(  
+			function(){
+				$("#menuNodes").selectmenu({change:common_onListChange});
+			}  
+		);
+		</script><?php
+		if ($node) {
+			$sNodeID = cADUtil::get_node_id($oApp, $node);
+			if ($sNodeID){
+				$sUrl = cADControllerUI::nodeDashboard($oApp, $sNodeID);
+				cADCommon::button($sUrl);
+			}
+		}
+		$sDiskUrl = cHttp::build_url("tierdisks.php", $sTierQs);
+		cRender::button("disk statistics", $sDiskUrl);
+	cRenderCards::action_end();
+cRenderCards::card_end();
+
+
+//####################################################################
+//# CARD
+//####################################################################
+$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
+cRenderCards::card_start("Overall Statistics");
+cRenderCards::body_start();
 	$aMetrics = [];
 	$sMetricUrl=cADTierMetricPaths::tierCallsPerMin($oTier->name);
 	$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
@@ -127,14 +128,14 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$oTier->name"
 	];
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
-	cDebug::flush();
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
 //####################################################################
-?>
-<p>
-<h2>Agent Statistics for <?=$oTier->name?>, <?=($node?"($node) Server":"all Servers")?></h2>
-<?php
+//# CARD
 //####################################################################
+cRenderCards::card_start("<a name='agent'>Agent Statistics</a>");
+cRenderCards::body_start();
 	$aMetricTypes = cADInfraMetric::getInfrastructureAgentMetricTypes();
 	
 	$aMetrics = [];
@@ -148,11 +149,14 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
-	cDebug::flush();
-?>
-<p>
-<h2>Memory Statistics for <?=$oTier->name?>, <?=($node?"($node) Server":"all Servers")?></h2>
-<?php
+	cRenderCards::body_end();
+cRenderCards::card_end();
+
+//####################################################################
+//# CARD
+//####################################################################
+cRenderCards::card_start("<a name='mem'>Memory Statistics</a>");
+cRenderCards::body_start();
 	$aMetricTypes = cADInfraMetric::getInfrastructureMemoryMetricTypes();
 	
 	$aMetrics = [];
@@ -166,11 +170,14 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
-	cDebug::flush();
-?>
-<p>
-<h2>Infrastructure Statistics for <?=$oTier->name?>, <?=($node?"($node) Server":"all Servers")?></h2>
-<?php
+	cRenderCards::body_end();
+cRenderCards::card_end();
+
+//####################################################################
+//# CARD
+//####################################################################
+cRenderCards::card_start("<a name='infr'>Infrastructure Statistics</a>");
+cRenderCards::body_start();
 	$aMetricTypes = cADInfraMetric::getInfrastructureMiscMetricTypes();
 	
 	$aMetrics = [];
@@ -184,7 +191,8 @@ $sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 		];
 	}
 	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
-	cDebug::flush();
+	cRenderCards::body_end();
+cRenderCards::card_end();
 
 	
 cChart::do_footer();
