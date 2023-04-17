@@ -34,8 +34,9 @@ class cRenderMenus{
 		?>
 			<div
 				type="admenus" menu="appfunctions" 
-				home="<?=$home?>"
-				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
+				<?=cRenderQs::HOME_QS?>="<?=$home?>"
+				<?=cRenderQs::APP_QS?>="<?=$poApp->name?>" 
+				<?=cRenderQs::APP_ID_QS?>="<?=$poApp->id?>">
 				<i>loading menu:<?=$poApp->name?></i>
 			</div>
 		<?php
@@ -62,7 +63,7 @@ class cRenderMenus{
 		?>
 			<DIV
 				type="admenus" menu="appchange" 
-				home="<?=$home?>"
+				<?=cRenderQs::HOME_QS?>="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sApps_fragment?>
 				>
@@ -87,11 +88,11 @@ class cRenderMenus{
 		if ($poApp == null) $poApp = cRenderObjs::get_current_app();
 		//TBD change to a DIV - widget can replace with a select menu
 		?>
-			<SELECT 
+			<DIV 
 				type="admenus" menu="appagents" 				
-				home="<?=$home?>"
-				appname="<?=$poApp->name?>" appid="<?=$poApp->id?>">
-			</SELECT>
+				<?=cRenderQs::HOME_QS?>="<?=$home?>"
+				<?=cRenderQs::APP_QS?>="<?=$poApp->name?>" <?=cRenderQs::APP_ID_QS?>="<?=$poApp->id?>">
+			</DIV>
 		<?php
 		cDebug::leave();
 	}
@@ -172,7 +173,7 @@ class cRenderMenus{
 		?>
 			<div 
 				type="admenus" menu="tierfunctions"  
-				home="<?=$home?>"
+				<?=cRenderQs::HOME_QS?>="<?=$home?>"
 				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
 				<?=$poTier->name?> - please wait
 			</div>
@@ -200,7 +201,7 @@ class cRenderMenus{
 		?>
 			<div 
 				type="admenus" menu="tierchangemenu" 
-				home="<?=$home?>"
+				<?=cRenderQs::HOME_QS?>="<?=$home?>"
 				caption="<?=$psCaption?>" url="<?=$psURLFragment?>" 
 				extra="<?=$psExtraQS?>" <?=$sFragment?>>
 				please wait

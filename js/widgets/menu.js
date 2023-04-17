@@ -79,9 +79,9 @@ $.widget("ck.admenu", {
 		if (sElementName !== "DIV") $.error("element must be a DIV")
 
 		//check for required options
-		sAppname = oElement.attr("appname")
+		sAppname = oElement.attr(cRenderQS.APP_QS)
 		if (!sAppname) { $.error("appname attr missing!") }
-		sAppid = oElement.attr("appid")
+		sAppid = oElement.attr(cRenderQS.APP_ID_QS)
 		if (!sAppid) { $.error("appid attr missing!") }
 
 		//build the params
@@ -138,31 +138,27 @@ $.widget("ck.admenu", {
 		var oOptions = this.options
 
 		//check for required options
-		var sAppname = oElement.attr("appname")
+		var sAppname = oElement.attr(cRenderQS.APP_QS)
 		if (!sAppname) { $.error("appname attr missing!") }
-		var sAppid = oElement.attr("appid")
+		var sAppid = oElement.attr(cRenderQS.APP_ID_QS)
 		if (!sAppid) { $.error("appid attr missing!") }
 
 		//build the params
-		var sAgentPrefixUrl = oOptions.home + "/pages/agent"
-		cJquery.setTopZindex(oElement)
-
-		//build the select menu
-		var oSelect = oElement
-		var oOption = $("<option>", { selected: 1, disabled: 1 }).append("Show Agent...")
-		oSelect.append(oOption)
-
+		var sAgentPrefixUrl = oOptions.home + "/pages/agents"
 		var oParams = {}
 		oParams[cRenderQS.APP_QS] = sAppname
 		oParams[cRenderQS.APP_ID_QS] = sAppid
-		this.pr__addToGroup(oSelect, "Agent Information", cBrowser.buildUrl(sAgentPrefixUrl + "/appagents.php", oParams))
 
+		//build the select menu
+		var aMenuItems = [
+			new cMenuItem(cMenuItem.TYPE_ITEM, "Agent Information", cBrowser.buildUrl(sAgentPrefixUrl + "/appagents.php", oParams))
+		]
 		oParams[cRenderQS.METRIC_TYPE_QS] = cMenus.METRIC_TYPE_INFR_AVAIL
-		this.pr__addToGroup(oSelect, "Agent Availability", cBrowser.buildUrl(sAgentPrefixUrl + "/appagentdetail.php", oParams))
+		aMenuItems.push(
+			new cMenuItem(cMenuItem.TYPE_ITEM, "Agent Availability", cBrowser.buildUrl(sAgentPrefixUrl + "/appagentdetail.php", oParams))
+		)
+		cDropDownMenu.render(oElement, "Show Agent...", aMenuItems)
 
-		//add and make the menu a selectmenu
-		var oThis = this
-		oSelect.selectmenu({ select: function (poEvent, poTarget) { oThis.onSelectItem(poTarget.item.element) } })
 	},
 
 

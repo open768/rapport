@@ -26,10 +26,6 @@ $gsMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 //####################################################################
-?>
-	<script src="js/remote.js"></script>
-	
-<?php
 cChart::do_header();
 cChart::$width = cChart::CHART_WIDTH_LARGE;
 //####################################################################
@@ -68,21 +64,11 @@ if (!$gsMetricType ){
 	exit;
 }
 $oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricType);
-$sTitle  = $oMetric->caption;
 
 //####################################################################
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
 $sDetailRootQS = cHttp::build_url(cCommon::filename(), $sAppQS);
-
-//####################################################################
-
-cRenderMenus::show_app_agent_menu();
-
-cRenderMenus::show_app_change_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
-
-cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
-//####################################################################
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -90,56 +76,61 @@ if (cAD::is_demo()){
 	cRenderHtml::footer();
 	exit;
 }
-//********************************************************************
 
-?>
-<p>
-<h2><?=$sTitle?></h2>
-
-<?php
-//####################################################################
 $aResponse = $oApp->GET_Nodes();
+$iNodes = count_nodes($aResponse);
+if ($iNodes==0){
+	cCommon::messagebox("no nodes found");
+	cRenderHtml::footer();
+	exit;
+}
+
+//####################################################################
+$sTitle  = $oMetric->caption;
+cRenderCards::card_start($sTitle);
+	cRenderCards::action_start();
+		cRenderMenus::show_app_agent_menu();
+		cRenderMenus::show_app_change_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
+		cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
+	cRenderCards::action_end();
+cRenderCards::card_end();
+		
+//####################################################################
 $aResponse= group_by_tier($aResponse);
 uasort($aResponse, "pr__sort_nodes");
-$iNodes = count_nodes($aResponse);
 
-if ($iNodes==0){
-	?>
-		<div class="maintable"><h2>No nodes found</h2></div>
-	<?php
-}else{
-?>
-	<p>
-		<?php
-			foreach ($aResponse as $aTierNodes){
+foreach ($aResponse as $aTierNodes){
+	
+	$tid = $aTierNodes[0]->tierId;
+	$sTier = $aTierNodes[0]->tierName;
+
+	cRenderCards::card_start($sTier);
+		cRenderCards::body_start();
+			$oTier = cRenderObjs::make_tier_obj($oApp, $sTier, $tid);
+			
+
+			$sTierQS = cHttp::build_qs($sAppQS, cRenderQS::TIER_QS, $sTier);
+			$sTierQS = cHttp::build_qs($sTierQS , cRenderQS::TIER_ID_QS, $tid);
+			$sTierRootUrl=cHttp::build_url("tierinfrstats.php",$sTierQS);				
+			$aMetrics = [];
+			foreach ($aTierNodes as $oNode){
+				$sNode = $oNode->name;
+
+				$oMetric = cADInfraMetric::getInfrastructureMetric($sTier, $sNode ,$gsMetricType );
+				$sDetailUrl = cHttp::build_url($sTierRootUrl,cRenderQS::NODE_QS,$sNode);
 				
-				$tid = $aTierNodes[0]->tierId;
-				$tier = $aTierNodes[0]->tierName;
-				$oTier = cRenderObjs::make_tier_obj($oApp, $tier, $tid);
+				$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
+				$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
 				
-				?><hr><?php
-
-				cRenderMenus::show_tier_functions($oTier);
-				$sTierQS = cHttp::build_qs($sAppQS, cRenderQS::TIER_QS, $tier);
-				$sTierQS = cHttp::build_qs($sTierQS , cRenderQS::TIER_ID_QS, $tid);
-				$sTierRootUrl=cHttp::build_url("tierinfrstats.php",$sTierQS);				
-				$aMetrics = [];
-				foreach ($aTierNodes as $oNode){
-					$sNode = $oNode->name;
-
-					$oMetric = cADInfraMetric::getInfrastructureMetric($tier, $sNode ,$gsMetricType );
-					$sDetailUrl = cHttp::build_url($sTierRootUrl,cRenderQS::NODE_QS,$sNode);
-					
-					$aMetrics[] = [cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric];
-					$aMetrics[] = [cChart::TYPE=>cChart::LABEL,cChart::LABEL=>cRender::button_code("go",$sDetailUrl)];
-					
-				}
-				cChart::metrics_table($oApp, $aMetrics,6,cRender::getRowClass(),null,cChart::CHART_WIDTH_LETTERBOX/3);
 			}
-		?>
-	<p>
-<?php
+			cChart::metrics_table($oApp, $aMetrics,6,cRender::getRowClass(),null,cChart::CHART_WIDTH_LETTERBOX/3);
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			cRenderMenus::show_tier_functions($oTier);
+		cRenderCards::action_end();
+	cRenderCards::card_end();
 }
+
 cChart::do_footer();
 cRenderHtml::footer();
 ?>
