@@ -127,9 +127,11 @@ var cMenusCode={
 	appfunctions: function(poApp, psHome, psDivID){
 		var sHTML = 
 			"<div " + 
-				" type='admenus' menu='appfunctions' home='"+psHome+"'" +
-				" appname='" + poApp.name +"' appid='"+poApp.id+"' id='"+ psDivID + "'"+
-				" style='position: relative;'>"+
+				" type='admenus' menu='appfunctions' "+
+				cRenderQS.HOME_QS+"='"+psHome+"' " +
+				cRenderQS.APP_QS+"='" + poApp.name +"' " +
+				cRenderQS.APP_ID_QS+"='"+poApp.id+"' id='"+ psDivID + "'"+
+				">"+
 					poApp.name+" .. please wait" + 
 			"</div>"
 		return sHTML
@@ -139,7 +141,7 @@ var cMenusCode={
 		var sHTML = 
 			"<DIV " + 
 				"type='admenus' menu='tierfunctions' " +
-				"home='" + psHome + "' " +
+				cRenderQS.HOME_QS+"='" + psHome + "' " +
 				"tier='" + poTier.name + "' " +
 				"tid='" + poTier.id + "'> " +
 					poTier.name + " - please wait" +

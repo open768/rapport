@@ -116,7 +116,7 @@ class cRenderMenus{
 		$sApps_fragment = "";
 		foreach ($aApps as $oApp){
 			$iCount++;
-			$sApps_fragment.= "appname.$iCount =\"".$oApp->name."\" appid.$iCount=\"$oApp->id\" ";
+			$sApps_fragment.= " ".cRenderQS::APP_QS.".$iCount ='$oApp->name' ".cRenderQS::APP_ID_QS.".$iCount='$oApp->id' ";
 		}
 		
 		cDebug::leave();
