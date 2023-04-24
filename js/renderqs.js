@@ -10,7 +10,7 @@ var cRenderQS={
 	APPS_QS : "apps",
 
 	CONTROLLER_URL_QS : "cur",
-	
+
 	DB_QS : "db",
 
 	TIER_QS : "tier",
@@ -18,7 +18,7 @@ var cRenderQS={
 	TO_TIER_QS : "to",
 	TIER_ID_QS : "tid",
 	SERVICE_QS : "srv",
-	SERVICE_ID_QS: "sid",
+	SERVICE_ID_QS : "sid",
 
 	TRANS_QS : "trans",
 	TRANS_ID_QS : "trid",
@@ -40,10 +40,13 @@ var cRenderQS={
 	USAGE_QS : "us",
 	CSV_QS : "csv",
 	DIV_QS : "div",
-	METRIC_TYPE_QS :"mt",
+	METRIC_TYPE_QS : "mt",
 
-	PREVIOUS_QS:"prv",
-	LOGIN_TOKEN_QS:"lt",
+	PREVIOUS_QS : "prv",
+	LOGIN_TOKEN_QS : "lt",
+
+	//************************************************************
+	ANALYTICS_METRIC_QS : "anmet",
 
 	//************************************************************
 	AUDIT_TYPE_QS : "aut",
@@ -53,17 +56,22 @@ var cRenderQS={
 	AUDIT_FILTER_LOGIN : "LOGIN",
 	AUDIT_FILTER_LOGIN_FAILED : "LOGIN_FAILED",
 	AUDIT_FILTER_LOGOUT : "LOGOUT",
-	AUDIT_FILTER_OBJECT	 : "OBJECT_UPDATED",
-	
+	AUDIT_FILTER_OBJECT : "OBJECT_UPDATED",
+
 	//************************************************************
 	AGENT_COUNT_TYPE_QS : "act",
 	COUNT_TYPE_APPD : "ctap",
 	COUNT_TYPE_ACTUAL : "ctac",
-	
+
+	//************************************************************
+	AUDIT_HOST_QS : "auh",
+	AUDIT_ACCOUNT_QS : "aah",
+	AUDIT_USER_QS : "auh",
+
 	//************************************************************
 	CHECK_ONLY_QS : "cho",
 	CHECK_ONLY_BT : "cob",
-	
+
 	//************************************************************
 	IGNORE_REF_QS : "igr",
 	LIST_MODE_QS : "list",
@@ -72,7 +80,7 @@ var cRenderQS={
 	DONT_CLOSE_CARD_QS : "dclcr",
 
 	//************************************************************
-	LOCATION_QS:"loc",
+	LOCATION_QS : "loc",
 
 	//************************************************************
 	SOURCE_TYPE_QS : "das",
@@ -80,35 +88,39 @@ var cRenderQS={
 	SOURCE_TYPE_APPD : "sta",
 
 	//************************************************************
-	DASH_ID_QS :"dai",
-	DASH_NAME_QS :"dan",
+	DASH_ID_QS : "dai",
+	DASH_NAME_QS : "dan",
 	DASH_URL_TEMPLATE : "dut",
+
+	//************************************************************
+	ID_QS : "id",
 
 	//************************************************************
 	GROUP_NAME_QS : "grn",
 	GROUP_ID_QS : "gri",
-	GROUP_TYPE_QS :"gtq",
-	GROUP_TYPE_NODE :"n",
-	GROUP_TYPE_TIER :"t",
-	GROUP_TYPE_IP :"i",
+	GROUP_TYPE_QS : "gtq",
+	GROUP_TYPE_NODE : "n",
+	GROUP_TYPE_TIER : "t",
+	GROUP_TYPE_IP : "i",
 
 	//************************************************************
-	LOG_ID_QS :"loi",
+	LOG_ID_QS : "loi",
 	LOG_VERSION_QS : "lov",
 	LOG_CREATED_QS : "loc",
 
 	//************************************************************
-	HEALTH_ID_QS :"hi",
+	HELP_QS : "help",
+	HEALTH_ID_QS : "hi",
 	HOME_QS : "home",
 	LABEL_QS : "lbl",
 
 	//**************************************************************************
-	RUM_DETAILS_QS :"rmd",
+	RUM_DETAILS_QS : "rmd",
 	RUM_PAGE_QS : "rpg",
 	RUM_PAGE_ID_QS : "rpid",
 	RUM_TYPE_QS : "rty",
-	RUM_DETAILS_ACTIVITY :"rmda",
-	RUM_DETAILS_RESPONSE :"rmdr",
+	RUM_DETAILS_ACTIVITY : "rmda",
+	RUM_DETAILS_RESPONSE : "rmdr",
 	SYNTH_DETAILS_QS : "syd",
 
 	//**************************************************************************
@@ -132,6 +144,11 @@ var cRenderQS={
 	TIME_START_QS : "tsta",
 	TIME_END_QS : "tend",
 	TIME_DURATION_QS : "tdur",
-	LAST_YEAR_QS:"lyq",
-	TYPE_QS: "typ"
+	LAST_YEAR_QS : "lyq",
+
+	//**************************************************************************
+	TYPE_QS : "typ",
+
+	//**************************************************************************
+	WIDGET_NO_DETAIL_QS : "nd"
 }
