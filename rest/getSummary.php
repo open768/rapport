@@ -20,8 +20,8 @@ set_time_limit(200); // huge time limit as this could takes a long time
 
 
 //###################### DATA #############################################################
-$oTrans = cRenderObjs::get_current_trans()
-$index = cHeader::get("id"); //id of HTML div
+$oTrans = cRenderObjs::get_current_trans();
+$index = cHeader::get(cRenderQS::ID_QS); //id of HTML div
 
 $aResult = array( "id"=>$index);
 

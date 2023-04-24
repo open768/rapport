@@ -1,5 +1,5 @@
 'use strict'
-/*global cCommon */
+/*global cCommon,cRenderQS */
 
 //the callback 
 // eslint-disable-next-line no-unused-vars
@@ -33,8 +33,15 @@ function remotedata_jsonCallBack( poJson){
 
 // eslint-disable-next-line no-unused-vars
 function remotedata_getUrl(poItem){
-	var sUrl
-	sUrl="rest/getSummary.php?app="+poItem.app+"&tier="+poItem.tier+"&trans="+poItem.trans+"&id="+poItem.index
+	
+	var aParts = [
+		"rest/getSummary.php?",
+		cRenderQS.APP_QS,"=",poItem.app,"&",
+		cRenderQS.TIER_QS,"=",poItem.tier,"&",
+		cRenderQS.TRANS_QS,"=",poItem.trans,"&",
+		cRenderQS.ID_QS,"=",poItem.index
+	]
+	var sUrl = aParts.join("") 
 	cCommon.writeConsole("fetching: " + sUrl)
 	return sUrl
 }

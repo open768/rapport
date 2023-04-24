@@ -232,6 +232,14 @@ class cRenderHtml{
 			</script>
 		</BODY>
 	</HTML><?php
-	}	
+	}
+	
+	//**************************************************************************
+	public static function write_div($psID, $paProps, $psInnerHTML ){
+		echo "<DIV ";
+			foreach ($paProps as $sKey=>$sValue)
+				echo "$sKey = '$sValue'";
+		echo ">$psInnerHTML</DIV>";
+	}
 }
 ?>

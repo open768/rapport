@@ -142,8 +142,8 @@ var cMenusCode={
 			"<DIV " + 
 				"type='admenus' menu='tierfunctions' " +
 				cRenderQS.HOME_QS+"='" + psHome + "' " +
-				"tier='" + poTier.name + "' " +
-				"tid='" + poTier.id + "'> " +
+				cRenderQS.TIER_QS+"='" + poTier.name + "' " +
+				cRenderQS.TIER_ID_QS+"='" + poTier.id + "'> " +
 					poTier.name + " - please wait" +
 			"</DIV>"	
 		return sHTML

@@ -170,17 +170,44 @@ class cRenderMenus{
 		if ($poTier == null){
 			$poTier = cRenderObjs::get_current_tier();
 		}
-		?>
-			<div 
-				type="admenus" menu="tierfunctions"  
-				<?=cRenderQs::HOME_QS?>="<?=$home?>"
-				tier="<?=$poTier->name?>" tid="<?=$poTier->id?>" node="<?=$psNode?>">
-				<?=$poTier->name?> - please wait
-			</div>
-		<?php
+
+		$aProps = array(
+			"type" => "admenus",
+			"menu" => "tierfunctions",
+		);
+		$aProps[cRenderQS::HOME_QS]=$home;
+		$aProps[cRenderQS::TIER_QS] = $poTier->name;
+		$aProps[cRenderQS::TIER_ID_QS] = $poTier->id; 
+		$aProps[cRenderQS::NODE_QS] = $psNode;
+
+		cRenderHtml::write_div("ID_mnu_tierfn".$poTier->name, $aProps, "please wait" );
 		cDebug::leave();
 	}
 	
+	//******************************************************************************************
+	public static function show_tier_infra_menu($poTier, $psNode=null){
+		global $home;
+
+		$aProps = array(
+			"type" => "admenus",
+			"menu" => "tierinframenu",
+		);
+		$aProps[cRenderQs::HOME_QS] = $home;
+		$aProps[cRenderQs::APP_QS] = $poTier->app->name;
+		$aProps[cRenderQs::APP_ID_QS] = $poTier->app->id;
+		$aProps[cRenderQs::TIER_QS] = $poTier->name;
+		$aProps[cRenderQs::TIER_ID_QS] = $poTier->id;
+		$aProps[cRenderQs::NODE_QS] = $psNode;
+		$iNode=1;
+		$aNodes = $poTier->GET_Nodes();	
+		foreach ($aNodes as $oNode){
+			$aProps[cRenderQs::NODE_QS.".$iNode"] = $oNode->name;
+			$iNode++;
+		}
+		
+		cRenderHtml::write_div("ID_mnu_tierinfra".$poTier->name, $aProps, "please wait" );
+	}
+
 	//******************************************************************************************
 	public static function show_tier_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;

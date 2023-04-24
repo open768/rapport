@@ -102,6 +102,9 @@ class cRenderQS{
 	const DASH_ID_QS ="dai";
 	const DASH_NAME_QS ="dan";
 	const DASH_URL_TEMPLATE = "dut";
+
+	//************************************************************
+	const ID_QS = "id";
 	
 	//************************************************************
 	const GROUP_NAME_QS ="grn";

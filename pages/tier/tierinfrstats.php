@@ -52,7 +52,7 @@ set_time_limit(200);
 $sAppQs = cRenderQS::get_base_app_QS($oApp);
 $sTierQs = cRenderQS::get_base_tier_QS($oTier);
 $sTierInfraUrl = cHttp::build_url(cCommon::filename(),$sTierQs);
-$sAppInfraUrl = cHttp::build_url("appinfra.php",$sAppQs);
+$sAppInfraUrl = cHttp::build_url("../app/appinfra.php",$sAppQs);
 $oApp = cRenderObjs::get_current_app();
 $oCred = cRenderObjs::get_AD_credentials();
 
@@ -74,26 +74,7 @@ cRenderCards::card_start($sTitle);
 	cRenderCards::action_start();
 		if ($oCred->restricted_login == null)	cRenderMenus::show_tier_functions();
 
-		$aNodes = $oTier->GET_Nodes();	
-		?><select id="menuNodes">
-			<option selected disabled>Show Infrastructure Details for</option>
-			<option <?=($node?"":"disabled")?> value="<?=$sTierInfraUrl?>">(<?=$oTier->name?>) tier</option>
-			<option value="<?=$sAppInfraUrl?>"><?=$oApp->name?> Application</option>
-			<optgroup label="Individual Servers"><?php
-				foreach ($aNodes as $oNode){
-					$sNode = $oNode->name;
-					?><option <?=(($sNode == $node)?"disabled":"")?> value="<?=cHttp::build_url($sTierInfraUrl, cRenderQS::NODE_QS, $sNode)?>"><?=$sNode?></option><?php
-				}
-			?></optgroup>
-		</select>
-
-		<script>
-		$(  
-			function(){
-				$("#menuNodes").selectmenu({change:common_onListChange});
-			}  
-		);
-		</script><?php
+		cRenderMenus::show_tier_infra_menu($oTier, $node);
 		if ($node) {
 			$sNodeID = cADUtil::get_node_id($oApp, $node);
 			if ($sNodeID){

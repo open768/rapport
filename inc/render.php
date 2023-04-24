@@ -136,7 +136,14 @@ class cRender{
 	//**************************************************************************
 	public static function getTierLinkUrl($psApp,$psAid, $psTier, $psTid)
 	{
-		return "tier.php?app=$psApp&aid=$psAid&tier=$psTier&tid=$psTid";
+		return 
+			join([
+				"tier.php?",
+				cRenderQS::APP_QS,"=$psApp&",
+				cRenderQS::APP_ID_QS,"=$psAid&",
+				cRenderQS::TIER_QS,"=$psTier&",
+				cRenderQS::TIER_ID_QS,"=$psTid"
+			]);
 	}
 	//**************************************************************************
 	public static function getTierLink($psApp,$psAid, $psTier, $psTid)

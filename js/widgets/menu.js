@@ -60,6 +60,9 @@ $.widget("ck.admenu", {
 			case "tierfunctions":
 				this.pr__showTierFunctions()
 				break
+			case "tierinframenu":
+				this.pr__showTierInfraMenu()
+				break
 			default:
 				$.error("unknown menu type: " + oOptions.MenuType)
 		}
@@ -300,6 +303,48 @@ $.widget("ck.admenu", {
 		aMenuItems.push( new cMenuItem(cMenuItem.TYPE_ITEM, "Compare", this.pr__get_base_tier_QS(sTierPrefixUrl + "/comparestats.php")))
 
 		cDropDownMenu.render(oElement, "Tier: "+sTier, aMenuItems)
+	},
+
+	//****************************************************************
+	pr__showTierInfraMenu: function(){
+		var oElement
+		oElement = this.element
+		var sApp = oElement.attr(cRenderQS.APP_QS)
+
+		//------------------------------------------------------
+		var oParams = {}
+		oParams[cRenderQS.APP_QS] = sApp
+		oParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS)
+		var sAppPrefixUrl = oElement.attr("home") + "/pages/app"
+		var sTierPrefixUrl = oElement.attr("home") + "/pages/tier"
+		var sAppInfraUrl = cBrowser.buildUrl(sAppPrefixUrl + "/appinfra.php", oParams)
+
+		//------------------------------------------------------
+		var aMenuItems = [
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR, "App Infra"),
+			new cMenuItem(cMenuItem.TYPE_ITEM, sApp, sAppInfraUrl),
+			new cMenuItem(cMenuItem.TYPE_SEPARATOR, "Nodes"),
+		]
+
+		//------------------------------------------------------
+		var sTier = oElement.attr(cRenderQS.TIER_QS)
+		oParams[cRenderQS.TIER_QS] = sTier
+		oParams[cRenderQS.TIER_ID_QS] = oElement.attr(cRenderQS.TIER_ID_QS)
+		var sThisNode = oElement.attr(cRenderQS.NODE_QS)
+		var iCount = 1
+		for (;;){
+			var sNode = oElement.attr(cRenderQS.NODE_QS + "." + iCount)
+			if (!sNode) break
+			var oNodeProps = Object.assign({}, oParams )
+			oNodeProps[ cRenderQS.NODE_QS] = sNode
+			var sTierInfraUrl = cBrowser.buildUrl(sTierPrefixUrl + "/tierinfrstats.php", oNodeProps)
+			var oMenuItem = new cMenuItem(cMenuItem.TYPE_ITEM, sNode, sTierInfraUrl)
+			if (sNode === sThisNode) oMenuItem.disabled = true
+			aMenuItems.push(oMenuItem)
+			iCount++
+		}
+
+		cDropDownMenu.render(oElement, "Tier infrastructure: "+sTier, aMenuItems)
 	},
 
 	//#################################################################
