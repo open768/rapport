@@ -25,33 +25,33 @@ cRender::force_login();
 //**********************************************************************************
 function render_summary($paApps){
 	cRenderCards::card_start("Checkup");
-	cRenderCards::body_start();
-		$sPrevious = "";
-		echo "<h3>There are ".count($paApps)." Applications</h3>";
-		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
-			foreach ( $paApps as $oApp){
-				$sChar = strtolower(($oApp->name)[0]);
-				if ($sChar !== $sPrevious){
-					echo "<h3>".strtoupper($sChar)."</h3>";
-					$sPrevious = $sChar;
+		cRenderCards::body_start();
+			$sPrevious = "";
+			echo "<h3>There are ".count($paApps)." Applications</h3>";
+			cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+				foreach ( $paApps as $oApp){
+					$sChar = strtolower(($oApp->name)[0]);
+					if ($sChar !== $sPrevious){
+						echo "<h3>".strtoupper($sChar)."</h3>";
+						$sPrevious = $sChar;
+					}
+					echo "<a href='#$oApp->id'>$oApp->name</a><br>";
 				}
-				echo "<a href='#$oApp->id'>$oApp->name</a><br>";
+			echo "</div>";	
+		cRenderCards::body_end();
+		cRenderCards::action_start();
+			$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::APP_ID_QS, cHeader::GET(cRenderQS::APP_ID_QS));
+			$checkQS = cHeader::GET(cRenderQS::CHECK_ONLY_QS);
+			if ($checkQS === cRenderQS::CHECK_ONLY_BT)
+				cRender::button("show all checks", $sUrl);
+			else{
+				$sUrl = cHttp::build_url($sUrl, cRenderQS::CHECK_ONLY_QS, cRenderQS::CHECK_ONLY_BT);
+				cRender::button("show only BT Checks", $sUrl);
 			}
-		echo "</div>";	
-	cRenderCards::body_end();
-	cRenderCards::action_start();
-		$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::APP_ID_QS, cHeader::GET(cRenderQS::APP_ID_QS));
-		$checkQS = cHeader::GET(cRenderQS::CHECK_ONLY_QS);
-		if ($checkQS === cRenderQS::CHECK_ONLY_BT)
-			cRender::button("show all checks", $sUrl);
-		else{
-			$sUrl = cHttp::build_url($sUrl, cRenderQS::CHECK_ONLY_QS, cRenderQS::CHECK_ONLY_BT);
-			cRender::button("show only BT Checks", $sUrl);
-		}
-		
-		
-		cRender::add_filter_box("div[type=admenus]",cRenderQS::APP_QS,".mdl-card");
-	cRenderCards::action_end();
+			
+			
+			cRender::add_filter_box("div[type=admenus]",cRenderQS::APP_QS,".mdl-card");
+		cRenderCards::action_end();
 	cRenderCards::card_end();
 }
 
