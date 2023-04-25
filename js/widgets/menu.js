@@ -215,9 +215,9 @@ $.widget("ck.admenu", {
 		var aMenuItems = []
 		var sItemApp
 		for (;;) {
-			sItemApp = oElement.attr("appname." + iCount)
+			sItemApp = oElement.attr(cRenderQS.APP_QS + "." + iCount)
 			if (!sItemApp) break
-			sItemAppId = oElement.attr("appid." + iCount)
+			sItemAppId = oElement.attr(cRenderQS.APP_ID_QS + "." + iCount)
 
 			oParams = {}
 			oParams[cRenderQS.APP_QS] = sItemApp
