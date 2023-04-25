@@ -9,7 +9,8 @@ http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 For licenses that allow for commercial use please contact cluck@chickenkatsu.co.uk
 
-// USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED**************************************************************************/
+// USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
+**************************************************************************/
 
 //####################################################################
 $home="../..";
@@ -58,7 +59,7 @@ cChart::do_header();
 //# CARD at top of page
 cRenderCards::card_start();
 	cRenderCards::body_start();
-		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
+		cRender::add_filter_box("div[type=admenus]",cRenderQS::APP_QS,".mdl-card");
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::apps_home());
