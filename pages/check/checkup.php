@@ -50,7 +50,7 @@ function render_summary($paApps){
 		}
 		
 		
-		cRender::add_filter_box("div[type=admenus]","appname",".mdl-card");
+		cRender::add_filter_box("div[type=admenus]",cRenderQS::APP_QS,".mdl-card");
 	cRenderCards::action_end();
 	cRenderCards::card_end();
 }
