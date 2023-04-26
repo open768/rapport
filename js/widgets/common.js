@@ -1,9 +1,9 @@
 'use strict'
-/* globals bean,cQueueifVisible */
+/* globals bean,cQueueifVisible,cRenderMDL */
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget( "ck.common",{
-	_create: function(){
+var cCommonWidget =  {
+	_create:function(){
 		//check for necessary classes
 		if (typeof bean === 'undefined')	$.error("bean class is missing! check includes")
 		if (typeof cHttp2 === 'undefined')	$.error("http2 class is missing! check includes")
@@ -15,7 +15,9 @@ $.widget( "ck.common",{
 	onStatus: function(psMessage){
 		var oElement = this.element
 		oElement.empty()
-		oElement.append("status: " +psMessage)
+
+		var oCard = cRenderMDL.card("Status", "status: " +psMessage)
+		oElement.append(oCard)
 	},
 
 	//*******************************************************************
@@ -28,7 +30,7 @@ $.widget( "ck.common",{
 			oElement.append("There was an error  getting data  ")
 	},
 
-//*******************************************************************
+	//*******************************************************************
 	// eslint-disable-next-line no-unused-vars
 	onStart: function(poItem){
 		var oElement = this.element
@@ -36,8 +38,11 @@ $.widget( "ck.common",{
 		oElement.empty()
 		oElement.removeClass()
 
-		var oLoader = $("<DIV>")
-		oLoader.gSpinner({scale: 0.25})
-		oElement.append(oLoader).append("Starting Server Request: ")
-	},
-})
+		var oSpin = $("<DIV>")
+		oSpin.gSpinner({scale: 0.25})
+		var oCard = cRenderMDL.card("Starting", oSpin)
+		oElement.append(oCard)
+	}
+}
+
+$.widget( "ck.common", cCommonWidget)
