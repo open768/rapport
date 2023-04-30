@@ -34,9 +34,9 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$oTrans = cRenderObjs::get_current_trans();
-$oTier = $oTrans->tier;
-$oApp = $oTier->app;
+/** @var cADTrans */	$oTrans = cRenderObjs::get_current_trans();
+/** @var cADTier */	$oTier = $oTrans->tier;
+/** @var cADApp */	$oApp = $oTier->app;
 
 $node= cHeader::get(cRenderQS::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
@@ -55,10 +55,8 @@ if (cAD::is_demo()){
 	exit;
 }
 //********************************************************************
-$aNodes = $oTier->GET_Nodes();
-uasort($aNodes , "AD_name_sort_fn");
-
 $oCred = cRenderObjs::get_AD_credentials();
+$aNodes = $oTier->GET_Nodes();
 
 function show_nodes($psNode){
 	global $oNodes, $sTransQS, $aNodes, $oCred;
@@ -100,11 +98,16 @@ function show_nodes($psNode){
 }
 
 //#####################################################################################################
-cRenderCards::card_start("Contents");
+cRenderCards::card_start("Transaction details for $oTrans->name");
 	cRenderCards::body_start();
 	?><ul>
 		<li><a href="#1">Data for <?=$oTrans->name?> in <?=$oTier->name?></a>
 		<li><a href="#2">Transaction Map</a>
+		<?php 
+			if ($node){ ?>
+				<li><a href="#3">Details for node: <?=$node?></a>
+			<?php }
+		?>
 		<li><a href="#4">Remote Services</a>
 		<li><a href="#5">Transaction Snapshots</a>
 	</ul><?php
@@ -126,7 +129,7 @@ cRenderCards::card_end();
 
 
 //#####################################################################################################
-cRenderCards::card_start("<a name='1'>Data</a> for $oTrans->name $oTier->name");
+cRenderCards::card_start("<a name='1'>Transation: </a> '$oTrans->name',  Tier: '$oTier->name'");
 	cRenderCards::body_start();
 		$aMetrics = [];
 		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTrans)];
@@ -139,7 +142,7 @@ cRenderCards::card_end();
 
 //#####################################################################################################
 //TBD make this a widget
-cRenderCards::card_start("<a name='2'>Transaction map</a>");
+cRenderCards::card_start("<a name='2'>map for transaction: '$oTrans->name'</a>");
 	cRenderCards::body_start();
 	
 	?><div class="transactionflow" id="<?=FLOW_ID?>">
@@ -161,7 +164,7 @@ cRenderCards::card_end();
 
 // ################################################################################
 if ($node){ 
-	cRenderCards::card_start("<a name='3'>Data</a> for Transaction: $oTrans->name for node $node)");
+	cRenderCards::card_start("<a name='3'>Transaction: '$oTrans->name'</a>, node: '$node'");
 		cRenderCards::body_start();
 			$aMetrics = [];
 			$aMetrics[] = [cChart::LABEL=>"server trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTrans, $node)];
@@ -187,7 +190,7 @@ if ($node){
 
 // ################################################################################
 //TBD make this a widget
-cRenderCards::card_start("<a name='4'>Remote</a>Services used by transaction:$oTrans->name in Tier: $oTier->name");
+cRenderCards::card_start("<a name='4'>Remote Services</a> used by transaction:'$oTrans->name' in Tier: '$oTier->name'");
 	cRenderCards::body_start();
 		//******get the external tiers used by this transaction
 		$oData = $oTrans->GET_ExtTiers();

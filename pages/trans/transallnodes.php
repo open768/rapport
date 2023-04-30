@@ -26,9 +26,9 @@ cChart::do_header();
 
 //####################################################
 //display the results
-$oTrans = cRenderObjs::get_current_trans();
-$oTier = $oTrans->tier;
-$oApp = $oTier->app;
+/** @var cADTrans */ 	$oTrans = cRenderObjs::get_current_trans();
+/** @var cADTier  */ 	$oTier = $oTrans->tier;		
+/** @var cADApp  */		$oApp = $oTier->app;
 $node= cHeader::get(cRenderQS::NODE_QS);
 $sExtraCaption = ($node?"($node) node":"");
 
@@ -45,37 +45,41 @@ if (cAD::is_demo()){
 
 //********************************************************************
 $oCred = cRenderObjs::get_AD_credentials();
-cADCommon::button(cADControllerUI::transaction($oTrans));
 cDebug::flush();
 
 // ################################################################################
 // ################################################################################
 $aNodes = $oTier->GET_Nodes();
-function sort_nodes($a, $b){
-	return strcmp($a->name, $b->name);
-}
-uasort($aNodes , "sort_nodes");
 
-cRender::button("Back to Transaction", "transdetails.php?$sTransQS");
 // ################################################################################
 // ################################################################################
-?><h2>Transaction: (<?=$oTrans->name?>) for all nodes</h2><?php
+cRenderCards::card_start("Transaction: $oTrans->name - for all nodes");
+	cRenderCards::action_start();
+		cRender::button("Back to Transaction", "transdetails.php?$sTransQS");
+		cADCommon::button(cADControllerUI::transaction($oTrans));
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
-$aMetrics = [];
 foreach ($aNodes as $oNode){ 
 	$sNodeName = $oNode->name;
 	$sNodeQs = cHttp::build_QS($sTransQS, cRenderQS::NODE_QS, $oNode->name);
 	$sUrl = "transdetails.php?$sNodeQs";
 					
+	$aMetrics = [];
 	$sMetricUrl=cADMetricPaths::transCallsPerMin($oTrans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Calls  ($sNodeName)", cChart::METRIC=>$sMetricUrl, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>$oNode->name];
 	$sMetricUrl=cADMetricPaths::transResponseTimes($oTrans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"response ($sNodeName)", cChart::METRIC=>$sMetricUrl];
 	$sMetricUrl=cADMetricPaths::transErrors($oTrans, $sNodeName);
 	$aMetrics[] = [cChart::LABEL=>"Errors ($sNodeName)", cChart::METRIC=>$sMetricUrl];
+
+	cRenderCards::card_start("Node: $sNodeName");
+		cRenderCards::body_start();
+			$sClass = cRender::getRowClass();
+			cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
+		cRenderCards::body_end();
+	cRenderCards::card_end();
 }
-$sClass = cRender::getRowClass();
-cChart::metrics_table($oApp, $aMetrics, 3, $sClass, cChart::CHART_HEIGHT_SMALL);
 
 // ################################################################################
 // ################################################################################
