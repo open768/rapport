@@ -129,7 +129,7 @@ cRenderCards::card_end();
 
 
 //#####################################################################################################
-cRenderCards::card_start("<a name='1'>Transation: </a> '$oTrans->name',  Tier: '$oTier->name'");
+cRenderCards::card_start("<a name='1'>Transaction: '$oTrans->name'</a>,  Tier: '$oTier->name'");
 	cRenderCards::body_start();
 		$aMetrics = [];
 		$aMetrics[] = [cChart::LABEL=>"trans Calls:", cChart::METRIC=>cADMetricPaths::transCallsPerMin($oTrans)];

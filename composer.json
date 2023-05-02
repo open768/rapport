@@ -1,6 +1,6 @@
 {
     "name": "open768/rapport",
-    "description": "Rapport application - focussed seful at a glance information about your appdynamics controller",
+    "description": "Rapport application - focussed at a glance information about your appdynamics controller",
     "type": "project",
     "license": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License",
     "authors": [
@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "oomphinc/composer-installers-extender": "^2.0"
+        "oomphinc/composer-installers-extender": "^2.0",
+        "zircote/swagger-php": "^4.7"
     },
     "config": {
         "allow-plugins": {
