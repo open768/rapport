@@ -18,7 +18,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 class cRenderMenus{
 	
 	//******************************************************************************************
-	// menus are populated in the footer() function in renderhtml.php
+	// menus are rendered by clientside js in the footer() function in renderhtml.php
 	//******************************************************************************************
 	public static function show_app_functions($poApp=null){
 		global $home;
@@ -181,6 +181,34 @@ class cRenderMenus{
 		$aProps[cRenderQS::NODE_QS] = $psNode;
 
 		cRenderHtml::write_div("ID_mnu_tierfn".$poTier->name, $aProps, "please wait" );
+		cDebug::leave();
+	}
+
+	//******************************************************************************************
+	public static function show_tiers_custom_menu($poApp, $psCaption, $psUrl){
+		cDebug::enter();
+		global $home;
+
+		$aTiers = $poApp->GET_Tiers();
+
+		$aProps = array(
+			"type" => "admenus",
+			"menu" => "tiersCustom",
+		);
+		$aProps[cRenderQs::TITLE_QS] = $psCaption;
+		$aProps[cRenderQs::BASE_URL_QS] = $psUrl;
+		
+		$aProps[cRenderQs::HOME_QS] = $home;
+		$aProps[cRenderQs::APP_QS] = $poApp->name;
+		$aProps[cRenderQs::APP_ID_QS] = $poApp->id;
+
+		$iCount =0;
+		foreach ($aTiers as $oTier){
+			$iCount++;
+			$aProps[cRenderQs::TIER_QS.$iCount] = $oTier->name;
+			$aProps[cRenderQs::TIER_ID_QS.$iCount] = $oTier->id;
+		}
+		cRenderHtml::write_div("ID_mnu_tiercustfn".$poApp->name, $aProps, "please wait" );
 		cDebug::leave();
 	}
 	

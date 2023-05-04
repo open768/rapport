@@ -31,14 +31,13 @@ $.widget("ck.admenu", {
 		oElement.css({ position: "relative" })
 
 		//check for necessary classes
-		if (!oElement.selectmenu) $.error("select Menu type missing! check includes")
 		if (!cDropDownMenu) $.error("cDropDownMenu misssing check includes")
 		if (!oElement.attr("menu")) $.error("select menu misssing menu attribute")
 
 		//get attributes
 		oOptions = this.options
 		oOptions.MenuType = oElement.attr("menu")
-		oOptions.home = oElement.attr("home")
+		oOptions.home = oElement.attr(cRenderQS.HOME_QS)
 
 		//load content
 		switch (oOptions.MenuType) {
@@ -54,14 +53,14 @@ $.widget("ck.admenu", {
 			case "tierchangemenu":
 				this.pr__showChangeTierMenu()
 				break
-			case "tiernodesmenu":
-				this.pr__showTierNodesMenu()
-				break
 			case "tierfunctions":
 				this.pr__showTierFunctions()
 				break
 			case "tierinframenu":
 				this.pr__showTierInfraMenu()
+				break
+			case "tiersCustom":
+				this.pr__showTiersCustomMenu()
 				break
 			default:
 				$.error("unknown menu type: " + oOptions.MenuType)
@@ -164,36 +163,6 @@ $.widget("ck.admenu", {
 
 	},
 
-
-	//****************************************************************
-	pr__showTierNodesMenu: function () {
-		var oElement
-		oElement = this.element
-		var sThisBaseUrl = this.pr__get_base_tier_QS(oElement.attr("url"))
-
-		cJquery.setTopZindex(oElement)
-
-		//
-		var oSelect = oElement
-		var oOption = $("<option>", { selected: 1, disabled: 1 }).append(oElement.attr("caption"))
-		oSelect.append(oOption)
-
-		var iCount = 1
-		for (;;) {
-			var sNode = oElement.attr("node." + iCount)
-			if (!sNode) break
-
-			var oParams = {}
-			oParams[cRenderQS.NODE_QS] = sNode
-			this.pr__addToGroup(oSelect, sNode, cBrowser.buildUrl(sThisBaseUrl, oParams))
-			iCount++
-		}
-
-		//add and make the menu a selectmenu
-		var oThis = this
-		oSelect.selectmenu({ select: function (poEvent, poTarget) { oThis.onSelectItem(poTarget.item.element) } })
-	},
-
 	//****************************************************************
 	pr__showAppsChangeMenu: function () {
 
@@ -233,6 +202,41 @@ $.widget("ck.admenu", {
 
 		//add menu
 		cDropDownMenu.render(oElement, "Change App: "+sCaption, aMenuItems,5)
+
+	},
+
+	//****************************************************************
+	//* TIERS
+	//****************************************************************
+	pr__showTiersCustomMenu: function (){
+		var oElement = this.element
+
+		//-----------things needed in loop
+		var sBaseUrl = oElement.attr(cRenderQS.BASE_URL_QS)
+		var sCaption = oElement.attr(cRenderQS.TITLE_QS)
+		var aBaseParams = {}
+			aBaseParams[ cRenderQS.APP_ID_QS] =  oElement.attr(cRenderQS.APP_ID_QS)
+			aBaseParams[ cRenderQS.APPS_QS] =  oElement.attr(cRenderQS.APPS_QS)
+
+		//-----------build menu
+		var aMenuItems = []
+		var iCount = 1
+		for (;;) {
+			var sTier = oElement.attr(cRenderQS.TIER_QS + iCount)
+			if (!sTier) break
+
+			var sTid = oElement.attr(cRenderQS.TIER_ID_QS + iCount)
+			var oTierParams = Object.assign({}, aBaseParams ) //copy params
+			oTierParams[cRenderQS.TIER_QS] = sTier
+			oTierParams[cRenderQS.TIER_ID_QS] = sTid
+			var sTierUrl = cBrowser.buildUrl(sBaseUrl, oTierParams)
+			var oMenuItem = new cMenuItem(cMenuItem.TYPE_ITEM, sTier,sTierUrl)
+			aMenuItems.push(oMenuItem)
+			iCount++
+		}
+
+		//render menu
+		cDropDownMenu.render(oElement, sCaption, aMenuItems,5)
 
 	},
 
@@ -315,8 +319,8 @@ $.widget("ck.admenu", {
 		var oParams = {}
 		oParams[cRenderQS.APP_QS] = sApp
 		oParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS)
-		var sAppPrefixUrl = oElement.attr("home") + "/pages/app"
-		var sTierPrefixUrl = oElement.attr("home") + "/pages/tier"
+		var sAppPrefixUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/app"
+		var sTierPrefixUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/tier"
 		var sAppInfraUrl = cBrowser.buildUrl(sAppPrefixUrl + "/appinfra.php", oParams)
 
 		//------------------------------------------------------

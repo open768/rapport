@@ -29,32 +29,6 @@ cRenderHtml::header("External Calls");
 cRender::force_login();
 cChart::do_header();
 
-//####################################################################
-function show_tier_menu(){
-	global $oApp, $gsAppQS;
-	
-	$aTiers = $oApp->GET_Tiers();
-
-	?><select id="TierMenu">
-		<option selected disabled>Show external calls for Tiers...</option>
-		<?php
-			foreach ($aTiers as $oTier){
-				$sUrl = cHttp::build_qs($gsAppQS, cRenderQS::TIER_QS, $oTier->name);
-				$sUrl = cHttp::build_qs($sUrl, cRenderQS::TIER_ID_QS, $oTier->id);
-				?><option value="../tier/tierextgraph.php?<?="$sUrl"?>"><?=$oTier->name?></option><?php
-			}
-		?>
-	</select>
-	<script>
-	$(  
-		function(){
-			$("#TierMenu").selectmenu({change:common_onListChange});  
-		}  
-	);
-	</script><?php
-}
-//####################################################################
-
 $oCred = cRenderObjs::get_AD_credentials();
 cDebug::flush();
 
@@ -71,8 +45,8 @@ cRendercards::card_start("Overall statistics for $oApp->name");
 	cRendercards::action_start();
 		if ($oCred->restricted_login == null){ 
 			//********************************************************************
-			show_tier_menu();
 			cRenderMenus::show_app_change_menu("External Calls");
+			cRenderMenus::show_tiers_custom_menu($oApp, "Tiers external calls", "$home/pages/tier/tierextgraph.php");
 		}
 	cRendercards::action_end();
 cRendercards::card_end();
