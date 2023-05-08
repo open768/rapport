@@ -91,19 +91,19 @@ cRenderCards::card_end();
 //####################################################################
 //# CARD
 //####################################################################
-$sAllUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
+$sAllInfraUrl = cHttp::build_url("tierallnodeinfra.php", $sTierQs);
 cRenderCards::card_start("Overall Statistics");
 cRenderCards::body_start();
 	$aMetrics = [];
 	$sMetricUrl=cADTierMetricPaths::tierCallsPerMin($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
+	$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::INFRA_METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Activity for all nodes in Tier:$oTier->name"
 	];
 	
 	$sMetricUrl=cADTierMetricPaths::tierResponseTimes($oTier->name);
-	$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
+	$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::INFRA_METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
 		cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See Response Times for all nodes in Tier:$oTier->name"
@@ -122,7 +122,7 @@ cRenderCards::body_start();
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::INFRA_METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::HIDEIFNODATA=>true,
@@ -143,7 +143,7 @@ cRenderCards::body_start();
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::INFRA_METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::HIDEIFNODATA=>true,
@@ -164,7 +164,7 @@ cRenderCards::body_start();
 	$aMetrics = [];
 	foreach ($aMetricTypes as $sMetricType){
 		$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,$node,$sMetricType);
-		$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
+		$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::INFRA_METRIC_TYPE_QS, $sMetricType);
 		$aMetrics[]= [
 			cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 			cChart::HIDEIFNODATA=>true,

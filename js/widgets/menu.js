@@ -1,9 +1,7 @@
 'use strict'
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-/*global cMenuItem, cBrowser, cRenderQS, cMenus, cDropDownMenu, cJquery */
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$.widget("ck.admenu", {
+/*global cMenuItem, cBrowser, cRenderQS, cMenus, cDropDownMenu cADMetricPaths*/
+var oMenu = {
 	//#################################################################
 	//# Definition
 	//#################################################################
@@ -62,7 +60,11 @@ $.widget("ck.admenu", {
 			case "tiersCustom":
 				this.pr__showTiersCustomMenu()
 				break
+			case "allnodeinframenu":
+				this.pr__showAllNodeInfraMenu()
+				break
 			default:
+				oElement.append("*unknown menu*")
 				$.error("unknown menu type: " + oOptions.MenuType)
 		}
 	},
@@ -317,8 +319,9 @@ $.widget("ck.admenu", {
 
 		//------------------------------------------------------
 		var oParams = {}
-		oParams[cRenderQS.APP_QS] = sApp
+		oParams[cRenderQS.APP_QS] = oElement.attr(cRenderQS.APP_QS)
 		oParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS)
+
 		var sAppPrefixUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/app"
 		var sTierPrefixUrl = oElement.attr(cRenderQS.HOME_QS) + "/pages/tier"
 		var sAppInfraUrl = cBrowser.buildUrl(sAppPrefixUrl + "/appinfra.php", oParams)
@@ -331,8 +334,7 @@ $.widget("ck.admenu", {
 		]
 
 		//------------------------------------------------------
-		var sTier = oElement.attr(cRenderQS.TIER_QS)
-		oParams[cRenderQS.TIER_QS] = sTier
+		oParams[cRenderQS.TIER_QS] = oElement.attr(cRenderQS.TIER_QS)
 		oParams[cRenderQS.TIER_ID_QS] = oElement.attr(cRenderQS.TIER_ID_QS)
 		var sThisNode = oElement.attr(cRenderQS.NODE_QS)
 		var iCount = 1
@@ -348,7 +350,54 @@ $.widget("ck.admenu", {
 			iCount++
 		}
 
+		var sTier = oElement.attr(cRenderQS.TIER_QS)
 		cDropDownMenu.render(oElement, "Tier infrastructure: "+sTier, aMenuItems)
+	},
+
+	//#################################################################
+	//#################################################################
+	pr__showAllNodeInfraMenu: function(){
+		var oElement = this.element
+		var sHome = oElement.attr(cRenderQS.HOME_QS)
+
+		var oBaseParams = {}
+		oBaseParams[cRenderQS.APP_ID_QS] = oElement.attr(cRenderQS.APP_ID_QS)
+		oBaseParams[cRenderQS.APP_QS] = oElement.attr(cRenderQS.APP_QS)
+
+		var aMenuItems = []
+		//----------- all ---------------------------
+		var sThisMetricName = oElement.attr(cRenderQS.INFRA_METRIC_NAME_QS)
+		var oAllProps = Object.assign({}, oBaseParams)
+		oAllProps[cRenderQS.METRIC_TYPE_QS] = oElement.attr(cRenderQS.INFRA_METRIC_TYPE_QS)
+		var sAllUrl = sHome + "/pages/agents/appagentdetail.php"
+		sAllUrl = cBrowser.buildUrl(sAllUrl, oAllProps)
+
+		aMenuItems.push(new cMenuItem(cMenuItem.TYPE_SEPARATOR, "show for all tiers:"))
+		aMenuItems.push(new cMenuItem(cMenuItem.TYPE_ITEM, sThisMetricName, sAllUrl))
+
+		//----------- metrics ---------------------------
+		oBaseParams[cRenderQS.TIER_ID_QS] = oElement.attr(cRenderQS.TIER_ID_QS)
+		oBaseParams[cRenderQS.TIER_QS] = oElement.attr(cRenderQS.TIER_QS)
+		aMenuItems.push(new cMenuItem(cMenuItem.TYPE_SEPARATOR, "Show Details of"))
+		var iCount = 1
+		for (;;){
+			var sType = oElement.attr(cRenderQS.INFRA_METRIC_TYPE_QS + iCount)
+			if (!sType) break
+			var sName = oElement.attr(cRenderQS.INFRA_METRIC_NAME_QS + iCount)
+			var oItemProps = Object.assign({}, oBaseParams)
+			oItemProps[cRenderQS.INFRA_METRIC_TYPE_QS] = sType
+			var sItemUrl = cBrowser.buildUrl("tierallnodeinfra.php", oItemProps)
+			aMenuItems.push(new cMenuItem(cMenuItem.TYPE_ITEM, sName, sItemUrl))
+			iCount++
+		}
+		//----------- additional ---------------------------
+		aMenuItems.push(new cMenuItem(cMenuItem.TYPE_SEPARATOR, "Other Stats"))
+		oBaseParams[cRenderQS.METRIC_TYPE_QS] = cADMetricPaths.METRIC_TYPE_JMX_DBPOOLS
+		var sUrl = cBrowser.buildUrl("tierjmx.php", oBaseParams)
+		aMenuItems.push(new cMenuItem(cMenuItem.TYPE_ITEM, "JMX database pools", sUrl))
+		
+
+		cDropDownMenu.render(oElement, "Infrastructure...", aMenuItems)		
 	},
 
 	//#################################################################
@@ -401,4 +450,7 @@ $.widget("ck.admenu", {
 			document.location.href = sUrl
 		}
 	}
-})
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+$.widget("ck.admenu", oMenu)

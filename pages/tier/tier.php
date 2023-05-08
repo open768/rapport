@@ -77,13 +77,13 @@ cDebug::flush();
 //Tier Statistics
 	$aMetrics = [];
 	$sMetricUrl=cADTierMetricPaths::tierCallsPerMin($oTier->name);	
-	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
+	$sQs = cHttp::build_qs($sTierQS, cRenderQS::INFRA_METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 	$aMetrics[]= [
 		cChart::LABEL=>"Calls per min for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,cChart::STYLE=>cRender::getRowClass(),
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
 	];
 	
-	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
+	$sQs = cHttp::build_qs($sTierQS, cRenderQS::INFRA_METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RESPONSE_TIMES);
 	$sMetricUrl=cADTierMetricPaths::tierResponseTimes($oTier->name);
 	$aMetrics[]= [
 		cChart::LABEL=>"Response times in ms for ($oTier->name) tier", cChart::METRIC=>$sMetricUrl,
@@ -101,7 +101,7 @@ cDebug::flush();
 	$aMetrics[] = [cChart::LABEL=>"Slow Calls", cChart::METRIC=>cADTierMetricPaths::tierSlowCalls($oTier->name),cChart::STYLE=>cRender::getRowClass()];
 	$aMetrics[] = [cChart::LABEL=>"Very Slow Calls", cChart::METRIC=>cADTierMetricPaths::tierVerySlowCalls($oTier->name)];
 
-	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_CPU_BUSY);
+	$sQs = cHttp::build_qs($sTierQS, cRenderQS::INFRA_METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_CPU_BUSY);
 	$aMetrics[] = [
 		cChart::LABEL=>"CPU Busy", cChart::METRIC=>cADInfraMetric::InfrastructureCpuBusy($oTier->name), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
@@ -111,7 +111,7 @@ cDebug::flush();
 		cChart::LABEL=>"Disk Free", cChart::METRIC=>cADInfraMetric::InfrastructureDiskFree($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1
 	];
 	
-	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ERRORS);
+	$sQs = cHttp::build_qs($sTierQS, cRenderQS::INFRA_METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ERRORS);
 	$aMetrics[] = [
 		cChart::LABEL=>"Errors Per Min", cChart::METRIC=>cADTierMetricPaths::tierErrorsPerMin($oTier->name), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"
@@ -121,7 +121,7 @@ cDebug::flush();
 		cChart::LABEL=>"Exceptions Per Min", cChart::METRIC=>cADTierMetricPaths::tierExceptionsPerMin($oTier->name), cChart::HIDEIFNODATA=>1
 	];
 	
-	$sQs = cHttp::build_qs($sTierQS, cRenderQS::METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_JAVA_HEAP_USED);
+	$sQs = cHttp::build_qs($sTierQS, cRenderQS::INFRA_METRIC_TYPE_QS, cADInfraMetric::METRIC_TYPE_INFR_JAVA_HEAP_USED);
 	$aMetrics[] = [
 		cChart::LABEL=>"Java Heap Used", cChart::METRIC=>cADInfraMetric::InfrastructureJavaHeapUsed($oTier->name),cChart::STYLE=>cRender::getRowClass(), cChart::HIDEIFNODATA=>1,
 		cChart::GO_HINT=>"All Nodes",	cChart::GO_URL=>"tierallnodeinfra.php?$sQs"

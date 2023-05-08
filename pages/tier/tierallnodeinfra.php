@@ -33,7 +33,7 @@ cChart::do_header();
 $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 
-$sMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
+$sMetricType = cHeader::get(cRenderQS::INFRA_METRIC_TYPE_QS);
 $oMetricDetails = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$sMetricType);
 
 //stuff for later
@@ -58,43 +58,14 @@ if (cAD::is_demo()){
 }
 
 //####################################################################
-$title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;$oMetricDetails->caption";
+$title = "App: $oApp->name, Tier: $oTier->name, Infrastructure - $oMetricDetails->caption";
 cRenderCards::card_start($title);
 cRenderCards::action_start();
-	if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
-	?>
-	<select id="menuDetails">
-		<option disabled selected>Infrastructure...</option>
-		<?php
-			$sDisabled = ($oCred->restricted_login? "disabled": "");
-		?>
-		<option <?=$sDisabled?> value="<?=$sAllNodeUrl?>">
-			All <?=$oMetricDetails->short?> data for <?=$oApp->name?> Application</option>
-		<optgroup label="Show details of ..">
-		<?php
-			$sAllInfraUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
-			foreach ( $aMetrics as $oType){
-				$sType = $oType->type;
-				$sUrl = cHttp::build_url($sAllInfraUrl, cRenderQS::METRIC_TYPE_QS, $sType);
-				?><option <?=($sType==$sMetricType?"disabled":"")?> value="<?=$sUrl?>"><?=$oType->metric->short?></option><?php
-			}
-		?>
-		</optgroup>
-		<optgroup label="Other Statistics">
-			<option value="<?=cHttp::build_url("tierjmx.php?$sTierQS", cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_JMX_DBPOOLS)?>">JMX database pools</option>
-
-		</optgroup>
-	</select>
-
-	<script>
-	$(  
-		function(){
-			$("#menuDetails").selectmenu({change:common_onListChange});
-		}  
-	);
-	</script>
-	<?php
-cRenderCards::action_end();
+	if (!$oCred->restricted_login) {
+		cRenderMenus::show_tier_functions();
+		cRenderMenus::show_all_node_infra_menu($oTier, $oMetricDetails );
+	}
+	cRenderCards::action_end();
 cRenderCards::card_end();
 
 	
@@ -117,7 +88,7 @@ cRenderCards::card_start($title);
 			$aMetrics[]= [cChart::LABEL=>$sNode." - ".$oMetric->caption, cChart::METRIC=>$oMetric->metric, cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"all metrics ($sNode)", cChart::HIDEIFNODATA=>1];
 		}
 		cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
-	cRenderCards::body_end();
+		cRenderCards::body_end();
 cRenderCards::card_end();
 
 //####################################################################

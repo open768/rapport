@@ -34,7 +34,7 @@ class cDropDownMenu{
 		//count how many columns needed
 		var iCols = 0
 		var iBreakAtRow = null
-		if (piFixedCols !== null){
+		if (piFixedCols !== null && (paItems.length > piFixedCols) ){
 			iCols = piFixedCols
 			iBreakAtRow = Math.trunc( paItems.length / iCols)
 		}else

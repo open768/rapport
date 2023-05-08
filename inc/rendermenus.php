@@ -20,7 +20,7 @@ class cRenderMenus{
 	//******************************************************************************************
 	// menus are rendered by clientside js in the footer() function in renderhtml.php
 	//******************************************************************************************
-	public static function show_app_functions($poApp=null){
+	public static function show_app_functions(cADApp $poApp=null){
 		global $home;
 		cDebug::enter();
 		$oCred = cRenderObjs::get_AD_credentials();
@@ -75,7 +75,7 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_app_agent_menu($poApp = null){
+	public static function show_app_agent_menu(cADApp $poApp = null){
 		global $home;
 
 		cDebug::enter();
@@ -156,7 +156,7 @@ class cRenderMenus{
 	
 	//******************************************************************************************
 	//******************************************************************************************
-	public static function show_tier_functions($poTier = null, $psNode=null){
+	public static function show_tier_functions(cAdTier $poTier = null, $psNode=null){
 		global $home;
 
 		cDebug::enter();
@@ -185,7 +185,7 @@ class cRenderMenus{
 	}
 
 	//******************************************************************************************
-	public static function show_tiers_custom_menu($poApp, $psCaption, $psUrl){
+	public static function show_tiers_custom_menu(cADApp $poApp, $psCaption, $psUrl){
 		cDebug::enter();
 		global $home;
 
@@ -213,7 +213,7 @@ class cRenderMenus{
 	}
 	
 	//******************************************************************************************
-	public static function show_tier_infra_menu($poTier, $psNode=null){
+	public static function show_tier_infra_menu(cADTier $poTier, $psNode=null){
 		global $home;
 
 		$aProps = array(
@@ -237,7 +237,7 @@ class cRenderMenus{
 	}
 
 	//******************************************************************************************
-	public static function show_tier_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
+	public static function show_tier_menu(string $psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;
 		
 		cDebug::enter();
@@ -264,8 +264,35 @@ class cRenderMenus{
 		<?php
 		cDebug::leave();
 	}	
+
 	//******************************************************************************************
-	private static function pr__get_tiers_fragment($poApp){
+	public static function show_all_node_infra_menu( cADTier $poTier, $poInfraType){
+		global $home;
+
+		$aProps = array(
+			"type" => "admenus",
+			"menu" => "allnodeinframenu",
+		);
+		$aProps[cRenderQs::HOME_QS] = $home;
+		$aProps[cRenderQs::APP_QS] = $poTier->app->name;
+		$aProps[cRenderQs::APP_ID_QS] = $poTier->app->id;
+		$aProps[cRenderQs::TIER_QS] = $poTier->name;
+		$aProps[cRenderQs::TIER_ID_QS] = $poTier->id;
+		$aProps[cRenderQs::INFRA_METRIC_TYPE_QS] = $poInfraType->type;
+		$aProps[cRenderQs::INFRA_METRIC_NAME_QS] = $poInfraType->short;
+
+		$aMetrics = cADInfraMetric::getInfrastructureMetricDetails($poTier);
+		$iCount = 1;
+		foreach ( $aMetrics as $oType){
+			$aProps[cRenderQs::INFRA_METRIC_TYPE_QS.$iCount] = $oType->type;
+			$aProps[cRenderQs::INFRA_METRIC_NAME_QS.$iCount] = $oType->metric->short;
+			$iCount ++;
+		}
+		cRenderHtml::write_div("ID_mnu_allnodeinfra".$poTier->name, $aProps, "please wait" );
+	}
+
+	//******************************************************************************************
+	private static function pr__get_tiers_fragment( cADApp $poApp){
 
 		cDebug::enter();
 		try{

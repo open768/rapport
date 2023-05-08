@@ -47,14 +47,15 @@ if (count($aTiers) == 0)
 	cCommon::messagebox("no Tiers Found");
 else{
 	foreach ($aTiers as $oTier){
-
+		cDebug::extra_debug("Tier: $oTier->name");
 		$sTierQs = cRenderQS::get_base_tier_QS($oTier );
 		$sAllUrl = cHttp::build_url("../tier/tierallnodeinfra.php", $sTierQs);
 
 		$aMetrics = [];
 		foreach ($aMetricTypes as $sMetricType){
 			$oMetric = cADInfraMetric::getInfrastructureMetric($oTier->name,null,$sMetricType);
-			$sUrl = cHttp::build_url($sAllUrl, cRenderQS::METRIC_TYPE_QS, $sMetricType);
+			$sUrl = cHttp::build_url($sAllUrl, cRenderQS::INFRA_METRIC_TYPE_QS, $sMetricType);
+			cDebug::extra_debug( $sUrl);
 			$aMetrics[] = [
 				cChart::LABEL=>$oMetric->caption, cChart::METRIC=>$oMetric->metric, 
 				cChart::GO_URL=>$sUrl, cChart::GO_HINT=>"See $oMetric->caption for all servers",

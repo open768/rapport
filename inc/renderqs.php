@@ -105,6 +105,8 @@ class cRenderQS{
 
 	//************************************************************
 	const ID_QS = "id";
+	const INFRA_METRIC_TYPE_QS = "imt";
+	const INFRA_METRIC_NAME_QS = "imn";
 	
 	//************************************************************
 	const GROUP_NAME_QS ="grn";
