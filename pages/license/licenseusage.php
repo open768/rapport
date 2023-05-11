@@ -47,24 +47,7 @@ cRenderCards::card_start("Licence Usage for last $sUsage Months");
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::licenses());
 		cRender::button("license rules", "agentlicense.php");
-		?><p>
-		<select id="menuTime">
-			<option selected disabled>Show Licenses for</option>
-			<?php
-				foreach ([1,2,3,4,5,6,12] as $iOption ){
-					$sDisabled = ($sUsage == $iOption?"disabled":"");
-					?>
-						<option <?=$sDisabled?> value="<?=cHttp::build_url("licenseusage.php",cRenderQS::USAGE_QS,$iOption)?>"><?=$iOption?> Months</option>
-					<?php
-				}
-			?></optgroup>
-		</select>
-
-		<script>
-		$(  function(){
-				$("#menuTime").selectmenu({change:common_onListChange,width:300});
-		} );
-		</script><?php
+		cRenderMenus::show_license_menu();
 	cRenderCards::action_end();
 cRenderCards::card_end();
 
@@ -82,6 +65,7 @@ cRenderCards::card_start();
 	cRenderCards::body_end();
 cRenderCards::card_end();
 
+//####################################################################
 cChart::do_footer();
 cRenderHtml::footer();
 ?>

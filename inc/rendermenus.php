@@ -156,6 +156,16 @@ class cRenderMenus{
 	
 	//******************************************************************************************
 	//******************************************************************************************
+	public static function show_license_menu(){
+		$aProps = array(
+			"type" => "admenus",
+			"menu" => "licenses",
+		);
+		cRenderHtml::write_div("ID_mnu_lic", $aProps, "please wait" );
+	}
+
+	//******************************************************************************************
+	//******************************************************************************************
 	public static function show_tier_functions(cAdTier $poTier = null, $psNode=null){
 		global $home;
 

@@ -63,6 +63,9 @@ var oMenu = {
 			case "allnodeinframenu":
 				this.pr__showAllNodeInfraMenu()
 				break
+			case "licenses":
+				this.pr__showLicensesMenu()
+				break
 			default:
 				oElement.append("*unknown menu*")
 				$.error("unknown menu type: " + oOptions.MenuType)
@@ -205,6 +208,24 @@ var oMenu = {
 		//add menu
 		cDropDownMenu.render(oElement, "Change App: "+sCaption, aMenuItems,5)
 
+	},
+
+	//****************************************************************
+	//* LICENSES
+	//****************************************************************
+	pr__showLicensesMenu:function(){
+		var oElement = this.element
+		var aMenuItems = []
+		var aOptions = [1,2,3,4,5,6,12]
+		aOptions.forEach (
+			( piValue ) => {
+				var oParams = {}
+				oParams[cRenderQS.USAGE_QS] = piValue
+				var sUrl = cBrowser.buildUrl("licenseusage.php", oParams)
+				aMenuItems.push( new cMenuItem(cMenuItem.TYPE_ITEM, ""+piValue + " Months", sUrl))
+			} 
+		)
+		cDropDownMenu.render(oElement, "Show Licenses for...", aMenuItems)
 	},
 
 	//****************************************************************
