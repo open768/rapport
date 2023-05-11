@@ -49,7 +49,9 @@ if (cAD::is_demo()){
 		cCommon::messagebox("Nothing found");
 	else{
 		foreach ( $aResponse as $oApp){		?>
-			<div app="<?=$oApp->name?>" aid="<?=$oApp->id?>">Loading synthetic data for ...<?=$oApp->name?></div>
+			<div <?=cRenderQS::HOME_QS?>="<?=$home?>" <?=cRenderQS::APP_QS?>="<?=$oApp->name?>" <?=cRenderQS::APP_ID_QS?>="<?=$oApp->id?>">
+				Loading synthetic data for ...<?=$oApp->name?>
+			</div>
 		<?php	}
 	}
 ?>
@@ -61,8 +63,8 @@ $( function(){
 			var oElement = $(this);
 			oElement.adsynlist( {
 				home:"<?=$home?>",
-				app:oElement.attr("app"),
-				app_id:oElement.attr("aid")
+				app:oElement.attr(cRenderQS.APP_QS),
+				app_id:oElement.attr(cRenderQS.APP_ID_QS)
 			} );
 		}
 	);

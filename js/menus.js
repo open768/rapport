@@ -198,7 +198,7 @@ var cTopMenu={
 	render_restricted: function (poDiv){
 		var sController = poDiv.attr("controller")
 		if (!sController) {	$.error("controller attr missing!")	}
-		var sHome = poDiv.attr("home")
+		var sHome = poDiv.attr(cRenderQS.HOME_QS)
 		if (!sHome) {	$.error("home attr missing!")	}
 		
 		//add the sections
@@ -217,7 +217,7 @@ var cTopMenu={
 		//check for required options
 		var sController = poDiv.attr("controller")
 		if (!sController) {	$.error("controller attr missing!")	}
-		var sHome = poDiv.attr("home")
+		var sHome = poDiv.attr(cRenderQS.HOME_QS)
 		if (!sHome) {	$.error("home attr missing!")	}
 		
 		var sAllPrefixUrl = sHome+"/pages/all"

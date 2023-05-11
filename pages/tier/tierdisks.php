@@ -29,14 +29,6 @@ $oTier = cRenderObjs::get_current_tier();
 $oApp = $oTier->app;
 $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
-// show time options
-$title = "$oApp->name&gt;$oTier->name&gt;Tier Infrastructure&gt;disks";
-
-$showlink = cCommon::get_session($LINK_SESS_KEY);
-
-//other buttons
-$oCred = cRenderObjs::get_AD_credentials();
-if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -44,33 +36,36 @@ if (cAD::is_demo()){
 	cRenderHtml::footer();
 	exit;
 }
+
 //********************************************************************
+cRenderCards::card_start("Overall Disks Metrics for $oTier->name");
+	cRenderCards::body_start();
+		$aData = $oTier->GET_DiskMetrics();
+		$sBaseMetric = cADInfraMetric::InfrastructureNodeDisks($oTier->name);
+		$aMetrics = [];
+		foreach ($aData as $oMetric)
+			$aMetrics[]= [cChart::LABEL=>$oMetric->name, cChart::METRIC=>$oMetric->name];
+		cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
+	cRenderCards::body_end();
+	cRenderCards::action_start();
+		$oCred = cRenderObjs::get_AD_credentials();
+		if (!$oCred->restricted_login) cRenderMenus::show_tier_functions();
+		$sDiskUrl = cHttp::build_url("tierinfrstats.php",$sTierQS);
+		cRender::button("Back to Tier Infrastructure", $sDiskUrl);
+	cRenderCards::action_end();
+cRenderCards::card_end();
 
-
-//data for the page
-	
-//####################################################################
-?>
-<h2>Overall Disks Metrics for <?=$oTier->name?></h2>
-<?php
-	$aData = $oTier->GET_DiskMetrics();
-	$sBaseMetric = cADInfraMetric::InfrastructureNodeDisks($oTier->name);
-	$aMetrics = [];
-	foreach ($aData as $oMetric)
-		$aMetrics[]= [cChart::LABEL=>$oMetric->name, cChart::METRIC=>$oMetric->name];
-	cChart::render_metrics($oApp, $aMetrics, cChart::CHART_WIDTH_LETTERBOX/3);
-
-?>
-<p>
-<h2>Show disks for Node..</h2>
-<?php
-$aNodes = $oTier->GET_Nodes();
-$sBaseUrl = cHttp::build_url("tiernodedisks.php",$sTierQS);
-foreach ($aNodes as $oNode){
-	$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::NODE_QS, $oNode->name);
-	cRender::button($oNode->name, $sUrl);
-	echo " ";
-}
+//********************************************************************
+cRenderCards::card_start("Show disks for Node..");
+cRenderCards::action_start();
+	$aNodes = $oTier->GET_Nodes();
+	$sBaseUrl = cHttp::build_url("tiernodedisks.php",$sTierQS);
+	foreach ($aNodes as $oNode){
+		$sUrl = cHttp::build_url($sBaseUrl, cRenderQS::NODE_QS, $oNode->name);
+		cRender::button($oNode->name, $sUrl);
+	}
+cRenderCards::action_end();
+cRenderCards::card_end();
 
 cChart::do_footer();
 cRenderHtml::footer();

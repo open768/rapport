@@ -282,7 +282,7 @@ var oMenu = {
 
 		var sApp = cBrowser.data[cRenderQS.APP_QS]
 		var sThisTier = cBrowser.data[cRenderQS.TIER_QS]
-		var sTier = oElement.attr("tier")
+		var sTier = oElement.attr(cRenderQS.TIER_QS)
 		if (!sTier) sTier = sThisTier
 
 		var sTierPrefixUrl = oOptions.home + "/pages/tier"
@@ -418,9 +418,9 @@ var oMenu = {
 		oParams[cRenderQS.APP_ID_QS] = cBrowser.data[cRenderQS.APP_ID_QS]
 
 		var sTier, sTid, sNode
-		sTier = oElement.attr("tier")
-		sTid = oElement.attr("tid")
-		sNode = oElement.attr("node")
+		sTier = oElement.attr(cRenderQS.TIER_QS)
+		sTid = oElement.attr(cRenderQS.TIER_ID_QS)
+		sNode = oElement.attr(cRenderQS.NODE_QS)
 		if (!sNode) sNode = cBrowser.data[cRenderQS.NODE_QS]
 
 		oParams[cRenderQS.TIER_ID_QS] = (sTid ? sTid : cBrowser.data[cRenderQS.TIER_ID_QS])

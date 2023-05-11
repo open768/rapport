@@ -26,9 +26,9 @@ $.widget( "ck.adhealthdetail",  $.ck.common, {
 		if (!cHR_Render) 				$.error("cHR_Render is missing! check includes")		
 		
 		//check for required options
-		if (!oElement.attr("aid"))		$.error("appid  (aid)missing!")			
+		if (!oElement.attr(cRenderQS.APP_ID_QS))		$.error("appid  (aid)missing!")			
 		if (!oElement.attr("hi"))		$.error("ruleID (hi) missing!")			
-		if (!oElement.attr("home"))		$.error("home  missing!")			
+		if (!oElement.attr(cRenderQS.HOME_QS))		$.error("home  missing!")			
 					
 		
 		//set behaviour for widget when it becomes visible
