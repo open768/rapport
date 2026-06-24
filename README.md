@@ -2,7 +2,7 @@
 Drill down and extract valuable information across multiple applications from your appdynamics controller with just a few simple clicks.
 The reporter provides a fast,simple and secure web based dashboarding tool that comes with pre-configured dashboards that allow you to quickly identify, drill down to the details of and extract data stored in the Appdynamics platform so that it can be further analysed by other data analytics tools.
 
-to see a live demo of the reporter please visit https://www.chickenkatsu.co.uk/apps/reporter/
+to see a live demo of the reporter please visit [https://www.chickenkatsu.co.uk/apps/reporter/](https://www.chickenkatsu.co.uk/apps/rapport/)
 
 
 Copyright (c) 2013-2018 ChickenKatsu Ltd.
