@@ -8,7 +8,7 @@
 			"path": "."
 		},
 		{
-			"path": "../jsinc"
+			"path": "../../js/jsinc"
 		}
 	],
 	"settings": {}
