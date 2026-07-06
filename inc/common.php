@@ -1,29 +1,29 @@
 <?php
 require_once "$home/inc/root.php";
-cRoot::set_root($home);
+cAppGlobals::init($home);
 
 //####################################################################
-require_once("$phpinc/ckinc/debug.php");
+require_once(cAppGlobals::$ckPhpInc."/debug.php");
 cDebug::check_GET_or_POST();
 
 //####################################################################
-require_once("$phpinc/ckinc/session.php");
-require_once("$phpinc/ckinc/common.php");
-require_once("$phpinc/ckinc/http.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/ckinc/rendercards.php");
-require_once("$phpinc/ckinc/renderw3.php");
-require_once("$phpinc/ckinc/google.php");
-require_once("$phpinc/ckinc/newrelic.php");
-require_once("$phpinc/ckinc/colour.php");
+require_once(cAppGlobals::$ckPhpInc."/session.php");
+require_once(cAppGlobals::$ckPhpInc."/common.php");
+require_once(cAppGlobals::$ckPhpInc."/http.php");
+require_once(cAppGlobals::$ckPhpInc."/header.php");
+require_once(cAppGlobals::$ckPhpInc."/rendercards.php");
+require_once(cAppGlobals::$ckPhpInc."/renderw3.php");
+require_once(cAppGlobals::$ckPhpInc."/google.php");
+require_once(cAppGlobals::$ckPhpInc."/newrelic.php");
+require_once(cAppGlobals::$ckPhpInc."/colour.php");
 
 //####################################################################
-require_once("$root/inc/render.php");
-require_once("$root/inc/metrics.php");
-require_once("$root/inc/secret.php");
+require_once(cAppGlobals::$root."/inc/render.php");
+require_once(cAppGlobals::$root."/inc/metrics.php");
+require_once(cAppGlobals::$root."/inc/secret.php");
 
 //####################################################################
-require_once("$ADlib/AD.php");
+require_once(cAppGlobals::$ADlib."/AD.php");
 
 //####################################################################
 //no cacheing allowed

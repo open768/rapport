@@ -1,0 +1,54 @@
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body>
+<script language="javascript">
+	
+	function sort_fn(a,b){
+	    if (a[0] > b[0])
+        	return 1;
+    	if (a[0] < b[0])
+        	return -1;
+    	return 0;
+	}
+	
+	function output(psCaption, psRapport, paCusts){
+		var iColumns=4;
+		var i, aCust;
+		var iCol =0;
+		
+		document.writeln("<h2>"+psCaption+"</h2>");
+		document.writeln("<table border=1>");
+		
+		paCusts.sort(sort_fn);
+		for (i = 0; i<paCusts.length; i++){
+			aCust = paCusts[i];
+			document.writeln(
+				"<td><form action='" + psRapport + "' method='POST' target='new' >" +
+					"<input type='hidden' name='ac' value='" + aCust[1] + "'>" +
+					"<input type='hidden' name='us' value='" + aCust[2] + "'>" +
+					"<input type='hidden' name='pw' value='" + aCust[3] + "'>" +
+					"<input type='hidden' name='ho' value='" + aCust[4] + "'>" +
+					"<input type='submit' name='go' value='"+ aCust[0] + "'>" +
+				"</form></td> "
+			);
+			iCol++;
+			if (iCol>=iColumns) {
+				document.writeln("</tr>");
+				iCol = 0;
+			}
+		}
+		if (iCol >0 ) document.writeln("</tr>");
+		document.writeln("</table><p>");
+		
+		document.writeln("<a href='"+ psRapport + "'>Login Page</a><hr>");
+	}
+	
+	var aCusts = [];
+	//caption, account, passwd, url,https
+	aCusts.push( ["Appd Demo1", "demo1", "adpartner", "xxxxxxxx", "demo1.saas.appdynamics.com", "yes"]);
+	aCusts.push( ["Appd Demo2", "demo2", "adpartner", "xxxxxxxx", "demo2.saas.appdynamics.com", "yes"]);
+	
+	output("live rapport", "https://chickenkatsu.co.uk/apps/rapport/index.php", aCusts);
+	//output("localhost rapport", "https://localhost:8443/Rapport/index.php", aCusts);
+	
+	
+</script></body></html>

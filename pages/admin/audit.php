@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$phpinc/ckinc/audit.php";
+require_once cAppGlobals::$ckPhpInc."/audit.php";
 
 //####################################################################
 cRenderHtml::header("Admin Auditing");

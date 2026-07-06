@@ -11,11 +11,11 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-require_once("$phpinc/ckinc/colour.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$phpinc/ckinc/http.php");
-require_once("$ADlib/AD.php");
-require_once("$ADlib/core.php");
+require_once(cAppGlobals::$ckPhpInc."/colour.php");
+require_once(cAppGlobals::$ckPhpInc."/header.php");
+require_once(cAppGlobals::$ckPhpInc."/http.php");
+require_once(cAppGlobals::$ADlib."/AD.php");
+require_once(cAppGlobals::$ADlib."/core.php");
 
 
 //#######################################################################

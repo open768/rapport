@@ -15,7 +15,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="../..";
 require_once "$home/inc/common.php";
-require_once "$root/inc/charts.php";
+require_once cAppGlobals::$root."/inc/charts.php";
 
 //********************************************************************
 if (cAD::is_demo()){

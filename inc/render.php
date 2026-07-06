@@ -11,10 +11,10 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-require_once("$root/inc/renderqs.php");
-require_once("$root/inc/rendermenus.php");
-require_once("$root/inc/renderobjs.php");
-require_once("$root/inc/renderhtml.php");
+require_once(cAppGlobals::$root."/inc/renderqs.php");
+require_once(cAppGlobals::$root."/inc/rendermenus.php");
+require_once(cAppGlobals::$root."/inc/renderobjs.php");
+require_once(cAppGlobals::$root."/inc/renderhtml.php");
 
 
 function sort_by_app_name($a,$b){

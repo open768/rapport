@@ -16,7 +16,7 @@ $home="..";
 require_once "$home/inc/common.php";
 
 //####################################################################
-require_once("$root/inc/link.php");
+require_once(cAppGlobals::$root."/inc/link.php");
 
 
 //####################################################################

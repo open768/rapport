@@ -14,7 +14,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 $home="..";
 require_once "$home/inc/common.php";
-require_once("$ADlib/audit.php");
+require_once(cAppGlobals::$ADlib."/audit.php");
 
 
 //###################### DATA #############################################

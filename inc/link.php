@@ -11,12 +11,12 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-require_once("$phpinc/ckinc/hash.php");
-require_once("$phpinc/ckinc/debug.php");
-require_once("$phpinc/ckinc/colour.php");
-require_once("$phpinc/ckinc/header.php");
-require_once("$ADlib/core.php");
-require_once("$root/inc/secret.php");
+require_once(cAppGlobals::$ckPhpInc."/hash.php");
+require_once(cAppGlobals::$ckPhpInc."/debug.php");
+require_once(cAppGlobals::$ckPhpInc."/colour.php");
+require_once(cAppGlobals::$ckPhpInc."/header.php");
+require_once(cAppGlobals::$ADlib."/core.php");
+require_once(cAppGlobals::$root."/inc/secret.php");
 
 class cLinkPageData{
 	public $page = null;

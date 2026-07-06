@@ -16,7 +16,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 //####################################################################
 $home="..";
 require_once "$home/inc/common.php";
-require_once("$root/inc/common.php");
+require_once(cAppGlobals::$root."/inc/common.php");
 
 $url = cHeader::get("url");
 

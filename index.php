@@ -23,14 +23,14 @@ cDebug::check_GET_or_POST();
 cDebug::extra_debug("Page Initialising - finished");
 
 //####################################################################
-function pr__show_error($psTitle, $psMessage){
+function pr__show_error($psTitle , $psMessage ){
 	global $home;
 	
 	cRenderHtml::header($psTitle);
 	
 	cRenderCards::card_start($psTitle);
 		cRenderCards::body_start();
-			cCommon::errorbox("check login details: Error was: $psMessage");
+			cPageOutput::errorbox("check login details: Error was: $psMessage");
 		cRenderCards::body_end();
 		cRenderCards::action_start();
 			cRender::button("Back to login", "$home/index.php", false);
@@ -69,7 +69,7 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 		$sLocation = "$home/pages/jsession/home.php";
 	
 	if (cDebug::is_debugging()) 
-		$sLocation = cHttp::build_url($sLocation, "debug");
+		$sLocation = cHttp::build_url($sLocation, cDebug::DEBUG_STR);
 	
 	//----------- redirect
 	cHeader::redirect($sLocation);
