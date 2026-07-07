@@ -12,6 +12,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
 $js_extra = cAppGlobals::$jsInc."/extra";
+CONST MDL_CDN = "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0";
 
 //#######################################################################
 //#######################################################################
@@ -46,11 +47,11 @@ class cRenderHtml{
 			<!-- google fonts fonts.googleapis.com -->			
 			<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Material+Icons%7CMaterial+Icons+Outlined%7CMaterial+Icons+Two+Tone%7CMaterial+Icons+Round%7CMaterial+Icons+Sharp" rel="stylesheet">
-			<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+			<link rel="stylesheet" href="<?=MDL_CDN?>/material.indigo-pink.min.css">
 			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
 
 			<!-- Material Design Lite https://getmdl.io/components/index.html -->			
-			<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+			<script defer src="<?=MDL_CDN?>/material.min.js"></script>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
 			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
