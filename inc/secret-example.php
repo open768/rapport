@@ -10,7 +10,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-class cSecret{
+class cAppSecret{
 	const ENABLE_GOOGLE_ANALYTICS = false;
 	static $GOOGLE_TAG_ID;
 	
@@ -27,19 +27,19 @@ class cSecret{
 	static $APPD_PROD ;
 }
 
-if (cSecret::ENABLE_APPD_EUM){
+if (cAppSecret::ENABLE_APPD_EUM){
 	//if using new Appd EUM monitoring provide the correct values below
 	//TBD - create a demo account
 }
 
-if (cSecret::ENABLE_NR_EUM){
+if (cAppSecret::ENABLE_NR_EUM){
 	//if using new relic EUM monitoring provide the correct values below
-	cSecret::$NR_DEV = new cNewRelicEUMAccount("AccountID","AgentID","LicenseKey","ApplicationID");
-	cSecret::$NR_PROD = new cNewRelicEUMAccount("AccountID","AgentID","LicenseKey","ApplicationID");
+	cAppSecret::$NR_DEV = new cNewRelicEUMAccount("AccountID","AgentID","LicenseKey","ApplicationID");
+	cAppSecret::$NR_PROD = new cNewRelicEUMAccount("AccountID","AgentID","LicenseKey","ApplicationID");
 }
 
-if (cSecret::ENABLE_GOOGLE_ANALYTICS){
+if (cAppSecret::ENABLE_GOOGLE_ANALYTICS){
 	//if using new Google analytics provide the correct values below
-	cSecret::$GOOGLE_TAG_ID = "UA-XXXXXXX";
+	cAppSecret::$GOOGLE_TAG_ID = "UA-XXXXXXX";
 }
 ?>

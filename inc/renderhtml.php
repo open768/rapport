@@ -34,9 +34,9 @@ class cRenderHtml{
 			-->
 			<!-- analytics tags -->
 			<?php
-				if (cSecret::ENABLE_GOOGLE_ANALYTICS) 
-					cGoogleAnalytics::browser_agent( cSecret::$GOOGLE_TAG_ID);
-				if (cSecret::ENABLE_NR_EUM)
+				if (cAppSecret::ENABLE_GOOGLE_ANALYTICS) 
+					cGoogleAnalytics::browser_agent( cAppSecret::$GOOGLE_TAG_ID);
+				if (cAppSecret::ENABLE_NR_EUM)
 					cNewRelic::browser_agent();// TBD pass secret data
 			?>
 			

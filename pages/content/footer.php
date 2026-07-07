@@ -47,7 +47,7 @@
 				<a href="http://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. 
 				For licenses that allow for commercial evaluation please contact cluck@chickenkatsu.co.uk
 				<p>
-				Licensed to : <?=cSecret::LICENSED_TO?><!-- <?=cSecret::LICENSE_COMMENT?>-->
+				Licensed to : <?=cAppSecret::LICENSED_TO?><!-- <?=cAppSecret::LICENSE_COMMENT?>-->
 				USE AT YOUR OWN RISK - NO GUARANTEES OF ANY FORM ARE EITHER EXPRESSED OR IMPLIED.
 			</div>
 			<script>init_modal_dialog('#ftrcopy', "#dlg_copy");</script>
