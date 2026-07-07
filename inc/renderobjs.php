@@ -27,7 +27,7 @@ class cRenderObjs{
 	
 	//**************************************************************************
 	public static function get_AD_credentials(){
-		//cDebug::enter();
+		//cTracing::enter();
 		$oCred = self::$oAppDCredentials;
 		if ($oCred == null){
 			cDebug::extra_debug("getting credentials");
@@ -40,7 +40,7 @@ class cRenderObjs{
 			}
 			self::$oAppDCredentials = $oCred;
 		}
-		//cDebug::leave();;
+		//cTracing::leave();;
 		return $oCred;
 	}
 	
@@ -56,7 +56,7 @@ class cRenderObjs{
 	
 	//***************************************************************************
 	public static function get_current_app(){
-		cDebug::enter();
+		cTracing::enter();
 		$sApp = cHeader::get(cRenderQS::APP_QS);
 		$sAID = cHeader::get(cRenderQS::APP_ID_QS);
 		$oApp = null;
@@ -64,13 +64,13 @@ class cRenderObjs{
 			cDebug::extra_debug_warning("no current app");
 		else
 			$oApp = self::make_app_obj($sApp, $sAID);
-		cDebug::leave();
+		cTracing::leave();
 		
 		return $oApp;
 	}
 
 	public static function get_current_tier(){
-		cDebug::enter();
+		cTracing::enter();
 		$oObj = null;
 		$oApp = self::get_current_app();
 		if ($oApp){
@@ -81,7 +81,7 @@ class cRenderObjs{
 			else
 				$oObj = self::make_tier_obj($oApp, $sTier, $sTID);
 		}
-		cDebug::leave();
+		cTracing::leave();
 		return $oObj;
 	}
 	

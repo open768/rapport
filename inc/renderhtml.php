@@ -11,7 +11,7 @@ For licenses that allow for commercial use please contact cluck@chickenkatsu.co.
 
 // USE AT YOUR OWN RISK - NO GUARANTEES OR ANY FORM ARE EITHER EXPRESSED OR IMPLIED
 **************************************************************************/
-$js_extra = "$jsinc/extra";
+$js_extra = cAppGlobals::$jsInc."/extra";
 
 //#######################################################################
 //#######################################################################
@@ -135,7 +135,7 @@ class cRenderHtml{
 	//**************************************************************************
 	public static function header ($psTitle){
 		global $jsinc, $js_extra, $home;
-		cDebug::enter();
+		cTracing::enter();
 		$bLoggedin = true;
 
 		//-------------------------------------------------------------
@@ -204,7 +204,7 @@ class cRenderHtml{
 		if ($bLoggedin)	cRenderMenus::top_menu();
 
 		cDebug::flush();
-		cDebug::leave();
+		cTracing::leave();
 		//error_reporting(E_ALL & ~E_WARNING);
 	}
 	

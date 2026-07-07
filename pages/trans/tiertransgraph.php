@@ -57,7 +57,7 @@ function sort_by_metricpath($a,$b){
 function render_tier_transactions($poApp, $poTier){	
 	global $giTotalTrans;
 	global $node;
-	cDebug::enter();
+	cTracing::enter();
 	$oTimes = cRender::get_times();
 
 	$sTierQS = cRenderQS::get_base_tier_QS($poTier);
@@ -119,7 +119,7 @@ function render_tier_transactions($poApp, $poTier){
 		cCommon::messagebox("No transactions found");
 	}
 	
-	cDebug::leave();
+	cTracing::leave();
 }
 
 //********************************************************************

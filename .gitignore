@@ -6,7 +6,6 @@ Desktop.ini
 \[cache\]/
 \[db\]/
 \[sessions\]/
-/vendor/
 css/jquery-ui
 images/src
 composer.lock

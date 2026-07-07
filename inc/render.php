@@ -31,7 +31,7 @@ class cRender{
 	
 	//**************************************************************************
 	public static function get_times(){
-		//cDebug::enter();
+		//cTracing::enter();
 		$oTimes = new cADTimes();
 		if (cHeader::get(cRenderQS::TIME_START_QS)){
 			if (!cHeader::get(cRenderQS::TIME_DURATION_QS))
@@ -68,7 +68,7 @@ class cRender{
 			$oTimes->duration = $sTime;
 		}	
 		//cDebug::vardump($oTimes);
-		//cDebug::leave();
+		//cTracing::leave();
 		return $oTimes;
 	}
 	
@@ -86,7 +86,7 @@ class cRender{
 	//**************************************************************************
 	public static function force_login(){
 		global $home;
-		//cDebug::enter();
+		//cTracing::enter();
 		
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null || !$oCred->logged_in()){
@@ -96,7 +96,7 @@ class cRender{
 			cDebug::flush();
 			exit;
 		}
-		//cDebug::leave();;
+		//cTracing::leave();;
 	}
 
 	//*************************************************************
@@ -181,7 +181,7 @@ class cRender{
 		global $home;
 		$bShow = false;
 		$oCred = null;
-		//cDebug::enter();
+		//cTracing::enter();
 		
 		if ($psUrl === "$home/index.php") {
 			cDebug::write("showing login page");
@@ -200,20 +200,20 @@ class cRender{
 		if ($oCred !== null)
 			if ($oCred->restricted_login && !$pbForceButton){
 					?><a class='fake_blue_button'><?=$psCaption?></a>&nbsp;<?php
-					cDebug::leave();;
+					cTracing::leave();;
 					return;
 			}
 		
 		if ($bShow)
 			echo self::button_code($psCaption, $psUrl, $pbNewWindow, $paParams, $psTarget);
 		
-		//cDebug::leave();;
+		//cTracing::leave();;
 	}
 	
 	//**************************************************************************
 	public static function button_code ($psCaption, $psUrl, $pbNewWindow =false, $paParams=null, $psTarget=null){
 		$sClass = "blue_button";
-		//cDebug::enter();
+		//cTracing::enter();
 		
 		if ($pbNewWindow){ 
 			if ($psTarget !== "")
@@ -231,7 +231,7 @@ class cRender{
 			if (isset($paParams["class"])) $sClass.=" ".$paParams["class"];
 		}
 		
-		///cDebug::leave();;
+		///cTracing::leave();;
 		$sClass="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect";
   		return "<button  class='$sClass' onclick='window.stop();$sOnClick;return false;'>$psCaption</button>";
 	}

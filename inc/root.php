@@ -5,7 +5,6 @@ class cAppGlobals {
     static ?string $root;
     static ?string $appPages;
     static ?string $jsHome, $jsWidgets, $jsAppRest, $jsExtra, $jsImages, $jsInc;
-    static ?string $jsThumbNailer, $jsCropper, $jsMosaicer;
 
     static ?string $phpInc = null;
     static ?string $ckPhpInc = null;

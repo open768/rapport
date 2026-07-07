@@ -16,6 +16,7 @@ require_once(cAppGlobals::$ckPhpInc."/renderw3.php");
 require_once(cAppGlobals::$ckPhpInc."/google.php");
 require_once(cAppGlobals::$ckPhpInc."/newrelic.php");
 require_once(cAppGlobals::$ckPhpInc."/colour.php");
+require_once(cAppGlobals::$ckPhpInc."/site.php");
 
 //####################################################################
 require_once(cAppGlobals::$root."/inc/render.php");

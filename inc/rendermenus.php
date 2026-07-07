@@ -22,11 +22,11 @@ class cRenderMenus{
 	//******************************************************************************************
 	public static function show_app_functions(cADApp $poApp=null){
 		global $home;
-		cDebug::enter();
+		cTracing::enter();
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($poApp->name,null);
-			cDebug::leave();
+			cTracing::leave();
 			return;
 		}
 		
@@ -40,18 +40,18 @@ class cRenderMenus{
 				<i>loading menu:<?=$poApp->name?></i>
 			</div>
 		<?php
-		cDebug::leave();
+		cTracing::leave();
 	}
 
 	//******************************************************************************************
 	public static function show_app_change_menu($psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;
 	
-		cDebug::enter();
+		cTracing::enter();
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) {
 			cRender::button($psCaption,null);
-			cDebug::leave();
+			cTracing::leave();
 			return;
 		}
 		
@@ -71,17 +71,17 @@ class cRenderMenus{
 			</DIV>
 		<?php
 		self::show_app_functions();
-		cDebug::leave();
+		cTracing::leave();
 	}
 	
 	//******************************************************************************************
 	public static function show_app_agent_menu(cADApp $poApp = null){
 		global $home;
 
-		cDebug::enter();
+		cTracing::enter();
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login) {
-			cDebug::leave();
+			cTracing::leave();
 			return;
 		}
 		
@@ -94,21 +94,21 @@ class cRenderMenus{
 				<?=cRenderQs::APP_QS?>="<?=$poApp->name?>" <?=cRenderQs::APP_ID_QS?>="<?=$poApp->id?>">
 			</DIV>
 		<?php
-		cDebug::leave();
+		cTracing::leave();
 	}
 
 
 	//******************************************************************************************
 	private static function pr__get_apps_fragment(){
 
-		cDebug::enter();
+		cTracing::enter();
 		try{
 			$aApps = cADController::GET_all_Applications();
 		}
 		catch (Exception $e)
 		{
 			cCommon::errorbox("Oops unable to get application data from controller");
-			cDebug::leave();
+			cTracing::leave();
 			exit;
 		}
 		uasort($aApps,"sort_by_app_name" );
@@ -119,7 +119,7 @@ class cRenderMenus{
 			$sApps_fragment.= " ".cRenderQS::APP_QS.".$iCount ='$oApp->name' ".cRenderQS::APP_ID_QS.".$iCount='$oApp->id' ";
 		}
 		
-		cDebug::leave();
+		cTracing::leave();
 		return $sApps_fragment;
 	}
 
@@ -129,7 +129,7 @@ class cRenderMenus{
 	public static function top_menu(){
 		global $home;
 
-		cDebug::enter();
+		cTracing::enter();
 		
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null) return;
@@ -151,7 +151,7 @@ class cRenderMenus{
 				$(init_top_menu);
 			</script>
 		<?php
-		cDebug::leave();
+		cTracing::leave();
 	}
 	
 	//******************************************************************************************
@@ -169,12 +169,12 @@ class cRenderMenus{
 	public static function show_tier_functions(cAdTier $poTier = null, $psNode=null){
 		global $home;
 
-		cDebug::enter();
+		cTracing::enter();
 		$oCred = cRenderObjs::get_AD_credentials();
 	
 		if ($oCred->restricted_login) {
 			cRender::button($poTier->name,null);
-			cDebug::leave();
+			cTracing::leave();
 			return;
 		}
 		if ($poTier == null){
@@ -191,12 +191,12 @@ class cRenderMenus{
 		$aProps[cRenderQS::NODE_QS] = $psNode;
 
 		cRenderHtml::write_div("ID_mnu_tierfn".$poTier->name, $aProps, "please wait" );
-		cDebug::leave();
+		cTracing::leave();
 	}
 
 	//******************************************************************************************
 	public static function show_tiers_custom_menu(cADApp $poApp, $psCaption, $psUrl){
-		cDebug::enter();
+		cTracing::enter();
 		global $home;
 
 		$aTiers = $poApp->GET_Tiers();
@@ -219,7 +219,7 @@ class cRenderMenus{
 			$aProps[cRenderQs::TIER_ID_QS.$iCount] = $oTier->id;
 		}
 		cRenderHtml::write_div("ID_mnu_tiercustfn".$poApp->name, $aProps, "please wait" );
-		cDebug::leave();
+		cTracing::leave();
 	}
 	
 	//******************************************************************************************
@@ -250,10 +250,10 @@ class cRenderMenus{
 	public static function show_tier_menu(string $psCaption, $psURLFragment=null, $psExtraQS=""){
 		global $home;
 		
-		cDebug::enter();
+		cTracing::enter();
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred->restricted_login){
-			cDebug::leave();
+			cTracing::leave();
 			return;
 		}
 
@@ -272,7 +272,7 @@ class cRenderMenus{
 				please wait
 			</div>
 		<?php
-		cDebug::leave();
+		cTracing::leave();
 	}	
 
 	//******************************************************************************************
@@ -304,14 +304,14 @@ class cRenderMenus{
 	//******************************************************************************************
 	private static function pr__get_tiers_fragment( cADApp $poApp){
 
-		cDebug::enter();
+		cTracing::enter();
 		try{
 			$aTiers = $poApp->GET_Tiers();
 		}
 		catch (Exception $e)
 		{
 			cCommon::errorbox("Oops unable to get tier data from controller");
-			cDebug::leave();
+			cTracing::leave();
 			exit;
 		}
 		
@@ -323,7 +323,7 @@ class cRenderMenus{
 			$sFragment .= " tname.$iCount=\"".$oTier->name."\" tid.$iCount=\"$oTier->id\" ";		
 		}
 		
-		cDebug::leave();
+		cTracing::leave();
 		return $sFragment;
 	}
 

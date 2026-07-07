@@ -99,7 +99,7 @@ function pr__sort_dates($a,$b){
 //######################################################################
 class cMetricGetter{
 	public static function get_metric($poApp, $psMetric, $pbPreviousPeriod = false){
-		cDebug::enter();
+		cTracing::enter();
 		$oOutput = new cMetricOutput;
 		$oOutput->metric = $psMetric;
 		$oOutput->app = $poApp->name;
@@ -164,7 +164,7 @@ class cMetricGetter{
 			}
 		}
 		
-		cDebug::leave();
+		cTracing::leave();
 		return $oOutput;
 	}
 }
