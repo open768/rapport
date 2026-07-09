@@ -45,7 +45,7 @@ class cLinkPage{
 	
 	//***************************************************************************************
 	public static function get_link_id(){
-		return cHash::hash( self::pr__get_referrer_key());
+		return cHasher::hash( self::pr__get_referrer_key());
 	}
 	
 	//***************************************************************************************
@@ -68,7 +68,7 @@ class cLinkPage{
 		cDebug::extra_debug("key is $sKey");
 		
 		//-- is there a objstore entry for the path?
-		$oData = cHash::get($sKey);
+		$oData = cFileHasher::get($sKey);
 		if ($oData == null){
 			cDebug::write("creating hash object");
 
@@ -80,7 +80,7 @@ class cLinkPage{
 			$oData->credentials = $oAppdynCredentials;
 			$oData->time_window = cRender::get_times();
 			
-			cHash::put($sKey, $oData);
+			cFileHasher::put_hash($sKey, $oData);
 		}
 		
 		//--

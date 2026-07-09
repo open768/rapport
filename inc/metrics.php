@@ -47,7 +47,7 @@ class cMergedMetrics{
 		
 		foreach ($this->sourceData as $oMetricOutput)
 			$sAggregated .= $oMetricOutput->app.$oMetricOutput->metric;
-		$sHash = cHash::hash($sAggregated);
+		$sHash = cHasher::hash($sAggregated);
 		cDebug::write($sHash);
 		return $sHash;
 	}
