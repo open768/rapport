@@ -56,7 +56,7 @@ cRenderCards::card_start("<a type='metric'>Analytics metrics</a>");
 		}
 	cRenderCards::body_end();
 	cRenderCards::action_start();
-		$sUrl = cCommon::filename();
+		$sUrl = cCommonFiles::server_filename();
 		if (!cRender::is_list_mode()){
 			$sUrl.= "?".cRenderQS::LIST_MODE_QS;
 			cRender::button("list mode", $sUrl);

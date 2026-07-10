@@ -31,7 +31,7 @@ $gsTierQs=cRenderQS::get_base_tier_QS($oTier);
 $gsMetricType = cHeader::get(cRenderQS::METRIC_TYPE_QS);
 if ($gsMetricType==null) $gsMetricType = cADMetricPaths::METRIC_TYPE_ACTIVITY;
 
-$gsBaseUrl = cHttp::build_url(cCommon::filename(), $gsTierQs );
+$gsBaseUrl = cHttp::build_url(cCommonFiles::server_filename(), $gsTierQs );
 if ($node) $gsBaseUrl = cHttp::build_url($gsBaseUrl, cRenderQS::NODE_QS, $node );
 
 $sExtraCaption = ($node?"($node) node":"");
@@ -141,7 +141,7 @@ function show_node_menu(){
 			$aNodes = $oTier->GET_nodes();
 			foreach ($aNodes as $oNode){
 				$sDisabled = ($oNode->name==$node?"disabled":"");
-				$sUrl = cHttp::build_url(cCommon::filename(),$gsTierQs);
+				$sUrl = cHttp::build_url(cCommonFiles::server_filename(),$gsTierQs);
 				$sUrl = cHttp::build_url($sUrl, cRenderQS::NODE_QS, $oNode->name);
 				
 				?>
@@ -199,7 +199,7 @@ cRenderCards::action_start();
 	if ($oCred->restricted_login == null){
 		cADCommon::button(cADControllerUI::tier($oApp,$oTier));
 		cRenderMenus::show_tier_functions();
-		cRenderMenus::show_tier_menu("change tier", cCommon::filename());
+		cRenderMenus::show_tier_menu("change tier", cCommonFiles::server_filename());
 		show_node_menu();
 	}
 cRenderCards::action_end();

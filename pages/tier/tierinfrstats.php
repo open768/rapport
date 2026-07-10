@@ -51,7 +51,7 @@ set_time_limit(200);
 //stuff for later
 $sAppQs = cRenderQS::get_base_app_QS($oApp);
 $sTierQs = cRenderQS::get_base_tier_QS($oTier);
-$sTierInfraUrl = cHttp::build_url(cCommon::filename(),$sTierQs);
+$sTierInfraUrl = cHttp::build_url(cCommonFiles::server_filename(),$sTierQs);
 $sAppInfraUrl = cHttp::build_url("../app/appinfra.php",$sAppQs);
 $oApp = cRenderObjs::get_current_app();
 $oCred = cRenderObjs::get_AD_credentials();

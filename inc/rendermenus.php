@@ -57,7 +57,7 @@ class cRenderMenus{
 		
 		$sApps_fragment = self::pr__get_apps_fragment();
 		if ($psURLFragment == null)
-			$psURLFragment=cCommon::filename();
+			$psURLFragment=cCommonFiles::server_filename();
 
 		//TBD change to a DIV - widget can replace with a select menu
 		?>
@@ -260,7 +260,7 @@ class cRenderMenus{
 		$oApp = cRenderObjs::get_current_app();
 		$sFragment = self::pr__get_tiers_fragment($oApp);
 		if ($psURLFragment == null)
-			$psURLFragment=cCommon::filename();
+			$psURLFragment=cCommonFiles::server_filename();
 		
 		//TBD change to a DIV - widget can replace with a select menu
 		?>

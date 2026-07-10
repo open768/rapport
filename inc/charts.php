@@ -245,7 +245,7 @@ class cChart{
 				$iWidth = null;
 				if ( isset( $aItem[self::WIDTH])) {
 					$iWidth = $aItem[self::WIDTH];
-					$start_tag .= "<div style='width:${iWidth}px;max-width:${iWidth}px;word-break:break-all'>";
+					$start_tag .= "<div style='width:{$iWidth}px;max-width:{$iWidth}px;word-break:break-all'>";
 					$end_tag = "</div>$end_tag";
 				}
 

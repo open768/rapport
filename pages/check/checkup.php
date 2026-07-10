@@ -40,7 +40,7 @@ function render_summary($paApps){
 			echo "</div>";	
 		cRenderCards::body_end();
 		cRenderCards::action_start();
-			$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::APP_ID_QS, cHeader::GET(cRenderQS::APP_ID_QS));
+			$sUrl = cHttp::build_url(cCommonFiles::server_filename(), cRenderQS::APP_ID_QS, cHeader::GET(cRenderQS::APP_ID_QS));
 			$checkQS = cHeader::GET(cRenderQS::CHECK_ONLY_QS);
 			if ($checkQS === cRenderQS::CHECK_ONLY_BT)
 				cRender::button("show all checks", $sUrl);

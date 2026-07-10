@@ -74,7 +74,7 @@ cRenderCards::card_start("Applications");
 	cRenderCards::action_start();
 		cRender::add_filter_box("a[appname]","appname",".mdl-card");
 		cADCommon::button(cADControllerUI::apps_home());
-		$sUrl = cCommon::filename();
+		$sUrl = cCommonFiles::server_filename();
 		if (!cRender::is_list_mode()){
 			$sUrl = cHttp::build_url($sUrl,cRenderQS::LIST_MODE_QS,"1");
 			cRender::button("list mode", $sUrl);

@@ -46,9 +46,9 @@ cRenderCards::card_start(($iCount==0?"MQ Nodes":"Pick a Node"));
 	cRenderCards::action_start();
 		cRender::button("Back to servers", "servers.php");	
 		if (cRender::is_list_mode())
-			cRender::button("show as buttons", cCommon::filename());
+			cRender::button("show as buttons", cCommonFiles::server_filename());
 		else
-			cRender::button("show as list", cCommon::filename()."?".cRenderQS::LIST_MODE_QS);
+			cRender::button("show as list", cCommonFiles::server_filename()."?".cRenderQS::LIST_MODE_QS);
 	cRenderCards::action_end();
 cRenderCards::card_end();
 

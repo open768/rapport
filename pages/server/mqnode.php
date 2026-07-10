@@ -50,7 +50,7 @@ cRenderCards::card_start(($iCount==0?"Queue Managers":"Pick a Queue Manager"));
 	cRenderCards::body_end();
 	cRenderCards::action_start();
 		cRender::button("Back to nodes", "mq.php");	
-		$sUrl = cHttp::build_url(cCommon::filename(), cRenderQS::NODE_QS, $sNode);
+		$sUrl = cHttp::build_url(cCommonFiles::server_filename(), cRenderQS::NODE_QS, $sNode);
 		if (cRender::is_list_mode())
 			cRender::button("show as buttons", $sUrl);
 		else

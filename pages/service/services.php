@@ -43,7 +43,7 @@ cRenderCards::card_start();
 		cADCommon::button(cADControllerUI::serviceEndPoints($oApp,$oTimes));
 		if ($oTier){
 			$sAppQS = cRenderQS::get_base_app_QS($oApp);
-			$sUrl = cHttp::build_url(cCommon::filename(), $sAppQS);
+			$sUrl = cHttp::build_url(cCommonFiles::server_filename(), $sAppQS);
 			cRender::button("Service End points for App: $oApp->name", $sUrl);
 			cRenderMenus::show_tier_menu("Show Service EndPoints for");
 			cRenderMenus::show_tier_functions($oTier);
@@ -89,7 +89,7 @@ if ($oTier){
 				}
 				
 				$sTierQS = cRenderQS::get_base_tier_QS($oTier);
-				$sUrl = cHttp::build_url(cCommon::filename(), $sTierQS);
+				$sUrl = cHttp::build_url(cCommonFiles::server_filename(), $sTierQS);
 				cRender::button($oTier->name, $sUrl);
 				echo "<br>";
 			}	

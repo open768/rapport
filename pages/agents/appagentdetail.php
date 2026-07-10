@@ -68,7 +68,7 @@ $oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricTyp
 //####################################################################
 $sAppQS = cRenderQS::get_base_app_QS($oApp);
 
-$sDetailRootQS = cHttp::build_url(cCommon::filename(), $sAppQS);
+$sDetailRootQS = cHttp::build_url(cCommonFiles::server_filename(), $sAppQS);
 
 //********************************************************************
 if (cAD::is_demo()){
@@ -90,7 +90,7 @@ $sTitle  = $oMetric->caption;
 cRenderCards::card_start($sTitle);
 	cRenderCards::action_start();
 		cRenderMenus::show_app_agent_menu();
-		cRenderMenus::show_app_change_menu("Show detail for", cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
+		cRenderMenus::show_app_change_menu("Show detail for", cHttp::build_url(cCommonFiles::server_filename(),cRenderQS::METRIC_TYPE_QS,$gsMetricType));
 		cADCommon::button(cADControllerUI::nodes($oApp), "All nodes");
 	cRenderCards::action_end();
 cRenderCards::card_end();

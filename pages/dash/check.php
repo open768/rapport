@@ -57,7 +57,7 @@ cRenderCards::card_start("Dashboards");
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::dashboard_home());
 		cRender::button("search", "search.php");
-		$sUrl = cCommon::filename();
+		$sUrl = cCommonFiles::server_filename();
 		if (!cRender::is_list_mode()){
 			$sUrl.= "?".cRenderQS::LIST_MODE_QS;
 			cRender::button("list mode", $sUrl);

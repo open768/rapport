@@ -17,7 +17,7 @@ require_once "$home/inc/common.php";
 
 //####################################################################
 $sLoginToken = cHeader::get(cRenderQS::LOGIN_TOKEN_QS);
-$sUsageLink = cCommon::filename()."?".cRenderQS::HELP_QS;
+$sUsageLink = cCommonFiles::server_filename()."?".cRenderQS::HELP_QS;
 if (cHeader::is_set(cRenderQS::HELP_QS)){
 	cRenderHtml::header("help");
 	cRenderCards::card_start("Usage");

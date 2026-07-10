@@ -52,7 +52,7 @@ cRenderMenus::show_tier_functions();
 ?>
 <h2>Overall Stats for <?=$oTier->name?></h2>
 <?php
-	$sBaseUrl = cHttp::build_url(cCommon::filename(),$gsTierQs);
+	$sBaseUrl = cHttp::build_url(cCommonFiles::server_filename(),$gsTierQs);
 	$aMetrics=[];
 	
 	$sMetricUrl=cADTierMetricPaths::tierCallsPerMin($oTier->name);

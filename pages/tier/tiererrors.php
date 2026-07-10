@@ -31,7 +31,7 @@ $oTimes = cRender::get_times();
 $oCred = cRenderObjs::get_AD_credentials();
 if ($oCred->restricted_login == null){
 	cRenderMenus::show_tier_functions();
-	cRenderMenus::show_tier_menu("Change Tier", cCommon::filename());
+	cRenderMenus::show_tier_menu("Change Tier", cCommonFiles::server_filename());
 	
 	$sGraphUrl = cHttp::build_url("tiererrorgraphs.php", $gsTierQS);
 	cRender::button("Show Error Graphs", $sGraphUrl);	

@@ -39,9 +39,10 @@ function pr__show_error($psTitle , $psMessage ){
 }
 
 //####################################################################
-if (cHeader::get(cADLogin::KEY_SUBMIT))
-{
-	//cDebug::on(true);
+function pr_form_submitted(){
+	cTracing::enter();
+	global $home;
+
 	cDebug::extra_debug("form submitted");
 	$oCred = new cADCredentials();
 	try{
@@ -50,6 +51,7 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 	catch (Exception $e)
 	{
 		pr__show_error("unable to login", $e->getMessage());
+		cTracing::leave();
 		exit;
 	}
 	
@@ -73,9 +75,16 @@ if (cHeader::get(cADLogin::KEY_SUBMIT))
 	
 	//----------- redirect
 	cHeader::redirect($sLocation);
+	cTracing::leave();
 	exit();
+}
+
+//####################################################################
+if (cHeader::get(cADLogin::KEY_SUBMIT))
+	pr_form_submitted();
+
 //#########################################################################
-}else if (cHeader::get(cRenderQS::LOGIN_TOKEN_QS)){
+else if (cHeader::get(cRenderQS::LOGIN_TOKEN_QS)){
 	cDebug::extra_debug("token found ");
 	try{
 		$sToken = cHeader::get(cRenderQS::LOGIN_TOKEN_QS);

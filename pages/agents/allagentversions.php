@@ -79,9 +79,9 @@ cRenderCards::card_start("Contents");
 		cRender::button("Agents per App", "countappagents.php");	
 		cRender::button("Count Actual Agents", "countactualagents.php");	
 		if (cHeader::GET(cRenderQS::TOTALS_QS))
-			cRender::button("show details", cCommon::filename());
+			cRender::button("show details", cCommonFiles::server_filename());
 		else
-			cRender::button("show totals", cCommon::filename()."?".cRenderQS::TOTALS_QS."=1");
+			cRender::button("show totals", cCommonFiles::server_filename()."?".cRenderQS::TOTALS_QS."=1");
 	cRenderCards::action_end();
 cRenderCards::card_end();
 

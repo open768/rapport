@@ -26,7 +26,7 @@ cRender::force_login();
 $sAccount = cHeader::get(cRenderQS::AUDIT_ACCOUNT_QS);
 $sHost = cHeader::get(cRenderQS::AUDIT_HOST_QS);
 $sUser = cHeader::get(cRenderQS::AUDIT_USER_QS);
-$sPage = cCommon::filename();
+$sPage = cCommonFiles::server_filename();
 
 // Auditing is used purely for the application, this is not the same as auditing AD
 ?>

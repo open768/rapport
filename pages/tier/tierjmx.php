@@ -56,7 +56,7 @@ if (!$gsMetric){
 //stuff for later
 $sBaseQS = cRenderQS::get_base_tier_QS($oTier);
 $sBaseQS = cHttp::build_qs($sBaseQS, cRenderQS::METRIC_TYPE_QS, $gsMetric);
-$sBaseUrl = cHttp::build_url(cCommon::filename(), $sBaseQS);
+$sBaseUrl = cHttp::build_url(cCommonFiles::server_filename(), $sBaseQS);
 
 
 //####################################################################

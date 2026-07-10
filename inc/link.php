@@ -64,6 +64,8 @@ class cLinkPage{
 	//hashes with passwords within them as there are going to be a large number of hashes to wade through
 	// passwords are also encrypted so no worries here.
 	public static function get_referrer_link(){
+		cTracing::enter();
+
 		$sKey = self::pr__get_referrer_key();
 		cDebug::extra_debug("key is $sKey");
 		
@@ -86,6 +88,7 @@ class cLinkPage{
 		//--
 		$link_ID = self::get_link_id();		
 		$sUrl = cHeader::get_page_url()."?".self::GO_QS."=$link_ID";
+		cTracing::leave();
 		return $sUrl;
 	}
 	

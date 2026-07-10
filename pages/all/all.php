@@ -22,7 +22,7 @@ switch($sMetricType){
 	case cADMetricPaths::METRIC_TYPE_RUMCALLS:
 	case cADMetricPaths::METRIC_TYPE_RUMRESPONSE:
 		$sOtherTitle = "Application Activity";
-		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
+		$sOtherUrl = cHttp::build_url(cCommonFiles::server_filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_ACTIVITY);
 
 		$sTitle1 = "Web Browser Page Requests";
 		$sMetric1 = cADWebRumMetricPaths::CallsPerMin();
@@ -37,7 +37,7 @@ switch($sMetricType){
 	case cADMetricPaths::METRIC_TYPE_ACTIVITY:
 	default:
 		$sOtherTitle = "Web Browser Activity";
-		$sOtherUrl = cHttp::build_url(cCommon::filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
+		$sOtherUrl = cHttp::build_url(cCommonFiles::server_filename(), cRenderQS::METRIC_TYPE_QS, cADMetricPaths::METRIC_TYPE_RUMCALLS);
 		$sTitle1 = "Application Activity";
 		$sMetric1 = cADAppMetricPaths::appCallsPerMin();
 		$sTitle2 = "Application Response Times";
@@ -64,7 +64,7 @@ cRenderCards::card_start();
 	cRenderCards::action_start();
 		cADCommon::button(cADControllerUI::apps_home());
 		cRender::button($sOtherTitle,$sOtherUrl);
-		$sUrl = cHttp::build_url(cCommon::filename(),cRenderQS::METRIC_TYPE_QS,$sMetricType);
+		$sUrl = cHttp::build_url(cCommonFiles::server_filename(),cRenderQS::METRIC_TYPE_QS,$sMetricType);
 		if (!cRender::is_list_mode()){
 			$sUrl.= "&".cRenderQS::LIST_MODE_QS;
 			cRender::button("list mode", $sUrl);

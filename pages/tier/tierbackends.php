@@ -56,7 +56,7 @@ cRenderCards::card_start("Backends for Tier: $oTier->name");
 	cRenderCards::action_start();
 		if ($oCred->restricted_login == null){
 			cRenderMenus::show_tier_functions();
-			cRenderMenus::show_tier_menu("Change Tier", cCommon::filename());
+			cRenderMenus::show_tier_menu("Change Tier", cCommonFiles::server_filename());
 			cDebug::flush();
 		}
 		cRenderCards::action_end();

@@ -98,7 +98,7 @@ cRenderCards::card_start("External calls in $oTier->name");
 		if ($oCred->restricted_login == null){
 			cRenderMenus::show_app_functions();
 			cRenderMenus::show_tier_functions();
-			cRenderMenus::show_tier_menu("Change Tier to", cCommon::filename());
+			cRenderMenus::show_tier_menu("Change Tier to", cCommonFiles::server_filename());
 		}
 	cRenderCards::action_end();
 cRenderCards::card_end();
