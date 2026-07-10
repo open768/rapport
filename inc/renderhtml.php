@@ -75,7 +75,7 @@ class cRenderHtml{
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.2/jquery-ui.min.js" crossorigin="anonymous"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.32.0/js/jquery.tablesorter.min.js" crossorigin="anonymous"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inview/1.0.0/jquery.inview.min.js" crossorigin="anonymous"></script>
+			<script src="<?=cAppGlobals::$jsExtra?>/jquery-inview/jquery.inview.min.js"></script>
 			<script src="<?=cAppGlobals::$jsExtra?>/jquery-visible/jquery.visible.min.js"></script>
 			<script src="<?=cAppGlobals::$jsExtra?>/jquery-qtip/jquery.qtip.min.js"></script>
 			<script src="<?=cAppGlobals::$jsExtra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>

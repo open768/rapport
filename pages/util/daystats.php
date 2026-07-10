@@ -40,7 +40,7 @@ if (cAD::is_demo()){
 }
 ?>
 <LINK rel="stylesheet" type="text/css" href="<?=cAppGlobals::$jsExtra?>/jquery-datetimepicker/jquery.datetimepicker.min.css" >
-<script src="<?=$jsWidgets?>/comparestats.js"></script>
+<script src="<?=cAppGlobals::$jsWidgets?>/comparestats.js"></script>
 <script src="<?=cAppGlobals::$jsExtra?>/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
 <?php
 

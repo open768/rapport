@@ -26,7 +26,7 @@ cRenderHtml::header("Service End Points");
 cRender::force_login();
 cChart::do_header();
 ?>
-	<script src="<?=$jsWidgets?>/tierserviceendpoints.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/tierserviceendpoints.js"></script>
 <?php
 
 //####################################################################

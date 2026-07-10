@@ -19,8 +19,8 @@ cRenderHtml::header("Agent Counts");
 cRender::force_login();
 
 ?>
-	<script src="<?=$jsWidgets?>/allagents.js"></script>
-	<script src="<?=$jsWidgets?>/agentcount.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/allagents.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/agentcount.js"></script>
 <?php
 
 

@@ -26,7 +26,7 @@ $oApp = $oTier->app;
 cRenderHtml::header("Search Snapshots for Transaction");
 cRender::force_login();
 ?>
-	<script src="<?=$jsWidgets?>/snapsearch.js"></script>	
+	<script src="<?=cAppGlobals::$jsWidgets?>/snapsearch.js"></script>	
 <?php
 
 //####################################################

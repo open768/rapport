@@ -26,7 +26,7 @@ if (cAD::is_demo()){
 }
 
 ?>
-	<script src="<?=$jsWidgets?>/allagents.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/allagents.js"></script>
 <?php
 
 //#############################################################

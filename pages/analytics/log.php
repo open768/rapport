@@ -20,7 +20,7 @@ require_once "$home/inc/common.php";
 //####################################################################
 cRenderHtml::header("Log Analytics");
 cRender::force_login();
-?><script src="<?=$jsWidgets?>/logdetail.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/logdetail.js"></script><?php
 
 //####################################################################
 cRenderCards::card_start();

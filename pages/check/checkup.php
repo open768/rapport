@@ -20,7 +20,7 @@ cRenderHtml::header("One Click Checkup");
 cRender::force_login();
 //TODO if application passed only do a checkup for that application.
 
-?><script src="<?=$jsWidgets?>/appcheckup.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/appcheckup.js"></script><?php
 
 //**********************************************************************************
 function render_summary($paApps){

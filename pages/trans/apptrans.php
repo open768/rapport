@@ -69,7 +69,7 @@ function tier_card($poTier){
 }
 //####################################################################
 
-?><script src="<?=$jsWidgets?>/tiertrans.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/tiertrans.js"></script><?php
 
 //*********************** header panel ***********************************
 cRenderCards::card_start();

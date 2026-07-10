@@ -17,7 +17,7 @@ require_once "$home/inc/common.php";
 
 //####################################################################
 cRenderHtml::header("jsession healthchecks ");
-?><script src="<?=$jsWidgets?>/appcheckup.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/appcheckup.js"></script><?php
 
 //cDebug::on(true);
 

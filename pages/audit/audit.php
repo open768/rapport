@@ -32,7 +32,7 @@ if (cAD::is_demo()){
 }
 
 ?>
-	<script src="<?=$jsWidgets?>/audit.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/audit.js"></script>
 <?php
 
 //####################################################################

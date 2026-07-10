@@ -33,7 +33,7 @@ if (cArrayUtil::array_is_empty($aGroups)){
 	cRenderHtml::footer();
 	return;
 }
-?><script src="<?=$jsWidgets?>/rbac_group_user.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/rbac_group_user.js"></script><?php
 
 
 //####################################################################

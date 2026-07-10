@@ -31,7 +31,7 @@ $title ="$oApp->name Application Errors and Exceptions";
 cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("$title");
 cRender::force_login();
-?><script src="<?=$jsWidgets?>/tiererrors.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/tiererrors.js"></script><?php
 
 $oTimes = cRender::get_times();
 

@@ -26,7 +26,7 @@ cRenderHtml::header("All Remote Services");
 cRender::force_login();
 cChart::do_header();
 $title ="All Remote Services";
-?><script src="<?=$jsWidgets?>/appbackends.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/appbackends.js"></script><?php
 
 //####################################################################
 $oApps = cADController::GET_all_Applications();

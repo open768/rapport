@@ -27,8 +27,8 @@ if (cAD::is_demo()){
 	exit;
 }
 ?>
-	<script src="<?=$jsWidgets?>/historicalAgents.js"></script>
-	<script src="<?=$jsWidgets?>/agentcount.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/historicalAgents.js"></script>
+	<script src="<?=cAppGlobals::$jsWidgets?>/agentcount.js"></script>
 <?php
 	cRenderCards::card_start("Historical Agents");
 	cRenderCards::action_start();

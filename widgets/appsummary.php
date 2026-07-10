@@ -57,7 +57,7 @@ if (cHeader::is_set(cRenderQS::HELP_QS)){
 		
 		cRenderHtml::widget_header();
 		?>
-			<script src="<?=$jsWidgets?>/appsummary.js"></script>
+			<script src="<?=cAppGlobals::$jsWidgets?>/appsummary.js"></script>
 			<div 
 				id='widget' 
 				<?=cRenderQS::LOGIN_TOKEN_QS?>="<?=cHeader::get(cRenderQS::LOGIN_TOKEN_QS)?>"

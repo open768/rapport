@@ -53,7 +53,7 @@ cRenderHtml::$load_google_charts = true;
 cRenderHtml::header("All Applications - $sTitle1");
 cRender::force_login();
 cChart::do_header();
-?><script src="<?=$jsWidgets?>/allapps.js"></script><?php
+?><script src="<?=cAppGlobals::$jsWidgets?>/allapps.js"></script><?php
 
 //###################################################################
 //# CARD at top of page

@@ -20,7 +20,7 @@ require_once "$home/inc/common.php";
 //####################################################################
 cRenderHtml::header("Search Dashboards");
 ?>
-	<script src="<?=$jsWidgets?>/dashsearch.js"></script>	
+	<script src="<?=cAppGlobals::$jsWidgets?>/dashsearch.js"></script>	
 	<script src="<?=$jsHome?>/listdash.js"></script>	
 <?php
 cRender::force_login();
