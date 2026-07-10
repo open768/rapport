@@ -26,7 +26,7 @@ class cRenderHtml{
 
 	//**************************************************************************
 	public static function common_header (){
-		global $jsinc, $js_extra, $home;
+		global $js_extra, $home;
 		?>
 			<!-- 
 				############################################################################
@@ -53,11 +53,11 @@ class cRenderHtml{
 			<!-- Material Design Lite https://getmdl.io/components/index.html -->			
 			<script defer src="<?=MDL_CDN?>/material.min.js"></script>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.css">			
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
+			<link rel="stylesheet" href="<?=cAppGlobals::$jsExtra?>/jquery-qtip/jquery.qtip.min.css">			
+			<link rel="stylesheet" href="<?=cAppGlobals::$jsExtra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.css">
 
 			<!-- additional style sheets -->			
-			<link rel="stylesheet" href="<?=$js_extra?>/jquery-spinner/css/gspinner.min.css">			
+			<link rel="stylesheet" href="<?=cAppGlobals::$jsExtra?>/jquery-spinner/css/gspinner.min.css">			
 			<LINK rel="stylesheet" type="text/css" href="<?=$home?>/css/rapport.css" >			
 			
 			<!-- google charts JS  -->
@@ -72,27 +72,27 @@ class cRenderHtml{
 			
 			<!-- jquery -->
 			<link rel="stylesheet" type="text/css" href="<?=$home?>/css/jquery-ui/jquery-ui.min.css">
-			<script src="<?=$js_extra?>/jquery/jquery-3.2.1.min.js"></script>
-			<script src="<?=$js_extra?>/jquery-ui/jquery-ui.min.js"></script>
-			<script src="<?=$js_extra?>/tablesorter/jquery.tablesorter.min.js"></script>
-			<script src="<?=$js_extra?>/jquery-inview/jquery.inview.min.js"></script>
-			<script src="<?=$js_extra?>/jquery-visible/jquery.visible.min.js"></script>
-			<script src="<?=$js_extra?>/jquery-qtip/jquery.qtip.min.js"></script>
-			<script src="<?=$js_extra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
-			<script src="<?=$js_extra?>/jquery-flowtype/flowtype.js"></script>
-			<script src="<?=$js_extra?>/jquery-spinner/g-spinner.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.2/jquery-ui.min.js" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.32.0/js/jquery.tablesorter.min.js" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inview/1.0.0/jquery.inview.min.js" crossorigin="anonymous"></script>
+			<script src="<?=cAppGlobals::$jsExtra?>/jquery-visible/jquery.visible.min.js"></script>
+			<script src="<?=cAppGlobals::$jsExtra?>/jquery-qtip/jquery.qtip.min.js"></script>
+			<script src="<?=cAppGlobals::$jsExtra?>/jquery-mdl-dialog/mdl-jquery-modal-dialog.js"></script>
+			<script src="<?=cAppGlobals::$jsExtra?>/jquery-flowtype/flowtype.js"></script>
+			<script src="<?=cAppGlobals::$jsExtra?>/jquery-spinner/g-spinner.min.js"></script>
 			
 			<!-- bean -->
-			<script src="<?=$js_extra?>/bean/bean.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/bean/1.0.15/bean.min.js" crossorigin="anonymous"></script>
 					
 			<!-- common JS  -->
-			<script src="<?=$jsinc?>/ck-inc/common.js"></script>
-			<script src="<?=$jsinc?>/ck-inc/debug.js"></script>
-			<script src="<?=$jsinc?>/ck-inc/http.js"></script>
-			<script src="<?=$jsinc?>/ck-inc/httpqueue.js"></script>
-			<script src="<?=$jsinc?>/ck-inc/jquery/jquery.inviewport.js"></script>
-			<script src="<?=$jsinc?>/ck-inc/queueifvisible.js"></script>
-			<script src="<?=$jsinc?>/ck-inc/render.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/common.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/debug.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/http.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/httpqueue.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/jquery/jquery.inviewport.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/queueifvisible.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/render.js"></script>
 			
 			<!-- Rapport JS  -->
 			<script src="<?=$home?>/js/menus.js"></script>

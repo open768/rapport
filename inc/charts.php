@@ -120,9 +120,9 @@ class cChart{
 
 	//****************************************************************************
 	public static function do_header(){
-		global $home, $jsinc;
+		global $home;
 		?>
-			<script src="<?=$jsinc?>/ck-inc/jquery/jqueryui.slideout.js"></script>
+			<script src="<?=cAppGlobals::$jsInc;?>/ck-inc/jquery/jqueryui.slideout.js"></script>
 			<script src="<?=$home?>/js/charts.js"></script>
 			<script src="<?=$home?>/js/widgets/chart.js"></script>
 		<?php

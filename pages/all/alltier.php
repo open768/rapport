@@ -47,7 +47,7 @@ if (count($aApps) == 0) {
 cChart::do_header();
 ?>
 	<script src="<?=$jsWidgets?>/showtiers.js"></script>
-	<script src="<?=$jsinc?>/extra/appd/metrics.js"></script>
+	<script src="<?=cAppGlobals::$jsInc;?>/extra/appd/metrics.js"></script>
 <?php
 
 //####################################################################

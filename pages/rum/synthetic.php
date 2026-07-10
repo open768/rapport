@@ -50,7 +50,7 @@ if (cAD::is_demo()){
 //####################################################################
 ?><h2>Synthetics for <?=$oApp->name?></h2>
 
-<script src="<?=$js_extra?>/uri-parser/parse.js"></script>
+<script src="<?=cAppGlobals::$jsExtra?>/uri-parser/parse.js"></script>
 <script src="<?=$jsWidgets?>/synthetics.js"></script>
 <div id="container">Loading Synthetic data...</div>
 <script>

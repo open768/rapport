@@ -20,7 +20,7 @@ class cAppGlobals {
         self::$ckPhpInc = self::$phpInc . "/ckinc";               //dont modify this line
 
         require_once self::$ckPhpInc . "/debug.php";              //dont modify this line its needed for the next line
-        self::$jsInc = "$psHome/../jsinc";                        //DEV url where jsinc can be found on your webserver 
+        self::$jsInc = "/jsinc";                        //DEV url where jsinc can be found on your webserver 
 
 
         //========================================================================================================
