@@ -34,7 +34,7 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -60,7 +60,7 @@ try{
 $oToday = cRender::get_times();
 }
 catch (Exception $e){
-	cCommon::errorbox("unable to read date:<p>".$e->getMessage());
+	cPageOutput::errorbox("unable to read date:<p>".$e->getMessage());
 	cRenderHtml::footer();
 	exit;	
 }

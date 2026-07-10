@@ -90,7 +90,7 @@ class cRender{
 		
 		$oCred = cRenderObjs::get_AD_credentials();
 		if ($oCred == null || !$oCred->logged_in()){
-			cCommon::errorbox("not logged in in");
+			cPageOutput::errorbox("not logged in in");
 			$sUrl = cHttp::build_url("$home/index.php", cRenderQS::LOCATION_QS, $_SERVER["REQUEST_URI"]);
 			self::button("Back to login", "$sUrl", false);
 			cDebug::flush();

@@ -28,7 +28,7 @@ if (!$sUsage) $sUsage = 1;
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -38,7 +38,7 @@ try{
 	$oMods=cADAccount::GET_license_modules();
 }
 catch (Exception $e){
-	cCommon::errorbox("unable to get license details - check whether user has Site Owner role");
+	cPageOutput::errorbox("unable to get license details - check whether user has Site Owner role");
 	cRenderHtml::footer();
 	exit;	
 }

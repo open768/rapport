@@ -25,7 +25,7 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -34,7 +34,7 @@ if (cAD::is_demo()){
 $aRules = $oApp->GET_HealthRules();
 $iCount = ($aRules==null?0:count($aRules));
 if ( $iCount == 0){
-	cCommon::errorbox("no health rules found for this application");
+	cPageOutput::errorbox("no health rules found for this application");
 	cRenderHtml::footer();
 	exit;
 }
@@ -47,7 +47,7 @@ foreach ($aRules as $oRule)
 		$iDisabled++;
 
 if ($iDisabled == $iCount){
-	cCommon::errorbox("all rules are disabled - nothing to show here");
+	cPageOutput::errorbox("all rules are disabled - nothing to show here");
 	cRenderHtml::footer();
 	exit;
 }

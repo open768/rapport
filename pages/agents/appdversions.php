@@ -28,7 +28,7 @@ cRenderCards::card_end();
 //####################################################################
 $aDownloads = cADWebsite::GET_latest_downloads();
 if (count($aDownloads) == 0){
-	cCommon::errorbox("nothing found!");
+	cPageOutput::errorbox("nothing found!");
 }else{
 	cRenderCards::card_start();
 	cRenderCards::body_start();

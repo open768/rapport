@@ -20,7 +20,7 @@ cRender::force_login();
 
 //********************************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

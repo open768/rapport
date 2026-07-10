@@ -26,7 +26,7 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -36,11 +36,11 @@ if (cAD::is_demo()){
 try{
 	$aApps = cADController::GET_all_Applications();
 }catch( Exception $e){
-	cCommon::errorbox("Error retrieving applications");
+	cPageOutput::errorbox("Error retrieving applications");
 	cDebug::error($e);
 }
 if (count($aApps) == 0) {
-	cCommon::errorbox("No Applications found");
+	cPageOutput::errorbox("No Applications found");
 	cRenderHtml::footer();
 	return;
 }

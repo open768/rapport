@@ -41,7 +41,7 @@ cADCommon::button(cADControllerUI::webrum_synthetics($oApp, $oTimes));
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

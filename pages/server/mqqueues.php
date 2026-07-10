@@ -20,12 +20,12 @@ require_once cAppGlobals::$root."/inc/charts.php";
 
 $sNode = cHeader::get(cRenderQS::NODE_QS);
 if (!$sNode){
-	cCommon::errorbox("no Node specified");
+	cPageOutput::errorbox("no Node specified");
 	exit;
 }
 $sQManager = cHeader::get(cRenderQS::SERVER_MQ_MANAGER_QS);
 if (!$sQManager){
-	cCommon::errorbox("no Queue Manager specified");
+	cPageOutput::errorbox("no Queue Manager specified");
 	exit;
 }
 
@@ -39,7 +39,7 @@ cChart::$hideGroupIfNoData = true;
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -68,7 +68,7 @@ $iCount = count($aData);
 cRenderCards::card_start();
 	cRenderCards::body_start();
 		if ($iCount == 0)
-			cCommon::errorbox("sorry - no Queues found");
+			cPageOutput::errorbox("sorry - no Queues found");
 		else{
 			uasort($aData,"sort_by_app_name" );
 			

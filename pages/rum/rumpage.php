@@ -40,7 +40,7 @@ cADCommon::button(cADControllerUI::webrum_detail($oApp, $rum_page_id));
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

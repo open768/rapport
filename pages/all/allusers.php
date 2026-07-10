@@ -27,13 +27,13 @@ cRender::force_login();
 try{
 	$aUsers = cAD_RBAC::get_all_users();
 }catch(Exception $e){
-	cCommon::errorbox("unable to get users.");
+	cPageOutput::errorbox("unable to get users.");
 	cRenderHtml::footer();
 	return;
 }
 
 if (cArrayUtil::array_is_empty($aUsers)){
-	cCommon::errorbox("no users found");
+	cPageOutput::errorbox("no users found");
 	cRenderHtml::footer();
 	return;
 }

@@ -46,7 +46,7 @@ $sTierQS = cRenderQS::get_base_tier_QS($oTier);
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -134,7 +134,7 @@ cRenderCards::body_start();
 	try{
 		$oFlow = $oSnap->GET_segments_flow($oSegment);
 	}catch (Exception $e){
-		cCommon::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
+		cPageOutput::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bProceed = false;
 	}
 	
@@ -172,7 +172,7 @@ cRenderCards::body_start();
 	try{
 		$aData = $oSnap->GET_expensive_methods();
 	}catch (Exception $e){
-		cCommon::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
+		cPageOutput::errorbox("unable to retrieve slow methods, try refreshing the page:" . $e->getMessage());
 		$bProceed = false;
 	}
 
@@ -223,7 +223,7 @@ cRenderCards::card_end();
 	try{
 		$oFlow = $oSnap->GET_segments_flow($oSegment);
 	}catch (Exception $e){
-		cCommon::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
+		cPageOutput::errorbox("unable to retrieve snapshot flow, Error was:" . $e->getMessage());
 		$bError = true;
 	}
 	if (!$bError){		

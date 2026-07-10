@@ -33,11 +33,11 @@ $node = cHeader::get(cRenderQS::NODE_QS);
 
 //####################################################################
 if (!$oTier->name){
-	cCommon::errorbox("no Tier parameter found");
+	cPageOutput::errorbox("no Tier parameter found");
 	exit;
 }
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

@@ -23,13 +23,13 @@ cRender::force_login();
 try{
 	$aGroups = cAD_RBAC::get_all_groups();
 }catch(Exception $e){
-	cCommon::errorbox("unable to get groups.");
+	cPageOutput::errorbox("unable to get groups.");
 	cRenderHtml::footer();
 	return;
 }
 
 if (cArrayUtil::array_is_empty($aGroups)){
-	cCommon::errorbox("no groups found");
+	cPageOutput::errorbox("no groups found");
 	cRenderHtml::footer();
 	return;
 }

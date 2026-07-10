@@ -56,11 +56,11 @@ function count_nodes($paData){
 
 //####################################################################
 if (!$oApp->name ){
-	cCommon::errorbox("no application");
+	cPageOutput::errorbox("no application");
 	exit;
 }
 if (!$gsMetricType ){
-	cCommon::errorbox("no metric type");
+	cPageOutput::errorbox("no metric type");
 	exit;
 }
 $oMetric = cADInfraMetric::getInfrastructureMetric($oApp->name,null,$gsMetricType);
@@ -72,7 +72,7 @@ $sDetailRootQS = cHttp::build_url(cCommonFiles::server_filename(), $sAppQS);
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

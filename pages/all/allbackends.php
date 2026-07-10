@@ -35,7 +35,7 @@ $oApps = cADController::GET_all_Applications();
 if (cAD::is_demo()){
 	cRenderCards::card_start("Not Supported");
 	cRenderCards::body_start();
-		cCommon::errorbox("function not supported for Demo");
+		cPageOutput::errorbox("function not supported for Demo");
 	cRenderCards::body_end();
 	cRenderCards::action_end();
 	cRenderHtml::footer();

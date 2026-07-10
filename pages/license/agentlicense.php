@@ -21,7 +21,7 @@ cRender::force_login();
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }
@@ -31,7 +31,7 @@ try{
 	$aRules=cADAccount::GET_LicenseRules();
 }
 catch (Exception $e){
-	cCommon::errorbox("unable to get license details - $e");
+	cPageOutput::errorbox("unable to get license details - $e");
 	cRenderHtml::footer();
 	exit;	
 }

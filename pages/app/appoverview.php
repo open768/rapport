@@ -124,7 +124,7 @@ cRenderCards::card_start("<a name='trans'>Transactions</a>");
 	cRenderCards::body_start();
 		//********************************************************************
 		if (cAD::is_demo()){
-			cCommon::errorbox("Transactions not supported for Demo");
+			cPageOutput::errorbox("Transactions not supported for Demo");
 			cChart::do_footer();
 			cRenderHtml::footer();
 			exit;

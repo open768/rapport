@@ -31,7 +31,7 @@ $title =  "Graphs for transaction calls per minute for transactions for $tier in
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

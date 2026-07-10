@@ -45,7 +45,7 @@ cChart::$width=cChart::CHART_WIDTH_LARGE/2;
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

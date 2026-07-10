@@ -107,7 +107,7 @@ class cRenderMenus{
 		}
 		catch (Exception $e)
 		{
-			cCommon::errorbox("Oops unable to get application data from controller");
+			cPageOutput::errorbox("Oops unable to get application data from controller");
 			cTracing::leave();
 			exit;
 		}
@@ -310,7 +310,7 @@ class cRenderMenus{
 		}
 		catch (Exception $e)
 		{
-			cCommon::errorbox("Oops unable to get tier data from controller");
+			cPageOutput::errorbox("Oops unable to get tier data from controller");
 			cTracing::leave();
 			exit;
 		}

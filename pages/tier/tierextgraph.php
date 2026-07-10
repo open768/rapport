@@ -40,7 +40,7 @@ $title = "$oApp->name&gt;$oTier->name&gt;External Calls";
 
 //********************************************************************
 if (cAD::is_demo()){
-	cCommon::errorbox("function not supported for Demo");
+	cPageOutput::errorbox("function not supported for Demo");
 	cRenderHtml::footer();
 	exit;
 }

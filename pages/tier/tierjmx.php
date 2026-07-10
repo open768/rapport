@@ -45,11 +45,11 @@ $title = "$oApp->name&gt;$oTier->name&gt;Infrastructure&gt;JMX";
 
 $showlink = cCommon::get_session($LINK_SESS_KEY);
 if (!$oTier->name){
-	cCommon::errorbox("no Tier parameter found");
+	cPageOutput::errorbox("no Tier parameter found");
 	exit;
 }
 if (!$gsMetric){
-	cCommon::errorbox("no Metric found");
+	cPageOutput::errorbox("no Metric found");
 	exit;
 }
 
