@@ -44,7 +44,7 @@ if (cAD::is_demo()){
 //********************************************************************
 cRenderCards::card_start("Applications");
 	cRenderCards::body_start();
-		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+		cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			$sLastCh = "";
 			foreach ($oApps as $oApp){
 				$sCh = strtoupper(($oApp->name)[0]);

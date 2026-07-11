@@ -64,7 +64,7 @@ if ($iCount > 0){
 	if (cRender::is_list_mode()){
 		cRenderCards::card_start();
 			cRenderCards::body_start();
-				cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+				cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 				foreach ($aData as $oItem)
 					if ($oItem->type === "folder")
 						echo "$oItem->name<br>";

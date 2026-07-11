@@ -52,7 +52,7 @@ cChart::do_header();
 
 //####################################################################
 function app_toc($paApps){
-	cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+	cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 		$chLast = "";
 		foreach ($paApps as $oApp){
 			$ch = strtolower($oApp->name[0]);

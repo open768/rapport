@@ -33,7 +33,7 @@ function render_list(){
 	global $aDashData;
 	
 	?><h3>there are <?=count($aDashData)?> dashboards</h3><?php
-		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+		cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			$sLastCh=null;
 			foreach ($aDashData as $oDash){
 				$sName = $oDash->name;

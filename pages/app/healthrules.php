@@ -77,7 +77,7 @@ cRenderCards::card_end();
 if (cRender::is_list_mode()){
 	cRenderCards::card_start("Health Rules");
 	cRenderCards::body_start();
-		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+		cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 		$sLastCh = "";
 		foreach ($aRules as $oRule){
 			$sRule = $oRule->name;

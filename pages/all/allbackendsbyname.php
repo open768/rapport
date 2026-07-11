@@ -39,7 +39,7 @@ $aBackends = cADController::GET_all_Backends();
 cRenderCards::card_start("All Remote Services");
 	cRenderCards::body_start();
 		$sLastCh = "";
-		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+		cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			echo "<ul>";
 				$iBackID = 0;
 				foreach ($aBackends as $sBackend=>$aApps){

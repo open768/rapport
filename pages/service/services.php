@@ -77,7 +77,7 @@ if ($oTier){
 	$aTiers = $oApp->GET_Tiers();
 	cRenderCards::card_start("Select a Tier");
 		cRenderCards::body_start();
-		cCommon::div_with_cols(cRenderHTML::DIV_COLUMNS);
+		cPageOutput::div_with_cols(cRenderHTML::DIV_COLUMNS);
 			$sLastCh = "";
 			
 			foreach ($aTiers as $oTier){
